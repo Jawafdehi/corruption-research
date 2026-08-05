@@ -1,0 +1,1057 @@
+{
+  "report": "26th-annual-report-2072-73",
+  "year": "2072-73",
+  "method": "vision double-pass over chart-page renders; charts are images likhit cannot convert. Plain ruled tables are recovered in the .likhit.md instead.",
+  "n_chart_pages": 12,
+  "n_charts": 13,
+  "n_estimated_values": 0,
+  "pages": [
+    {
+      "page": 1,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p001.png",
+      "has_chart": false,
+      "figures": []
+    },
+    {
+      "page": 2,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p002.png",
+      "has_chart": false,
+      "figures": []
+    },
+    {
+      "page": 7,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p007.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "",
+          "title_ne": "बढी उजुरी परेका क्षेत्रहरू",
+          "chart_type": "bar",
+          "x_axis": "क्षेत्र",
+          "y_axis": "उजुरी संख्या",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "शिक्षा",
+              "series": "२०६९/७०",
+              "value": 2013,
+              "value_estimated": false
+            },
+            {
+              "label": "शिक्षा",
+              "series": "२०७०/७१",
+              "value": 5050,
+              "value_estimated": false
+            },
+            {
+              "label": "शिक्षा",
+              "series": "२०७१/७२",
+              "value": 7264,
+              "value_estimated": false
+            },
+            {
+              "label": "शिक्षा",
+              "series": "२०७२/७३",
+              "value": 5671,
+              "value_estimated": false
+            },
+            {
+              "label": "स्थानीय निकाय",
+              "series": "२०६९/७०",
+              "value": 1728,
+              "value_estimated": false
+            },
+            {
+              "label": "स्थानीय निकाय",
+              "series": "२०७०/७१",
+              "value": 3300,
+              "value_estimated": false
+            },
+            {
+              "label": "स्थानीय निकाय",
+              "series": "२०७१/७२",
+              "value": 3982,
+              "value_estimated": false
+            },
+            {
+              "label": "स्थानीय निकाय",
+              "series": "२०७२/७३",
+              "value": 3659,
+              "value_estimated": false
+            },
+            {
+              "label": "भूमि प्रशासन",
+              "series": "२०६९/७०",
+              "value": 896,
+              "value_estimated": false
+            },
+            {
+              "label": "भूमि प्रशासन",
+              "series": "२०७०/७१",
+              "value": 1718,
+              "value_estimated": false
+            },
+            {
+              "label": "भूमि प्रशासन",
+              "series": "२०७१/७२",
+              "value": 2165,
+              "value_estimated": false
+            },
+            {
+              "label": "भूमि प्रशासन",
+              "series": "२०७२/७३",
+              "value": 1582,
+              "value_estimated": false
+            },
+            {
+              "label": "स्वास्थ्य",
+              "series": "२०६९/७०",
+              "value": 664,
+              "value_estimated": false
+            },
+            {
+              "label": "स्वास्थ्य",
+              "series": "२०७०/७१",
+              "value": 1062,
+              "value_estimated": false
+            },
+            {
+              "label": "स्वास्थ्य",
+              "series": "२०७१/७२",
+              "value": 1493,
+              "value_estimated": false
+            },
+            {
+              "label": "स्वास्थ्य",
+              "series": "२०७२/७३",
+              "value": 1242,
+              "value_estimated": false
+            },
+            {
+              "label": "गृह प्रशासन",
+              "series": "२०६९/७०",
+              "value": 700,
+              "value_estimated": false
+            },
+            {
+              "label": "गृह प्रशासन",
+              "series": "२०७०/७१",
+              "value": 1268,
+              "value_estimated": false
+            },
+            {
+              "label": "गृह प्रशासन",
+              "series": "२०७१/७२",
+              "value": 1263,
+              "value_estimated": false
+            },
+            {
+              "label": "गृह प्रशासन",
+              "series": "२०७२/७३",
+              "value": 1159,
+              "value_estimated": false
+            },
+            {
+              "label": "वन",
+              "series": "२०६९/७०",
+              "value": 337,
+              "value_estimated": false
+            },
+            {
+              "label": "वन",
+              "series": "२०७०/७१",
+              "value": 962,
+              "value_estimated": false
+            },
+            {
+              "label": "वन",
+              "series": "२०७१/७२",
+              "value": 1358,
+              "value_estimated": false
+            },
+            {
+              "label": "वन",
+              "series": "२०७२/७३",
+              "value": 1062,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; chart on front-matter/foreword page (पृष्ठ ख). 2072/73 column cross-validated exactly against narrative percentages on the same page (शिक्षा ५,६७१; स्थानीय निकाय ३,६५९; भूमि प्रशासन १,५८२; स्वास्थ्य १,२४२; गृह प्रशासन १,१५९; वन १,०६२).",
+          "verify_note": "Corrected on re-read/zoom: none needed after zoom crop confirmed all 24 values matched initial read and narrative text."
+        }
+      ]
+    },
+    {
+      "page": 8,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p008.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "",
+          "title_ne": "आ.व.२०७२/७३ मा प्रारम्भिक अनुसन्धानबाट भएको कारबाही",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "प्रतिशत",
+          "data": [
+            {
+              "label": "विस्तृत अनुसन्धान",
+              "series": "",
+              "value": 2.6,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेली",
+              "series": "",
+              "value": 63.5,
+              "value_estimated": false
+            },
+            {
+              "label": "अन्य कार्यालय/महाशाखामा प्रेषित",
+              "series": "",
+              "value": 13.1,
+              "value_estimated": false
+            },
+            {
+              "label": "सम्बन्धित निकायमा आवश्यक कारबाहीका लागि पठाइएको",
+              "series": "",
+              "value": 20.8,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; front-matter/foreword page (पृष्ठ ग). Percentages sum to 100.0 and match narrative: विस्तृत अनुसन्धान २.६%, तामेली ६३.५%, and १३.१%+२०.८%=३३.९% matching 'अन्य विभिन्न किसिमको कारबाही' ५,६६० (३३.९%).",
+          "verify_note": "ok"
+        }
+      ]
+    },
+    {
+      "page": 9,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p009.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "",
+          "title_ne": "विस्तृत अनुसन्धानबाट भएको कारबाही",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "मुद्दा दायर",
+              "series": "",
+              "value": 144,
+              "value_estimated": false
+            },
+            {
+              "label": "विभागीय कारबाही",
+              "series": "",
+              "value": 52,
+              "value_estimated": false
+            },
+            {
+              "label": "सुझाव",
+              "series": "",
+              "value": 95,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेली",
+              "series": "",
+              "value": 291,
+              "value_estimated": false
+            },
+            {
+              "label": "लेखी पठाइएको",
+              "series": "",
+              "value": 82,
+              "value_estimated": false
+            },
+            {
+              "label": "अन्य",
+              "series": "",
+              "value": 76,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; front-matter/foreword page (पृष्ठ घ). Values sum to 740, matching narrative 'जम्मा ७४० उजुरीहरू उपरको विस्तृत अनुसन्धान पूरा भई विभिन्न निर्णयहरू गरिएको छ'; also matches तामेली २९१, विभागीय कारबाही ५२, सुझाव ९५, लेखी पठाइएको ८२, अन्य ७६ from narrative. Duplicated as अनुसूची-८(ग) on p359.",
+          "verify_note": "ok"
+        },
+        {
+          "figure_label": "",
+          "title_ne": "विषयगत आधारमा मुद्दा दर्ताको संख्या",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "झुठा शैक्षिक योग्यता",
+              "series": "",
+              "value": 52,
+              "value_estimated": false
+            },
+            {
+              "label": "गैरकानुनी लाभ वा हानि",
+              "series": "",
+              "value": 11,
+              "value_estimated": false
+            },
+            {
+              "label": "गैरकानुनी सम्पत्ति आर्जन",
+              "series": "",
+              "value": 7,
+              "value_estimated": false
+            },
+            {
+              "label": "घूस (रिसवत)",
+              "series": "",
+              "value": 46,
+              "value_estimated": false
+            },
+            {
+              "label": "सार्वजनिक सम्पत्तिको हानि नोक्सानी",
+              "series": "",
+              "value": 23,
+              "value_estimated": false
+            },
+            {
+              "label": "राजस्व चुहावट",
+              "series": "",
+              "value": 2,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध",
+              "series": "",
+              "value": 3,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; front-matter/foreword page (पृष्ठ घ). Values sum to 144 (= total मुद्दा दायर) and match narrative exactly (नक्कली शैक्षिक प्रमाणपत्र ५२, घूस ४६, गैरकानुनी सम्पत्ति आर्जन ७, सार्वजनिक सम्पत्तिको हानि नोक्सानी २३, गैरकानुनी लाभहानि ११, राजस्व चुहावट २, अन्य ३). Duplicated as अनुसूची-७ on p358.",
+          "verify_note": "ok"
+        }
+      ]
+    },
+    {
+      "page": 10,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p010.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "",
+          "title_ne": "विभिन्न आर्थिक वर्षहरूमा उजुरी दर्ता तथा फछ्यौंटको प्रवृत्ति",
+          "chart_type": "line",
+          "x_axis": "आर्थिक वर्ष",
+          "y_axis": "संख्या",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "२०६२/६३",
+              "series": "कुल उजुरी",
+              "value": 4324,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६३/६४",
+              "series": "कुल उजुरी",
+              "value": 3564,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६४/६५",
+              "series": "कुल उजुरी",
+              "value": 2732,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६५/६६",
+              "series": "कुल उजुरी",
+              "value": 4149,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६६/६७",
+              "series": "कुल उजुरी",
+              "value": 4295,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "कुल उजुरी",
+              "value": 6145,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "कुल उजुरी",
+              "value": 8539,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "कुल उजुरी",
+              "value": 11298,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "कुल उजुरी",
+              "value": 22602,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "कुल उजुरी",
+              "value": 31213,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "कुल उजुरी",
+              "value": 24691,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६२/६३",
+              "series": "कुल फछ्यौंट",
+              "value": 3353,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६३/६४",
+              "series": "कुल फछ्यौंट",
+              "value": 2976,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६४/६५",
+              "series": "कुल फछ्यौंट",
+              "value": 2135,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६५/६६",
+              "series": "कुल फछ्यौंट",
+              "value": 3303,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६६/६७",
+              "series": "कुल फछ्यौंट",
+              "value": 3067,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "कुल फछ्यौंट",
+              "value": 3904,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "कुल फछ्यौंट",
+              "value": 5466,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "कुल फछ्यौंट",
+              "value": 6672,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "कुल फछ्यौंट",
+              "value": 12892,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "कुल फछ्यौंट",
+              "value": 21648,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "कुल फछ्यौंट",
+              "value": 16694,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; front-matter/foreword page (पृष्ठ ङ). Duplicated as अनुसूची-१० on p361 (identical values, re-verified there). 2072/73 pair (24691, 16694) matches narrative 'जम्मा २४,६९१ उजुरीहरू...१६,६९४ उजुरीहरू प्रारम्भिक छानबिनबाट फछ्यौंट'.",
+          "verify_note": "Corrected on zoom re-read: 2071/72 कुल उजुरी peak was misread first pass as ३१२९३ (31293); zoomed crop showed ३१२१३ (31213). Also corrected ११२९५→११२९८ (2069/70 blue), ६१४४→६१४५ (2067/68 blue), २९३६→२९७६ (2063/64 red), २१३४→२१३५ (2064/65 red) after zoom."
+        }
+      ]
+    },
+    {
+      "page": 12,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p012.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "",
+          "title_ne": "सामुदायिक शिक्षा कार्यक्रममा सहभागी संख्या",
+          "chart_type": "line",
+          "x_axis": "आर्थिक वर्ष",
+          "y_axis": "संख्या",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "२०६४/६५",
+              "series": "सहभागी संख्या",
+              "value": 2998,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६५/६६",
+              "series": "सहभागी संख्या",
+              "value": 7785,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६६/६७",
+              "series": "सहभागी संख्या",
+              "value": 8053,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "सहभागी संख्या",
+              "value": 5238,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "सहभागी संख्या",
+              "value": 3670,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "सहभागी संख्या",
+              "value": 1613,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "सहभागी संख्या",
+              "value": 788,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "सहभागी संख्या",
+              "value": 2920,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "सहभागी संख्या",
+              "value": 9021,
+              "value_estimated": false
+            }
+          ],
+          "notes": "No चित्र caption; front-matter/foreword page (पृष्ठ छ).",
+          "verify_note": "ok"
+        }
+      ]
+    },
+    {
+      "page": 347,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p347.png",
+      "has_chart": false,
+      "figures": []
+    },
+    {
+      "page": 358,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p358.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "अनुसूची- ७",
+          "title_ne": "आ.व.२०७२/७३ मा विशेष अदालतमा दायर भएका विभिन्न प्रकृतिका मुद्दाहरूको संख्या",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "झुठा शैक्षिक योग्यता",
+              "series": "",
+              "value": 52,
+              "value_estimated": false
+            },
+            {
+              "label": "गैरकानुनी लाभ वा हानि",
+              "series": "",
+              "value": 11,
+              "value_estimated": false
+            },
+            {
+              "label": "गैरकानुनी सम्पत्ति आर्जन",
+              "series": "",
+              "value": 7,
+              "value_estimated": false
+            },
+            {
+              "label": "घूस रिसवत",
+              "series": "",
+              "value": 46,
+              "value_estimated": false
+            },
+            {
+              "label": "सार्वजनिक सम्पत्तिको हानि नोक्सानी",
+              "series": "",
+              "value": 23,
+              "value_estimated": false
+            },
+            {
+              "label": "राजस्व चुहावट",
+              "series": "",
+              "value": 2,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध",
+              "series": "",
+              "value": 3,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Duplicate of the p009 second pie chart (same data, official अनुसूची annex here); sums to 144.",
+          "verify_note": "ok"
+        },
+        {
+          "figure_label": "अनुसूची- ८(क)",
+          "title_ne": "मागदाबी लिइएको कुल बिगोमा अनुसन्धानको क्षेत्र अनुसारको अंश",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "प्रतिशत",
+          "data": [
+            {
+              "label": "गैरकानुनी लाभ वा हानि",
+              "series": "",
+              "value": 50.4,
+              "value_estimated": false
+            },
+            {
+              "label": "सार्वजनिक सम्पत्तिको हानि नोक्सानी",
+              "series": "",
+              "value": 21.7,
+              "value_estimated": false
+            },
+            {
+              "label": "गैरकानुनी सम्पत्ति",
+              "series": "",
+              "value": 26.8,
+              "value_estimated": false
+            },
+            {
+              "label": "घूस रिसवत",
+              "series": "",
+              "value": 0.5,
+              "value_estimated": false
+            },
+            {
+              "label": "राजस्व चुहावट",
+              "series": "",
+              "value": 0.6,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Page heading is 'आ.व. २०७२/७३ मा विशेष अदालतमा दायर भएका विभिन्न प्रकृतिका मुद्दाहरूमा मागदाबी लिइएको बिगो (रु. दस लाखमा)' but the pie itself shows percentage shares, not absolute रु. figures. Percentages sum to 100.0.",
+          "verify_note": "Corrected on zoom re-read: गैरकानुनी सम्पत्ति slice first read as २६.५% (26.5), zoomed crop showed २६.८% (26.8)."
+        }
+      ]
+    },
+    {
+      "page": 359,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p359.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "अनुसूची -८(ख)",
+          "title_ne": "विशेष अदालतबाट फैसला भएका भ्रष्टाचारसम्बन्धी मुद्दाहरूमा सफलताको प्रतिशत",
+          "chart_type": "line",
+          "x_axis": "आर्थिक वर्ष",
+          "y_axis": "सफलताको प्रतिशत",
+          "unit": "प्रतिशत",
+          "data": [
+            {
+              "label": "२०६६/६७",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 52.9,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 62.7,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 88.1,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 80,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 80,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 81.5,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "विशेष अदालतबाट फैसला भएका भ्रष्टाचार सम्बन्धी मुद्दामा सफलताको प्रतिशत",
+              "value": 60,
+              "value_estimated": false
+            }
+          ],
+          "notes": "",
+          "verify_note": "ok"
+        },
+        {
+          "figure_label": "अनुसूची -८(ग)",
+          "title_ne": "विस्तृत अनुसन्धानबाट भएको कारबाही",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "मुद्दा दायर",
+              "series": "",
+              "value": 144,
+              "value_estimated": false
+            },
+            {
+              "label": "विभागीय कारबाही",
+              "series": "",
+              "value": 52,
+              "value_estimated": false
+            },
+            {
+              "label": "सुझाव",
+              "series": "",
+              "value": 95,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेली",
+              "series": "",
+              "value": 291,
+              "value_estimated": false
+            },
+            {
+              "label": "लेखी पठाइएको",
+              "series": "",
+              "value": 82,
+              "value_estimated": false
+            },
+            {
+              "label": "अन्य",
+              "series": "",
+              "value": 76,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Duplicate of the p009 first pie chart (same data, official अनुसूची annex here); sums to 740.",
+          "verify_note": "ok"
+        }
+      ]
+    },
+    {
+      "page": 360,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p360.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "अनुसूची -९(क)",
+          "title_ne": "आ.व.२०७२/७३ मा प्रारम्भिक छानबिनबाट भएको कारबाहीको विवरण",
+          "chart_type": "pie",
+          "x_axis": "",
+          "y_axis": "",
+          "unit": "प्रतिशत",
+          "data": [
+            {
+              "label": "विस्तृत अनुसन्धानमा गएको",
+              "series": "",
+              "value": 2.6,
+              "value_estimated": false
+            },
+            {
+              "label": "आयोगबाटै तामेली",
+              "series": "",
+              "value": 63.5,
+              "value_estimated": false
+            },
+            {
+              "label": "अन्य कार्यालय/महाशाखामा प्रेषित",
+              "series": "",
+              "value": 13.1,
+              "value_estimated": false
+            },
+            {
+              "label": "सम्बन्धित निकायमा आवश्यक कारबाहीका लागि पठाएको",
+              "series": "",
+              "value": 20.8,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Duplicate of the p008 pie chart (same data, official अनुसूची annex here); sums to 100.0.",
+          "verify_note": "ok"
+        },
+        {
+          "figure_label": "अनुसूची -९(ख)",
+          "title_ne": "विगत ४ वर्षको कुल उजुरी फछ्यौंटको प्रवृत्ति",
+          "chart_type": "bar",
+          "x_axis": "कारबाहीको किसिम",
+          "y_axis": "उजुरी फछ्यौंट भएको संख्या",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "तामेलीमा गएको",
+              "series": "आ.व. २०६९/७०",
+              "value": 3168,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेलीमा गएको",
+              "series": "आ.व.२०७०/७१",
+              "value": 6185,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेलीमा गएको",
+              "series": "आ.व.२०७१/७२",
+              "value": 12109,
+              "value_estimated": false
+            },
+            {
+              "label": "तामेलीमा गएको",
+              "series": "आ.व.२०७२/७३",
+              "value": 10606,
+              "value_estimated": false
+            },
+            {
+              "label": "विस्तृत अनुसन्धानमा गएको",
+              "series": "आ.व. २०६९/७०",
+              "value": 726,
+              "value_estimated": false
+            },
+            {
+              "label": "विस्तृत अनुसन्धानमा गएको",
+              "series": "आ.व.२०७०/७१",
+              "value": 890,
+              "value_estimated": false
+            },
+            {
+              "label": "विस्तृत अनुसन्धानमा गएको",
+              "series": "आ.व.२०७१/७२",
+              "value": 1246,
+              "value_estimated": false
+            },
+            {
+              "label": "विस्तृत अनुसन्धानमा गएको",
+              "series": "आ.व.२०७२/७३",
+              "value": 428,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध कारबाही",
+              "series": "आ.व. २०६९/७०",
+              "value": 2778,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध कारबाही",
+              "series": "आ.व.२०७०/७१",
+              "value": 5817,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध कारबाही",
+              "series": "आ.व.२०७१/७२",
+              "value": 8293,
+              "value_estimated": false
+            },
+            {
+              "label": "विविध कारबाही",
+              "series": "आ.व.२०७२/७३",
+              "value": 5660,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Overlapping bar labels required a zoomed re-read; each year's three category values were cross-checked to sum to that year's कुल फछ्यौंट from p010/p361 (e.g. 2072/73: 10606+428+5660=16694 ✓; 2071/72: 12109+1246+8293=21648 ✓; 2070/71: 6185+890+5817=12892 ✓; 2069/70: 3168+726+2778=6672 ✓), giving high confidence.",
+          "verify_note": "ok (validated via cross-sum against p010/p361 totals)"
+        }
+      ]
+    },
+    {
+      "page": 361,
+      "png": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2072-73/figures/pages/p361.png",
+      "has_chart": true,
+      "figures": [
+        {
+          "figure_label": "अनुसूची -१०",
+          "title_ne": "विभिन्न आर्थिक वर्षहरूमा उजुरी दर्ता भएको संख्या र फछ्यौंटको प्रवृत्ति",
+          "chart_type": "line",
+          "x_axis": "आ.व.",
+          "y_axis": "संख्या",
+          "unit": "संख्या",
+          "data": [
+            {
+              "label": "२०६२/६३",
+              "series": "कुल उजुरी",
+              "value": 4324,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६३/६४",
+              "series": "कुल उजुरी",
+              "value": 3564,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६४/६५",
+              "series": "कुल उजुरी",
+              "value": 2732,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६५/६६",
+              "series": "कुल उजुरी",
+              "value": 4149,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६६/६७",
+              "series": "कुल उजुरी",
+              "value": 4295,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "कुल उजुरी",
+              "value": 6145,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "कुल उजुरी",
+              "value": 8539,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "कुल उजुरी",
+              "value": 11298,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "कुल उजुरी",
+              "value": 22602,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "कुल उजुरी",
+              "value": 31213,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "कुल उजुरी",
+              "value": 24691,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६२/६३",
+              "series": "कुल फछ्यौंट",
+              "value": 3353,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६३/६४",
+              "series": "कुल फछ्यौंट",
+              "value": 2976,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६४/६५",
+              "series": "कुल फछ्यौंट",
+              "value": 2135,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६५/६६",
+              "series": "कुल फछ्यौंट",
+              "value": 3303,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६६/६७",
+              "series": "कुल फछ्यौंट",
+              "value": 3067,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६७/६८",
+              "series": "कुल फछ्यौंट",
+              "value": 3904,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६८/६९",
+              "series": "कुल फछ्यौंट",
+              "value": 5466,
+              "value_estimated": false
+            },
+            {
+              "label": "२०६९/७०",
+              "series": "कुल फछ्यौंट",
+              "value": 6672,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७०/७१",
+              "series": "कुल फछ्यौंट",
+              "value": 12892,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७१/७२",
+              "series": "कुल फछ्यौंट",
+              "value": 21648,
+              "value_estimated": false
+            },
+            {
+              "label": "२०७२/७३",
+              "series": "कुल फछ्यौंट",
+              "value": 16694,
+              "value_estimated": false
+            }
+          ],
+          "notes": "Duplicate of the p010 chart (official अनुसूची annex here); identical values re-verified via zoomed crops on p010.",
+          "verify_note": "ok"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "pdf": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2076-77/30th-annual-report-2076-77.pdf",
+  "page_count": 364,
+  "dpi": 300,
+  "cover_thresh": 0.1,
+  "candidates": [
+    {
+      "page": 1,
+      "png": "pages/p001.png",
+      "signals": {
+        "raster_cover": 0.275,
+        "colored_fills": 146
+      }
+    },
+    {
+      "page": 14,
+      "png": "pages/p014.png",
+      "signals": {
+        "curves": 84
+      }
+    },
+    {
+      "page": 23,
+      "png": "pages/p023.png",
+      "signals": {
+        "raster_cover": 0.234
+      }
+    },
+    {
+      "page": 24,
+      "png": "pages/p024.png",
+      "signals": {
+        "raster_cover": 0.229
+      }
+    },
+    {
+      "page": 25,
+      "png": "pages/p025.png",
+      "signals": {
+        "raster_cover": 0.192
+      }
+    },
+    {
+      "page": 26,
+      "png": "pages/p026.png",
+      "signals": {
+        "raster_cover": 0.167
+      }
+    },
+    {
+      "page": 27,
+      "png": "pages/p027.png",
+      "signals": {
+        "raster_cover": 0.189
+      }
+    },
+    {
+      "page": 28,
+      "png": "pages/p028.png",
+      "signals": {
+        "raster_cover": 0.173
+      }
+    },
+    {
+      "page": 29,
+      "png": "pages/p029.png",
+      "signals": {
+        "raster_cover": 0.111
+      }
+    },
+    {
+      "page": 30,
+      "png": "pages/p030.png",
+      "signals": {
+        "raster_cover": 0.104
+      }
+    },
+    {
+      "page": 31,
+      "png": "pages/p031.png",
+      "signals": {
+        "raster_cover": 0.136
+      }
+    },
+    {
+      "page": 32,
+      "png": "pages/p032.png",
+      "signals": {
+        "raster_cover": 0.233
+      }
+    },
+    {
+      "page": 33,
+      "png": "pages/p033.png",
+      "signals": {
+        "raster_cover": 0.126
+      }
+    },
+    {
+      "page": 170,
+      "png": "pages/p170.png",
+      "signals": {
+        "raster_cover": 0.256
+      }
+    },
+    {
+      "page": 271,
+      "png": "pages/p271.png",
+      "signals": {
+        "raster_cover": 0.105
+      }
+    },
+    {
+      "page": 273,
+      "png": "pages/p273.png",
+      "signals": {
+        "raster_cover": 0.112
+      }
+    },
+    {
+      "page": 275,
+      "png": "pages/p275.png",
+      "signals": {
+        "raster_cover": 0.115
+      }
+    },
+    {
+      "page": 276,
+      "png": "pages/p276.png",
+      "signals": {
+        "raster_cover": 0.108
+      }
+    },
+    {
+      "page": 278,
+      "png": "pages/p278.png",
+      "signals": {
+        "raster_cover": 0.133
+      }
+    },
+    {
+      "page": 281,
+      "png": "pages/p281.png",
+      "signals": {
+        "raster_cover": 0.103
+      }
+    },
+    {
+      "page": 282,
+      "png": "pages/p282.png",
+      "signals": {
+        "colored_fills": 20
+      }
+    },
+    {
+      "page": 283,
+      "png": "pages/p283.png",
+      "signals": {
+        "raster_cover": 0.239
+      }
+    },
+    {
+      "page": 290,
+      "png": "pages/p290.png",
+      "signals": {
+        "colored_fills": 29
+      }
+    },
+    {
+      "page": 292,
+      "png": "pages/p292.png",
+      "signals": {
+        "raster_cover": 0.147
+      }
+    },
+    {
+      "page": 318,
+      "png": "pages/p318.png",
+      "signals": {
+        "curves": 104,
+        "colored_fills": 24
+      }
+    },
+    {
+      "page": 356,
+      "png": "pages/p356.png",
+      "signals": {
+        "raster_cover": 0.167,
+        "curves": 910
+      }
+    },
+    {
+      "page": 357,
+      "png": "pages/p357.png",
+      "signals": {
+        "raster_cover": 0.214,
+        "curves": 1342
+      }
+    },
+    {
+      "page": 358,
+      "png": "pages/p358.png",
+      "signals": {
+        "raster_cover": 0.216,
+        "curves": 1425
+      }
+    },
+    {
+      "page": 359,
+      "png": "pages/p359.png",
+      "signals": {
+        "raster_cover": 0.2,
+        "colored_fills": 27
+      }
+    },
+    {
+      "page": 360,
+      "png": "pages/p360.png",
+      "signals": {
+        "curves": 2193,
+        "colored_fills": 50
+      }
+    },
+    {
+      "page": 361,
+      "png": "pages/p361.png",
+      "signals": {
+        "raster_cover": 0.189
+      }
+    },
+    {
+      "page": 362,
+      "png": "pages/p362.png",
+      "signals": {
+        "raster_cover": 0.166,
+        "curves": 2106,
+        "colored_fills": 12
+      }
+    },
+    {
+      "page": 363,
+      "png": "pages/p363.png",
+      "signals": {
+        "colored_fills": 12
+      }
+    },
+    {
+      "page": 364,
+      "png": "pages/p364.png",
+      "signals": {
+        "curves": 2660,
+        "colored_fills": 50
+      }
+    }
+  ]
+}
