@@ -1,0 +1,101 @@
+{
+  "pdf": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2070-71/24th-annual-report-2070-71.pdf",
+  "page_count": 865,
+  "dpi": 300,
+  "cover_thresh": 0.1,
+  "candidates": [
+    {
+      "page": 815,
+      "png": "pages/p815.png",
+      "signals": {
+        "curves": 152
+      }
+    },
+    {
+      "page": 816,
+      "png": "pages/p816.png",
+      "signals": {
+        "colored_fills": 72
+      }
+    },
+    {
+      "page": 817,
+      "png": "pages/p817.png",
+      "signals": {
+        "colored_fills": 57
+      }
+    },
+    {
+      "page": 818,
+      "png": "pages/p818.png",
+      "signals": {
+        "colored_fills": 65
+      }
+    },
+    {
+      "page": 819,
+      "png": "pages/p819.png",
+      "signals": {
+        "colored_fills": 65
+      }
+    },
+    {
+      "page": 820,
+      "png": "pages/p820.png",
+      "signals": {
+        "colored_fills": 65
+      }
+    },
+    {
+      "page": 821,
+      "png": "pages/p821.png",
+      "signals": {
+        "colored_fills": 65
+      }
+    },
+    {
+      "page": 822,
+      "png": "pages/p822.png",
+      "signals": {
+        "colored_fills": 16
+      }
+    },
+    {
+      "page": 826,
+      "png": "pages/p826.png",
+      "signals": {
+        "colored_fills": 75
+      }
+    },
+    {
+      "page": 862,
+      "png": "pages/p862.png",
+      "signals": {
+        "colored_fills": 9
+      }
+    },
+    {
+      "page": 863,
+      "png": "pages/p863.png",
+      "signals": {
+        "colored_fills": 16
+      }
+    },
+    {
+      "page": 864,
+      "png": "pages/p864.png",
+      "signals": {
+        "curves": 422,
+        "colored_fills": 5
+      }
+    },
+    {
+      "page": 865,
+      "png": "pages/p865.png",
+      "signals": {
+        "curves": 1091,
+        "colored_fills": 100
+      }
+    }
+  ]
+}

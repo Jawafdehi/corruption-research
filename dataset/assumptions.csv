@@ -1,0 +1,8 @@
+key,value,unit,note,source_url
+funnel_complaints,28554,count,new complaints registered in FY2081/82 (Table 2.2 चालु आ.व. column; excludes 8472 prior-year carryover; total workload was 37026),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+funnel_investigated,947,count,detailed investigations completed in FY2081/82,https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+funnel_filed,137,count,corruption prosecutions filed at the Special Court in FY2081/82 (135 corruption + 2 money-laundering),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+ciaa_complaints_5yr,107050,count,new complaints registered FY2077/78–2081/82 (5-yr workload 148235 minus 41185 prior-year backlog recycled across years),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+ciaa_filed_5yr,744,count,corruption prosecutions filed FY2077/78–2081/82 (chart 3.2 sum 113+131+162+201+137),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+ciaa_damages_1yr_bn,6.02,Rs billion,damages (bigo) demanded by the CIAA in FY2081/82 (Rs 6018472692),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665
+ciaa_success_rate_pct,52.67,percent,CIAA single-year success rate FY2081/82 (full + partial conviction; volatile YoY ~33–72%),https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665

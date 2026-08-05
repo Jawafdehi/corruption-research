@@ -1,0 +1,126 @@
+{
+  "pdf": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2069-70/23rd-annual-report-2069-70.pdf",
+  "page_count": 542,
+  "dpi": 300,
+  "cover_thresh": 0.1,
+  "candidates": [
+    {
+      "page": 1,
+      "png": "pages/p001.png",
+      "signals": {
+        "raster_cover": 0.28,
+        "colored_fills": 136
+      }
+    },
+    {
+      "page": 517,
+      "png": "pages/p517.png",
+      "signals": {
+        "curves": 1340,
+        "colored_fills": 74
+      }
+    },
+    {
+      "page": 518,
+      "png": "pages/p518.png",
+      "signals": {
+        "curves": 1178
+      }
+    },
+    {
+      "page": 527,
+      "png": "pages/p527.png",
+      "signals": {
+        "curves": 248,
+        "colored_fills": 7
+      }
+    },
+    {
+      "page": 528,
+      "png": "pages/p528.png",
+      "signals": {
+        "raster_cover": 0.134,
+        "curves": 3723,
+        "colored_fills": 32
+      }
+    },
+    {
+      "page": 534,
+      "png": "pages/p534.png",
+      "signals": {
+        "raster_cover": 0.313,
+        "curves": 1237,
+        "colored_fills": 19
+      }
+    },
+    {
+      "page": 535,
+      "png": "pages/p535.png",
+      "signals": {
+        "curves": 272,
+        "colored_fills": 7
+      }
+    },
+    {
+      "page": 536,
+      "png": "pages/p536.png",
+      "signals": {
+        "raster_cover": 0.33,
+        "curves": 1669,
+        "colored_fills": 20
+      }
+    },
+    {
+      "page": 537,
+      "png": "pages/p537.png",
+      "signals": {
+        "curves": 1022,
+        "colored_fills": 12
+      }
+    },
+    {
+      "page": 538,
+      "png": "pages/p538.png",
+      "signals": {
+        "raster_cover": 0.248,
+        "curves": 1452,
+        "colored_fills": 26
+      }
+    },
+    {
+      "page": 539,
+      "png": "pages/p539.png",
+      "signals": {
+        "raster_cover": 0.144,
+        "curves": 1519,
+        "colored_fills": 26
+      }
+    },
+    {
+      "page": 540,
+      "png": "pages/p540.png",
+      "signals": {
+        "raster_cover": 0.331,
+        "curves": 1533,
+        "colored_fills": 20
+      }
+    },
+    {
+      "page": 541,
+      "png": "pages/p541.png",
+      "signals": {
+        "raster_cover": 0.26,
+        "curves": 3778,
+        "colored_fills": 63
+      }
+    },
+    {
+      "page": 542,
+      "png": "pages/p542.png",
+      "signals": {
+        "curves": 1970,
+        "colored_fills": 121
+      }
+    }
+  ]
+}

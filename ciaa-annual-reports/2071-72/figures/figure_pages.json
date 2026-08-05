@@ -1,0 +1,106 @@
+{
+  "pdf": "/home/damo/projects/jawafdehi/jawafdehi-meta/work/2026-07-24-corruption-research-notebook/ciaa-annual-reports/2071-72/25th-annual-report-2071-72.pdf",
+  "page_count": 359,
+  "dpi": 300,
+  "cover_thresh": 0.1,
+  "candidates": [
+    {
+      "page": 1,
+      "png": "pages/p001.png",
+      "signals": {
+        "raster_cover": 0.28,
+        "colored_fills": 140
+      }
+    },
+    {
+      "page": 6,
+      "png": "pages/p006.png",
+      "signals": {
+        "curves": 1431
+      }
+    },
+    {
+      "page": 7,
+      "png": "pages/p007.png",
+      "signals": {
+        "colored_fills": 16
+      }
+    },
+    {
+      "page": 8,
+      "png": "pages/p008.png",
+      "signals": {
+        "raster_cover": 0.274
+      }
+    },
+    {
+      "page": 9,
+      "png": "pages/p009.png",
+      "signals": {
+        "curves": 549,
+        "colored_fills": 6
+      }
+    },
+    {
+      "page": 342,
+      "png": "pages/p342.png",
+      "signals": {
+        "curves": 80
+      }
+    },
+    {
+      "page": 353,
+      "png": "pages/p353.png",
+      "signals": {
+        "raster_cover": 0.149,
+        "colored_fills": 13
+      }
+    },
+    {
+      "page": 354,
+      "png": "pages/p354.png",
+      "signals": {
+        "colored_fills": 11
+      }
+    },
+    {
+      "page": 355,
+      "png": "pages/p355.png",
+      "signals": {
+        "raster_cover": 0.105,
+        "colored_fills": 9
+      }
+    },
+    {
+      "page": 356,
+      "png": "pages/p356.png",
+      "signals": {
+        "colored_fills": 8
+      }
+    },
+    {
+      "page": 357,
+      "png": "pages/p357.png",
+      "signals": {
+        "raster_cover": 0.156,
+        "curves": 503,
+        "colored_fills": 10
+      }
+    },
+    {
+      "page": 358,
+      "png": "pages/p358.png",
+      "signals": {
+        "curves": 1441,
+        "colored_fills": 9
+      }
+    },
+    {
+      "page": 359,
+      "png": "pages/p359.png",
+      "signals": {
+        "colored_fills": 50
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+.venv-notebook/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Intermediate render artifacts for the CIAA chart vision-transcription (~266 MB of page PNGs).
+# The markdown extractions + figures.json/figures.md (the useful outputs) are committed; these are not.
+ciaa-annual-reports/*/figures/pages/
