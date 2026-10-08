@@ -64,7 +64,7 @@ Court-wide: **61.3% convicted · 45.1% full only** (1,230 / 442 / 1,056 full / p
 
 ## Appeals — what survives the Supreme Court
 
-A conviction at the Special Court is not the end of the case. **1,809 of these trials have an established Supreme Court appeal**, and the two sides fare very differently.
+A conviction at the Special Court is not the end of the case. **1,797 of these trials have an established Supreme Court appeal**, and the two sides fare very differently.
 
 | Appealed by | Decided | Full reversals | Rate |
 |---|---:|---:|---:|
@@ -81,7 +81,7 @@ Applying only the appeals **already decided** — 157 convictions lost, 4 acquit
 | Full only | 45.1% | **40.0%** |
 | Funnel bottom, of 137 prosecutions | ≈84 | **≈76** |
 
-⚠️ **This is a floor on the eventual effect, not a settled number.** 831 of the 1,809 mapped appeals (46%) carry no recorded outcome yet. If they resolve in the same proportions the conviction rate lands nearer 51%, but that is a projection and must be labelled as one.
+⚠️ **This is a floor on the eventual effect, not a settled number.** 819 of the 1,797 mapped appeals (46%) carry no recorded outcome yet. If they resolve in the same proportions the conviction rate lands nearer 51%, but that is a projection and must be labelled as one.
 
 ### How the mapping was made, and what it cannot tell you
 
@@ -89,7 +89,7 @@ NGM stores trial and appeal cases in the same table with **no foreign key betwee
 
 **Direction — whether a reversal means *now convicted* or *now acquitted* — depends entirely on who appealed, and the caption flips.** That was verified three ways before any figure here was published: 503 of the 504 rows carrying a CIAA register decision date (a signal independent of party names) are marked commission-filed; the government's side on the party roster agrees with the recorded direction on all 163 reversal dockets; and 15 rows that failed a logical check (a defendant appearing to appeal their own acquittal) were **excluded** — all 15 were single-name matcher pairings with mismatched party counts, and none was a reversal.
 
-**A blank is not a finding.** Where no appeal is recorded it means none has been *established*, not that none exists. So 1,809 is a floor on how many of these trials were appealed, and every rate above is computed on decided appeals only.
+**A blank is not a finding.** Where no appeal is recorded it means none has been *established*, not that none exists. So 1,797 is a floor on how many of these trials were appealed, and every rate above is computed on decided appeals only.
 
 ### Where a verdict comes from — `verdict_derived`
 

@@ -267,6 +267,47 @@ def load_appeals():
     """
     return pd.read_csv(DATA / "appeals.csv")
 
+def appeal_effect():
+    """Everything the appeals section quotes, derived from `dataset/appeals.csv`.
+
+    One implementation so the prose, the funnel and the chart cannot drift apart: the
+    notebook's narrative numbers were hardcoded once before and went stale silently.
+
+    ⚠️ A reversal flips the trial outcome, but WHICH WAY depends on who appealed — the
+    caption flips on appeal. So every count here is filtered on `appealed_by`, never on
+    the verdict alone. Reading `reversed` without that filter inverts the finding on
+    roughly a third of the rows.
+
+    Full+partial (the default): a conviction is lost when the convicted person appealed
+    and won; one is gained when the commission appealed an acquittal and won, in full or
+    in part. Full-only: a partial reversal ALSO costs a full conviction (ठहर -> आंशिक),
+    and a commission win on a partial upgrades it to full.
+    """
+    ap = load_appeals()
+    CONV, ACQ = ("ठहर", "आंशिक ठहर"), "सफाई"
+    DEF, GOV = "DEFENDANT_PERSON", "CIAA_GOVERNMENT"
+    s = lambda df, *c: int(df[list(c)].sum().sum())
+    won_by_defendant = ap[ap.trial_outcome.isin(CONV) & (ap.appealed_by == DEF)]
+    won_by_commission = ap[(ap.trial_outcome == ACQ) & (ap.appealed_by == GOV)]
+
+    e = {"appeals": int(ap.appeals.sum()),
+         "no_outcome": int(ap.no_outcome_recorded.sum()),
+         "lost": s(won_by_defendant, "reversed"),
+         "gained": s(won_by_commission, "reversed", "partially_reversed"),
+         "lost_full": s(ap[(ap.trial_outcome == "ठहर") & (ap.appealed_by == DEF)],
+                        "reversed", "partially_reversed"),
+         "gained_full": s(ap[(ap.appealed_by == GOV) & (ap.trial_outcome != "ठहर")], "reversed")}
+    e["decided"] = e["appeals"] - e["no_outcome"]
+    e["net"] = e["gained"] - e["lost"]
+    e["net_full"] = e["gained_full"] - e["lost_full"]
+    for key, who in (("defendant", DEF), ("commission", GOV)):
+        side = ap[ap.appealed_by == who]
+        dec = int(side.appeals.sum() - side.no_outcome_recorded.sum())
+        e[key] = {"appeals": int(side.appeals.sum()), "decided": dec,
+                  "reversed": s(side, "reversed"),
+                  "pct": round(s(side, "reversed") / dec * 100, 1) if dec else 0.0}
+    return e
+
 def ad_to_bs(ad):
     "AD 'YYYY-MM-DD' -> BS 'YYYY-MM-DD', via the nepali_datetime calendar library."
     import datetime, nepali_datetime

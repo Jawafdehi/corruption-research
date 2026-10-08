@@ -35,6 +35,11 @@ _AVG_FULL = _conv / _clean * 100               # conservative variant (ठहर
 # default definition changed, and a hardcoded range silently goes stale.
 _jrates = _frames["justices"].conviction_pct
 _jhi, _jlo = _jrates.max(), _jrates.min()
+# Appeal figures come from dataset/appeals.csv via one derivation, so the prose, the funnel
+# and the §7 chart cannot disagree. Hardcoding these is how the narrative went stale before.
+_ap = cd.appeal_effect()
+_AVG_AP = (_conv + _part + _ap["net"]) / _clean * 100          # convicted, after decided appeals
+_AVG_FULL_AP = (_conv + _ap["net_full"]) / _clean * 100        # full only, after decided appeals
 
 # ============================================================ intro / method
 md(f"""# Corruption accountability at Nepal's Special Court — the full read
@@ -235,7 +240,7 @@ the trial-court outcome; **appeal reversals take it to ~{afterap}** — see §7.
     comp=f"{int(_assum['funnel_complaints']):,}", inv=f"{int(_assum['funnel_investigated']):,}",
     filed=f"{int(_assum['funnel_filed']):,}",
     cf=_ct['funnel_convicted'], cfull=_ct['funnel_convicted_full_only'], rate=f"{_AVG:.1f}",
-    afterap=round(int(_assum['funnel_filed']) * (_conv + _part - 153) / _clean)))
+    afterap=round(int(_assum['funnel_filed']) * _AVG_AP / 100)))
 code("""fn = funnel.copy()   # top 3 = CIAA actuals (assumptions.csv); convicted = derived (rate x filed)
 lab = {"complaints": "उजुरी (Complaints)", "investigated": "पूर्ण अनुसन्धान (Investigated)",
        "filed": "अभियोजन दायर (Prosecuted)", "convicted": "दोषी ठहर (Conviction, est.)"}
@@ -574,22 +579,22 @@ fig""")
 # ============================================================ 7. appeals
 md("""## 7. Appeals — what survives the Supreme Court
 
-A conviction at the Special Court is not the end of the case. Of these trials, **1,809 have an
+A conviction at the Special Court is not the end of the case. Of these trials, **{n} have an
 established Supreme Court appeal**, and the two sides fare very differently.
 
-**The Commission almost never wins an appeal.** Across 549 decided appeals it obtained a full reversal
-**six times — 1.1%**. Defendants, across 429 decided, did so **157 times — 36.6%**. Put plainly: the
-Special Court's acquittals are close to final, and its convictions are not. That asymmetry is arguably
-a larger finding than the conviction rate itself, and it points the same way as §8: the accountability
-loss is concentrated on the Commission's side of the process.
+**The Commission almost never wins an appeal.** Across {cdec} decided appeals it obtained a full
+reversal **{crev} times — {cpct}%**. Defendants, across {ddec} decided, did so **{drev} times —
+{dpct}%**. Put plainly: the Special Court's acquittals are close to final, and its convictions are
+not. That asymmetry is arguably a larger finding than the conviction rate itself, and it points the
+same way as §8: the accountability loss is concentrated on the Commission's side of the process.
 
-Applying only the appeals **already decided** — 157 convictions lost, 4 acquittals overturned into
-convictions, net −153 — the court-wide rate moves from **{t0}% to {t1}%** convicted, and the
-conservative full-only rate from **{f0}% to {f1}%**.
+Applying only the appeals **already decided** — {lost} convictions lost, {gained} acquittals
+overturned into convictions, net {net} — the court-wide rate moves from **{t0}% to {t1}%**
+convicted, and the conservative full-only rate from **{f0}% to {f1}%**.
 
-⚠️ **A floor on the eventual effect, not a settled number.** 831 of the 1,809 mapped appeals (46%)
-carry no recorded outcome yet. If they resolve in the same proportions the rate lands nearer 51% — a
-projection, not a measurement.
+⚠️ **A floor on the eventual effect, not a settled number.** {none} of the {n} mapped appeals ({npct}%)
+carry no recorded outcome yet. If they resolve in the same proportions the rate lands nearer
+{proj}% — a projection, not a measurement.
 
 *(Source: `dataset/appeals.csv`, an aggregate of a curated trial→appeal mapping. NGM stores trial and
 appeal cases in one table with no foreign key between them, so the pairing was built from the CIAA
@@ -599,8 +604,16 @@ now-convicted or now-acquitted — depends on who appealed, and the caption flip
 three ways: 503 of 504 rows carrying an independent CIAA register decision date agree; the government's
 side on the party roster agrees on all 163 reversal dockets; and 15 rows failing a logical check were
 excluded. A blank is not a finding — where no appeal is recorded, none has been *established*.)*""".format(
-    t0=f"{_AVG:.1f}", t1=f"{(_conv + _part - 153) / _clean * 100:.1f}",
-    f0=f"{_AVG_FULL:.1f}", f1=f"{(_conv - 143 + 5) / _clean * 100:.1f}"))
+    n=f"{_ap['appeals']:,}", none=f"{_ap['no_outcome']:,}",
+    npct=round(_ap['no_outcome'] / _ap['appeals'] * 100),
+    cdec=f"{_ap['commission']['decided']:,}", crev=_ap['commission']['reversed'],
+    cpct=f"{_ap['commission']['pct']:.1f}",
+    ddec=f"{_ap['defendant']['decided']:,}", drev=_ap['defendant']['reversed'],
+    dpct=f"{_ap['defendant']['pct']:.1f}",
+    lost=_ap['lost'], gained=_ap['gained'], net=f"{_ap['net']:+d}".replace("-", "−"),
+    t0=f"{_AVG:.1f}", t1=f"{_AVG_AP:.1f}", f0=f"{_AVG_FULL:.1f}", f1=f"{_AVG_FULL_AP:.1f}",
+    # if the undecided resolve in the same proportions as those already decided
+    proj=round((_conv + _part + _ap['net'] * _ap['appeals'] / _ap['decided']) / _clean * 100)))
 code("""ap = cd.load_appeals()
 side = ap.groupby("appealed_by")[["appeals", "affirmed", "claim_denied", "reversed",
                                   "partially_reversed", "other_procedural", "no_outcome_recorded"]].sum()
