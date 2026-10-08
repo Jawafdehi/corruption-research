@@ -253,6 +253,20 @@ def load_dataset(refresh=False):
 def load_assumptions():
     return pd.read_csv(DATA / "assumptions.csv")
 
+def load_appeals():
+    """Trial outcome x who appealed x Supreme Court outcome, as counts of CASES.
+
+    An aggregate of a curated trial->appeal mapping that is not itself published: NGM holds trial and
+    appeal cases in one table with no foreign key between them, so the pairing had to be built by hand
+    and is a v0 dataset. Only the aggregate is shipped, which is enough to reproduce every appeal rate
+    quoted in the notebook without republishing provisional per-case pairings.
+
+    `reversed` folds ACQUITTED into REVERSED (both are the lower court's verdict fully overturned);
+    `partially_reversed` folds PARTIALLY_UPHELD. `no_outcome_recorded` is NOT "pending" -- Supreme
+    disposition enrichment is incomplete, so some decided appeals read blank.
+    """
+    return pd.read_csv(DATA / "appeals.csv")
+
 def ad_to_bs(ad):
     "AD 'YYYY-MM-DD' -> BS 'YYYY-MM-DD', via the nepali_datetime calendar library."
     import datetime, nepali_datetime
@@ -356,8 +370,11 @@ def _transform(cases, hearings, entities, assumptions):
     dispo = hc.groupby("decision_type").case_number.nunique().to_dict()
     cv_all, pt_all, aq_all = dispo.get("ठहर", 0), dispo.get("आंशिक ठहर", 0), dispo.get("सफाई", 0)
     clean = cv_all + pt_all + aq_all
-    full_rate = cv_all / clean if clean else 0.0             # "convicted" = ठहर only (headline)
-    incl_rate = (cv_all + pt_all) / clean if clean else 0.0  # + आंशिक ठहर (partial counted as a win)
+    # "Convicted" = ठहर + आंशिक ठहर is the DEFAULT (and the CIAA's own definition, so our rate is
+    # comparable to its published "success rate"). full_rate is the conservative variant, reported
+    # alongside everywhere and never on its own.
+    incl_rate = (cv_all + pt_all) / clean if clean else 0.0  # headline: convicted
+    full_rate = cv_all / clean if clean else 0.0             # secondary: ठहर only
 
     f = {}
 
@@ -450,7 +467,10 @@ def _transform(cases, hearings, entities, assumptions):
     TRAILING_TITLE = re.compile(r"(?:माननीय|न्यायाधीश|प्र\.क्षे\.न्या\.|डा\.|मा\.|\s)+$")
     jt = {}
     for bench, row in pb.iterrows():
-        cv = int(row.get("ठहर", 0)); tot = cv + int(row.get("सफाई", 0)) + int(row.get("आंशिक ठहर", 0))
+        # convicted = ठहर + आंशिक ठहर, matching the headline definition; a per-justice rate on a
+        # different definition from the court average it is plotted against would be unreadable.
+        cv = int(row.get("ठहर", 0)) + int(row.get("आंशिक ठहर", 0))
+        tot = cv + int(row.get("सफाई", 0))
         for frag in re.split(r"अध्यक्ष|सदस्य|\n", str(bench)):
             parts = re.split(r"श्री\s+", frag)
             # parts[0] is whatever preceded the first marker (the honorific run, or the entire
@@ -466,14 +486,14 @@ def _transform(cases, hearings, entities, assumptions):
         columns=["justice", "decisions", "conviction_pct"])
 
     # Accountability funnel. Top three stages are CIAA annual-report actuals (assumptions table); the
-    # conviction floor is DERIVED — our corpus full-conviction rate applied to the CIAA filed count —
-    # so nothing here is hand-entered. Bottom bar is full (ठहर) only; the incl.-partial variant is a
-    # scalar (below) for annotation. All four stages are counts of CASES / prosecutions, not people.
+    # conviction bar is DERIVED — our corpus conviction rate applied to the CIAA filed count — so
+    # nothing here is hand-entered. Bottom bar is convicted (ठहर + आंशिक ठहर); the full-only variant
+    # is a scalar (below) for annotation. All four stages are counts of CASES / prosecutions, not people.
     a = dict(zip(assumptions.key, assumptions.value))
     filed_n = int(a["funnel_filed"])
     f["funnel"] = pd.DataFrame(
         [["complaints", int(a["funnel_complaints"])], ["investigated", int(a["funnel_investigated"])],
-         ["filed", filed_n], ["convicted", round(filed_n * full_rate)]],
+         ["filed", filed_n], ["convicted", round(filed_n * incl_rate)]],
         columns=["stage_key", "count"])
 
     # Headline scalars.
@@ -491,10 +511,13 @@ def _transform(cases, hearings, entities, assumptions):
         ["avg_filed_per_year", round(corpus_all / N_FY, 1)],
         ["outcome_convicted", cv_all], ["outcome_partial", pt_all], ["outcome_acquitted", aq_all],
         ["outcome_convicted_incl_partial", cv_all + pt_all],
-        ["full_conviction_rate_pct", round(full_rate * 100, 1)],
-        ["conviction_incl_partial_pct", round(incl_rate * 100, 1)],
-        ["funnel_convicted", round(filed_n * full_rate)],
-        ["funnel_convicted_incl_partial", round(filed_n * incl_rate)],
+        # The unqualified name carries the DEFAULT definition (ठहर + आंशिक ठहर); the full-only
+        # variant is explicitly suffixed. Named the other way round until 2026-10, when the default
+        # changed — a consumer reading `funnel_convicted` then silently got the conservative figure.
+        ["conviction_rate_pct", round(incl_rate * 100, 1)],
+        ["conviction_rate_full_only_pct", round(full_rate * 100, 1)],
+        ["funnel_convicted", round(filed_n * incl_rate)],
+        ["funnel_convicted_full_only", round(filed_n * full_rate)],
         ["outcome_decided", int(corpus.is_decided.sum())],
         ["outcome_ongoing", int((has_status & ~corpus.is_decided).sum())],
         # Verdicts read out of the court's judgment by a model rather than coded

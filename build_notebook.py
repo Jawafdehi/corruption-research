@@ -29,8 +29,12 @@ _ct = dict(zip(_frames["corpus_totals"].metric, _frames["corpus_totals"].value))
 _assum = dict(zip(_frames["assumptions"].key, _frames["assumptions"].value))
 _conv, _part, _acq = _ct["outcome_convicted"], _ct["outcome_partial"], _ct["outcome_acquitted"]
 _clean = _conv + _part + _acq
-_AVG = _conv / _clean * 100                    # headline full-conviction rate (ठहर only)
-_AVG2 = (_conv + _part) / _clean * 100         # incl. partial
+_AVG = (_conv + _part) / _clean * 100          # HEADLINE conviction rate (ठहर + आंशिक ठहर)
+_AVG_FULL = _conv / _clean * 100               # conservative variant (ठहर only), shown alongside
+# §4's quoted range, read off the data rather than hand-entered — it moved ~16 points when the
+# default definition changed, and a hardcoded range silently goes stale.
+_jrates = _frames["justices"].conviction_pct
+_jhi, _jlo = _jrates.max(), _jrates.min()
 
 # ============================================================ intro / method
 md(f"""# Corruption accountability at Nepal's Special Court — the full read
@@ -151,24 +155,24 @@ leadership = frames["leadership"]
 ct = dict(zip(corpus_totals.metric, corpus_totals.value))
 conv, part, acq = ct['outcome_convicted'], ct['outcome_partial'], ct['outcome_acquitted']
 clean = conv + part + acq                    # decided cases with a clean disposition (mutually exclusive)
-AVG = conv / clean * 100                      # HEADLINE full-conviction rate (ठहर only)
-AVG2 = (conv + part) / clean * 100            # incl. partial (ठहर + आंशिक ठहर) — shown alongside everywhere
+AVG = (conv + part) / clean * 100             # HEADLINE conviction rate (ठहर + आंशिक ठहर)
+AVG_FULL = conv / clean * 100                 # conservative variant (ठहर only) — shown alongside everywhere
 print(f"corpus={ct['corpus_in_window']:,}  substantive={ct['substantive']:,}  avg/yr={ct['avg_filed_per_year']}  "
       f"decided={ct['outcome_decided']:,}  ongoing={ct['outcome_ongoing']:,}  "
-      f"conv/part/acq={conv:,}/{part:,}/{acq:,}  full={AVG:.1f}%  incl-partial={AVG2:.1f}%")""")
+      f"conv/part/acq={conv:,}/{part:,}/{acq:,}  convicted={AVG:.1f}%  full-only={AVG_FULL:.1f}%")""")
 
 # ============================================================ headline / KPIs
 md(f"""## Headline numbers — सारांश तथ्यांक
 
 Six figures that frame everything below. Of ~{_ct['corpus_in_window']:,} `-CR-` criminal prosecutions filed in the window
 (~{_ct['avg_filed_per_year']:.0f} per year), ~{_ct['substantive']:,} are substantive corruption charges; ~{_ct['outcome_decided']:,} have been decided; and of the
-decided cases with a clean disposition, **fewer than half** end in a full conviction.""")
+decided cases with a clean disposition, about **three in five** end in a conviction — and that is before appeal.""")
 code("""tiles = [
     ("-CR- अभियोजन (Criminal prosecutions)", dev(f"{ct['corpus_in_window']:,}")),
     ("सारभूत भ्रष्टाचार मुद्दा (Substantive)", dev(f"{ct['substantive']:,}")),
     ("औसत वार्षिक दायर (Avg. filed / year)", dev(f"{ct['avg_filed_per_year']:.1f}")),
     ("टुंगिएका (Decided)", dev(f"{ct['outcome_decided']:,}")),
-    (f"पूर्ण दोषी ठहर दर (Full-conviction) · आंशिकसहित {dev(f'{AVG2:.1f}')}% (incl. partial)", dev(f"{AVG:.1f}") + "%"),
+    (f"दोषी ठहर दर (Conviction) · पूर्ण ठहर मात्र {dev(f'{AVG_FULL:.1f}')}% (full only)", dev(f"{AVG:.1f}") + "%"),
     ("बाँकी / चलिरहेका (Ongoing backlog)", dev(f"{ct['outcome_ongoing']:,}")),
 ]
 fig = go.Figure()
@@ -199,35 +203,42 @@ cases:
   data, so we never split a case's defendants into convicted vs. acquitted.
 - **सफाई (saphāī) — acquittal:** the accused are cleared / the case dismissed.
 
-**"Convicted" = full (ठहर) only** is the headline throughout (a conservative bar). Because partial is a
-real, common outcome, every figure also shows the **incl.-partial** rate alongside — so the court-wide
-rate reads **{full}% full · {incl}% incl. partial** ({conv:,} / {part:,} / {acq:,} full / partial / acquittal
-across {clean:,} decided cases). For contrast, the CIAA's own reported "success rate" ({ciaa}%) counts full
-+ partial together.""".format(
-    full=f"{_AVG:.1f}", incl=f"{_AVG2:.1f}", conv=_conv, part=_part, acq=_acq, clean=_clean,
+**"Convicted" = full + partial (ठहर + आंशिक ठहर)** is the default throughout. That is also the CIAA's own
+definition — its published "success rate" ({ciaa}%) counts both — so our rate is directly comparable to it.
+The conservative **full-only** rate is reported alongside everywhere and never on its own, because the two
+answer different questions and the record cannot choose between them: full-only treats every mixed verdict
+as a failure, full+partial treats a case where one junior official was convicted and everyone senior walked
+as a win. So the court-wide rate reads **{incl}% convicted · {full}% full only** ({conv:,} / {part:,} / {acq:,}
+full / partial / acquittal across {clean:,} decided cases). On the like-for-like definition this archive comes
+out **above** the Commission's figure, not below it.
+
+⚠️ **These are trial-court rates — see §7 for what survives appeal.**""".format(
+    full=f"{_AVG_FULL:.1f}", incl=f"{_AVG:.1f}", conv=_conv, part=_part, acq=_acq, clean=_clean,
     ciaa=_assum.get("ciaa_success_rate_pct", "52.67")))
 
 # ============================================================ 1. funnel
-md("""## 1. The funnel — about 0.2% of complaints end in a full conviction
+md("""## 1. The funnel — about 0.3% of complaints end in a conviction
 
 Accountability is a pipeline, and almost all of the loss happens **before** a courtroom is involved.
 Of the ~{comp} complaints **newly registered** at the CIAA in a single year (FY2081/82), only ~{inv}
-reach a full investigation, ~{filed} become prosecutions, and an estimated **~{cf} end in a full
-conviction (~{ci} if partial convictions count)**. The steepest drop by far is at **intake screening**,
+reach a full investigation, ~{filed} become prosecutions, and an estimated **~{cf} end in a conviction
+(~{cfull} counting full ठहर only)**. The steepest drop by far is at **intake screening**,
 not adjudication.
 *(Each stage counts that fiscal year's CIAA activity — a **throughput snapshot, not a traced cohort**:
 this year's investigations and filings come from complaints of several years, and most of this year's
 complaints resolve later. The top of the funnel is **newly registered** complaints only — it excludes
 the ~8,500 prior-year backlog the CIAA also re-processed this year (total workload ~37,026), which
 already entered as intake in their own registration year. Top three stages are CIAA annual-report
-actuals; the conviction floor is **derived, not assumed** — the corpus full-conviction rate ({full}%)
-applied to the filed count. Every stage is a count of **cases/prosecutions, not people**.)*""".format(
+actuals; the conviction bar is **derived, not assumed** — the corpus conviction rate ({rate}%)
+applied to the filed count. Every stage is a count of **cases/prosecutions, not people**. This bar is
+the trial-court outcome; **appeal reversals take it to ~{afterap}** — see §7.)*""".format(
     comp=f"{int(_assum['funnel_complaints']):,}", inv=f"{int(_assum['funnel_investigated']):,}",
     filed=f"{int(_assum['funnel_filed']):,}",
-    cf=_ct['funnel_convicted'], ci=_ct['funnel_convicted_incl_partial'], full=f"{_AVG:.1f}"))
+    cf=_ct['funnel_convicted'], cfull=_ct['funnel_convicted_full_only'], rate=f"{_AVG:.1f}",
+    afterap=round(int(_assum['funnel_filed']) * (_conv + _part - 153) / _clean)))
 code("""fn = funnel.copy()   # top 3 = CIAA actuals (assumptions.csv); convicted = derived (rate x filed)
 lab = {"complaints": "उजुरी (Complaints)", "investigated": "पूर्ण अनुसन्धान (Investigated)",
-       "filed": "अभियोजन दायर (Prosecuted)", "convicted": "पूर्ण दोषी ठहर (Full conviction, est.)"}
+       "filed": "अभियोजन दायर (Prosecuted)", "convicted": "दोषी ठहर (Conviction, est.)"}
 fn["label"] = fn.stage_key.map(lab).fillna(fn.stage_key)
 top = fn["count"].iloc[0]
 fn["text"] = [f"{dev(f'{c:,}')} ({dev(f'{c / top * 100:.1f}')}%)" for c in fn["count"]]
@@ -235,8 +246,8 @@ fig = go.Figure(go.Funnel(y=fn["label"], x=fn["count"], text=fn["text"], textinf
                           marker={"color": [NAVY, BLUE, AMBER, GREEN]}))
 fig.add_annotation(x=0.5, xref="paper", y=-0.14, yref="paper", showarrow=False,
                    font={"size": 12, "color": "#64748b"},
-                   text=f"आंशिक ठहरसहित अनुमान ~{dev(str(ct['funnel_convicted_incl_partial']))} "
-                        f"(incl. partial ~{ct['funnel_convicted_incl_partial']}) · counts are cases, not defendants")
+                   text=f"पूर्ण ठहर मात्र ~{dev(str(ct['funnel_convicted_full_only']))} "
+                        f"(full only ~{ct['funnel_convicted_full_only']}) · counts are cases, not defendants")
 fig.update_layout(title="अख्तियार जवाफदेहिता फनेल (CIAA accountability funnel, आ.व. २०८१/८२)",
                   height=460, margin={"l": 180, "b": 70})
 fig""")
@@ -248,14 +259,16 @@ gets reported.""".format(
     d1=_assum['ciaa_damages_1yr_bn']))
 
 # ============================================================ 2. outcomes
-md("""## 2. Outcomes — fewer than half of decided prosecutions convict cleanly
+md("""## 2. Outcomes — about three in five decided prosecutions convict
 
 Restricting to the corpus's decided cases with a clean disposition, the split is
 **{full}% full conviction / {p}% partial / {a}% acquittal**. "Partial" (आंशिक ठहर) is where a mixed
 outcome lands — some accused convicted and others acquitted, or conviction on some counts / a reduced
-amount (these are *case* verdicts; the data carries no per-defendant outcome). Counting partial as a
-win, **{incl}% end in at least a partial conviction** — but **fewer than half convict cleanly.**""".format(
-    full=f"{_AVG:.0f}", p=f"{_part / _clean * 100:.0f}", a=f"{_acq / _clean * 100:.0f}", incl=f"{_AVG2:.0f}"))
+amount (these are *case* verdicts; the data carries no per-defendant outcome). On the default
+definition that makes **{incl}% convicted**; on the conservative one, **{full}% convict cleanly**. The
+gap between those two numbers is the {p}% of cases the court itself declined to resolve either way.""".format(
+    full=f"{_AVG_FULL:.0f}", p=f"{_part / _clean * 100:.0f}", a=f"{_acq / _clean * 100:.0f}",
+    incl=f"{_AVG:.0f}"))
 code("""vals = [conv, part, acq]
 labs = [L_CONV, L_PART, L_ACQ]
 txt = [f"{L}<br>{dev(f'{v:,}')} ({dev(f'{v / clean * 100:.0f}')}%)" for L, v in zip(labs, vals)]
@@ -296,26 +309,30 @@ fig.add_vline(x=AVG, line_dash="dash", line_color=NAVY,
 fig""")
 
 # ============================================================ 4. which bench
-md("""## 4. Which bench you draw — full-conviction rate per justice
+md("""## 4. Which bench you draw — conviction rate per justice
 
 Outcomes vary almost as much by **who decides** as by what was charged. Each dot is one justice who
-sat on ≥30 decided corruption cases; the x-position is that justice's full-conviction rate, the **dot
+sat on ≥30 decided corruption cases; the x-position is that justice's conviction rate on the default
+definition (ठहर + आंशिक ठहर), matching the court average it is plotted against, the **dot
 size is how many decisions** they wrote, and the colour band flags whether they convict more, near, or
-less than the court average. The range runs from roughly **78% down to 21%**. *(Names are read verbatim
+less than the court average. The range runs from roughly **{hi}% down to {lo}%**. *(Names are read verbatim
 from public court records; caseload is not randomly assigned, so read this as a description of the
 bench, not a ranking of rigour.)*
 
-> **Why this differs from the website.** The published (all-years) page shows a wider **~25–85%** range
-> with more justices. Because our corpus starts at **FY2069/70**, benches that sat mainly *before* that
-> boundary fall outside this chart — including the court's early-era chairs, whose full-conviction rates
-> ran to **~85%** but whose dockets were filed under the old pre-Shrawan-2069 numbering. One such chair
-> has 37 lifetime decisions at ~86% but only 5 inside our window (below the ≥30 threshold), so he drops
-> out. This isn't a data error; it's the same era-shift Section 5 describes — the window trades away the
-> early high-conviction docket by design.""")
+> **Why this differs from the website.** Because our corpus starts at **FY2069/70**, benches that sat
+> mainly *before* that boundary fall outside this chart — including the court's early-era chairs, whose
+> conviction rates ran higher but whose dockets were filed under the old pre-Shrawan-2069 numbering.
+> One such chair has 37 lifetime decisions but only 5 inside our window (below the ≥30 threshold), so
+> he drops out. This isn't a data error; it's the same era-shift Section 5 describes — the window trades
+> away the early high-conviction docket by design. **Note also that this chart counts ठहर + आंशिक ठहर,
+> the default definition; a full-only version of the same chart sits roughly 16 points lower
+> throughout.**""".format(hi=f"{_jhi:.0f}", lo=f"{_jlo:.0f}"))
 code("""j = justices.sort_values("conviction_pct").copy()
-B_HI, B_MID, B_LO = "बढी दोषी ठहर (>55%)", "औसत नजिक (37–55%)", "बढी सफाई (<37%)"
+# Bands are centred on the court average (~61%), not on fixed numbers: under the full-only
+# definition the average was ~45, and the old 37/55 cuts would now put 31 of 39 justices in one bucket.
+B_HI, B_MID, B_LO = "बढी दोषी ठहर (>70%)", "औसत नजिक (52–70%)", "बढी सफाई (<52%)"
 def band(p):
-    return B_HI if p > 55 else (B_MID if p >= 37 else B_LO)
+    return B_HI if p > 70 else (B_MID if p >= 52 else B_LO)
 j["band"] = j.conviction_pct.map(band)
 fig = px.scatter(j, x="conviction_pct", y="justice", size="decisions", color="band",
                  color_discrete_map={B_HI: GREEN, B_MID: AMBER, B_LO: CRIMSON}, size_max=22,
@@ -554,8 +571,58 @@ fig.update_layout(xaxis_title="नेपाली महिना (Nepali month)
 fig.update_xaxes(tickangle=-45)
 fig""")
 
-# ============================================================ 7. where the gap is
-md("""## 7. Where the gap is — attrition concentrates at the CIAA stage, then goes dark
+# ============================================================ 7. appeals
+md("""## 7. Appeals — what survives the Supreme Court
+
+A conviction at the Special Court is not the end of the case. Of these trials, **1,809 have an
+established Supreme Court appeal**, and the two sides fare very differently.
+
+**The Commission almost never wins an appeal.** Across 549 decided appeals it obtained a full reversal
+**six times — 1.1%**. Defendants, across 429 decided, did so **157 times — 36.6%**. Put plainly: the
+Special Court's acquittals are close to final, and its convictions are not. That asymmetry is arguably
+a larger finding than the conviction rate itself, and it points the same way as §8: the accountability
+loss is concentrated on the Commission's side of the process.
+
+Applying only the appeals **already decided** — 157 convictions lost, 4 acquittals overturned into
+convictions, net −153 — the court-wide rate moves from **{t0}% to {t1}%** convicted, and the
+conservative full-only rate from **{f0}% to {f1}%**.
+
+⚠️ **A floor on the eventual effect, not a settled number.** 831 of the 1,809 mapped appeals (46%)
+carry no recorded outcome yet. If they resolve in the same proportions the rate lands nearer 51% — a
+projection, not a measurement.
+
+*(Source: `dataset/appeals.csv`, an aggregate of a curated trial→appeal mapping. NGM stores trial and
+appeal cases in one table with no foreign key between them, so the pairing was built from the CIAA
+register where it prints both numbers, from Supreme judgments naming the trial case, and otherwise by
+matching defendant names; ~97.8% precision on a 90-row audit. **Direction — whether a reversal means
+now-convicted or now-acquitted — depends on who appealed, and the caption flips**, so it was verified
+three ways: 503 of 504 rows carrying an independent CIAA register decision date agree; the government's
+side on the party roster agrees on all 163 reversal dockets; and 15 rows failing a logical check were
+excluded. A blank is not a finding — where no appeal is recorded, none has been *established*.)*""".format(
+    t0=f"{_AVG:.1f}", t1=f"{(_conv + _part - 153) / _clean * 100:.1f}",
+    f0=f"{_AVG_FULL:.1f}", f1=f"{(_conv - 143 + 5) / _clean * 100:.1f}"))
+code("""ap = cd.load_appeals()
+side = ap.groupby("appealed_by")[["appeals", "affirmed", "claim_denied", "reversed",
+                                  "partially_reversed", "other_procedural", "no_outcome_recorded"]].sum()
+side["decided"] = side.appeals - side.no_outcome_recorded
+side["reversal_pct"] = (side["reversed"] / side.decided * 100).round(1)
+print(side[["appeals", "decided", "reversed", "reversal_pct"]].to_string())
+
+lab = {"CIAA_GOVERNMENT": "अख्तियार (CIAA appealed)", "DEFENDANT_PERSON": "प्रतिवादी (Defendant appealed)"}
+d = side.reset_index()
+d["label"] = d.appealed_by.map(lab)
+fig = go.Figure(go.Bar(y=d.label, x=d.reversal_pct, orientation="h",
+                       marker_color=[BLUE, CRIMSON],
+                       text=[f"{dev(f'{p:.1f}')}% ({dev(str(int(r)))}/{dev(str(int(n)))})"
+                             for p, r, n in zip(d.reversal_pct, d["reversed"], d.decided)],
+                       textposition="outside"))
+fig.update_layout(title="पुनरावेदनमा उल्टिएको दर (Share of decided appeals fully reversed)",
+                  xaxis_title="उल्टिएको % (Reversed %)", height=300,
+                  margin={"l": 190, "r": 90}, xaxis_range=[0, 45])
+fig""")
+
+# ============================================================ 8. where the gap is
+md("""## 8. Where the gap is — attrition concentrates at the CIAA stage, then goes dark
 
 Putting the sections together, the accountability pipeline leaks unevenly:
 
@@ -577,7 +644,7 @@ The two stages we most want for a full accountability story — appeal and recov
 we can't measure from this data.""")
 
 # ============================================================ 8. methodology
-md(f"""## 8. Methodology & data gaps
+md(f"""## 9. Methodology & data gaps
 
 **Source of truth.** Everything sits in one `dataset/` folder: `cases.csv` (the {_ct['corpus_in_window']:,} `-CR-` corpus),
 `hearings.csv`, `entities.csv`, and `assumptions.csv` (external CIAA constants, with a `source_url` per

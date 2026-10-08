@@ -1,0 +1,6 @@
+trial_outcome,appealed_by,appeals,affirmed,claim_denied,reversed,partially_reversed,other_procedural,no_outcome_recorded
+ठहर,CIAA_GOVERNMENT,99,16,14,1,1,0,67
+ठहर,DEFENDANT_PERSON,596,226,4,142,1,8,215
+आंशिक ठहर,CIAA_GOVERNMENT,259,48,31,3,9,7,161
+आंशिक ठहर,DEFENDANT_PERSON,109,25,2,15,4,2,61
+सफाई,CIAA_GOVERNMENT,734,410,3,2,2,2,315
