@@ -56,7 +56,40 @@ The court records **one verdict per case** (per docket), coded as one of three d
 - **आंशिक ठहर** (āṃśik ṭhahar) — **partial conviction**: upheld *in part*. **This is where a mixed bench lands** — some accused convicted and others acquitted, or conviction on some counts / a reduced amount. There is **no per-defendant verdict** in the data, so we never split a case's defendants into convicted vs. acquitted.
 - **सफाई** (saphāī) — **acquittal**: the accused are cleared / case dismissed.
 
-**"Convicted" = full (ठहर) only** is the headline everywhere (a conservative bar); the **incl.-partial** rate is shown alongside. Court-wide that is **45.1% full · 61.3% incl. partial** (1,230 / 442 / 1,056 full / partial / acquittal across the 2,728 cases carrying a clean disposition — a different set from the 2,740 marked decided, not a subset of it: 2,628 are in both, 112 are marked decided but carry no hearing with a `decision_type` (mostly cases from the mirror's latest backfill), and 100 carry a disposition without a फैसला `case_status`). The CIAA's own reported "success rate" (52.67%, an assumption) counts full + partial together. The `entities` table's `nes_id` flag means *matched to the registry* (entity resolution), **not** convicted — don't read it as an outcome.
+**"Convicted" = full + partial (ठहर + आंशिक ठहर).** That is the default definition throughout, and it is the CIAA's own: the Commission's published "success rate" (52.67%, an assumption) counts full and partial together, so ours is directly comparable to it. The conservative **full-only** rate is reported alongside everywhere, never on its own, because the two answer different questions and the court's record cannot choose between them — it publishes one verdict per case and no per-accused outcome, so a partial cannot be resolved into how many of the accused were actually convicted. Reporting full-only treats every mixed verdict as a failure; reporting full+partial treats a case where one junior official was convicted and everyone senior walked as a win. Say which you are using, every time.
+
+Court-wide: **61.3% convicted · 45.1% full only** (1,230 / 442 / 1,056 full / partial / acquittal across the 2,728 cases carrying a clean disposition — a different set from the 2,740 marked decided, not a subset of it: 2,628 are in both, 112 are marked decided but carry no hearing with a `decision_type` (mostly cases from the mirror's latest backfill), and 100 carry a disposition without a फैसला `case_status`). On the like-for-like definition this archive comes out **above** the Commission's figure, not below it — anyone presenting the gap as the CIAA overstating itself has the direction wrong.
+
+⚠️ **Those are trial-court rates. They are not what survived appeal** — see [Appeals](#appeals-what-survives-the-supreme-court). The `entities` table's `nes_id` flag means *matched to the registry* (entity resolution), **not** convicted — don't read it as an outcome.
+
+## Appeals — what survives the Supreme Court
+
+A conviction at the Special Court is not the end of the case. **1,797 of these trials have an established Supreme Court appeal**, and the two sides fare very differently.
+
+| Appealed by | Decided | Full reversals | Rate |
+|---|---:|---:|---:|
+| The convicted person | 429 | 157 | **36.6%** |
+| The CIAA | 549 | 6 | **1.1%** |
+
+**The Commission almost never wins an appeal.** Across 549 decided appeals it obtained a full reversal six times. Defendants, across 429, did so 157 times. Put plainly: the Special Court's acquittals are close to final, and its convictions are not.
+
+Applying only the appeals **already decided** — 157 convictions lost, 4 acquittals overturned into convictions, net −153:
+
+| | Trial court | After appeals decided so far |
+|---|---:|---:|
+| Convicted (full + partial) | 61.3% | **55.7%** |
+| Full only | 45.1% | **40.0%** |
+| Funnel bottom, of 137 prosecutions | ≈84 | **≈76** |
+
+⚠️ **This is a floor on the eventual effect, not a settled number.** 819 of the 1,797 mapped appeals (46%) carry no recorded outcome yet. If they resolve in the same proportions the conviction rate lands nearer 51%, but that is a projection and must be labelled as one.
+
+### How the mapping was made, and what it cannot tell you
+
+NGM stores trial and appeal cases in the same table with **no foreign key between them**, so the pairing had to be built: from the CIAA register where it prints both case numbers, from Supreme judgments that name the trial case, and otherwise by bipartite matching on defendant names. It is a curated v0 dataset (`docs/appeal-mapping/` in the internal repo), audited at ~97.8% precision on a 90-row sample.
+
+**Direction — whether a reversal means *now convicted* or *now acquitted* — depends entirely on who appealed, and the caption flips.** That was verified three ways before any figure here was published: 503 of the 504 rows carrying a CIAA register decision date (a signal independent of party names) are marked commission-filed; the government's side on the party roster agrees with the recorded direction on all 163 reversal dockets; and 15 rows that failed a logical check (a defendant appearing to appeal their own acquittal) were **excluded** — all 15 were single-name matcher pairings with mismatched party counts, and none was a reversal.
+
+**A blank is not a finding.** Where no appeal is recorded it means none has been *established*, not that none exists. So 1,797 is a floor on how many of these trials were appealed, and every rate above is computed on decided appeals only.
 
 ### Where a verdict comes from — `verdict_derived`
 
@@ -108,7 +141,7 @@ Gotcha: Cloudflare 403s the default `urllib`/`requests` UA — `corpus_data` sen
 
 ## Assumptions (`dataset/assumptions.csv`)
 
-The figures the court records **cannot** give us — CIAA complaint/investigation volumes — are declared here as explicit assumptions, each with a `source_url`. They come from the CIAA annual-report PDFs (converted with **likhit**, the Nepali document→markdown converter; the PDFs + extractions are in `ciaa-annual-reports/`). Only the funnel's top three stages and the 5-year context box use them. The funnel's **bottom stage (convictions) is not an assumption** — it's *derived* live as `corpus full-conviction rate × filed` (≈62 full / ≈84 incl. partial), so nothing in the funnel is hand-entered below the CIAA inputs.
+The figures the court records **cannot** give us — CIAA complaint/investigation volumes — are declared here as explicit assumptions, each with a `source_url`. They come from the CIAA annual-report PDFs (converted with **likhit**, the Nepali document→markdown converter; the PDFs + extractions are in `ciaa-annual-reports/`). Only the funnel's top three stages and the 5-year context box use them. The funnel's **bottom stage (convictions) is not an assumption** — it's *derived* live as `corpus conviction rate × filed` (≈84 of 137, ~0.3% of complaints), with the full-only variant (≈62) carried alongside, so nothing in the funnel is hand-entered below the CIAA inputs. Appeal reversals take that bottom stage to **≈76** — see [Appeals](#appeals-what-survives-the-supreme-court).
 
 | key | value | note |
 |---|---|---|
