@@ -1,0 +1,87 @@
+name: Publish dashboard
+
+# Builds the Corruption Accountability dashboard and publishes it to GitHub Pages
+# at https://jawafdehi.github.io/corruption-research/
+#
+# The data file is REGENERATED here from `dataset/` on every run rather than taken
+# from the commit. The copy in the repo is a convenience so `npm run dev` works
+# without Python; what gets published is always derived from the dataset as it
+# stands at this commit, so the published figures cannot lag the data behind them.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "dataset/**"
+      - "ciaa-vs-register/data/**"
+      - "corpus_data.py"
+      - "gen_site_data.py"
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two publishes race; the later commit should win. Queued runs are
+# cancelled rather than deploying an older build over a newer one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: site/requirements.txt
+
+      - name: Install data dependencies
+        run: pip install -r site/requirements.txt
+
+      - name: Derive the dashboard data from dataset/
+        run: python gen_site_data.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install site dependencies
+        working-directory: site
+        run: npm ci
+
+      - name: Type-check
+        working-directory: site
+        run: npm run typecheck
+
+      - name: Build
+        working-directory: site
+        # Pages serves this repo at /corruption-research/, so assets and the router
+        # basename must be built against that prefix — at the root they 404.
+        env:
+          BASE_PATH: /corruption-research/
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
