@@ -2,7 +2,7 @@
 
 A Jupyter notebook that is the **deep, section-by-section companion** to **jawafdehi.org/research/corruption-accountability**.
 The published page is the lite read (8 sections, 11 charts); `corruption_analysis.ipynb` mirrors all of it and goes further — **~18 interactive Plotly charts** (incl. a combined government/CIAA leadership reference timeline), Nepali-first labels with Devanagari numerals, each section with the numbers spelled out and its caveats attached.
-Snapshot: **BS 2083 / 2026-07**. Court: विशेष अदालत (Special Court).
+Snapshot: **BS 2083 / 2026-10-08**. Court: विशेष अदालत (Special Court).
 
 ## Run it in one click — Google Colab
 
@@ -25,9 +25,9 @@ Everything the analysis rests on lives in one folder. The three court tables are
 ```
 dataset/
   cases.csv        2,949 rows — the corpus: Special Court `-CR-` cases filed FY2069/70–2082/83
-  hearings.csv     2,797 rows — deciding hearings (ठहर/आंशिक ठहर/सफाई) for those cases only, + a `verdict_derived` provenance flag (2,728 court-published + 69 model-derived)
+  hearings.csv     2,824 rows — deciding hearings (ठहर/आंशिक ठहर/सफाई) for those cases only, + a `verdict_derived` provenance flag (2,755 court-published + 69 model-derived)
   entities.csv    12,547 rows — parties (defendants/plaintiffs) for those cases only
-  assumptions.csv  8 rows    — external CIAA constants (funnel + 5-yr figures) with a source_url each
+  assumptions.csv  7 rows    — external CIAA constants (funnel + 5-yr figures) with a source_url each
   leadership.csv   15 rows   — reference: heads of government + CIAA chief commissioners; tenures in AD (BS derived via nepali-datetime)
 ```
 
@@ -58,7 +58,7 @@ The court records **one verdict per case** (per docket), coded as one of three d
 
 **"Convicted" = full + partial (ठहर + आंशिक ठहर).** That is the default definition throughout, and it is the CIAA's own: the Commission's published "success rate" (52.67%, an assumption) counts full and partial together, so ours is directly comparable to it. The conservative **full-only** rate is reported alongside everywhere, never on its own, because the two answer different questions and the court's record cannot choose between them — it publishes one verdict per case and no per-accused outcome, so a partial cannot be resolved into how many of the accused were actually convicted. Reporting full-only treats every mixed verdict as a failure; reporting full+partial treats a case where one junior official was convicted and everyone senior walked as a win. Say which you are using, every time.
 
-Court-wide: **61.3% convicted · 45.1% full only** (1,230 / 442 / 1,056 full / partial / acquittal across the 2,728 cases carrying a clean disposition — a different set from the 2,740 marked decided, not a subset of it: 2,628 are in both, 112 are marked decided but carry no hearing with a `decision_type` (mostly cases from the mirror's latest backfill), and 100 carry a disposition without a फैसला `case_status`). On the like-for-like definition this archive comes out **above** the Commission's figure, not below it — anyone presenting the gap as the CIAA overstating itself has the direction wrong.
+Court-wide: **61.3% convicted · 45.0% full only** (1,239 / 450 / 1,066 full / partial / acquittal across the 2,755 cases carrying a clean disposition — now a strict **subset** of the 2,870 marked decided: the other 115 are marked decided but carry no hearing with a `decision_type`, mostly cases from the mirror's register backfill. Before the 2026-10 refresh the two sets disagreed in *both* directions — 100 cases then carried a disposition with no फैसला `case_status` — and that direction is now empty, so "decided" and "has a published verdict" finally nest the way you would expect.) On the like-for-like definition this archive comes out **above** the Commission's figure, not below it — anyone presenting the gap as the CIAA overstating itself has the direction wrong.
 
 ⚠️ **Those are trial-court rates. They are not what survived appeal** — see [Appeals](#appeals-what-survives-the-supreme-court). The `entities` table's `nes_id` flag means *matched to the registry* (entity resolution), **not** convicted — don't read it as an outcome.
 
@@ -77,8 +77,8 @@ Applying only the appeals **already decided** — 157 convictions lost, 4 acquit
 
 | | Trial court | After appeals decided so far |
 |---|---:|---:|
-| Convicted (full + partial) | 61.3% | **55.7%** |
-| Full only | 45.1% | **40.0%** |
+| Convicted (full + partial) | 61.3% | **55.8%** |
+| Full only | 45.0% | **40.0%** |
 | Funnel bottom, of 137 prosecutions | ≈84 | **≈76** |
 
 ⚠️ **This is a floor on the eventual effect, not a settled number.** 819 of the 1,797 mapped appeals (46%) carry no recorded outcome yet. If they resolve in the same proportions the conviction rate lands nearer 51%, but that is a projection and must be labelled as one.
@@ -93,9 +93,9 @@ NGM stores trial and appeal cases in the same table with **no foreign key betwee
 
 ### Where a verdict comes from — `verdict_derived`
 
-A disposition normally reaches the mirror because the court published it on a daily cause list. Cases that entered the mirror by another route — chiefly the 2026-07 register backfill, which recovered dockets the court had issued but never listed publicly — can be marked decided in `case_status` while carrying **no hearing with a `decision_type` at all**. That is the 112 above, and it is why they count as decided but appear in no outcome chart.
+A disposition normally reaches the mirror because the court published it on a daily cause list. Cases that entered the mirror by another route — chiefly the 2026-07 register backfill, which recovered dockets the court had issued but never listed publicly — can be marked decided in `case_status` while carrying **no hearing with a `decision_type` at all**. That is the 115 above, and it is why they count as decided but appear in no outcome chart.
 
-For most of them the court publishes the **full judgment** (faisala), which states the disposition. Those can be recovered by reading it — **69 of the 112 now have been**, leaving 43 still dispositionless in the mirror. Those 43 are not a queue that will drain: the recovery pass has now been run twice over them and each time declined to answer, mostly on very long multi-defendant judgments where the operative clause could not be pinned to a single disposition. A gap is the intended output there. That recovery is a defensible record — it comes from the court's own document and stores the quoted operative clause — but it is **not the court's own coding**, so every such row is flagged:
+For most of them the court publishes the **full judgment** (faisala), which states the disposition. Those can be recovered by reading it — **69 of the 115 now have been**, leaving 46 still dispositionless in the mirror. Those 46 are not a queue that will drain: the recovery pass has now been run twice over them and each time declined to answer, mostly on very long multi-defendant judgments where the operative clause could not be pinned to a single disposition. A gap is the intended output there. That recovery is a defensible record — it comes from the court's own document and stores the quoted operative clause — but it is **not the court's own coding**, so every such row is flagged:
 
 | `verdict_derived` | meaning |
 |---|---|
@@ -113,6 +113,13 @@ The court tables come from Jawafdehi's internal read-only query API — a guarde
 - `court_cases` — `WHERE court_identifier='special' AND case_number LIKE '%-CR-%'` → `case_number, case_type, plaintiff, registration_date_bs, case_status`
 - `court_case_hearings` — same `+ AND decision_type IN (ठहर, आंशिक ठहर, सफाई)` → `case_number, decision_type, judge_names, (extra_data->'verdict_extraction' IS NOT NULL) AS verdict_derived`
 - `court_case_entities` — same `-CR-` filter → `case_number, side, name, nes_id`
+
+⚠️ **Those three queries are currently rejected by the live API, so `gen_dataset.py` cannot run as written.** The query endpoint grew a function allowlist on 2026-08-05 — three days after the previous snapshot, which is why nothing noticed until the 2026-10-08 refresh. Two things now fail:
+
+- **`AND` / `OR` are refused outright** (`400 Function is not allowed: and`). The guard walks `find_all(exp.Func)` over the parsed statement, and in sqlglot 27 `exp.And` / `exp.Or` are subclasses of `exp.Func`, so the boolean connectives are tested against a list of *scalar* functions and lose. The API pins `sqlglot>=26.33,<28`; the guard was written against 26.x, where they were not `Func`. This breaks every multi-predicate query on the endpoint, not just these three — it needs fixing in the API, not here.
+- **`extra_data->'verdict_extraction'` is refused** (`400 Function is not allowed: json_extract`), because `json_extract` is not on the allowlist and never was.
+
+The 2026-10-08 snapshot was therefore pulled out-of-band: one predicate per derived-table level instead of `AND`, and `extra_data` selected raw with `verdict_derived` computed in pandas from key presence (`->` yields SQL `NULL` only when the key is *absent*, so key presence is the faithful equivalent). That reproduced the previous snapshot's flag on all 2,797 shared rows with zero mismatches. **Restore `gen_dataset.py` by fixing the API guard**, not by baking the workaround in here.
 
 `corpus_data.load_dataset()` paginates these into memory, applies the fiscal window, and writes `dataset/{cases,hearings,entities}.csv` (which then serve as the cache — no separate raw copy is kept). `corpus_data._transform()` then derives every result table in pandas — case-grain outcomes use `count(distinct case_number)`, so any duplicate hearing row can never bias a metric.
 
@@ -168,16 +175,16 @@ There are **no result CSVs** — the notebook computes them from the source tabl
 
 ### `justices` — two things to know before citing it
 
-**It is per-bench, not per-judge.** `judge_names` gives the panel with roles (`अध्यक्ष` presiding, `सदस्य` member) and nothing else, and the court records one verdict per case. There is no per-judge vote anywhere in the data, so a judge who dissented is credited with the panel's outcome exactly as if he had written it. Benches are almost always panels — 3-justice benches decided 2,189 cases, 2-justice 644, single-judge 2 — so nearly every number in this table is a panel property attributed to individuals. It describes the benches a justice sat on, not that justice's effect.
+**It is per-bench, not per-judge.** `judge_names` gives the panel with roles (`अध्यक्ष` presiding, `सदस्य` member) and nothing else, and the court records one verdict per case. There is no per-judge vote anywhere in the data, so a judge who dissented is credited with the panel's outcome exactly as if he had written it. Benches are almost always panels — counted over the 2,755 court-published rows, 3-justice benches decided 2,121 cases, 2-justice 632, single-judge 2 — so nearly every number in this table is a panel property attributed to individuals. It describes the benches a justice sat on, not that justice's effect.
 
-**The name parser is clean on court-published rows and fragile on the model-derived ones.** Names are cut from the text after each `श्री ` marker. On the 2,728 court-published rows that is exact: 41 name buckets, and normalising spelling variants merges none of them. Include the 69 model-derived rows and it degrades to 62 buckets where normalisation yields 48 — one judge scattered across several buckets. Four patterns cause it, and every one of them appears *only* in derived rows, which `_transform` drops before computing anything:
+**The name parser is clean on court-published rows and fragile on the model-derived ones.** Names are cut from the text after each `श्री ` marker. On the 2,755 court-published rows that is exact: 42 name buckets, and normalising spelling variants merges none of them. Include the 69 model-derived rows and it degrades to 63 buckets, several of which are the same judge spelled differently. Four patterns cause it, and every one of them appears *only* in derived rows, which `_transform` drops before computing anything:
 
 | Pattern | Court-published | Model-derived |
 |---|---|---|
-| Variant title spelling (`न्यायधीश`, `न्यायाधिश`, `माननिय`) | 0 / 2,728 | 7 / 69 |
-| Whole panel with no `अध्यक्ष`/`सदस्य` delimiter | 0 / 2,728 | 9 / 69 |
-| Stray parentheses | 0 / 2,728 | 2 / 69 |
-| `सिहं` / `ससंह` for `सिंह` | 0 / 2,728 | 2 / 69 |
+| Variant title spelling (`न्यायधीश`, `न्यायाधिश`, `माननिय`) | 0 / 2,755 | 7 / 69 |
+| Whole panel with no `अध्यक्ष`/`सदस्य` delimiter | 0 / 2,755 | 9 / 69 |
+| Stray parentheses | 0 / 2,755 | 2 / 69 |
+| `सिहं` / `ससंह` for `सिंह` | 0 / 2,755 | 2 / 69 |
 
 So the published chart is unaffected today. The trap is that if those derived verdicts are ever promoted into the headline, or upstream re-ingestion fills the NULL `decision_type`s in the same format, the chart degrades silently — the same failure signature as the conviction-rate guard described above: the number moves and nothing raises. The delimiter-less case is now handled (names are taken from every `श्री ` marker, not just the last, or a panel would collapse to its last judge); the other three are not, and normalising them needs care, since folding `सिहं`→`सिंह` blind risks merging two different people.
 
