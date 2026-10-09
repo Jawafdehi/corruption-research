@@ -6,3 +6,10 @@ __pycache__/
 # Intermediate render artifacts for the CIAA chart vision-transcription (~266 MB of page PNGs).
 # The markdown extractions + figures.json/figures.md (the useful outputs) are committed; these are not.
 ciaa-annual-reports/*/figures/pages/
+
+# Dashboard build output and dependencies.
+# `site/src/data/report.generated.json` is deliberately NOT ignored: committing it
+# lets the dashboard run with `npm run dev` alone, no Python. CI regenerates it from
+# `dataset/` before every publish, so the committed copy never decides what ships.
+site/node_modules/
+site/dist/

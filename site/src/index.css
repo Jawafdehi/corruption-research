@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens copied from the jawafdehi.org SPA so the charts render identically
+   in both places. Light only: the research route force-disables dark mode, because
+   the chart palettes were chosen and contrast-checked against this background. */
+@layer base {
+  :root {
+    --background: 60 23.1% 97.5%; /* #FAFAF7 */
+    --foreground: 215 28% 17%;
+
+    --card: 60 10.3% 94.3%; /* #F2F2EF */
+    --card-foreground: 215 28% 17%;
+
+    --popover: 60 23.1% 97.5%;
+    --popover-foreground: 215 28% 17%;
+
+    /* Navy blue — trust and authority | #0E1F3B */
+    --primary: 217 62% 14%;
+    --primary-foreground: 36 100% 99%;
+
+    --secondary: 215 28% 83%;
+    --secondary-foreground: 215 28% 17%;
+
+    --muted: 215 20% 96%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 357 67% 43%; /* #B5242C */
+    --accent-foreground: 36 100% 99%;
+
+    --destructive: 25 95% 53%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 88%;
+    --input: 215 20% 88%;
+    --ring: 217 62% 14%;
+
+    --radius: 0.5rem;
+
+    --alert: 25 95% 53%;
+    --alert-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Tabular figures everywhere a count is shown, so columns of numbers line up
+     and a changing value does not reflow the text around it. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* Charts are wider than a phone. Allow horizontal scroll on the chart only,
+     rather than letting one wide figure set the width of the whole page. */
+  .chart-scroll {
+    @apply -mx-4 overflow-x-auto px-4;
+  }
+}

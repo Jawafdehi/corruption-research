@@ -1,0 +1,8 @@
+# What `gen_site_data.py` needs to derive the dashboard's data file.
+#
+# Deliberately narrower than the notebook's environment: building the site only
+# reads the committed CSVs and derives tables in pandas. No plotting, no Jupyter,
+# no network — and no credentials.
+pandas>=2.2
+requests>=2.32
+nepali-datetime>=1.0.8

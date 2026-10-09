@@ -1,0 +1,1230 @@
+{
+  "provenance": {
+    "generatedAt": "2026-10-08T19:08:49+00:00",
+    "commit": "57de636",
+    "dataset": {
+      "cases": {
+        "rows": 2949,
+        "modified": "2026-10-08"
+      },
+      "hearings": {
+        "rows": 2824,
+        "modified": "2026-10-08"
+      },
+      "entities": {
+        "rows": 12547,
+        "modified": "2026-10-08"
+      },
+      "appeals": {
+        "rows": 5,
+        "modified": "2026-10-07"
+      }
+    }
+  },
+  "corpus": {
+    "ciaaProsecutions": 2949,
+    "substantive": 2795,
+    "moneyLaundering": 93,
+    "otherBucket": 61,
+    "avgFiledPerYear": 210.6,
+    "fiscalYears": [
+      2069,
+      2070,
+      2071,
+      2072,
+      2073,
+      2074,
+      2075,
+      2076,
+      2077,
+      2078,
+      2079,
+      2080,
+      2081,
+      2082
+    ]
+  },
+  "outcome": {
+    "convicted": 1239,
+    "partial": 450,
+    "acquitted": 1066,
+    "decided": 2870,
+    "ongoing": 76
+  },
+  "rates": {
+    "convictionPct": 61.3,
+    "convictionFullOnlyPct": 45
+  },
+  "verdictsModelDerivedExcluded": 69,
+  "byCharge": [
+    {
+      "en": "Fake credential",
+      "ne": "नक्कली प्रमाण पत्र",
+      "convicted": 572,
+      "partial": 5,
+      "acquitted": 57
+    },
+    {
+      "en": "Bribery",
+      "ne": "रिसवत / घुस",
+      "convicted": 430,
+      "partial": 109,
+      "acquitted": 376
+    },
+    {
+      "en": "Money laundering",
+      "ne": "सम्पत्ति शुद्धीकरण",
+      "convicted": 33,
+      "partial": 33,
+      "acquitted": 18
+    },
+    {
+      "en": "False statement",
+      "ne": "झुठ्ठा विवरण",
+      "convicted": 16,
+      "partial": 11,
+      "acquitted": 33
+    },
+    {
+      "en": "Embezzlement",
+      "ne": "रकम हिनामिना",
+      "convicted": 87,
+      "partial": 86,
+      "acquitted": 202
+    },
+    {
+      "en": "Exam rigging",
+      "ne": "परीक्षा फेरबदल",
+      "convicted": 6,
+      "partial": 14,
+      "acquitted": 6
+    },
+    {
+      "en": "Forged document",
+      "ne": "गलत लिखत",
+      "convicted": 7,
+      "partial": 12,
+      "acquitted": 14
+    },
+    {
+      "en": "Illicit enrichment",
+      "ne": "गैरकानूनी सम्पत्ति",
+      "convicted": 19,
+      "partial": 17,
+      "acquitted": 59
+    },
+    {
+      "en": "Loss to government",
+      "ne": "हानीनोक्सानी",
+      "convicted": 31,
+      "partial": 39,
+      "acquitted": 97
+    },
+    {
+      "en": "Irregularity",
+      "ne": "अनियमितता",
+      "convicted": 22,
+      "partial": 44,
+      "acquitted": 64
+    },
+    {
+      "en": "Govt land misregistration",
+      "ne": "सरकारी जग्गा",
+      "convicted": 5,
+      "partial": 26,
+      "acquitted": 10
+    },
+    {
+      "en": "Revenue leakage",
+      "ne": "राजश्व चुहावट",
+      "convicted": 4,
+      "partial": 4,
+      "acquitted": 26
+    },
+    {
+      "en": "Illegal benefit",
+      "ne": "गैरकानुनी लाभ",
+      "convicted": 6,
+      "partial": 40,
+      "acquitted": 89
+    }
+  ],
+  "justiceMinDecisions": 30,
+  "justices": [
+    {
+      "name": "कृष्ण गिरी",
+      "decisions": 93,
+      "convPct": 89.2
+    },
+    {
+      "name": "द्वारिकामान जोशी",
+      "decisions": 189,
+      "convPct": 86.2
+    },
+    {
+      "name": "केदार प्रसाद चालिसे",
+      "decisions": 111,
+      "convPct": 84.7
+    },
+    {
+      "name": "रवि शर्मा अर्याल",
+      "decisions": 86,
+      "convPct": 83.7
+    },
+    {
+      "name": "शिवराज अधिकारी",
+      "decisions": 93,
+      "convPct": 81.7
+    },
+    {
+      "name": "शान्तिसिंह थापा",
+      "decisions": 140,
+      "convPct": 80
+    },
+    {
+      "name": "बालेन्द्र रुपाखेती",
+      "decisions": 150,
+      "convPct": 78.7
+    },
+    {
+      "name": "नारायणप्रसाद पोखरेल",
+      "decisions": 138,
+      "convPct": 75.4
+    },
+    {
+      "name": "प्रमोदकुमार श्रेष्ठ वैद्य",
+      "decisions": 219,
+      "convPct": 75.3
+    },
+    {
+      "name": "रत्नबहादुर बागचन्द",
+      "decisions": 123,
+      "convPct": 74.8
+    },
+    {
+      "name": "बाबुराम रेग्मी",
+      "decisions": 268,
+      "convPct": 73.9
+    },
+    {
+      "name": "चन्द्रबहादुर सारु",
+      "decisions": 151,
+      "convPct": 72.8
+    },
+    {
+      "name": "भूपेन्द्र प्रसाद राई",
+      "decisions": 334,
+      "convPct": 72.5
+    },
+    {
+      "name": "मोहनरमण भट्टराई",
+      "decisions": 429,
+      "convPct": 72
+    },
+    {
+      "name": "चण्डीराज ढकाल",
+      "decisions": 149,
+      "convPct": 71.8
+    },
+    {
+      "name": "नित्यानन्द पाण्डेय",
+      "decisions": 79,
+      "convPct": 70.9
+    },
+    {
+      "name": "महेश प्रसाद पुडासैनी",
+      "decisions": 242,
+      "convPct": 65.3
+    },
+    {
+      "name": "नरेन्द्र कुमार शिवाकोटी",
+      "decisions": 271,
+      "convPct": 64.9
+    },
+    {
+      "name": "प्रभा बस्नेत",
+      "decisions": 243,
+      "convPct": 64.6
+    },
+    {
+      "name": "अब्दुल अजिज मुसलमान",
+      "decisions": 81,
+      "convPct": 64.2
+    },
+    {
+      "name": "सुदर्शनदेव भट्ट",
+      "decisions": 69,
+      "convPct": 62.3
+    },
+    {
+      "name": "हेमन्त रावल",
+      "decisions": 77,
+      "convPct": 61
+    },
+    {
+      "name": "पवनकुमार शर्मा",
+      "decisions": 241,
+      "convPct": 59.8
+    },
+    {
+      "name": "उमेश कोइराला",
+      "decisions": 70,
+      "convPct": 58.6
+    },
+    {
+      "name": "विदुर कोइराला",
+      "decisions": 96,
+      "convPct": 58.3
+    },
+    {
+      "name": "डिल्लीरत्न श्रेष्ठ",
+      "decisions": 73,
+      "convPct": 57.5
+    },
+    {
+      "name": "रितेन्द्र थापा",
+      "decisions": 235,
+      "convPct": 56.6
+    },
+    {
+      "name": "नारायणप्रसाद पौडेल",
+      "decisions": 77,
+      "convPct": 55.8
+    },
+    {
+      "name": "तेज नारायण सिंह राई",
+      "decisions": 280,
+      "convPct": 55.4
+    },
+    {
+      "name": "टेक नारायण कुँवर",
+      "decisions": 339,
+      "convPct": 54.6
+    },
+    {
+      "name": "राम बहादुर थापा",
+      "decisions": 247,
+      "convPct": 53.8
+    },
+    {
+      "name": "मुरारीबाबु श्रेष्ठ",
+      "decisions": 243,
+      "convPct": 51
+    },
+    {
+      "name": "यमुना भट्टराई",
+      "decisions": 316,
+      "convPct": 47.8
+    },
+    {
+      "name": "श्रीकान्त पौडेल",
+      "decisions": 411,
+      "convPct": 46
+    },
+    {
+      "name": "शालिग्राम कोइराला",
+      "decisions": 265,
+      "convPct": 46
+    },
+    {
+      "name": "खुशी प्रसाद थारु",
+      "decisions": 453,
+      "convPct": 45.7
+    },
+    {
+      "name": "प्रेमराज कार्की",
+      "decisions": 42,
+      "convPct": 42.9
+    },
+    {
+      "name": "बलभद्र बास्तोला",
+      "decisions": 339,
+      "convPct": 41.3
+    },
+    {
+      "name": "रमेशकुमार पोखरेल",
+      "decisions": 143,
+      "convPct": 35
+    }
+  ],
+  "trend": {
+    "years": [
+      2069,
+      2070,
+      2071,
+      2072,
+      2073,
+      2074,
+      2075,
+      2076,
+      2077,
+      2078,
+      2079,
+      2080,
+      2081,
+      2082
+    ],
+    "filed": [
+      126,
+      188,
+      319,
+      159,
+      168,
+      197,
+      371,
+      450,
+      127,
+      135,
+      176,
+      211,
+      143,
+      179
+    ],
+    "decided": [
+      35,
+      87,
+      202,
+      222,
+      179,
+      176,
+      230,
+      178,
+      135,
+      339,
+      270,
+      503,
+      130,
+      53
+    ]
+  },
+  "chargeMixByYear": [
+    {
+      "bribery": 7,
+      "fake": 79,
+      "embezzlement": 2,
+      "benefit": 1,
+      "loss": 0,
+      "other": 24,
+      "fy": 2069
+    },
+    {
+      "bribery": 22,
+      "fake": 81,
+      "embezzlement": 15,
+      "benefit": 0,
+      "loss": 2,
+      "other": 64,
+      "fy": 2070
+    },
+    {
+      "bribery": 68,
+      "fake": 99,
+      "embezzlement": 91,
+      "benefit": 0,
+      "loss": 10,
+      "other": 50,
+      "fy": 2071
+    },
+    {
+      "bribery": 47,
+      "fake": 54,
+      "embezzlement": 25,
+      "benefit": 0,
+      "loss": 2,
+      "other": 27,
+      "fy": 2072
+    },
+    {
+      "bribery": 62,
+      "fake": 44,
+      "embezzlement": 28,
+      "benefit": 0,
+      "loss": 1,
+      "other": 27,
+      "fy": 2073
+    },
+    {
+      "bribery": 97,
+      "fake": 58,
+      "embezzlement": 21,
+      "benefit": 0,
+      "loss": 0,
+      "other": 17,
+      "fy": 2074
+    },
+    {
+      "bribery": 148,
+      "fake": 93,
+      "embezzlement": 51,
+      "benefit": 0,
+      "loss": 1,
+      "other": 69,
+      "fy": 2075
+    },
+    {
+      "bribery": 222,
+      "fake": 84,
+      "embezzlement": 58,
+      "benefit": 0,
+      "loss": 18,
+      "other": 58,
+      "fy": 2076
+    },
+    {
+      "bribery": 70,
+      "fake": 3,
+      "embezzlement": 11,
+      "benefit": 0,
+      "loss": 18,
+      "other": 11,
+      "fy": 2077
+    },
+    {
+      "bribery": 32,
+      "fake": 6,
+      "embezzlement": 31,
+      "benefit": 9,
+      "loss": 26,
+      "other": 28,
+      "fy": 2078
+    },
+    {
+      "bribery": 31,
+      "fake": 8,
+      "embezzlement": 21,
+      "benefit": 40,
+      "loss": 22,
+      "other": 43,
+      "fy": 2079
+    },
+    {
+      "bribery": 48,
+      "fake": 31,
+      "embezzlement": 7,
+      "benefit": 40,
+      "loss": 34,
+      "other": 43,
+      "fy": 2080
+    },
+    {
+      "bribery": 36,
+      "fake": 27,
+      "embezzlement": 10,
+      "benefit": 30,
+      "loss": 16,
+      "other": 22,
+      "fy": 2081
+    },
+    {
+      "bribery": 41,
+      "fake": 13,
+      "embezzlement": 22,
+      "benefit": 23,
+      "loss": 36,
+      "other": 36,
+      "fy": 2082
+    }
+  ],
+  "filedByMonth": [
+    {
+      "month": 1,
+      "name": "Baisakh",
+      "mean": 14.9,
+      "sd": 7.4
+    },
+    {
+      "month": 2,
+      "name": "Jestha",
+      "mean": 21.3,
+      "sd": 13.6
+    },
+    {
+      "month": 3,
+      "name": "Ashadh",
+      "mean": 26.6,
+      "sd": 13.9
+    },
+    {
+      "month": 4,
+      "name": "Shrawan",
+      "mean": 15.6,
+      "sd": 8.8
+    },
+    {
+      "month": 5,
+      "name": "Bhadra",
+      "mean": 19.9,
+      "sd": 13.2
+    },
+    {
+      "month": 6,
+      "name": "Ashwin",
+      "mean": 16.1,
+      "sd": 12.3
+    },
+    {
+      "month": 7,
+      "name": "Kartik",
+      "mean": 11.7,
+      "sd": 11.8
+    },
+    {
+      "month": 8,
+      "name": "Mangsir",
+      "mean": 15.5,
+      "sd": 11.1
+    },
+    {
+      "month": 9,
+      "name": "Poush",
+      "mean": 17.4,
+      "sd": 12
+    },
+    {
+      "month": 10,
+      "name": "Magh",
+      "mean": 15.9,
+      "sd": 8.1
+    },
+    {
+      "month": 11,
+      "name": "Falgun",
+      "mean": 18.3,
+      "sd": 15
+    },
+    {
+      "month": 12,
+      "name": "Chaitra",
+      "mean": 17.6,
+      "sd": 7.5
+    }
+  ],
+  "funnel": [
+    {
+      "key": "complaints",
+      "count": 28554
+    },
+    {
+      "key": "investigated",
+      "count": 947
+    },
+    {
+      "key": "filed",
+      "count": 137
+    },
+    {
+      "key": "convicted",
+      "count": 84
+    }
+  ],
+  "ciaa": {
+    "complaintsYear": 28554,
+    "casesFiledYear": 137,
+    "investigatedYear": 947,
+    "successRatePct": 52.67,
+    "damagesClaimedYearBn": 6.02,
+    "complaints5yr": 107050,
+    "casesFiled5yr": 744
+  },
+  "entityResolution": {
+    "defendantRows": 9576,
+    "distinctNames": 8321,
+    "resolved": 607
+  },
+  "overTime": {
+    "byVerdictYear": [
+      {
+        "convicted": 22,
+        "partial": 4,
+        "acquitted": 6,
+        "fakeConv": 18,
+        "fakeDisp": 19,
+        "fy": 2069
+      },
+      {
+        "convicted": 67,
+        "partial": 2,
+        "acquitted": 9,
+        "fakeConv": 60,
+        "fakeDisp": 61,
+        "fy": 2070
+      },
+      {
+        "convicted": 84,
+        "partial": 13,
+        "acquitted": 80,
+        "fakeConv": 57,
+        "fakeDisp": 61,
+        "fy": 2071
+      },
+      {
+        "convicted": 109,
+        "partial": 26,
+        "acquitted": 66,
+        "fakeConv": 65,
+        "fakeDisp": 82,
+        "fy": 2072
+      },
+      {
+        "convicted": 100,
+        "partial": 23,
+        "acquitted": 43,
+        "fakeConv": 65,
+        "fakeDisp": 79,
+        "fy": 2073
+      },
+      {
+        "convicted": 85,
+        "partial": 27,
+        "acquitted": 61,
+        "fakeConv": 30,
+        "fakeDisp": 33,
+        "fy": 2074
+      },
+      {
+        "convicted": 157,
+        "partial": 32,
+        "acquitted": 36,
+        "fakeConv": 85,
+        "fakeDisp": 90,
+        "fy": 2075
+      },
+      {
+        "convicted": 123,
+        "partial": 21,
+        "acquitted": 27,
+        "fakeConv": 39,
+        "fakeDisp": 40,
+        "fy": 2076
+      },
+      {
+        "convicted": 68,
+        "partial": 23,
+        "acquitted": 43,
+        "fakeConv": 30,
+        "fakeDisp": 32,
+        "fy": 2077
+      },
+      {
+        "convicted": 46,
+        "partial": 26,
+        "acquitted": 258,
+        "fakeConv": 25,
+        "fakeDisp": 30,
+        "fy": 2078
+      },
+      {
+        "convicted": 112,
+        "partial": 74,
+        "acquitted": 83,
+        "fakeConv": 37,
+        "fakeDisp": 39,
+        "fy": 2079
+      },
+      {
+        "convicted": 155,
+        "partial": 101,
+        "acquitted": 240,
+        "fakeConv": 24,
+        "fakeDisp": 26,
+        "fy": 2080
+      },
+      {
+        "convicted": 58,
+        "partial": 28,
+        "acquitted": 42,
+        "fakeConv": 27,
+        "fakeDisp": 31,
+        "fy": 2081
+      },
+      {
+        "convicted": 20,
+        "partial": 7,
+        "acquitted": 21,
+        "fakeConv": 6,
+        "fakeDisp": 7,
+        "fy": 2082
+      }
+    ],
+    "cohorts": [
+      {
+        "decided": 126,
+        "pending": 0,
+        "medianMonths": 11,
+        "fy": 2069
+      },
+      {
+        "decided": 188,
+        "pending": 0,
+        "medianMonths": 12.5,
+        "fy": 2070
+      },
+      {
+        "decided": 319,
+        "pending": 0,
+        "medianMonths": 13,
+        "fy": 2071
+      },
+      {
+        "decided": 157,
+        "pending": 0,
+        "medianMonths": 14,
+        "fy": 2072
+      },
+      {
+        "decided": 168,
+        "pending": 0,
+        "medianMonths": 16,
+        "fy": 2073
+      },
+      {
+        "decided": 197,
+        "pending": 0,
+        "medianMonths": 14,
+        "fy": 2074
+      },
+      {
+        "decided": 371,
+        "pending": 0,
+        "medianMonths": 19,
+        "fy": 2075
+      },
+      {
+        "decided": 450,
+        "pending": 0,
+        "medianMonths": 30,
+        "fy": 2076
+      },
+      {
+        "decided": 127,
+        "pending": 0,
+        "medianMonths": 22,
+        "fy": 2077
+      },
+      {
+        "decided": 135,
+        "pending": 0,
+        "medianMonths": 19,
+        "fy": 2078
+      },
+      {
+        "decided": 176,
+        "pending": 0,
+        "medianMonths": 12,
+        "fy": 2079
+      },
+      {
+        "decided": 211,
+        "pending": 0,
+        "medianMonths": 5,
+        "fy": 2080
+      },
+      {
+        "decided": 129,
+        "pending": 14,
+        "medianMonths": 4,
+        "fy": 2081
+      },
+      {
+        "decided": 116,
+        "pending": 62,
+        "medianMonths": 3,
+        "fy": 2082
+      }
+    ],
+    "completeThroughFy": 2080
+  },
+  "appeals": {
+    "appeals": 1797,
+    "no_outcome": 819,
+    "lost": 157,
+    "gained": 4,
+    "lost_full": 143,
+    "gained_full": 5,
+    "decided": 978,
+    "net": -153,
+    "net_full": -138,
+    "defendant": {
+      "appeals": 705,
+      "decided": 429,
+      "reversed": 157,
+      "pct": 36.6
+    },
+    "commission": {
+      "appeals": 1092,
+      "decided": 549,
+      "reversed": 6,
+      "pct": 1.1
+    },
+    "byTrialOutcome": [
+      {
+        "trial_outcome": "ठहर",
+        "appealed_by": "CIAA_GOVERNMENT",
+        "appeals": 99,
+        "affirmed": 16,
+        "claim_denied": 14,
+        "reversed": 1,
+        "partially_reversed": 1,
+        "other_procedural": 0,
+        "no_outcome_recorded": 67
+      },
+      {
+        "trial_outcome": "ठहर",
+        "appealed_by": "DEFENDANT_PERSON",
+        "appeals": 596,
+        "affirmed": 226,
+        "claim_denied": 4,
+        "reversed": 142,
+        "partially_reversed": 1,
+        "other_procedural": 8,
+        "no_outcome_recorded": 215
+      },
+      {
+        "trial_outcome": "आंशिक ठहर",
+        "appealed_by": "CIAA_GOVERNMENT",
+        "appeals": 259,
+        "affirmed": 48,
+        "claim_denied": 31,
+        "reversed": 3,
+        "partially_reversed": 9,
+        "other_procedural": 7,
+        "no_outcome_recorded": 161
+      },
+      {
+        "trial_outcome": "आंशिक ठहर",
+        "appealed_by": "DEFENDANT_PERSON",
+        "appeals": 109,
+        "affirmed": 25,
+        "claim_denied": 2,
+        "reversed": 15,
+        "partially_reversed": 4,
+        "other_procedural": 2,
+        "no_outcome_recorded": 61
+      },
+      {
+        "trial_outcome": "सफाई",
+        "appealed_by": "CIAA_GOVERNMENT",
+        "appeals": 734,
+        "affirmed": 410,
+        "claim_denied": 3,
+        "reversed": 2,
+        "partially_reversed": 2,
+        "other_procedural": 2,
+        "no_outcome_recorded": 315
+      }
+    ]
+  },
+  "crossCheck": {
+    "sourceAgreement": [
+      {
+        "fy": 2069,
+        "ciaaFiled": 93,
+        "registerComparable": 100
+      },
+      {
+        "fy": 2070,
+        "ciaaFiled": 168,
+        "registerComparable": 167
+      },
+      {
+        "fy": 2071,
+        "ciaaFiled": 303,
+        "registerComparable": 310
+      },
+      {
+        "fy": 2072,
+        "ciaaFiled": 144,
+        "registerComparable": 147
+      },
+      {
+        "fy": 2073,
+        "ciaaFiled": 154,
+        "registerComparable": 158
+      },
+      {
+        "fy": 2074,
+        "ciaaFiled": 194,
+        "registerComparable": 193
+      },
+      {
+        "fy": 2075,
+        "ciaaFiled": 351,
+        "registerComparable": 358
+      },
+      {
+        "fy": 2076,
+        "ciaaFiled": 441,
+        "registerComparable": 440
+      },
+      {
+        "fy": 2077,
+        "ciaaFiled": 113,
+        "registerComparable": 113
+      },
+      {
+        "fy": 2078,
+        "ciaaFiled": 131,
+        "registerComparable": 132
+      },
+      {
+        "fy": 2079,
+        "ciaaFiled": 162,
+        "registerComparable": 165
+      },
+      {
+        "fy": 2080,
+        "ciaaFiled": 201,
+        "registerComparable": 202
+      },
+      {
+        "fy": 2081,
+        "ciaaFiled": 137,
+        "registerComparable": 139
+      }
+    ],
+    "yearsCompared": 13,
+    "ciaaFiledTotal": 2592,
+    "registerComparableTotal": 2624,
+    "nonCiaaStreams": 154,
+    "nonCiaaStreamSplit": [
+      {
+        "key": "money_laundering",
+        "count": 98
+      },
+      {
+        "key": "nirnaya_vadar",
+        "count": 33
+      },
+      {
+        "key": "other_agency",
+        "count": 23
+      }
+    ],
+    "yearsExamined": 3,
+    "ciaaListed": 254,
+    "foundInRegister": 254,
+    "registerSurplus": 19,
+    "surplusReasons": [
+      {
+        "en": "Counted in the previous year's report",
+        "count": 5
+      },
+      {
+        "en": "Omitted, but confirmed by a later report",
+        "count": 4
+      },
+      {
+        "en": "Recorded under a different offence label",
+        "count": 1
+      },
+      {
+        "en": "Still unexplained",
+        "count": 9,
+        "unexplained": true
+      }
+    ]
+  },
+  "assumptions": [
+    {
+      "key": "funnel_complaints",
+      "value": 28554,
+      "unit": "count",
+      "note": "new complaints registered in FY2081/82 (Table 2.2 चालु आ.व. column; excludes 8472 prior-year carryover; total workload was 37026)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "funnel_investigated",
+      "value": 947,
+      "unit": "count",
+      "note": "detailed investigations completed in FY2081/82",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "funnel_filed",
+      "value": 137,
+      "unit": "count",
+      "note": "corruption prosecutions filed at the Special Court in FY2081/82 (135 corruption + 2 money-laundering)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "ciaa_complaints_5yr",
+      "value": 107050,
+      "unit": "count",
+      "note": "new complaints registered FY2077/78–2081/82 (5-yr workload 148235 minus 41185 prior-year backlog recycled across years)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "ciaa_filed_5yr",
+      "value": 744,
+      "unit": "count",
+      "note": "corruption prosecutions filed FY2077/78–2081/82 (chart 3.2 sum 113+131+162+201+137)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "ciaa_damages_1yr_bn",
+      "value": 6.02,
+      "unit": "Rs billion",
+      "note": "damages (bigo) demanded by the CIAA in FY2081/82 (Rs 6018472692)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    },
+    {
+      "key": "ciaa_success_rate_pct",
+      "value": 52.67,
+      "unit": "percent",
+      "note": "CIAA single-year success rate FY2081/82 (full + partial conviction; volatile YoY ~33–72%)",
+      "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
+    }
+  ],
+  "leadership": [
+    {
+      "lane": "Head of Government",
+      "name_en": "Baburam Bhattarai",
+      "name_ne": "बाबुराम भट्टराई",
+      "start_ad": "2011-08-29",
+      "start_bs": "2068-05-12",
+      "end_ad": "2013-03-14",
+      "end_bs": "2069-12-01",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Khil Raj Regmi",
+      "name_ne": "खिलराज रेग्मी",
+      "start_ad": "2013-03-14",
+      "start_bs": "2069-12-01",
+      "end_ad": "2014-02-11",
+      "end_bs": "2070-10-28",
+      "status": "interim (Chief Justice-led)"
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Sushil Koirala",
+      "name_ne": "सुशील कोइराला",
+      "start_ad": "2014-02-11",
+      "start_bs": "2070-10-28",
+      "end_ad": "2015-10-11",
+      "end_bs": "2072-06-24",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "K. P. Sharma Oli",
+      "name_ne": "केपी शर्मा ओली",
+      "start_ad": "2015-10-11",
+      "start_bs": "2072-06-24",
+      "end_ad": "2016-08-04",
+      "end_bs": "2073-04-20",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Pushpa Kamal Dahal",
+      "name_ne": "पुष्पकमल दाहाल",
+      "start_ad": "2016-08-04",
+      "start_bs": "2073-04-20",
+      "end_ad": "2017-06-07",
+      "end_bs": "2074-02-24",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Sher Bahadur Deuba",
+      "name_ne": "शेरबहादुर देउवा",
+      "start_ad": "2017-06-07",
+      "start_bs": "2074-02-24",
+      "end_ad": "2018-02-15",
+      "end_bs": "2074-11-03",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "K. P. Sharma Oli",
+      "name_ne": "केपी शर्मा ओली",
+      "start_ad": "2018-02-15",
+      "start_bs": "2074-11-03",
+      "end_ad": "2021-07-13",
+      "end_bs": "2078-03-29",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Sher Bahadur Deuba",
+      "name_ne": "शेरबहादुर देउवा",
+      "start_ad": "2021-07-13",
+      "start_bs": "2078-03-29",
+      "end_ad": "2022-12-26",
+      "end_bs": "2079-09-11",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Pushpa Kamal Dahal",
+      "name_ne": "पुष्पकमल दाहाल",
+      "start_ad": "2022-12-26",
+      "start_bs": "2079-09-11",
+      "end_ad": "2024-07-15",
+      "end_bs": "2081-03-31",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "K. P. Sharma Oli",
+      "name_ne": "केपी शर्मा ओली",
+      "start_ad": "2024-07-15",
+      "start_bs": "2081-03-31",
+      "end_ad": "2025-09-12",
+      "end_bs": "2082-05-27",
+      "status": ""
+    },
+    {
+      "lane": "Head of Government",
+      "name_en": "Sushila Karki",
+      "name_ne": "सुशीला कार्की",
+      "start_ad": "2025-09-12",
+      "start_bs": "2082-05-27",
+      "end_ad": "2026-07-16",
+      "end_bs": "2083-03-32",
+      "status": "interim · incumbent"
+    },
+    {
+      "lane": "CIAA Chief Commissioner",
+      "name_en": "Lokman Singh Karki",
+      "name_ne": "लोकमानसिंह कार्की",
+      "start_ad": "2013-05-08",
+      "start_bs": "2070-01-25",
+      "end_ad": "2016-10-20",
+      "end_bs": "2073-07-04",
+      "status": "removed by Supreme Court"
+    },
+    {
+      "lane": "CIAA Chief Commissioner",
+      "name_en": "Deep Basnyat",
+      "name_ne": "दीप बस्न्यात",
+      "start_ad": "2017-05-22",
+      "start_bs": "2074-02-08",
+      "end_ad": "2018-02-12",
+      "end_bs": "2074-10-29",
+      "status": "officiating (post-Karki vacancy)"
+    },
+    {
+      "lane": "CIAA Chief Commissioner",
+      "name_en": "Nabin Kumar Ghimire",
+      "name_ne": "नविन कुमार घिमिरे",
+      "start_ad": "2018-09-20",
+      "start_bs": "2075-06-04",
+      "end_ad": "2020-09-13",
+      "end_bs": "2077-05-28",
+      "status": "officiating (post-Karki vacancy)"
+    },
+    {
+      "lane": "CIAA Chief Commissioner",
+      "name_en": "Prem Kumar Rai",
+      "name_ne": "प्रेमकुमार राई",
+      "start_ad": "2021-02-03",
+      "start_bs": "2077-10-21",
+      "end_ad": "2026-07-16",
+      "end_bs": "2083-03-32",
+      "status": "incumbent"
+    }
+  ]
+}
