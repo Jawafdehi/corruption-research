@@ -1,0 +1,20 @@
+# Static-asset Worker serving the Corruption Accountability dashboard at
+# research.jawafdehi.org. Same deploy model as the main jawafdehi.org frontend.
+#
+# There is no `main` script: this is an assets-only Worker, so Cloudflare serves
+# dist/ straight from its edge and no request runs our code.
+name = "corruption-research"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+
+# The whole reason this moved off GitHub Pages. A single-page app owns its own
+# routes, so /appeals is a real page rather than a missing file — but it has no
+# file on disk, and static hosts answer that with 404. Pages could only be worked
+# around by serving the app from a 404.html, which returns the app with an HTTP 404
+# status: bad for search engines and for anything that checks the status code.
+#
+# This setting makes Cloudflare serve index.html with a genuine 200 for any path
+# that isn't an asset, which is what an SPA actually needs.
+not_found_handling = "single-page-application"
