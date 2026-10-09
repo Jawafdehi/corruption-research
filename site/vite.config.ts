@@ -1,39 +1,14 @@
-import fs from "node:fs";
 import path from "node:path";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 
-/**
- * GitHub Pages serves static files only — it has no SPA rewrite, so a deep link like
- * /over-time is a miss and returns 404.html. Shipping a copy of index.html under that
- * name makes Pages hand the request to the app, which then routes it client-side.
- * Without this, every link into the site except the root is broken for anyone who
- * arrives from outside — and it looks fine locally, because the dev server rewrites.
- *
- * .nojekyll stops Pages running the output through Jekyll, which would drop any
- * asset directory beginning with an underscore.
- */
-function githubPagesFallback(): Plugin {
-  return {
-    name: "github-pages-fallback",
-    apply: "build",
-    closeBundle() {
-      const out = path.resolve(__dirname, "dist");
-      fs.copyFileSync(path.join(out, "index.html"), path.join(out, "404.html"));
-      fs.writeFileSync(path.join(out, ".nojekyll"), "");
-    },
-  };
-}
-
-// GitHub Pages serves a project site from a sub-path, so assets must be requested
-// relative to it. `BASE_PATH` lets the Pages workflow set it without editing this
-// file, and leaves dev + the Cloudflare tunnel on "/" where a sub-path would only
-// get in the way.
+// Served at the root of research.jawafdehi.org, so "/" is right everywhere.
+// `BASE_PATH` stays as an override for the case of hosting under a sub-path again.
 const base = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
   base,
-  plugins: [react(), githubPagesFallback()],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

@@ -1,7 +1,7 @@
 # Corruption Accountability — dashboard
 
 The browsable companion to the research pack in this repo. Same findings as the
-notebook, arranged as six sections you can link to, published to GitHub Pages at
+notebook, arranged as six sections you can link to, published at
 **https://research.jawafdehi.org**
 
 It holds **no figures of its own**. Every number is derived from `../dataset/` by
@@ -50,38 +50,54 @@ npm run preview
 ```
 
 The site is served at the root of its own domain, so the default base of `/` is
-correct everywhere and `BASE_PATH` is not set. It would be needed again — as
-`/corruption-research/` — only if the custom domain were dropped and the site fell
-back to the `jawafdehi.github.io` project sub-path, where a root-based build 404s on
-every asset.
+correct everywhere and `BASE_PATH` is not set. It stays as an override only for the
+case of hosting under a sub-path again.
 
-Pages has no SPA rewrite, so a deep link like `/over-time` would 404. The build
-writes `404.html` as a copy of `index.html` (and a `.nojekyll`) to hand those
-requests back to the app — see `githubPagesFallback` in `vite.config.ts`.
+## Hosting
+
+A **static-asset Worker** on Cloudflare (`wrangler.toml`, project
+`corruption-research`), the same deploy model as the main jawafdehi.org frontend.
+There is no worker script — Cloudflare serves `dist/` from its edge directly.
+
+```bash
+npm run deploy    # wrangler deploy, from a built dist/
+```
+
+**`not_found_handling = "single-page-application"` is the point of this setup.** A
+single-page app owns its own routes, so `/appeals` is a real page with no file behind
+it. Static hosts answer that with a 404.
+
+This ran on GitHub Pages first, and Pages cannot do it honestly: its only SPA
+workaround is to serve the app out of `404.html`, which returns the correct page with
+an **HTTP 404 status** — bad for search engines and for anything that checks status
+codes. The Worker returns a genuine 200. If you ever see deep links 404 again, this
+setting is the first thing to check.
 
 ## The custom domain
 
-`research.jawafdehi.org` is a `CNAME` to `jawafdehi.github.io`, declared in the infra
-repo at `terraform/cloudflare/dns.tf` (`cname_research`) — not clicked in by hand.
+`research.jawafdehi.org` is a **Workers Custom Domain** bound to the
+`corruption-research` Worker, with a proxied `AAAA 100::` dummy record so the name
+resolves to the Cloudflare edge — the same shape as `give.` and `org-admin-panel.`.
+The record is declared in the infra repo at `terraform/cloudflare/dns.tf`
+(`aaaa_research`).
 
-Two things hold it together, and both are easy to break:
-
-- **`public/CNAME`** carries the domain into every build. Pages reads it on each
-  deploy; a build without it resets the site to the github.io sub-path.
-- **The record is deliberately not proxied** (grey cloud). GitHub issues the TLS
-  certificate for this domain itself and cannot complete that validation through the
-  Cloudflare proxy. Turning the orange cloud on before the certificate exists leaves
-  the host with broken HTTPS. It can be proxied afterwards if the caching is wanted.
+⚠️ **That record is read-only.** Cloudflare locks any record owned by a Workers
+Custom Domain, so a Terraform apply that tries to change it — even just adding a
+comment — fails with `configured as read only` (code 1043). The Terraform block is
+kept byte-identical to what Cloudflare holds so the record stays tracked but is never
+written to.
 
 ## Publishing
 
-`.github/workflows/pages.yml` runs on a push to `main` that touches the dataset, the
+`.github/workflows/deploy.yml` runs on a push to `main` that touches the dataset, the
 derivation code or this directory. It **regenerates the data file from `dataset/`**
 rather than trusting the committed copy, then type-checks, builds and deploys. So
 what is published is always derived from the dataset at that commit.
 
-Enabling it once, in the repo settings: **Pages → Build and deployment → Source →
-GitHub Actions**.
+It authenticates with a Cloudflare token scoped to **Workers Scripts: Edit on this
+account and nothing else** — it cannot touch DNS and cannot mint further tokens. It
+lives in the repo secrets as `CLOUDFLARE_API_TOKEN`, alongside
+`CLOUDFLARE_ACCOUNT_ID`. This repo is public, so never put a broader token here.
 
 ## Moving these pages into the jawafdehi.org SPA
 
