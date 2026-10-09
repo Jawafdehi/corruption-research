@@ -2,7 +2,7 @@
 
 The browsable companion to the research pack in this repo. Same findings as the
 notebook, arranged as six sections you can link to, published to GitHub Pages at
-**https://jawafdehi.github.io/corruption-research/**
+**https://research.jawafdehi.org**
 
 It holds **no figures of its own**. Every number is derived from `../dataset/` by
 `../gen_site_data.py` and written to `src/data/report.generated.json` at build time,
@@ -49,13 +49,29 @@ npm run build     # type-check, then build to dist/
 npm run preview
 ```
 
-GitHub Pages serves this repo from a sub-path, so the production build needs
-`BASE_PATH=/corruption-research/`. The workflow sets it; locally the default `/` is
-what you want.
+The site is served at the root of its own domain, so the default base of `/` is
+correct everywhere and `BASE_PATH` is not set. It would be needed again — as
+`/corruption-research/` — only if the custom domain were dropped and the site fell
+back to the `jawafdehi.github.io` project sub-path, where a root-based build 404s on
+every asset.
 
 Pages has no SPA rewrite, so a deep link like `/over-time` would 404. The build
 writes `404.html` as a copy of `index.html` (and a `.nojekyll`) to hand those
 requests back to the app — see `githubPagesFallback` in `vite.config.ts`.
+
+## The custom domain
+
+`research.jawafdehi.org` is a `CNAME` to `jawafdehi.github.io`, declared in the infra
+repo at `terraform/cloudflare/dns.tf` (`cname_research`) — not clicked in by hand.
+
+Two things hold it together, and both are easy to break:
+
+- **`public/CNAME`** carries the domain into every build. Pages reads it on each
+  deploy; a build without it resets the site to the github.io sub-path.
+- **The record is deliberately not proxied** (grey cloud). GitHub issues the TLS
+  certificate for this domain itself and cannot complete that validation through the
+  Cloudflare proxy. Turning the orange cloud on before the certificate exists leaves
+  the host with broken HTTPS. It can be proxied afterwards if the caching is wanted.
 
 ## Publishing
 
