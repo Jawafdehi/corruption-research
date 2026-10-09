@@ -1,7 +1,11 @@
 name: Publish dashboard
 
 # Builds the Corruption Accountability dashboard and publishes it to GitHub Pages
-# at https://jawafdehi.github.io/corruption-research/
+# at https://research.jawafdehi.org
+#
+# The custom domain is held by site/public/CNAME, which Vite copies into the build.
+# That file is what keeps the domain attached: Pages reads it on every deploy, and a
+# build that omitted it would silently reset the site back to the github.io sub-path.
 #
 # The data file is REGENERATED here from `dataset/` on every run rather than taken
 # from the commit. The copy in the repo is a convenience so `npm run dev` works
@@ -71,10 +75,10 @@ jobs:
 
       - name: Build
         working-directory: site
-        # Pages serves this repo at /corruption-research/, so assets and the router
-        # basename must be built against that prefix — at the root they 404.
-        env:
-          BASE_PATH: /corruption-research/
+        # Served at the root of research.jawafdehi.org, so the default base of "/" is
+        # correct and BASE_PATH is deliberately NOT set. It would need to be
+        # /corruption-research/ again only if the custom domain were removed and the
+        # site fell back to the jawafdehi.github.io project sub-path.
         run: npm run build
 
       - uses: actions/configure-pages@v5
