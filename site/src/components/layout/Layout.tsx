@@ -19,7 +19,15 @@ const SectionFallback = () => (
 /** Jump back to the top when the section changes; otherwise a deep scroll carries over. */
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // The braces are load-bearing: an effect's return value IS its cleanup function, so a
+  // concise arrow body here would hand React whatever window.scrollTo returns. Browsers
+  // return undefined, but extensions and smooth-scroll polyfills override scrollTo and
+  // some return a value — React then calls it as cleanup on the next navigation and the
+  // whole app unmounts into a blank page. Never return a value from an effect you do not
+  // mean as cleanup.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return null;
 }
 
