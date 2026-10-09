@@ -90,23 +90,41 @@ def _cross_check() -> dict:
     }
 
 
-def _provenance() -> dict:
-    "What the reader needs to judge how current this is."
+def _git(*args: str) -> str:
     try:
-        sha = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=10
+        return subprocess.run(
+            ["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=10
         ).stdout.strip()
     except Exception:
-        sha = ""
+        return ""
+
+
+def _provenance() -> dict:
+    """What the reader needs to judge how current this is.
+
+    ⚠️ Dates come from git, NOT from the file's mtime. A CI checkout writes every
+    file at checkout time, so mtime there reports "today" for data that may be
+    months old — which turns the one field that discloses staleness into a field
+    that actively hides it. `%cs` is the commit date of the last commit to touch
+    the file, which is the thing a reader actually wants to know.
+    """
     files = {}
     for name in ("cases", "hearings", "entities", "appeals"):
         p = ROOT / "dataset" / f"{name}.csv"
-        if p.exists():
-            files[name] = {
-                "rows": int(len(pd.read_csv(p))),
-                "modified": datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).strftime("%Y-%m-%d"),
-            }
-    return {"generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "commit": sha, "dataset": files}
+        if not p.exists():
+            continue
+        committed = _git("log", "-1", "--format=%cs", "--", str(p.relative_to(ROOT)))
+        files[name] = {
+            "rows": int(len(pd.read_csv(p))),
+            # Fall back to mtime only outside a git checkout, where there is nothing better.
+            "modified": committed
+            or datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).strftime("%Y-%m-%d"),
+        }
+    return {
+        "generatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "commit": _git("rev-parse", "--short", "HEAD"),
+        "dataset": files,
+    }
 
 
 def build() -> dict:
