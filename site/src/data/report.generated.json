@@ -1,19 +1,19 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-08T19:08:49+00:00",
-    "commit": "57de636",
+    "generatedAt": "2026-10-09T02:37:43+00:00",
+    "commit": "c2b75df",
     "dataset": {
       "cases": {
         "rows": 2949,
-        "modified": "2026-10-08"
+        "modified": "2026-08-04"
       },
       "hearings": {
         "rows": 2824,
-        "modified": "2026-10-08"
+        "modified": "2026-08-04"
       },
       "entities": {
         "rows": 12547,
-        "modified": "2026-10-08"
+        "modified": "2026-08-04"
       },
       "appeals": {
         "rows": 5,
