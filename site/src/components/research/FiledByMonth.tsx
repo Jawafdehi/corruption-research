@@ -13,6 +13,7 @@ import {
 import type { MonthFiling } from "@/data/research-corruption";
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
+import { useFormat } from "@/lib/format";
 
 /**
  * Cases filed per Nepali month — mean bar with ±1 SD error bars across complete
@@ -33,6 +34,7 @@ export function FiledByMonth({
   meanLabel: string;
   sdLabel: string;
 }) {
+  const { n } = useFormat();
   const mounted = useMounted();
   const height = 300;
   // Pin the axis to [0, nice-max]: filings can't be negative, so a large SD
@@ -74,7 +76,7 @@ export function FiledByMonth({
               contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))", fontSize: 13 }}
               itemStyle={{ fontFamily: MONO_STACK }}
               formatter={(value: number, _n, entry: { payload?: MonthFiling }) => [
-                `${value} ± ${entry?.payload?.sd ?? 0}`,
+                `${n(value)} ± ${n(entry?.payload?.sd ?? 0)}`,
                 meanLabel,
               ]}
             />

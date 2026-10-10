@@ -9,9 +9,9 @@ import {
   YAxis,
 } from "recharts";
 
-import { fyLabel } from "@/data/research-corruption";
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
+import { useFormat } from "@/lib/format";
 
 export type RateSeries = {
   /** Data key present on every row. */
@@ -45,6 +45,7 @@ export function RateTrend({
   refLabel?: string;
   height?: number;
 }) {
+  const { pct, fy, fyLong } = useFormat();
   const mounted = useMounted();
   if (!mounted) return <div className="w-full" style={{ height }} />;
 
@@ -52,7 +53,7 @@ export function RateTrend({
     .map(
       (s) =>
         `${s.label}: ${data
-          .map((d) => `${fyLabel(d.year)} ${Math.round((d[s.key] as number | null) ?? 0)}%`)
+          .map((d) => `${fy(d.year)} ${pct((d[s.key] as number | null) ?? 0)}`)
           .join(", ")}`,
     )
     .join("; ");
@@ -66,21 +67,21 @@ export function RateTrend({
             dataKey="year"
             tickLine={false}
             axisLine={false}
-            tickFormatter={(y: number) => fyLabel(y).slice(2)}
+            tickFormatter={(y: number) => fy(y).slice(2)}
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <YAxis
             width={40}
             domain={[0, 100]}
             ticks={[0, 25, 50, 75, 100]}
-            tickFormatter={(v: number) => `${v}%`}
+            tickFormatter={(v: number) => pct(v)}
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <Tooltip
-            labelFormatter={(y) => `FY ${fyLabel(Number(y))}`}
-            formatter={(v) => `${Math.round(v as number)}%`}
+            labelFormatter={(y) => fyLong(Number(y))}
+            formatter={(v) => pct(v as number)}
             contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))", fontSize: 13 }}
             itemStyle={{ fontFamily: MONO_STACK }}
           />

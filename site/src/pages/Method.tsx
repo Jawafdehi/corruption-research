@@ -1,12 +1,14 @@
 import { useTranslation } from "react-i18next";
 
+import { useFormat } from "@/lib/format";
+
 import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
 import { CITATIONS, REPORT, fyLabel } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
 
 export default function Method() {
   const { t } = useTranslation();
+  const { n } = useFormat();
   const { assumptions, corpus, crossCheck, entityResolution, provenance } = REPORT;
 
   const years = corpus.fiscalYears;

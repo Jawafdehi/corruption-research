@@ -1,13 +1,14 @@
 import { useTranslation } from "react-i18next";
 
+import { useFormat } from "@/lib/format";
+
 import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile } from "@/components/layout/Prose";
 import { REPORT, decidedClean } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
-const pct1 = (v: number) => `${v.toFixed(1)}%`;
 
 export default function Appeals() {
   const { t } = useTranslation();
+  const { n, pct1 } = useFormat();
   const { appeals, outcome } = REPORT;
 
   const decided = decidedClean(outcome);

@@ -1,20 +1,26 @@
 import { useTranslation } from "react-i18next";
 
+import { useFormat } from "@/lib/format";
+
 import { StatusDonut, type DonutSegment } from "@/components/data-quality/StatusDonut";
 import { ConvictionByCharge, type ChargeRow } from "@/components/research/ConvictionByCharge";
 import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile } from "@/components/layout/Prose";
 import { CITATIONS, REPORT, decidedClean } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
 
 export default function Outcomes() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
+  const { n, pct1 } = useFormat();
   const { byCharge, outcome, rates, verdictsModelDerivedExcluded } = REPORT;
 
   const decided = decidedClean(outcome);
   const convPct = (outcome.convicted / decided) * 100;
   const partPct = (outcome.partial / decided) * 100;
   const acqPct = (outcome.acquitted / decided) * 100;
+
+  /** Shared note under the three disposition tiles — one key, three call sites. */
+  const ofDecided = (v: number) =>
+    t("research.corruption.tile.ofDecided", "{{pct}} of decided", { pct: pct1(v) });
 
   // Per-charge figures for the prose, derived so they cannot drift from the chart beside them.
   const charge = (en: string) => {
@@ -51,9 +57,13 @@ export default function Outcomes() {
     { key: "acquitted", label: t("research.corruption.outcome.acquitted", "Acquitted"), value: outcome.acquitted, color: "hsl(var(--accent))" },
   ];
 
+  // The dataset already carries both labels per charge family, and the Nepali one
+  // is the court's own wording rather than a translation of the English. So the
+  // pair just swaps with the language: the active language leads, the other stays
+  // as the small secondary — which keeps the court's term visible either way.
   const chargeRows: ChargeRow[] = byCharge.map((c) => ({
-    label: c.en,
-    sublabel: c.ne,
+    label: language === "ne" ? c.ne : c.en,
+    sublabel: language === "ne" ? c.en : c.ne,
     convicted: c.convicted,
     partial: c.partial,
     acquitted: c.acquitted,
@@ -75,9 +85,9 @@ export default function Outcomes() {
         </Lede>
 
         <StatRow>
-          <StatTile value={n(outcome.convicted)} label={t("research.corruption.tile.full", "Full convictions")} note={`${convPct.toFixed(1)}% of decided`} />
-          <StatTile value={n(outcome.partial)} label={t("research.corruption.tile.partial", "Partial convictions")} note={`${partPct.toFixed(1)}% of decided`} />
-          <StatTile value={n(outcome.acquitted)} label={t("research.corruption.tile.acquitted", "Acquittals")} note={`${acqPct.toFixed(1)}% of decided`} />
+          <StatTile value={n(outcome.convicted)} label={t("research.corruption.tile.full", "Full convictions")} note={ofDecided(convPct)} />
+          <StatTile value={n(outcome.partial)} label={t("research.corruption.tile.partial", "Partial convictions")} note={ofDecided(partPct)} />
+          <StatTile value={n(outcome.acquitted)} label={t("research.corruption.tile.acquitted", "Acquittals")} note={ofDecided(acqPct)} />
           <StatTile value={n(outcome.ongoing)} label={t("research.corruption.tile.ongoing", "Still awaiting a verdict")} note={t("research.corruption.tile.ongoingNote", "open cases in the register")} />
         </StatRow>
       </Block>

@@ -1,4 +1,6 @@
 import { useTranslation } from "react-i18next";
+
+import { useFormat } from "@/lib/format";
 import { Link } from "react-router-dom";
 
 import { AccountabilityFunnel, type FunnelStage } from "@/components/data-quality/AccountabilityFunnel";
@@ -9,11 +11,10 @@ import {
 import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile } from "@/components/layout/Prose";
 import { CITATIONS, FUNNEL_SOURCE, REPORT, decidedClean } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
-const pct = (v: number) => `${Math.round(v)}%`;
 
 export default function Overview() {
   const { t } = useTranslation();
+  const { n, pct } = useFormat();
   const { ciaa, corpus, funnel, outcome, rates } = REPORT;
 
   const decided = decidedClean(outcome);
