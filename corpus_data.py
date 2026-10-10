@@ -505,6 +505,36 @@ def _transform(cases, hearings, entities, assumptions):
     f["cohorts"] = pd.DataFrame(sorted(r for r in crows if r[0] and "/" in str(r[0])),
         columns=["fiscal_year", "decided", "pending", "median_months"])
 
+    # How long a DECIDED case took, filing to verdict, across the whole corpus.
+    #
+    # Decided cases only, and that is a real limitation rather than a tidy-up: a case
+    # still open has no duration yet, so the slowest matters are precisely the ones
+    # missing from this distribution. It therefore describes cases that finished, NOT
+    # how long a case filed today should be expected to take, and the pending count is
+    # carried alongside so the exclusion stays visible.
+    all_months = []
+    for y, m, rm in zip(coh[coh.is_decided & coh.vyear.notna()].vyear,
+                        coh[coh.is_decided & coh.vyear.notna()].vmonth,
+                        coh[coh.is_decided & coh.vyear.notna()].reg_m):
+        d = (int(y) * 12 + int(m)) - rm
+        if d >= 0:                      # a verdict dated before filing is a bad row, not a fast case
+            all_months.append(d)
+    pend_total = int((coh.case_status.notna()
+                      & (coh.case_status.astype(str).str.strip() != "")
+                      & ~coh.is_decided).sum())
+    buckets = [("within 1 year", lambda d: d <= 12),
+               ("1 to 2 years", lambda d: 12 < d <= 24),
+               ("2 to 3 years", lambda d: 24 < d <= 36),
+               ("over 3 years", lambda d: d > 36)]
+    f["duration"] = pd.DataFrame(
+        [[label, sum(1 for d in all_months if test(d))] for label, test in buckets],
+        columns=["band", "cases"])
+    f["duration_summary"] = pd.DataFrame([[
+        len(all_months),
+        round(statistics.median(all_months), 1) if all_months else 0.0,
+        pend_total,
+    ]], columns=["measured", "median_months", "pending"])
+
     hcj = hc[hc.judge_names.fillna("").str.len() > 0]
     pb = hcj.groupby(["judge_names", "decision_type"])["case_number"].nunique().unstack(fill_value=0)
     # Honorifics must come off as whole TOKENS, never as substrings. The court writes each bench member

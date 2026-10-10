@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-10T02:38:01+00:00",
-    "commit": "d4b0452",
+    "generatedAt": "2026-10-10T13:16:59+00:00",
+    "commit": "8e5a5fc",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -961,6 +961,29 @@
       "note": "34th annual report. Tameli 825 = 694 (alone) + 124 (with सुझाव) + 7 (with लेखी पठाउने), matching the table total."
     }
   ],
+  "duration": {
+    "bands": [
+      {
+        "band": "within 1 year",
+        "cases": 1140
+      },
+      {
+        "band": "1 to 2 years",
+        "cases": 837
+      },
+      {
+        "band": "2 to 3 years",
+        "cases": 462
+      },
+      {
+        "band": "over 3 years",
+        "cases": 299
+      }
+    ],
+    "measured": 2738,
+    "median_months": 15,
+    "pending": 76
+  },
   "crossCheck": {
     "sourceAgreement": [
       {
