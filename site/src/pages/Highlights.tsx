@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
 import { DurationBands } from "@/components/highlights/DurationBands";
+import { FlowNote, ProcessFlow, type FlowStage } from "@/components/highlights/ProcessFlow";
 import { OutcomeSplit, type OutcomeSegment } from "@/components/highlights/OutcomeSplit";
 import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
 import { TameliTrend } from "@/components/research/TameliTrend";
@@ -129,6 +130,173 @@ export default function Highlights() {
     .reduce((acc, b) => acc + b.cases, 0);
   const withinTwoPct = duration.measured ? (withinTwo / duration.measured) * 100 : 0;
 
+
+  // The legal route a complaint takes. Stages, branch conditions and section
+  // numbers come from the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८
+  // (approved २०७८।३।७); the appeal forum from the विशेष अदालत ऐन, २०५९ दफा १७.
+  // Nothing here is inferred from our data, and no stage or deadline is added
+  // that the texts do not state.
+  const flowStages: FlowStage[] = [
+    {
+      key: "darta",
+      term: "उजुरी दर्ता",
+      roman: t("research.corruption.flow.s1Roman", "Complaint received and registered"),
+      cite: t("research.corruption.flow.s1Cite", "कार्यविधि २०७८, दफा २०"),
+      body: t(
+        "research.corruption.flow.s1",
+        "No complaint brought to the Commission may be refused registration. A complaint can also be opened from an unsigned letter, a report, or something carried in the media, if the Commission sees reason. The complainant's name and address are normally kept confidential.",
+      ),
+      continues: t("research.corruption.flow.a1", "every registered complaint →"),
+    },
+    {
+      key: "parikshan",
+      term: "उजुरी परीक्षण (स्क्रिनिङ) समिति",
+      roman: t("research.corruption.flow.s2Roman", "Screening committee examines and classifies"),
+      cite: t("research.corruption.flow.s2Cite", "कार्यविधि २०७८, दफा २१"),
+      body: t(
+        "research.corruption.flow.s2",
+        "A committee chaired by the Secretary sorts every registered complaint before anyone investigates it. This is the first and largest filter.",
+      ),
+      branches: [
+        {
+          key: "tameli",
+          condition: t("research.corruption.flow.ifA", "if"),
+          term: "तामेलीमा राख्ने",
+          note: t(
+            "research.corruption.flow.s2b1",
+            "Closed with no action. The grounds the rule lists include: outside the Commission's jurisdiction, out of time, not traceable to an identifiable complainant, not factual on its face or vaguely written, too trivial, impossible to act on, or a repeat of a closed complaint with no new evidence.",
+          ),
+          ends: true,
+        },
+        {
+          key: "nikaya",
+          condition: t("research.corruption.flow.ifB", "or"),
+          term: "सम्बन्धित निकायमा लेखी पठाउने",
+          note: t(
+            "research.corruption.flow.s2b2",
+            "Sent to the ministry or body that should deal with it, and struck off the Commission's register.",
+          ),
+          ends: true,
+        },
+        {
+          key: "proceed",
+          condition: t("research.corruption.flow.ifC", "or"),
+          term: "थप कारबाहीका लागि पठाउने",
+          note: t(
+            "research.corruption.flow.s2b3",
+            "Passed to the relevant division for the Commission to take forward itself.",
+          ),
+        },
+      ],
+      continues: t("research.corruption.flow.a2", "complaints taken forward →"),
+    },
+    {
+      key: "prarambhik",
+      term: "प्रारम्भिक छानबिन",
+      roman: t("research.corruption.flow.s3Roman", "Preliminary inquiry"),
+      cite: t("research.corruption.flow.s3Cite", "कार्यविधि २०७८, दफा २२"),
+      body: t(
+        "research.corruption.flow.s3",
+        "The division identifies what actually has to be checked, calls for documents from the office concerned within a set time, asks officials for an explanation, and where needed carries out a site inspection or quality test. It then reaches a view on whether the allegation can be made out at all.",
+      ),
+      branches: [
+        {
+          key: "no",
+          condition: t("research.corruption.flow.ifA", "if"),
+          term: "तामेलीमा राख्ने",
+          note: t(
+            "research.corruption.flow.s3b1",
+            "Nothing amounting to corruption found. The division must give concrete reasons and grounds for closing it.",
+          ),
+          ends: true,
+        },
+        {
+          key: "yes",
+          condition: t("research.corruption.flow.ifB", "or"),
+          term: "अनुसन्धान अधिकृत तोक्ने",
+          note: t(
+            "research.corruption.flow.s3b2",
+            "Corruption appears to have occurred. An investigating officer is appointed, again on stated grounds, and the case moves to full investigation.",
+          ),
+        },
+      ],
+      continues: t("research.corruption.flow.a3", "only where grounds are found →"),
+    },
+    {
+      key: "bistrit",
+      term: "विस्तृत अनुसन्धान",
+      roman: t("research.corruption.flow.s4Roman", "Detailed investigation"),
+      cite: t("research.corruption.flow.s4Cite", "कार्यविधि २०७८, दफा २३, २४"),
+      body: t(
+        "research.corruption.flow.s4",
+        "The appointed officer investigates and writes a report. Before any case can be filed, a पूर्णता परीक्षण समिति checks that report and the draft charge sheet for completeness and accuracy.",
+      ),
+      continues: t("research.corruption.flow.a4", "report goes to the Commission →"),
+    },
+    {
+      key: "nirnaya",
+      term: "आयोगको निर्णय",
+      roman: t("research.corruption.flow.s5Roman", "The Commission decides"),
+      cite: t("research.corruption.flow.s5Cite", "कार्यविधि २०७८, दफा २५"),
+      body: t(
+        "research.corruption.flow.s5",
+        "An investigation does not automatically become a court case. The rule gives the Commission four things it may decide, and only the first one reaches a courtroom.",
+      ),
+      branches: [
+        {
+          key: "file",
+          condition: t("research.corruption.flow.ifA", "if"),
+          term: "मुद्दा दायर गर्ने",
+          note: t(
+            "research.corruption.flow.s5b1",
+            "A charge sheet (आरोपपत्र) is drawn up and filed at the Special Court, with the Special Government Attorney's Office conducting the case.",
+          ),
+        },
+        {
+          key: "sujhav",
+          condition: t("research.corruption.flow.ifB", "or"),
+          term: "सुझाव दिने",
+          note: t(
+            "research.corruption.flow.s5b2",
+            "Written advice to the body concerned instead of a prosecution.",
+          ),
+          ends: true,
+        },
+        {
+          key: "tameli5",
+          condition: t("research.corruption.flow.ifB", "or"),
+          term: "तामेलीमा राख्ने",
+          note: t(
+            "research.corruption.flow.s5b3",
+            "Closed. Any suspension, asset freeze or travel restriction imposed during the investigation is lifted.",
+          ),
+          ends: true,
+        },
+        {
+          key: "multabi",
+          condition: t("research.corruption.flow.ifB", "or"),
+          term: "मुल्तवीमा राख्ने",
+          note: t(
+            "research.corruption.flow.s5b4",
+            "Held in abeyance rather than closed or charged.",
+          ),
+          ends: true,
+        },
+      ],
+      continues: t("research.corruption.flow.a5", "only cases actually filed →"),
+    },
+    {
+      key: "adalat",
+      term: "विशेष अदालतको फैसला र पुनरावेदन",
+      roman: t("research.corruption.flow.s6Roman", "Special Court verdict, and appeal"),
+      cite: t("research.corruption.flow.s6Cite", "विशेष अदालत ऐन, २०५९ दफा १७"),
+      body: t(
+        "research.corruption.flow.s6",
+        "The Special Court gives one verdict per case: ठहर (convicted), आंशिक ठहर (partly convicted) or सफाई (acquitted). Either side, the convicted person or the Commission, may then appeal to the Supreme Court within the period that section allows. An appeal is a right that may be exercised, not a stage every case passes through, and most verdicts here have no appeal recorded against them.",
+      ),
+    },
+  ];
+
   const scope = [
     { k: "period", label: t("research.corruption.scope.period", "Period"), v: period },
     {
@@ -164,7 +332,7 @@ export default function Highlights() {
           <p className="mt-5 text-base leading-7 text-foreground/75 md:text-[1.0625rem] md:leading-8">
             {t(
               "research.corruption.hl.lede",
-              "Every corruption case in Nepal takes the same route. Someone files a complaint with the anti-corruption commission, the CIAA. The CIAA decides whether to investigate, and if it finds enough, it files the case at the Special Court. Whoever loses there can appeal to the Supreme Court. We followed {{cases}} cases along that route, using the court's own register and fourteen years of CIAA annual reports. Below is where the cases fall out, stage by stage.",
+              "A complaint to the anti-corruption commission, the CIAA, has to clear several filters before anyone reaches a courtroom, and most never do. The diagram below is the legal route, taken from the Commission's own rules. The findings after it show how many cases actually fall out at each stage, counted from {{cases}} prosecutions in the Special Court register and fourteen years of CIAA annual reports.",
               { cases: n(corpus.ciaaProsecutions) },
             )}
           </p>
@@ -177,6 +345,42 @@ export default function Highlights() {
             ))}
           </dl>
         </header>
+      </Reveal>
+
+      <Reveal>
+        <section className="mt-10 md:mt-12" aria-labelledby="flow-heading">
+          <h3
+            id="flow-heading"
+            className="font-display text-lg font-bold leading-snug md:text-xl"
+          >
+            {t(
+              "research.corruption.flow.title",
+              "How a corruption complaint is supposed to travel",
+            )}
+          </h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-foreground/75">
+            {t(
+              "research.corruption.flow.lede",
+              "Each step below is set out in the Commission's own working procedure. Branches marked in red continue; the others end the complaint there.",
+            )}
+          </p>
+
+          <div className="mt-6 max-w-3xl">
+            <ProcessFlow
+              stages={flowStages}
+              labels={{
+                endsHere: t("research.corruption.flow.endsHere", "ends here"),
+                romanLang: "en",
+              }}
+            />
+            <FlowNote>
+              {t(
+                "research.corruption.flow.source",
+                "Stages, branch conditions and section numbers are taken from the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८, approved by the Commission on २०७८।३।७, and the appeal provision from the विशेष अदालत ऐन, २०५९. This is the procedure as written. How many complaints actually take each branch is the subject of the findings below.",
+              )}
+            </FlowNote>
+          </div>
+        </section>
       </Reveal>
 
       {/* 01 — lead. Widest slot, figure and chart side by side. */}
