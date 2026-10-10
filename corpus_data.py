@@ -253,6 +253,25 @@ def load_dataset(refresh=False):
 def load_assumptions():
     return pd.read_csv(DATA / "assumptions.csv")
 
+def load_disposals():
+    """What the Commission decided to do with complaints that COMPLETED a detailed investigation.
+
+    This is the second of the Commission's two filters and the one its own funnel chart does not
+    isolate: the first closes complaints at प्रारम्भिक छानबिन (preliminary screening), before anyone
+    investigates; this one closes them as तामेली AFTER a full investigation has been carried out.
+    One row per fiscal year, transcribed from the decision table (or reconciled Venn figure) printed
+    in that year's annual report, with the figure number and report URL on the row.
+
+    Only years where the report prints BOTH the तामेली count AND the table total are included, so
+    every share is computed from two numbers in one table rather than across sources. 2076/77 and
+    2081/82 print the decision bubbles without a reconcilable disposal total and are left out rather
+    than derived — the gap is in the reporting, and filling it by arithmetic would hide that.
+
+    `filed` is मुद्दा दायर on the same table. It counts DECISIONS to prosecute in that year, which is
+    not the same unit as the court register's filings, so the two are never differenced here.
+    """
+    return pd.read_csv(DATA / "ciaa_disposals.csv")
+
 def load_appeals():
     """Trial outcome x who appealed x Supreme Court outcome, as counts of CASES.
 

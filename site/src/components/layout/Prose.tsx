@@ -111,3 +111,69 @@ export const Cite = ({ href, children }: { href: string; children: ReactNode }) 
     {children}
   </a>
 );
+
+/**
+ * One verified finding, built for the ten-second scan: the number first, then the
+ * claim, then the single sentence that says what it means, then the way in to the
+ * evidence. Reading only the stat and the headline should leave you with something
+ * true — if a finding needs its caveat to avoid being misread, the caveat belongs
+ * in `meaning`, not further down the page.
+ */
+export const Finding = ({
+  stat,
+  statNote,
+  headline,
+  meaning,
+  action,
+}: {
+  stat: string;
+  statNote: string;
+  headline: string;
+  meaning: string;
+  action?: ReactNode;
+}) => (
+  <article className="flex flex-col gap-3 border-t border-border py-6 md:flex-row md:gap-8 md:py-7">
+    <div className="md:w-56 md:shrink-0">
+      <p className="font-mono text-3xl font-semibold leading-none text-accent md:text-4xl">
+        {stat}
+      </p>
+      <p className="mt-2 text-xs leading-5 text-muted-foreground">{statNote}</p>
+    </div>
+    <div className="md:flex-1">
+      <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
+        {headline}
+      </h3>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-foreground/80 md:text-base md:leading-7">
+        {meaning}
+      </p>
+      {action ? <p className="mt-3 text-sm">{action}</p> : null}
+    </div>
+  </article>
+);
+
+/**
+ * The scope line under the title. An MP reading a rate needs to know what it is a
+ * rate *of* before the first chart, not in the methodology section.
+ */
+export const ScopeBar = ({ items }: { items: { label: string; value: string }[] }) => (
+  <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-y border-border py-4">
+    {items.map((it) => (
+      <div key={it.label}>
+        <dt className="text-xs uppercase tracking-wide text-muted-foreground">{it.label}</dt>
+        <dd className="mt-0.5 font-mono text-sm font-medium text-foreground">{it.value}</dd>
+      </div>
+    ))}
+  </dl>
+);
+
+/**
+ * An explicit "the data does not answer this" block. Distinct from `Caveat`, which
+ * qualifies a figure that exists; this marks a question we cannot answer at all, so
+ * a reader does not take its absence for a zero.
+ */
+export const Unknown = ({ title, children }: { title: string; children: ReactNode }) => (
+  <aside className="mt-8 rounded-lg border border-dashed border-border bg-muted/30 p-4">
+    <p className="text-sm font-semibold text-foreground">{title}</p>
+    <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{children}</p>
+  </aside>
+);

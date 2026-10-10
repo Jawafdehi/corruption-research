@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { useFormat } from "@/lib/format";
 
-import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile } from "@/components/layout/Prose";
+import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
 import { REPORT, decidedClean } from "@/data/research-corruption";
 
 
@@ -13,6 +13,10 @@ export default function Appeals() {
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
+
+  // Share of established appeals we cannot follow to an end. Surfaced before the
+  // rates, not after, so the 36.6%/1.1% pair is read as the decided minority.
+  const untracedPct = appeals.appeals ? (appeals.no_outcome / appeals.appeals) * 100 : 0;
 
   // Only appeals that have actually been decided move a rate. The undecided ones are
   // shown as a gap, never projected into the headline.
@@ -56,6 +60,20 @@ export default function Appeals() {
           <StatTile tone="accent" value={pct1(appeals.defendant.pct)} label={t("research.corruption.appeals.tileDefendant", "Defendant appeals won")} note={t("research.corruption.appeals.tileDefendantNote", "full reversals, of decided")} />
           <StatTile value={pct1(appeals.commission.pct)} label={t("research.corruption.appeals.tileCommission", "Commission appeals won")} note={t("research.corruption.appeals.tileCommissionNote", "full reversals, of decided")} />
         </StatRow>
+
+        <Unknown
+          title={t(
+            "research.corruption.appeals.tracingTitle",
+            "Read every rate below against this: {{pct}} of these appeals have no recorded outcome",
+            { pct: pct1(untracedPct) },
+          )}
+        >
+          {t(
+            "research.corruption.appeals.tracingBody",
+            "{{no}} of {{total}} established appeals carry no outcome in the record, so every rate on this page is computed over the {{decided}} that do. That is a limit of what can be traced, not a finding about the Supreme Court — and a case with no appeal recorded is one we cannot follow, never one that was not appealed.",
+            { no: n(appeals.no_outcome), total: n(appeals.appeals), decided: n(appeals.decided) },
+          )}
+        </Unknown>
       </Block>
 
       <Block>
