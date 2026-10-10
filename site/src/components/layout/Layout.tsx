@@ -85,12 +85,12 @@ export function Layout() {
             <LanguageToggle />
           </div>
           <h1 className="mt-1 font-display text-2xl font-bold leading-tight tracking-tight md:text-3xl">
-            {t("research.corruption.site.title", "Corruption Accountability")}
+            {t("research.corruption.site.title", "Where Nepal's corruption accountability actually leaks")}
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
             {t(
               "research.corruption.site.lede",
-              "What happens to a corruption complaint in Nepal — from the Commission's intake desk to a verdict at the Special Court, and on to the Supreme Court. Every figure is counted from the court's own criminal register and the Commission's published annual reports.",
+              "Thousands of complaints. Hundreds of prosecutions. Years of court proceedings. But how many cases actually lead to convictions, how many end in acquittals, and how many remain unresolved? Following cases from the CIAA to the Special Court and Supreme Court, this research identifies where the gaps lie at each stage of Nepal's corruption accountability system.",
             )}
           </p>
         </div>
