@@ -199,6 +199,10 @@ def build() -> dict:
         },
         "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals())},
         "disposals": _rows(cd.load_disposals()),
+        "duration": {
+            "bands": _rows(f["duration"]),
+            **{k: _num(v) for k, v in f["duration_summary"].iloc[0].items()},
+        },
         "crossCheck": _cross_check(),
         "assumptions": _rows(f["assumptions"]),
         "leadership": _rows(f["leadership"]),
