@@ -1,5 +1,7 @@
 import { useTranslation } from "react-i18next";
 
+import { useFormat } from "@/lib/format";
+
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { FiledDecidedTrend } from "@/components/research/FiledDecidedTrend";
@@ -7,10 +9,10 @@ import { RateTrend, type RatePoint } from "@/components/research/RateTrend";
 import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
 import { REPORT, fyLabel, verdictYearRates } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
 
 export default function OverTime() {
   const { t } = useTranslation();
+  const { n } = useFormat();
   const { chargeMixByYear, corpus, filedByMonth, overTime, trend } = REPORT;
 
   const rates = verdictYearRates(overTime.byVerdictYear);

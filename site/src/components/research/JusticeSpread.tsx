@@ -1,6 +1,7 @@
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
 import type { JusticeRow } from "@/data/research-corruption";
+import { useFormat } from "@/lib/format";
 
 const NE_STACK = "'Noto Sans Devanagari', system-ui, -apple-system, sans-serif";
 
@@ -22,6 +23,7 @@ export function JusticeSpread({
   bandLabels: { high: string; mid: string; low: string };
   avgLabel: string;
 }) {
+  const { pct } = useFormat();
   const mounted = useMounted();
 
   const W = 760;
@@ -39,7 +41,7 @@ export function JusticeSpread({
   const radius = (dec: number) => Math.max(4, Math.min(11, Math.sqrt(dec) / 2.6));
 
   const ariaLabel = justices
-    .map((j) => `${j.name} ${j.convPct}%`)
+    .map((j) => `${j.name} ${pct(j.convPct)}`)
     .join(", ");
 
   if (!mounted) {

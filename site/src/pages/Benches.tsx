@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 
+import { useFormat } from "@/lib/format";
+
 import { JusticeSpread } from "@/components/research/JusticeSpread";
 import { PipelineHealth, type PipelinePoint } from "@/components/research/PipelineHealth";
 import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
 import { REPORT, decidedClean, fyLabel } from "@/data/research-corruption";
 
-const n = (v: number) => v.toLocaleString();
 
 // Mirrors the thresholds in `JusticeSpread`'s `bandColor`. Kept here rather than
 // edited into the component so that file stays byte-identical to the SPA's copy;
@@ -15,6 +16,7 @@ const BAND_LOW = 37;
 
 export default function Benches() {
   const { t } = useTranslation();
+  const { n } = useFormat();
   const { justiceMinDecisions, justices, outcome, overTime, rates } = REPORT;
 
   const decided = decidedClean(outcome);

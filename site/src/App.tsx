@@ -20,14 +20,19 @@ const Method = lazy(() => import("@/pages/Method"));
  * lifted into the jawafdehi.org SPA, where the research will be arranged as
  * sections anyway — so each one is already a self-contained page component that
  * reads from `@/data/research-corruption` and takes no props.
+ *
+ * `label`/`blurb` are the English source copy and are handed to `t()` as the
+ * default at the point of use — the same `t("key", "English default")` shape as
+ * every other string on the site, so the nav translates through one mechanism
+ * rather than a second one. `key` names the pair: `…nav.<key>` / `…nav.<key>Blurb`.
  */
 export const SECTIONS = [
-  { path: "/", label: "Overview", blurb: "Where accountability is lost" },
-  { path: "/outcomes", label: "Outcomes", blurb: "What the court decides" },
-  { path: "/over-time", label: "Over time", blurb: "How the docket moved" },
-  { path: "/benches", label: "Benches", blurb: "Who decides, and how fast" },
-  { path: "/appeals", label: "Appeals", blurb: "What survives the Supreme Court" },
-  { path: "/method", label: "Method", blurb: "Sources, limits and provenance" },
+  { path: "/", key: "overview", label: "Overview", blurb: "Where accountability is lost" },
+  { path: "/outcomes", key: "outcomes", label: "Outcomes", blurb: "What the court decides" },
+  { path: "/over-time", key: "overTime", label: "Over time", blurb: "How the docket moved" },
+  { path: "/benches", key: "benches", label: "Benches", blurb: "Who decides, and how fast" },
+  { path: "/appeals", key: "appeals", label: "Appeals", blurb: "What survives the Supreme Court" },
+  { path: "/method", key: "method", label: "Method", blurb: "Sources, limits and provenance" },
 ] as const;
 
 export default function App() {

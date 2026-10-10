@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFormat } from "@/lib/format";
 
 export interface FunnelStage {
   key: string;
@@ -41,6 +42,7 @@ export function AccountabilityFunnel({
   /** Formatter for the "{pct}% of documented" caption per row. */
   ofLabel: (pct: string) => string;
 }) {
+  const { n } = useFormat();
   const base = (denominator ?? stages[0]?.count) || 1;
 
   if (isLoading) {
@@ -80,7 +82,7 @@ export function AccountabilityFunnel({
             <div className="mb-1 flex items-baseline justify-between gap-3">
               <span className="text-sm font-medium text-foreground">{stage.label}</span>
               <span className="font-mono text-lg font-bold tabular-nums text-foreground">
-                {stage.count.toLocaleString()}
+                {n(stage.count)}
               </span>
             </div>
             <div className="flex items-center gap-3">

@@ -9,10 +9,11 @@ import {
   YAxis,
 } from "recharts";
 
-import { fyLabel, type ChargeMixYear } from "@/data/research-corruption";
+import { type ChargeMixYear } from "@/data/research-corruption";
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
 import { Switch } from "@/components/ui/switch";
+import { useFormat } from "@/lib/format";
 
 type MixKey = "bribery" | "fake" | "embezzlement" | "benefit" | "loss" | "other";
 
@@ -48,13 +49,14 @@ export function ChargeMixByYear({
   labels: Record<MixKey, string>;
   percentLabel: string;
 }) {
+  const { n, pct, fy, fyLong } = useFormat();
   const mounted = useMounted();
   const [percent, setPercent] = useState(false);
   const toggleId = useId();
   const height = 300;
 
   const ariaLabel = `Charge mix by fiscal filing year: ${data
-    .map((d) => `FY ${fyLabel(d.fy)} — ${SERIES.map((s) => `${labels[s.key]} ${d[s.key]}`).join(", ")}`)
+    .map((d) => `${fyLong(d.fy)} — ${SERIES.map((s) => `${labels[s.key]} ${n(d[s.key] as number)}`).join(", ")}`)
     .join("; ")}`;
 
   return (
@@ -79,7 +81,7 @@ export function ChargeMixByYear({
               dataKey="fy"
               tickLine={false}
               axisLine={false}
-              tickFormatter={(y: number) => fyLabel(y).slice(2)}
+              tickFormatter={(y: number) => fy(y).slice(2)}
               tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
             />
             <YAxis
@@ -87,18 +89,18 @@ export function ChargeMixByYear({
               tickLine={false}
               axisLine={false}
               domain={percent ? [0, 1] : undefined}
-              tickFormatter={percent ? (v: number) => `${Math.round(v * 100)}%` : undefined}
+              tickFormatter={percent ? (v: number) => pct(v * 100) : undefined}
               tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
             />
             <Tooltip
-              labelFormatter={(y) => `FY ${fyLabel(Number(y))}`}
+              labelFormatter={(y) => fyLong(Number(y))}
               contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))", fontSize: 13 }}
               itemStyle={{ fontFamily: MONO_STACK }}
               formatter={(value: number, name: string, entry: { payload?: ChargeMixYear }) => {
-                if (!percent) return [value, name];
+                if (!percent) return [n(value), name];
                 const total = entry?.payload ? rowTotal(entry.payload) : 0;
-                const pct = total ? Math.round((value / total) * 100) : 0;
-                return [`${value} (${pct}%)`, name];
+                const share = total ? (value / total) * 100 : 0;
+                return [`${n(value)} (${pct(share)})`, name];
               }}
             />
             {SERIES.map((s, i) => (
