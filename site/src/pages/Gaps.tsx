@@ -85,13 +85,13 @@ export default function Gaps() {
         <SectionHeading>
           {t(
             "research.corruption.gaps.title2",
-            "Six places where Nepal's corruption record stops being followable",
+            "Six places where the paper trail runs out",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.gaps.lede2",
-            "Each gap below is tied to a specific dataset, document or stated limitation — not to a general view about governance. Where the record cannot settle a question, that is said plainly rather than filled in.",
+            "Every gap below points at a specific missing field, document or identifier. None of them is a complaint about governance in general, and where the record cannot settle something we say so instead of filling it in.",
           )}
         </Lede>
       </Block>
@@ -102,7 +102,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.aLabel", "A · Investigation and closure")}
           title={t(
             "research.corruption.gap.aTitle",
-            "Complaints are closed after investigation, and no reason is published",
+            "Thousands of closures, not one published reason",
           )}
           establishes={t(
             "research.corruption.gap.aEstablishes",
@@ -128,7 +128,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.bLabel", "B · Selective prosecution")}
           title={t(
             "research.corruption.gap.bTitle",
-            "A court has treated selective charging as a ground for acquittal — and the question is unresolved",
+            "A bench acquitted three men because of who was not charged",
           )}
           establishes={t(
             "research.corruption.gap.bEstablishes",
@@ -141,7 +141,7 @@ export default function Gaps() {
         >
           {t(
             "research.corruption.gap.bBody",
-            "This is a judicial observation, not an allegation by a party — which is what makes it worth recording. It is also not a final conclusion: the case is before the Supreme Court and the Commission's position is that the court overstepped. Jawafdehi takes no view on who is right. We record that the issue has been raised by a bench, in a reasoned judgment, and is unsettled.",
+            "Defendants raise selective prosecution often and it usually goes nowhere, which is why this one matters: the finding came from the bench, in a reasoned judgment. It is also not settled. The Commission says the court walked into territory the constitution reserves for prosecutors, and the Supreme Court has not ruled. We record the question, not an answer to it.",
           )}{" "}
           <Cite href={JALAHARI.case}>
             {t("research.corruption.gap.bCite", "The case, with sources")}
@@ -167,7 +167,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.cLabel", "C · Claimed amounts versus upheld amounts")}
           title={t(
             "research.corruption.gap.cTitle",
-            "The बिगो a prosecution claims and the amount a court accepts can differ by orders of magnitude",
+            "The charge said 1,491 grams were missing. The court made it 58.",
           )}
           establishes={t(
             "research.corruption.gap.cEstablishes",
@@ -190,7 +190,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.dLabel", "D · Appeals and finality")}
           title={t(
             "research.corruption.gap.dTitle",
-            "For nearly half of appeals, the record does not say how they ended",
+            "Half the appeals end in silence",
           )}
           establishes={t(
             "research.corruption.gap.dEstablishes",
@@ -210,7 +210,7 @@ export default function Gaps() {
         >
           {t(
             "research.corruption.gap.dBody",
-            "This is a record-tracing gap, not a finding about the Supreme Court. Trial and appeal cases are stored in one table with no link between them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and otherwise by matching defendant names. A case with no appeal recorded is counted as unknown — never as a case that was not appealed, and never as a loss.",
+            "Blame the filing system here, not the bench. Trial and appeal cases sit in one table with nothing joining them, so we rebuilt the pairing from the Commission's register, from judgments that name the trial case, and failing both, by matching defendant names. Anything we could not resolve is counted as unknown. It is never counted as a case that went unappealed, and never as a loss.",
           )}{" "}
           <Link to="/appeals" className="text-accent underline underline-offset-4">
             {t("research.corruption.gap.dLink", "See the appeal record")}
@@ -222,7 +222,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.eLabel", "E · Recovery and enforcement")}
           title={t(
             "research.corruption.gap.eTitle",
-            "Nothing in the public record connects a judgment to money actually recovered",
+            "The money is where the record simply stops",
           )}
           establishes={t(
             "research.corruption.gap.eEstablishes",
@@ -236,7 +236,7 @@ export default function Gaps() {
         >
           {t(
             "research.corruption.gap.eBody",
-            "This is the one stage of the process with no institutional owner for its data, which is why it is the only stage this research cannot put a number against. Treat it as absent, not as zero: a court's finding on बिगो is a legal determination, and nothing published anywhere says whether a rupee followed it.",
+            "Every other stage here has an institution that publishes something about it. This one has none, which is why it is the only stage we cannot put a number against. Read the blank as missing rather than as zero. A finding on बिगो is a legal determination, and no published source says whether a rupee followed it.",
           )}
           <Unknown title={t("research.corruption.gap.eUnknownTitle", "Explicitly unanswerable")}>
             {t(
@@ -251,7 +251,7 @@ export default function Gaps() {
           label={t("research.corruption.gap.fLabel", "F · Data and institutional transparency")}
           title={t(
             "research.corruption.gap.fTitle",
-            "Definitions move between reports, and people cannot be followed across cases",
+            "The same person is a different name in every file",
           )}
           establishes={t(
             "research.corruption.gap.fEstablishes",

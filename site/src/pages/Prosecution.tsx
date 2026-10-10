@@ -55,13 +55,13 @@ export default function Prosecution() {
         <SectionHeading>
           {t(
             "research.corruption.prosecution.title",
-            "The charges the Commission brings are not a cross-section of the corruption it describes",
+            "The Commission charges what it can prove, and what it can prove is paperwork",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.prosecution.lede",
-            "Roughly one in {{k}} fully investigated complaints becomes a prosecution. Which ones do is the decision that shapes every number further down this site — because, as the court record shows, the charge chosen predicts the verdict better than almost anything else about a case.",
+            "About one in {{k}} investigated complaints becomes a prosecution. Which ones is the most consequential choice in the whole process, because the court record shows the charge predicts the verdict better than almost anything else about a case.",
             { k: Math.round(ciaa.investigatedYear / ciaa.casesFiledYear) },
           )}
         </Lede>
@@ -153,13 +153,13 @@ export default function Prosecution() {
         <SectionHeading>
           {t(
             "research.corruption.prosecution.whyTitle",
-            "A conviction rate that moves because the charge mix moved is not a finding about the court",
+            "When the headline rate fell, the docket had already changed",
           )}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.prosecution.whyBody",
-            "In {{firstYear}} fake-credential cases were {{firstShare}} of everything the court decided; by {{lastYear}} they were {{lastShare}}. Over the same period the headline full-conviction rate fell. Those two facts are the same fact. Read on their own, the falling rate looks like a court growing reluctant to convict — the Court outcomes section separates the two explanations instead of leaving the reader to guess.",
+            "In {{firstYear}} fake-credential cases were {{firstShare}} of everything the court decided. By {{lastYear}} they were {{lastShare}}. The headline conviction rate fell over the same years, and these are not two findings. They are one. A reader given only the falling line would reasonably conclude the court had gone soft; the Court outcomes section pulls the two apart.",
             {
               firstYear: fyLabel(firstRate.year),
               firstShare: pct(firstRate.fakeSharePct),
@@ -172,7 +172,7 @@ export default function Prosecution() {
         <Body>
           {t(
             "research.corruption.prosecution.easyBody",
-            "The pattern is not that the Commission prosecutes nothing hard. Bribery is its largest charge — {{briberyDecided}} decided cases — and converts at {{briberyPct}} in full. But the documentary offence that convicts almost automatically supplied the bulk of its record for years, and when that charge thinned out, so did the headline.",
+            "Bribery is the Commission's largest charge, {{briberyDecided}} decided cases, and it converts at {{briberyPct}} in full. So this is not a body that avoids hard cases. It is one whose published record leaned for years on an offence that convicts almost automatically, and that thinned out.",
             {
               briberyDecided: n(
                 bribery ? bribery.convicted + bribery.partial + bribery.acquitted : 0,

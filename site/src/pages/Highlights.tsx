@@ -61,13 +61,13 @@ export default function Highlights() {
         <SectionHeading>
           {t(
             "research.corruption.highlights.title",
-            "Five things the record shows about corruption accountability in Nepal",
+            "Most corruption complaints die quietly. The convictions are mostly forged certificates.",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.highlights.lede",
-            "Jawafdehi read the Special Court's criminal register and the Commission's annual reports against each other, case by case. Each finding below is counted from those records, and each one links to the working behind it.",
+            "Two institutions keep records about the same cases and neither reads the other's. We put them side by side. Five things fell out that are hard to see when you read either one alone.",
           )}
         </Lede>
 
@@ -107,7 +107,7 @@ export default function Highlights() {
           stat={pct(tameliPct(lastDisposal))}
           statNote={t(
             "research.corruption.highlights.f1Note",
-            "of completed investigations closed without charge, {{fy}} — up from {{was}} in {{wasFy}}",
+            "of finished investigations end in a filing cabinet ({{fy}}). In {{wasFy}} it was {{was}}.",
             {
               fy: lastDisposal.fy,
               was: pct(tameliPct(firstDisposal)),
@@ -116,11 +116,11 @@ export default function Highlights() {
           )}
           headline={t(
             "research.corruption.highlights.f1",
-            "Most complaints now end after the Commission has already investigated them",
+            "The Commission shelves most of what it investigates",
           )}
           meaning={t(
             "research.corruption.highlights.f1Body",
-            "These are not complaints screened out at the desk — they completed a full investigation and were then filed away as तामेली. The share closed this way roughly tripled in five years while prosecutions stayed flat. The reports publish the totals but not the reasons, so the record cannot say whether the cases were weak or the decisions were.",
+            "Everyone knows the front desk turns away almost everything. This is the filter after that one. These complaints survived screening, got a full investigation, and were then closed as तामेली. That share roughly tripled in five years while the number of prosecutions stayed flat. The Commission publishes the totals and not one reason, so nobody outside it can tell whether the cases were weak or the decisions were.",
           )}
           action={
             <Evidence to="/investigation">
@@ -130,18 +130,19 @@ export default function Highlights() {
         />
 
         <Finding
-          stat={`${pct(fakeFullPct)} / ${pct(benefitFullPct)}`}
+          stat={pct(fakeFullPct)}
           statNote={t(
             "research.corruption.highlights.f2Note",
-            "full-conviction rate: fake credentials vs. illegal benefit",
+            "of forged-certificate cases convict in full. For rigging a decision in someone's favour: {{b}}.",
+            { b: pct(benefitFullPct) },
           )}
           headline={t(
             "research.corruption.highlights.f2",
-            "What a defendant is charged with predicts the verdict better than anything else",
+            "Paper crimes convict. Money crimes mostly don't.",
           )}
           meaning={t(
             "research.corruption.highlights.f2Body",
-            "Producing a forged certificate is upheld in full about nine times in ten and supplies {{share}} of every full conviction in the archive. The financial offences the Commission exists to punish convict far less often. A conviction rate that moves can therefore mean the charge mix changed, not that the court did.",
+            "Fake academic certificates are the easiest corruption case in Nepal to prove, and they alone supply {{share}} of every full conviction in this archive. The offences the Commission was built for do far worse. So when the national conviction rate moves, the first thing to check is what was being charged that year, not what the judges were thinking.",
             { share: pct(fakeShareOfFull) },
           )}
           action={
@@ -152,22 +153,24 @@ export default function Highlights() {
         />
 
         <Finding
-          stat={`${pct1(appeals.defendant.pct)} / ${pct1(appeals.commission.pct)}`}
+          stat={`${n(appeals.defendant.reversed)} vs ${n(appeals.commission.reversed)}`}
           statNote={t(
             "research.corruption.highlights.f3Note",
-            "of decided appeals fully reversed: defendants vs. the Commission",
+            "full reversals won by convicted defendants, against {{c}} won by the Commission",
+            { c: n(appeals.commission.reversed) },
           )}
           headline={t(
             "research.corruption.highlights.f3",
-            "Appeals run almost entirely one way",
+            "The Commission has won {{c}} appeals",
+            { c: n(appeals.commission.reversed) },
           )}
           meaning={t(
             "research.corruption.highlights.f3Body",
-            "Convicted people who appeal overturn their verdict in full in {{d}} of {{dd}} decided appeals. The Commission, appealing acquittals, has done so {{c}} times in {{cd}}. An acquittal at the Special Court is close to final; a conviction is considerably less secure than it looks.",
+            "{{c}}, out of {{cd}} decided appeals it brought, most of them against acquittals. Convicted defendants, over {{dd}} decided appeals, won {{d}}. Put plainly: when the Commission loses at trial that is usually the end of it, and when it wins, the win is a lot shakier than the verdict makes it look.",
             {
+              c: n(appeals.commission.reversed),
               d: n(appeals.defendant.reversed),
               dd: n(appeals.defendant.decided),
-              c: n(appeals.commission.reversed),
               cd: n(appeals.commission.decided),
             },
           )}
@@ -182,16 +185,16 @@ export default function Highlights() {
           stat={pct(untracedPct)}
           statNote={t(
             "research.corruption.highlights.f4Note",
-            "of established appeals carry no recorded outcome ({{no}} of {{total}})",
+            "of the appeals we found simply stop: {{no}} of {{total}} have no outcome recorded anywhere",
             { no: n(appeals.no_outcome), total: n(appeals.appeals) },
           )}
           headline={t(
             "research.corruption.highlights.f4",
-            "For nearly half of appeals, the trail stops before the end",
+            "Half the appeals go dark",
           )}
           meaning={t(
             "research.corruption.highlights.f4Body",
-            "This is a gap in what can be traced, not a finding about the Supreme Court. Trial and appeal cases are stored with no link between them, so the pairing had to be reconstructed. Where no outcome is recorded we count it as unknown — never as a loss, and never as proof that no appeal exists.",
+            "Nepal's courts file a trial and its appeal as two unrelated cases with nothing joining them, so we rebuilt the links by hand. Nearly half end in silence. That is a failure of record-keeping and says nothing about the Supreme Court. A case with no appeal on record is one we cannot follow, not one that was never appealed.",
           )}
           action={
             <Evidence to="/gaps">
@@ -204,16 +207,16 @@ export default function Highlights() {
           stat={t("research.corruption.highlights.f5Stat", "Not published")}
           statNote={t(
             "research.corruption.highlights.f5Note",
-            "money actually recovered, against Rs {{bn}}bn claimed in {{fy}}",
+            "is how much of the Rs {{bn}}bn claimed in {{fy}} any institution says it got back",
             { bn: ciaa.damagesClaimedYearBn, fy: "2081/82" },
           )}
           headline={t(
             "research.corruption.highlights.f5",
-            "The last stage of accountability is not measured by anyone",
+            "Nobody publishes what gets recovered",
           )}
           meaning={t(
             "research.corruption.highlights.f5Body",
-            "The Commission publishes the damages it demands each year. No institution publishes what was recovered afterwards, and the court record does not carry it. A court finding on बिगो is not the same event as money returning to the treasury, and nothing in the public record connects the two.",
+            "The Commission reports what it demands every year. No institution reports what came back, and the court record does not carry it either. बिगो is a figure written in a judgment; whether anyone collected it is a separate question that nothing public answers.",
           )}
           action={
             <Evidence to="/gaps">
