@@ -62,13 +62,13 @@ export default function Investigation() {
         <SectionHeading>
           {t(
             "research.corruption.investigation.title",
-            "The Commission filters twice, and the second filter is the one nobody sees",
+            "There are two filters, and the second one is invisible",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.investigation.lede",
-            "Almost every complaint is closed at the front desk, before anyone investigates it. That much is well known. What the annual reports also show — but never put on one chart — is that a large and growing share of the complaints that do get a full investigation are then closed too.",
+            "That almost nothing survives the front desk is well known. The annual reports also carry a second number, scattered across tables and never drawn as a series: what happens to the complaints that do get investigated. Most of them are now closed too.",
           )}
         </Lede>
 
@@ -138,13 +138,13 @@ export default function Investigation() {
         <SectionHeading>
           {t(
             "research.corruption.investigation.tameliTitle",
-            "Closure after investigation went from one in five to seven in ten",
+            "One in five became seven in ten",
           )}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.investigation.tameliBody",
-            "Once a complaint survives screening and is fully investigated, the Commission's own meeting decides what to do with it: prosecute, advise the agency, write to it, or close it as तामेली. In {{firstFy}} it closed {{firstPct}} of those decisions. By {{lastFy}} it closed {{lastPct}} — while the number of decisions to prosecute barely moved.",
+            "A complaint that survives screening and gets investigated goes to the Commission's own meeting, which can prosecute it, advise the agency, write to it, or shelve it as तामेली. In {{firstFy}} the meeting shelved {{firstPct}} of what reached it. By {{lastFy}} it shelved {{lastPct}}. Decisions to prosecute barely moved across the same years.",
             {
               firstFy: first.fy,
               firstPct: pct1(tameliPct(first)),
@@ -191,7 +191,7 @@ export default function Investigation() {
         <Caveat>
           {t(
             "research.corruption.investigation.tameliCaveat",
-            "A rising closure rate is not by itself evidence of wrongdoing. Closing a weak case after investigating it is the correct outcome, and a Commission that prosecuted everything it investigated would be doing something worse. What the record does establish is the scale and the direction of the change — and that the reports give no case-by-case reason for any of it, so nobody outside the Commission can test whether the cases were weak or the decisions were.",
+            "Shelving a weak case after investigating it is the right call, and a Commission that prosecuted everything it touched would be a worse one. The number alone cannot tell you which of those is happening here. What it does tell you is the size of the change and the direction of it, and that the reports attach no reason to a single one of these closures.",
           )}
         </Caveat>
 
@@ -200,7 +200,7 @@ export default function Investigation() {
         >
           {t(
             "research.corruption.investigation.unknownBody",
-            "A published reason code per closed complaint, or the number of closures later reopened. Neither exists in the annual reports. Until one does, the share above is the strongest statement the public record supports.",
+            "A reason attached to each closure, or a count of closures later reopened. The annual reports carry neither. Until one of them appears, the share above is as far as the public record goes.",
           )}
         </Unknown>
       </Block>

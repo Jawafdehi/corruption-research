@@ -131,13 +131,13 @@ export default function CourtOutcomes() {
         <SectionHeading>
           {t(
             "research.corruption.outcomes.title",
-            "A conviction rate that depends on which charge was brought",
+            "One number, two completely different stories inside it",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.outcomes.lede2",
-            "Across {{decided}} cases with a clear verdict, {{rate}} ended in conviction in whole or in part, and {{full}} in full. That headline hides a sharper story: the court convicts almost everyone charged with a documentary offence, and far fewer of those charged with the financial graft the system exists to punish.",
+            "Across {{decided}} cases with a clear verdict, {{rate}} ended in conviction in whole or in part, {{full}} in full. Quoted alone that number is close to meaningless, because it averages an offence the court upholds nine times in ten with offences it upholds one time in five.",
             { decided: n(decided), rate: pct1(rates.convictionPct), full: pct1(rates.convictionFullOnlyPct) },
           )}
         </Lede>
@@ -268,7 +268,7 @@ export default function CourtOutcomes() {
         <Body>
           {t(
             "research.corruption.rateTrend.body2",
-            "The dashed line is the answer to the question the solid line raises. Once the documentary cases are removed, the remaining docket does not show the same collapse — which means the headline fell largely because the easy charge left the docket, not because the court changed its mind about serious graft.",
+            "The dashed line answers the question the solid line raises. Take the documentary cases out and the rest of the docket does not collapse the same way. The headline fell mostly because the easy charge left, not because the court hardened against serious graft.",
           )}
         </Body>
 
@@ -364,7 +364,7 @@ export default function CourtOutcomes() {
       <Block>
         <Eyebrow>{t("research.corruption.benches.eyebrow", "Who decides")}</Eyebrow>
         <SectionHeading>
-          {t("research.corruption.benches.title", "Benches differ far more than a single court average suggests")}
+          {t("research.corruption.benches.title2", "Which panel you draw is a material fact about your case")}
         </SectionHeading>
         <Body>
           {t(

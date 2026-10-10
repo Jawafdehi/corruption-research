@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { useFormat } from "@/lib/format";
 
+import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
 import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
 import { REPORT, decidedClean } from "@/data/research-corruption";
 
@@ -17,6 +18,27 @@ export default function Appeals() {
   // Share of established appeals we cannot follow to an end. Surfaced before the
   // rates, not after, so the 36.6%/1.1% pair is read as the decided minority.
   const untracedPct = appeals.appeals ? (appeals.no_outcome / appeals.appeals) * 100 : 0;
+
+  // Both sides over their FULL established count, so the unresolved share stays
+  // inside the figure rather than becoming a caption nobody reads.
+  const asymSides: AppealSide[] = [
+    {
+      key: "defendant",
+      who: t("research.corruption.appeals.whoDefendant", "The convicted person"),
+      stake: t("research.corruption.appeals.stakeDefendant", "a win clears them"),
+      appeals: appeals.defendant.appeals,
+      decided: appeals.defendant.decided,
+      reversed: appeals.defendant.reversed,
+    },
+    {
+      key: "commission",
+      who: t("research.corruption.appeals.whoCommission", "The Commission"),
+      stake: t("research.corruption.appeals.stakeCommission", "a win converts an acquittal into a conviction"),
+      appeals: appeals.commission.appeals,
+      decided: appeals.commission.decided,
+      reversed: appeals.commission.reversed,
+    },
+  ];
 
   // Only appeals that have actually been decided move a rate. The undecided ones are
   // shown as a gap, never projected into the headline.
@@ -70,10 +92,34 @@ export default function Appeals() {
         >
           {t(
             "research.corruption.appeals.tracingBody",
-            "{{no}} of {{total}} established appeals carry no outcome in the record, so every rate on this page is computed over the {{decided}} that do. That is a limit of what can be traced, not a finding about the Supreme Court — and a case with no appeal recorded is one we cannot follow, never one that was not appealed.",
+            "{{no}} of {{total}} established appeals carry no outcome anywhere in the record, so every rate below is computed over the {{decided}} that do. The missing half is a filing problem rather than a judicial one. And a case with no appeal on record is one we cannot follow, never one that nobody appealed.",
             { no: n(appeals.no_outcome), total: n(appeals.appeals), decided: n(appeals.decided) },
           )}
         </Unknown>
+      </Block>
+
+      <Block>
+        <Figure
+          title={t(
+            "research.corruption.appeals.asymTitle",
+            "Every appeal each side brought, and how far it got",
+          )}
+          subtitle={t(
+            "research.corruption.appeals.asymSubtitle",
+            "Each bar is one side's full set of established appeals, not just the decided ones. The hatched band is the part of the record that stops.",
+          )}
+          caption={t(
+            "research.corruption.appeals.asymCaption",
+            "A full reversal means opposite things on the two rows, which is the point of splitting them: when the convicted person wins they walk, and when the Commission wins an acquittal becomes a conviction. Rates underneath are computed over decided appeals only. Counts are of cases, never of people.",
+          )}
+        >
+          <AppealAsymmetry
+            sides={asymSides}
+            wonLabel={t("research.corruption.appeals.won", "won outright")}
+            otherLabel={t("research.corruption.appeals.otherDecided", "decided")}
+            unknownLabel={t("research.corruption.appeals.noOutcome", "no outcome recorded")}
+          />
+        </Figure>
       </Block>
 
       <Block>
