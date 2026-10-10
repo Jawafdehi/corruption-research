@@ -61,6 +61,24 @@
   }
 }
 
+@layer base {
+  /* Editorial palette, scoped to the Highlights section only.
+     Redefining the tokens here rather than at :root means the charts inside pick
+     up the warmer scheme through the same `hsl(var(--token))` references they
+     already use, while every other section keeps the shared jawafdehi.org theme.
+     Promote these to :root if the whole page should move to this palette. */
+  .theme-editorial {
+    --background: 44 33% 94%;   /* #F4F1E9 warm off-white */
+    --foreground: 0 0% 10%;     /* #191919 ink */
+    --accent: 5 56% 36%;        /* #8E3028 muted crimson */
+    --accent-foreground: 44 33% 97%;
+    --border: 40 16% 82%;       /* #D9D4CA stone */
+    --muted-foreground: 30 8% 38%;
+    --surface: 44 30% 97%;      /* near-white card face */
+    --card: 44 30% 97%;
+  }
+}
+
 @layer utilities {
   /* Charts are wider than a phone. Allow horizontal scroll on the chart only,
      rather than letting one wide figure set the width of the whole page. */
