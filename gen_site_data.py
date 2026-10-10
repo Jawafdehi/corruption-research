@@ -198,6 +198,7 @@ def build() -> dict:
             "completeThroughFy": complete_through,
         },
         "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals())},
+        "disposals": _rows(cd.load_disposals()),
         "crossCheck": _cross_check(),
         "assumptions": _rows(f["assumptions"]),
         "leadership": _rows(f["leadership"]),

@@ -8,11 +8,12 @@ import { Layout } from "@/components/layout/Layout";
 // the page keeps the opening view light. The Suspense boundary lives inside
 // `Layout`, around the outlet, so the header and section nav stay on screen
 // while a section's chunk arrives.
-const Overview = lazy(() => import("@/pages/Overview"));
-const Outcomes = lazy(() => import("@/pages/Outcomes"));
-const OverTime = lazy(() => import("@/pages/OverTime"));
-const Benches = lazy(() => import("@/pages/Benches"));
+const Highlights = lazy(() => import("@/pages/Highlights"));
+const Investigation = lazy(() => import("@/pages/Investigation"));
+const Prosecution = lazy(() => import("@/pages/Prosecution"));
+const CourtOutcomes = lazy(() => import("@/pages/CourtOutcomes"));
 const Appeals = lazy(() => import("@/pages/Appeals"));
+const Gaps = lazy(() => import("@/pages/Gaps"));
 const Method = lazy(() => import("@/pages/Method"));
 
 /**
@@ -27,11 +28,12 @@ const Method = lazy(() => import("@/pages/Method"));
  * rather than a second one. `key` names the pair: `…nav.<key>` / `…nav.<key>Blurb`.
  */
 export const SECTIONS = [
-  { path: "/", key: "overview", label: "Overview", blurb: "Where accountability is lost" },
-  { path: "/outcomes", key: "outcomes", label: "Outcomes", blurb: "What the court decides" },
-  { path: "/over-time", key: "overTime", label: "Over time", blurb: "How the docket moved" },
-  { path: "/benches", key: "benches", label: "Benches", blurb: "Who decides, and how fast" },
+  { path: "/", key: "highlights", label: "Highlights", blurb: "What the research found" },
+  { path: "/investigation", key: "investigation", label: "Investigation", blurb: "Complaint to charge" },
+  { path: "/prosecution", key: "prosecution", label: "Prosecution", blurb: "What gets charged" },
+  { path: "/court-outcomes", key: "courtOutcomes", label: "Court outcomes", blurb: "What the court decides" },
   { path: "/appeals", key: "appeals", label: "Appeals", blurb: "What survives the Supreme Court" },
+  { path: "/gaps", key: "gaps", label: "Accountability gaps", blurb: "Where the trail breaks" },
   { path: "/method", key: "method", label: "Method", blurb: "Sources, limits and provenance" },
 ] as const;
 
@@ -39,12 +41,17 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route index element={<Overview />} />
-        <Route path="outcomes" element={<Outcomes />} />
-        <Route path="over-time" element={<OverTime />} />
-        <Route path="benches" element={<Benches />} />
+        <Route index element={<Highlights />} />
+        <Route path="investigation" element={<Investigation />} />
+        <Route path="prosecution" element={<Prosecution />} />
+        <Route path="court-outcomes" element={<CourtOutcomes />} />
         <Route path="appeals" element={<Appeals />} />
+        <Route path="gaps" element={<Gaps />} />
         <Route path="method" element={<Method />} />
+        {/* The pre-redesign paths, kept so existing links and bookmarks still land. */}
+        <Route path="outcomes" element={<Navigate to="/court-outcomes" replace />} />
+        <Route path="over-time" element={<Navigate to="/court-outcomes" replace />} />
+        <Route path="benches" element={<Navigate to="/court-outcomes" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

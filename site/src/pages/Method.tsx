@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { useFormat } from "@/lib/format";
 
 import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
-import { CITATIONS, REPORT, fyLabel } from "@/data/research-corruption";
+import { CITATIONS, REPORT, fyLabel, tameliPct } from "@/data/research-corruption";
 
 
 export default function Method() {
   const { t } = useTranslation();
-  const { n } = useFormat();
+  const { n, pct1 } = useFormat();
   const { assumptions, corpus, crossCheck, entityResolution, provenance } = REPORT;
 
   const years = corpus.fiscalYears;
@@ -185,6 +185,66 @@ export default function Method() {
             "Money recovered after a conviction is not published by any institution and does not appear in the court record, so the final stage of accountability is absent here rather than measured as zero. Reasons for closing a complaint at intake are likewise unpublished case by case.",
           )}
         </Body>
+      </Block>
+
+      <Block>
+        <SectionHeading>
+          {t("research.corruption.method.disposalsTitle", "The post-investigation closure series")}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.method.disposalsBody",
+            "The Investigation section's closure series is transcribed from the decision table printed in each annual report, one row per fiscal year, and shipped as its own file in the data pack. Each row carries the figure number and the report it came from, so any share can be checked against two numbers printed side by side in one table.",
+          )}
+        </Body>
+        <Body>
+          {t(
+            "research.corruption.method.disposalsLimits",
+            "Years are included only where the report prints both the तामेली count and that table's own total. Two reports in the window show the decision bubbles without a reconcilable disposal total; they are left out rather than derived, because filling them in by arithmetic would hide a gap in the reporting. The 'prosecute' column counts decisions to file, which is a different unit from a case appearing in the court register — the two are never differenced.",
+          )}
+        </Body>
+        <div className="chart-scroll mt-6">
+          <table className="w-full min-w-[34rem] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <th className="py-2 pr-4 font-medium">
+                  {t("research.corruption.method.colFy", "Fiscal year")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colTameli", "Closed (तामेली)")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colTotal", "All decisions")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colShare", "Share")}
+                </th>
+                <th className="py-2 font-medium">
+                  {t("research.corruption.method.colFigure", "Figure")}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {REPORT.disposals.map((d) => (
+                <tr key={d.fy} className="border-b border-border/60 last:border-0">
+                  <td className="py-3 pr-4 font-mono tabular-nums text-foreground">{d.fy}</td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-muted-foreground">
+                    {n(d.tameli)}
+                  </td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-muted-foreground">
+                    {n(d.total)}
+                  </td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-foreground">
+                    {pct1(tameliPct(d))}
+                  </td>
+                  <td className="py-3 text-muted-foreground">
+                    <Cite href={d.source_url}>{d.figure}</Cite>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Block>
 
       <Block>

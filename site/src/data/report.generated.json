@@ -1,15 +1,15 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-09T02:37:43+00:00",
-    "commit": "c2b75df",
+    "generatedAt": "2026-10-10T02:38:01+00:00",
+    "commit": "d4b0452",
     "dataset": {
       "cases": {
         "rows": 2949,
-        "modified": "2026-08-04"
+        "modified": "2026-10-09"
       },
       "hearings": {
         "rows": 2824,
-        "modified": "2026-08-04"
+        "modified": "2026-10-09"
       },
       "entities": {
         "rows": 12547,
@@ -914,6 +914,53 @@
       }
     ]
   },
+  "disposals": [
+    {
+      "fy": "2075/76",
+      "filed": 351,
+      "tameli": 137,
+      "total": 653,
+      "figure": "तालिका २.५ (p.26)",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf",
+      "note": "29th annual report. Printed percentages (53.8/21.0) confirmed against the raw counts on the same table."
+    },
+    {
+      "fy": "2077/78",
+      "filed": 114,
+      "tameli": 264,
+      "total": 488,
+      "figure": "तालिका २.९",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/wbZQvp.pdf",
+      "note": "31st annual report. Table counts give tameli 54.10% against the chart's printed 53.89%; the table is used because it carries the counts."
+    },
+    {
+      "fy": "2078/79",
+      "filed": 115,
+      "tameli": 637,
+      "total": 975,
+      "figure": "चित्र २.११ / तालिका २.११",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf",
+      "note": "32nd annual report. Tameli = 559 (alone) + 68 (with सुझाव) + 10 (with लेखी पठाउने). Venn figures reconcile exactly with तालिका २.११, total 975."
+    },
+    {
+      "fy": "2079/80",
+      "filed": 162,
+      "tameli": 656,
+      "total": 937,
+      "figure": "चित्र २.१० body text",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/0wS8NV.pdf",
+      "note": "33rd annual report. Counts printed in the body text below the chart; the chart itself carries percentages only."
+    },
+    {
+      "fy": "2080/81",
+      "filed": 201,
+      "tameli": 825,
+      "total": 1187,
+      "figure": "तालिका २.१०",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf",
+      "note": "34th annual report. Tameli 825 = 694 (alone) + 124 (with सुझाव) + 7 (with लेखी पठाउने), matching the table total."
+    }
+  ],
   "crossCheck": {
     "sourceAgreement": [
       {
