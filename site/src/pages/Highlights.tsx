@@ -268,7 +268,9 @@ export default function Highlights() {
       </Reveal>
 
       {/* Four findings, one shape each. */}
-      <div className="mt-10 grid gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
+      {/* `items-start` so a card is its own height. Grid items stretch by default,
+          which left the shorter card in each row with a block of empty space. */}
+      <div className="mt-10 grid items-start gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
         <Highlight
           index={1}
           stat={pct1(tameliPct(lastDisposal))}
@@ -358,7 +360,7 @@ export default function Highlights() {
               avgPct={fullOnlyAvg}
               rateLabel={t(
                 "research.corruption.hl.f3Rate",
-                "Share of decided cases ending in a full conviction, by type of charge",
+                "Percentage of decided cases ending in a full conviction, by type of charge",
               )}
             />
           }
@@ -377,16 +379,16 @@ export default function Highlights() {
           })}
           statCaption={t(
             "research.corruption.hl.f3cCaption",
-            "median time from filing to verdict at the Special Court, across {{m}} decided cases",
+            "Median time from filing to verdict at the Special Court, based on {{m}} decided cases.",
             { m: n(duration.measured) },
           )}
           headline={t(
             "research.corruption.hl.f3c",
-            "Most cases are decided within two years, but the slowest are still running",
+            "How long does a corruption trial take in the Special Court?",
           )}
           explain={t(
             "research.corruption.hl.f3cBody",
-            "{{within}} reached a verdict within two years of being filed. That figure covers only cases that have ended. The {{pending}} still waiting are the slow ones, so the real wait is longer than this shows.",
+            "{{within}} of decided cases reached a verdict within two years. But this figure excludes the {{pending}} cases still pending. Since these cases have yet to reach a verdict, the actual time taken across all cases may be longer.",
             {
               within: pct1(withinTwoPct),
               over: n(duration.bands[3].cases),
@@ -397,24 +399,14 @@ export default function Highlights() {
             <DurationBands
               bands={duration.bands}
               measured={duration.measured}
-              median={duration.median_months}
-              pending={duration.pending}
               labels={{
                 heading: t(
                   "research.corruption.hl.durHeading",
                   "Time from filing to verdict, decided cases only",
                 ),
-                cumulative: t("research.corruption.hl.durCumulative", "{{pct}} decided within two years", {
-                  pct: pct1(withinTwoPct),
-                }),
-                medianNote: t("research.corruption.hl.durMedian", "Median {{m}} months", {
-                  m: n(Math.round(duration.median_months)),
-                }),
-                pendingNote: t(
-                  "research.corruption.hl.durPending",
-                  "{{p}} cases still pending are not counted here, because a case that has not ended has no duration yet.",
-                  { p: n(duration.pending) },
-                ),
+                band: t("research.corruption.hl.durBand", "Time to verdict"),
+                cases: t("research.corruption.hl.durCases", "Cases"),
+                share: t("research.corruption.hl.durShare", "Share of decided cases"),
               }}
             />
           }

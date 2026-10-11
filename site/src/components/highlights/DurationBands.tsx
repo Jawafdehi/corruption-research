@@ -1,3 +1,4 @@
+import { ChartHeading } from "@/components/highlights/ChartHeading";
 import { useFormat } from "@/lib/format";
 
 export type DurationBand = {
@@ -8,29 +9,26 @@ export type DurationBand = {
 /**
  * How long decided cases took, filing to verdict.
  *
- * Horizontal bars rather than a stacked one: the question is "how many landed in
- * each band", which is a comparison between bands, and four separate bars answer
- * it without the reader having to measure segment lengths against each other.
+ * A real table rather than a styled list: each row carries three distinct quantities
+ * and a reader comparing bands needs to know which column they are reading. The bar
+ * sits in its own column under a shared "share" header, so it is understood as the
+ * percentage drawn rather than as a fourth unlabelled measurement.
  *
- * Every bar prints its own count and share, so the chart is readable without
- * hovering and colour never carries the meaning on its own.
+ * Every row prints its own count and share, so the figure is readable without
+ * hovering and colour never carries meaning on its own.
  */
 export function DurationBands({
   bands,
   measured,
-  median,
-  pending,
   labels,
 }: {
   bands: readonly DurationBand[];
   measured: number;
-  median: number;
-  pending: number;
   labels: {
     heading: string;
-    cumulative: string;
-    pendingNote: string;
-    medianNote: string;
+    band: string;
+    cases: string;
+    share: string;
   };
 }) {
   const { n, pct1 } = useFormat();
@@ -39,41 +37,59 @@ export function DurationBands({
 
   return (
     <div>
-      <p className="mb-3 text-xs uppercase tracking-wide text-muted-foreground">{labels.heading}</p>
+      <ChartHeading>{labels.heading}</ChartHeading>
 
-      <ul className="space-y-3">
-        {bands.map((b, i) => (
-          <li key={b.band}>
-            <div className="flex items-baseline justify-between gap-3">
-              <span className="text-sm text-foreground/85">{b.band}</span>
-              <span className="shrink-0 font-mono text-sm tabular-nums text-foreground">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="border-b border-border text-[0.7rem] uppercase tracking-wide text-muted-foreground">
+            <th scope="col" className="py-2 pr-3 text-left font-medium">
+              {labels.band}
+            </th>
+            <th scope="col" className="py-2 pr-3 text-right font-medium">
+              {labels.cases}
+            </th>
+            {/* One header over the number and the bar, because they are the same
+                quantity twice and two headers would imply two measurements. */}
+            <th scope="col" colSpan={2} className="py-2 text-right font-medium">
+              {labels.share}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {bands.map((b, i) => (
+            <tr key={b.band} className="border-b border-border/60 last:border-0">
+              <th
+                scope="row"
+                className="py-2.5 pr-3 text-left text-sm font-normal text-foreground/85"
+              >
+                {b.band}
+              </th>
+              <td className="py-2.5 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
                 {n(b.cases)}
-                <span className="ml-2 font-semibold">{pct1(share(b.cases))}</span>
-              </span>
-            </div>
-            <div className="mt-1.5 h-2.5 w-full rounded-sm bg-foreground/[0.07]">
-              <div
-                className="h-full rounded-sm"
-                style={{
-                  width: `${(b.cases / max) * 100}%`,
-                  // The first two bands are the ones the cumulative claim rests on.
-                  backgroundColor:
-                    i < 2 ? "hsl(var(--accent) / 0.85)" : "hsl(var(--foreground) / 0.4)",
-                }}
-                title={`${b.band}: ${n(b.cases)} of ${n(measured)} decided cases`}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      {/* Plain paragraphs: these are sentences, not term/definition pairs, and a
-          `shrink-0` flex child here refused to wrap and overflowed the page. */}
-      <div className="mt-4 space-y-1.5 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
-        <p className="font-medium text-foreground/80">{labels.cumulative}</p>
-        <p>{labels.medianNote}</p>
-        <p>{labels.pendingNote}</p>
-      </div>
+              </td>
+              <td className="py-2.5 pr-3 text-right font-mono text-xs font-semibold tabular-nums text-foreground">
+                {pct1(share(b.cases))}
+              </td>
+              <td className="w-[38%] py-2.5">
+                <div
+                  className="h-2.5 w-full rounded-sm bg-foreground/[0.07]"
+                  title={`${b.band}: ${n(b.cases)} of ${n(measured)} decided cases`}
+                >
+                  <div
+                    className="h-full rounded-sm"
+                    style={{
+                      width: `${(b.cases / max) * 100}%`,
+                      // The first two bands are the ones the cumulative claim rests on.
+                      backgroundColor:
+                        i < 2 ? "hsl(var(--accent) / 0.85)" : "hsl(var(--foreground) / 0.4)",
+                    }}
+                  />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

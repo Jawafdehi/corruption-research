@@ -95,14 +95,16 @@ export function Highlight({
   children?: ReactNode;
 }) {
   return (
-    <Reveal className="h-full min-w-0">
+    <Reveal className="min-w-0">
       <article
         className={cn(
           // `relative` anchors the stretched link below, so the whole card is one
           // hit area without nesting a second interactive element inside a link.
           // One shape for every finding, so the grid reads as a set rather than a
-          // hierarchy. `h-full` lets the grid equalise heights across a row.
-          "group relative flex h-full flex-col gap-4 rounded-lg border border-border",
+          // hierarchy. Deliberately NOT `h-full`: equalising heights across a row
+          // padded the shorter card with dead space under its chart, and a card that
+          // ends where its content ends reads better than a tidy bottom edge.
+          "group relative flex flex-col gap-4 rounded-lg border border-border",
           "bg-[hsl(var(--surface))] p-5 transition-colors hover:border-accent/50 md:p-6",
         )}
       >
@@ -147,7 +149,7 @@ export function Highlight({
 
         {chart ? <div className="chart-scroll min-w-0">{chart}</div> : null}
 
-        <footer className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
+        <footer className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
           <span>
             <span aria-hidden="true" className="mr-1">
               *
