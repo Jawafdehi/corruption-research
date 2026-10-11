@@ -217,15 +217,15 @@ export default function Highlights() {
               stages={flowStages}
               labels={{
                 start: t("research.corruption.flow.start", "Complaint received"),
-                yes: t("research.corruption.flow.yes", "yes"),
-                no: t("research.corruption.flow.no", "no"),
-                dScreen: t("research.corruption.flow.dScreen", "Taken forward?"),
-                dGrounds: t("research.corruption.flow.dGrounds", "Grounds found?"),
-                dProsecute: t("research.corruption.flow.dProsecute", "Prosecute?"),
-                dAppeal: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
                 chargeSheet: t("research.corruption.flow.chargeSheet", "charge sheet filed"),
+                ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
+                ifAppealed: t("research.corruption.flow.ifAppealed", "if appealed"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                standsTitle: t("research.corruption.flow.stands", "Verdict stands"),
+                exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
+                centreNote: t(
+                  "research.corruption.flow.centreNote",
+                  "set aside, not closed. Three ways out.",
+                ),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
                   "The route a corruption complaint takes, in order. Steps one to five sit with the Commission; steps six and seven are separate courts.",

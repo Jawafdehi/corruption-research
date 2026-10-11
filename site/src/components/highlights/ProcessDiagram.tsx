@@ -1,24 +1,24 @@
 /**
- * How a corruption complaint travels: a conventional vertical flowchart.
+ * How a corruption complaint travels, laid out around an oval.
  *
- * Deliberately ordinary in form. Earlier attempts here were infographics —
- * swimlanes, institutional bands, grouped stage boxes — and they read as busy
- * rather than clear. A flowchart has a settled grammar that readers already know:
- * a rounded terminator to start, rectangles for steps, diamonds for decisions,
- * yes/no on the branches, terminators where a path ends. Using it means the
- * reader spends no effort learning the picture.
+ * The seven steps sit on an elliptical path rather than a straight column. The
+ * sweep deliberately stops short of closing: it runs about 300 degrees and
+ * leaves a gap between the last step and the first, because this is a sequence
+ * that ends at the Supreme Court, not a cycle that feeds back to the start. A
+ * closed ring would assert a loop the process does not have.
  *
- * One rendering at every width. The spine is vertical, which is the shape a phone
- * wants anyway, so there is no second mobile composition to keep in sync.
+ * The three ways out radiate OUTWARD from the steps that have them, so leaving
+ * the process reads as leaving the ring. The centre carries what they all lead
+ * to, which is also the one word a reader most needs defined.
  *
  * Legal content checks against the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि,
- * २०७८ and विशेष अदालत ऐन, २०५९ दफा १७:
- *   · तामेली is reachable at three points — after screening (दफा २१), after the
- *     preliminary inquiry (दफा २२(३)(छ)), and on the investigation report
- *     (दफा २५(ग)). Each is drawn as its own decision with its own exit.
- *   · The detailed investigation has no exit of its own; its report goes to the
- *     Commission's decision, which is where it can be set aside.
- *   · The appeal is a decision with a "no" branch, not an automatic step.
+ * २०७८ and विशेष अदालत ऐन, २०५९ दफा १७: तामेली is reachable after screening
+ * (दफा २१), after the preliminary inquiry (दफा २२(३)(छ)) and on the investigation
+ * report (दफा २५(ग)); the detailed investigation has no exit of its own; the
+ * appeal is conditional.
+ *
+ * An ellipse cannot be read on a phone, so narrow screens get the same seven
+ * steps as a vertical list. Both render from the same `stages` prop.
  */
 
 export type DiagramNode = {
@@ -30,46 +30,50 @@ export type DiagramNode = {
 
 export type DiagramLabels = {
   start: string;
-  yes: string;
-  no: string;
-  dScreen: string;
-  dGrounds: string;
-  dProsecute: string;
-  dAppeal: string;
   chargeSheet: string;
+  ifGrounds: string;
+  ifAppealed: string;
   exitTitle: string;
-  standsTitle: string;
+  exitHere: string;
+  centreNote: string;
   srIntro: string;
   srExit: string;
 };
 
-/** Geometry. Shapes sit on one spine; exits branch right at a fixed column. */
 const L = {
-  w: 560,
-  spineX: 140,
-  boxW: 240,
-  boxH: 54,
-  dRx: 100,
-  dRy: 40,
-  exitX: 356,
-  exitW: 168,
-  exitH: 40,
-  gap: 23,
+  w: 1000,
+  h: 760,
+  cx: 500,
+  cy: 382,
+  rx: 252,
+  ry: 212,
+  nodeW: 166,
+  nodeH: 56,
+  /** Degrees of the ellipse the sequence occupies. The rest is the open gap. */
+  sweep: 300,
+  start: -90,
+  /** How far an exit sits beyond its step, along the outward radius. */
+  exitOut: 170,
+  exitW: 116,
+  exitH: 34,
 };
 
-type Shape =
-  | { kind: "terminator"; key: string; label: string; tone: "start" }
-  | { kind: "process"; key: string; label: string; n: number; tone: "ciaa" | "court" }
-  | {
-      kind: "decision";
-      key: string;
-      label: string;
-      n?: number;
-      /** Where the "no" branch lands. */
-      exit: { label: string; tone: "exit" | "stands" };
-      /** Optional note on the "yes" branch, e.g. "charge sheet filed". */
-      yesNote?: string;
-    };
+const rad = (d: number) => (d * Math.PI) / 180;
+/** Point on the ellipse at a given angle, in SVG coordinates (y grows down). */
+const onEllipse = (deg: number) => ({
+  x: L.cx + L.rx * Math.cos(rad(deg)),
+  y: L.cy + L.ry * Math.sin(rad(deg)),
+});
+
+function twoLines(s: string): [string, string?] {
+  if (s.length <= 15) return [s];
+  const mid = s.length / 2;
+  let best = -1;
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === " " && (best < 0 || Math.abs(i - mid) < Math.abs(best - mid))) best = i;
+  }
+  return best < 0 ? [s] : [s.slice(0, best), s.slice(best + 1)];
+}
 
 export function ProcessDiagram({
   stages,
@@ -78,285 +82,261 @@ export function ProcessDiagram({
   stages: readonly DiagramNode[];
   labels: DiagramLabels;
 }) {
-  const [n1, n2, n3, n4, n5, court, appeal] = stages;
-
-  // The chart in reading order. Numbers track the seven named stages; the
-  // decisions between them are the rule's own branch points and are unnumbered
-  // except where a decision *is* a stage (the prosecution decision, 5).
-  const shapes: Shape[] = [
-    { kind: "terminator", key: "start", label: labels.start, tone: "start" },
-    { kind: "process", key: n1.key, label: n1.title, n: 1, tone: "ciaa" },
-    { kind: "process", key: n2.key, label: n2.title, n: 2, tone: "ciaa" },
-    {
-      kind: "decision",
-      key: "d-screen",
-      label: labels.dScreen,
-      exit: { label: labels.exitTitle, tone: "exit" },
-    },
-    { kind: "process", key: n3.key, label: n3.title, n: 3, tone: "ciaa" },
-    {
-      kind: "decision",
-      key: "d-grounds",
-      label: labels.dGrounds,
-      exit: { label: labels.exitTitle, tone: "exit" },
-    },
-    { kind: "process", key: n4.key, label: n4.title, n: 4, tone: "ciaa" },
-    {
-      kind: "decision",
-      key: n5.key,
-      label: labels.dProsecute,
-      n: 5,
-      exit: { label: labels.exitTitle, tone: "exit" },
-      yesNote: labels.chargeSheet,
-    },
-    { kind: "process", key: court.key, label: court.title, n: 6, tone: "court" },
-    {
-      kind: "decision",
-      key: "d-appeal",
-      label: labels.dAppeal,
-      exit: { label: labels.standsTitle, tone: "stands" },
-    },
-    { kind: "process", key: appeal.key, label: appeal.title, n: 7, tone: "court" },
-  ];
-
-  // Lay the spine out top to bottom, recording each shape's vertical centre.
-  let y = 16;
-  const placed = shapes.map((s) => {
-    const h = s.kind === "decision" ? L.dRy * 2 : s.kind === "terminator" ? 40 : L.boxH;
-    const cy = y + h / 2;
-    // A decision carrying a note on its yes-branch needs a second line of room
-    // below it, or the note is painted over by the shape that follows.
-    const extra = s.kind === "decision" && s.yesNote ? 18 : 0;
-    y += h + L.gap + extra;
-    return { s, cy, h };
-  });
-  const height = y - L.gap + 16;
-
-  const ink = "hsl(var(--foreground))";
   const green = "hsl(var(--court))";
   const red = "hsl(var(--accent))";
-  const toneFill = (t: string) =>
-    t === "court" ? green : t === "start" ? "hsl(var(--foreground) / 0.8)" : ink;
+  const ink = "hsl(var(--foreground))";
+
+  const step = L.sweep / (stages.length - 1);
+  const placed = stages.map((s, i) => {
+    const deg = L.start + i * step;
+    return { s, i, deg, ...onEllipse(deg), isCourt: i >= 5 };
+  });
 
   return (
     <div>
-      <div className="mx-auto max-w-[560px]" aria-hidden="true">
-        <svg
-          viewBox={`0 0 ${L.w} ${height}`}
-          className="h-auto w-full"
-          role="presentation"
-          focusable="false"
-        >
+      {/* ---------- wide: the oval ---------- */}
+      <div className="hidden md:block" aria-hidden="true">
+        <svg viewBox={`0 0 ${L.w} ${L.h}`} className="h-auto w-full" role="presentation" focusable="false">
           <defs>
             {[
-              ["fc-ink", "hsl(var(--foreground) / 0.65)"],
-              ["fc-red", "hsl(var(--accent))"],
-              ["fc-green", "hsl(var(--court))"],
+              ["ov-ink", "hsl(var(--foreground) / 0.6)"],
+              ["ov-green", "hsl(var(--court))"],
+              ["ov-red", "hsl(var(--accent))"],
             ].map(([id, c]) => (
-              <marker
-                key={id}
-                id={id}
-                viewBox="0 0 10 10"
-                refX="8.5"
-                refY="5"
-                markerWidth="5"
-                markerHeight="5"
-                orient="auto-start-reverse"
-              >
+              <marker key={id} id={id} viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
                 <path d="M0 0.5 L10 5 L0 9.5 Z" fill={c} />
               </marker>
             ))}
           </defs>
 
-          {/* Spine: each shape to the next, with yes/no on the decision exits. */}
-          {placed.map((p, i) => {
+          {/* The path itself, faint, so the ring reads even between the nodes. */}
+          <ellipse
+            cx={L.cx}
+            cy={L.cy}
+            rx={L.rx}
+            ry={L.ry}
+            fill="none"
+            stroke="hsl(var(--border))"
+            strokeWidth={1}
+            strokeDasharray="2 6"
+          />
+
+          {/* Arcs between consecutive steps, inset so they meet the node edges. */}
+          {placed.slice(0, -1).map((p, i) => {
             const next = placed[i + 1];
-            if (!next) return null;
-            const from = p.cy + p.h / 2;
-            const to = next.cy - next.h / 2 - 3;
-            const isCourtLink = p.s.kind === "process" && p.s.tone === "court";
-            const stroke = isCourtLink ? green : "hsl(var(--foreground) / 0.65)";
-            const marker = isCourtLink ? "url(#fc-green)" : "url(#fc-ink)";
+            const pad = 13;
+            const a = onEllipse(p.deg + pad);
+            const b = onEllipse(next.deg - pad);
+            const c = next.isCourt ? green : "hsl(var(--foreground) / 0.6)";
+            const mid = onEllipse((p.deg + next.deg) / 2);
+            const out = {
+              x: (mid.x - L.cx) / Math.hypot(mid.x - L.cx, mid.y - L.cy),
+              y: (mid.y - L.cy) / Math.hypot(mid.x - L.cx, mid.y - L.cy),
+            };
+            const label = i === 2 ? labels.ifGrounds : i === 4 ? labels.chargeSheet : i === 5 ? labels.ifAppealed : null;
             return (
-              <g key={`c-${p.s.key}`}>
+              <g key={`arc-${p.s.key}`}>
                 <path
-                  d={`M${L.spineX} ${from} L${L.spineX} ${to}`}
+                  d={`M${a.x} ${a.y} A ${L.rx} ${L.ry} 0 0 1 ${b.x} ${b.y}`}
                   fill="none"
-                  stroke={stroke}
-                  strokeWidth={2}
+                  stroke={c}
+                  strokeWidth={2.25}
                   strokeLinecap="round"
-                  markerEnd={marker}
+                  markerEnd={next.isCourt ? "url(#ov-green)" : "url(#ov-ink)"}
                 />
-                {p.s.kind === "decision" ? (
-                  <>
-                    <text
-                      x={L.spineX + 9}
-                      y={from + 15}
-                      fontSize={13}
-                      fontWeight={700}
-                      fill="hsl(var(--muted-foreground))"
-                    >
-                      {labels.yes}
-                    </text>
-                    {p.s.yesNote ? (
-                      <text
-                        x={L.spineX + 9}
-                        y={from + 30}
-                        fontSize={12}
-                        fill="hsl(var(--muted-foreground))"
-                      >
-                        {p.s.yesNote}
-                      </text>
-                    ) : null}
-                  </>
+                {label ? (
+                  <text
+                    x={mid.x - out.x * 26}
+                    y={mid.y - out.y * 26 + 4}
+                    textAnchor="middle"
+                    fontSize={12.5}
+                    fontWeight={600}
+                    fill={next.isCourt ? green : "hsl(var(--muted-foreground))"}
+                  >
+                    {label}
+                  </text>
                 ) : null}
               </g>
             );
           })}
 
-          {/* "No" branches: right off each diamond to its own terminator. */}
+          {/* Ways out, radiating away from the ring. */}
           {placed.map((p) => {
-            if (p.s.kind !== "decision") return null;
-            const isStands = p.s.exit.tone === "stands";
-            const c = isStands ? "hsl(var(--foreground) / 0.5)" : red;
+            if (!p.s.exit) return null;
+            const len = Math.hypot(p.x - L.cx, p.y - L.cy);
+            const ux = (p.x - L.cx) / len;
+            const uy = (p.y - L.cy) / len;
+            const from = { x: p.x + ux * (L.nodeW / 2 - 18), y: p.y + uy * (L.nodeH / 2 + 2) };
+            const to = { x: p.x + ux * L.exitOut, y: p.y + uy * L.exitOut };
             return (
-              <g key={`e-${p.s.key}`}>
+              <g key={`exit-${p.s.key}`}>
                 <path
-                  d={`M${L.spineX + L.dRx} ${p.cy} L${L.exitX - 3} ${p.cy}`}
+                  d={`M${from.x} ${from.y} L${to.x - ux * (L.exitW / 2)} ${to.y - uy * (L.exitH / 2)}`}
                   fill="none"
-                  stroke={c}
+                  stroke={red}
                   strokeWidth={2}
                   strokeLinecap="round"
                   strokeDasharray="6 5"
-                  markerEnd={isStands ? "url(#fc-ink)" : "url(#fc-red)"}
+                  markerEnd="url(#ov-red)"
                 />
-                <text
-                  x={(L.spineX + L.dRx + L.exitX) / 2}
-                  y={p.cy - 9}
-                  fontSize={13}
-                  fontWeight={700}
-                  textAnchor="middle"
-                  fill="hsl(var(--muted-foreground))"
-                >
-                  {labels.no}
-                </text>
                 <rect
-                  x={L.exitX}
-                  y={p.cy - L.exitH / 2}
+                  x={to.x - L.exitW / 2}
+                  y={to.y - L.exitH / 2}
                   width={L.exitW}
                   height={L.exitH}
                   rx={L.exitH / 2}
-                  fill={isStands ? "hsl(var(--foreground) / 0.04)" : "hsl(var(--accent) / 0.08)"}
-                  stroke={c}
-                  strokeWidth={1.5}
-                  strokeDasharray={isStands ? undefined : "5 4"}
+                  fill="hsl(var(--accent) / 0.08)"
+                  stroke={red}
+                  strokeWidth={1.4}
+                  strokeDasharray="5 4"
                 />
                 <text
-                  x={L.exitX + L.exitW / 2}
-                  y={p.cy + 5}
+                  x={to.x}
+                  y={to.y + 5}
                   textAnchor="middle"
                   className="font-display"
-                  fontSize={15}
+                  fontSize={14}
                   fontWeight={700}
-                  fill={isStands ? "hsl(var(--muted-foreground))" : red}
+                  fill={red}
                 >
-                  {p.s.exit.label}
+                  {labels.exitTitle}
                 </text>
               </g>
             );
           })}
 
-          {/* Shapes */}
-          {placed.map(({ s, cy }) => {
-            if (s.kind === "terminator") {
-              return (
-                <g key={s.key}>
-                  <rect
-                    x={L.spineX - L.boxW / 2}
-                    y={cy - 20}
-                    width={L.boxW}
-                    height={40}
-                    rx={20}
-                    fill={toneFill("start")}
-                  />
-                  <text
-                    x={L.spineX}
-                    y={cy + 5}
-                    textAnchor="middle"
-                    className="font-display"
-                    fontSize={15}
-                    fontWeight={700}
-                    fill="hsl(var(--background))"
-                  >
-                    {s.label}
-                  </text>
-                </g>
-              );
-            }
+          {/* Centre: what the three exits lead to. */}
+          <text
+            x={L.cx}
+            y={L.cy - 6}
+            textAnchor="middle"
+            className="font-display"
+            fontSize={19}
+            fontWeight={700}
+            fill={red}
+          >
+            {labels.exitTitle}
+          </text>
+          <text x={L.cx} y={L.cy + 18} textAnchor="middle" fontSize={13} fill="hsl(var(--muted-foreground))">
+            {labels.centreNote}
+          </text>
 
-            if (s.kind === "decision") {
-              const c = s.n ? red : "hsl(var(--foreground) / 0.75)";
-              return (
-                <g key={s.key}>
-                  <polygon
-                    points={`${L.spineX},${cy - L.dRy} ${L.spineX + L.dRx},${cy} ${L.spineX},${cy + L.dRy} ${L.spineX - L.dRx},${cy}`}
-                    fill={s.n ? "hsl(var(--accent) / 0.07)" : "hsl(var(--surface))"}
-                    stroke={c}
-                    strokeWidth={1.75}
-                  />
-                  <text
-                    x={L.spineX}
-                    y={cy + 5}
-                    textAnchor="middle"
-                    className="font-display"
-                    fontSize={15}
-                    fontWeight={700}
-                    fill={c}
-                  >
-                    {s.label}
-                  </text>
-                  {s.n ? <StepNo x={L.spineX - L.dRx * 0.5} y={cy - L.dRy * 0.5} n={s.n} fill={red} /> : null}
-                </g>
-              );
-            }
-
-            const c = s.tone === "court" ? green : "hsl(var(--border))";
+          {/* The start sits in the open gap, pushed outside the ring so it
+              cannot collide with step one, with a short lead-in arrow. */}
+          {(() => {
+            const a = rad(L.start - 44);
+            const g = { x: L.cx + (L.rx + 64) * Math.cos(a), y: L.cy + (L.ry + 64) * Math.sin(a) };
+            const first = onEllipse(L.start);
+            const dx = first.x - g.x;
+            const dy = first.y - g.y;
+            const len = Math.hypot(dx, dy);
             return (
-              <g key={s.key}>
-                <rect
-                  x={L.spineX - L.boxW / 2}
-                  y={cy - L.boxH / 2}
-                  width={L.boxW}
-                  height={L.boxH}
-                  rx={L.boxH / 2}
-                  fill="hsl(var(--surface))"
-                  stroke={c}
-                  strokeWidth={s.tone === "court" ? 1.75 : 1.25}
+              <g>
+                <path
+                  d={`M${g.x + (dx / len) * 86} ${g.y + (dy / len) * 22} L${first.x - (dx / len) * (L.nodeW / 2 + 10)} ${first.y - (dy / len) * 14}`}
+                  fill="none"
+                  stroke="hsl(var(--foreground) / 0.6)"
+                  strokeWidth={2.25}
+                  strokeLinecap="round"
+                  markerEnd="url(#ov-ink)"
                 />
+                <rect x={g.x - 78} y={g.y - 17} width={156} height={34} rx={17} fill="hsl(var(--foreground) / 0.82)" />
                 <text
-                  x={L.spineX}
-                  y={cy + 6}
+                  x={g.x}
+                  y={g.y + 5}
                   textAnchor="middle"
                   className="font-display"
-                  fontSize={16}
+                  fontSize={13.5}
                   fontWeight={700}
-                  fill={s.tone === "court" ? green : ink}
+                  fill="hsl(var(--background))"
                 >
-                  {s.label}
+                  {labels.start}
                 </text>
-                <StepNo
-                  x={L.spineX - L.boxW / 2 + 2}
-                  y={cy}
-                  n={s.n}
-                  fill={s.tone === "court" ? green : "hsl(var(--foreground) / 0.65)"}
+              </g>
+            );
+          })()}
+
+          {/* Steps */}
+          {placed.map((p) => {
+            const [a, b] = twoLines(p.s.title);
+            const c = p.isCourt ? green : "hsl(var(--border))";
+            return (
+              <g key={p.s.key}>
+                <rect
+                  x={p.x - L.nodeW / 2}
+                  y={p.y - L.nodeH / 2}
+                  width={L.nodeW}
+                  height={L.nodeH}
+                  rx={L.nodeH / 2}
+                  fill="hsl(var(--surface))"
+                  stroke={c}
+                  strokeWidth={p.isCourt ? 1.75 : 1.25}
                 />
+                <text
+                  x={p.x}
+                  y={b ? p.y - 4 : p.y + 5}
+                  textAnchor="middle"
+                  className="font-display"
+                  fontSize={14}
+                  fontWeight={700}
+                  fill={p.isCourt ? green : ink}
+                >
+                  <tspan x={p.x}>{a}</tspan>
+                  {b ? (
+                    <tspan x={p.x} dy={16}>
+                      {b}
+                    </tspan>
+                  ) : null}
+                </text>
+                <circle
+                  cx={p.x - L.nodeW / 2 + 2}
+                  cy={p.y}
+                  r={11}
+                  fill={p.isCourt ? green : "hsl(var(--foreground) / 0.65)"}
+                />
+                <text
+                  x={p.x - L.nodeW / 2 + 2}
+                  y={p.y + 4}
+                  textAnchor="middle"
+                  className="font-mono"
+                  fontSize={12}
+                  fontWeight={700}
+                  fill="hsl(var(--background))"
+                >
+                  {p.i + 1}
+                </text>
               </g>
             );
           })}
         </svg>
       </div>
 
-      {/* The one description assistive tech reads. */}
+      {/* ---------- narrow: the same seven steps, stacked ---------- */}
+      <ol className="space-y-2 md:hidden" aria-hidden="true">
+        {stages.map((s, i) => (
+          <li key={s.key}>
+            <div
+              className="rounded-full border bg-[hsl(var(--surface))] px-4 py-2.5"
+              style={{ borderColor: i >= 5 ? green : "hsl(var(--border))" }}
+            >
+              <span className="mr-2 font-mono text-xs text-muted-foreground">{i + 1}</span>
+              <span
+                className="font-display text-sm font-bold"
+                style={i >= 5 ? { color: green } : undefined}
+              >
+                {s.title}
+              </span>
+            </div>
+            {s.exit ? (
+              <p className="flex items-center gap-1.5 py-1 pl-6 text-xs font-medium text-accent">
+                <span aria-hidden="true">↳</span>
+                {labels.exitHere}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+
       <ol className="sr-only">
         <li>{labels.srIntro}</li>
         {stages.map((s) => (
@@ -369,21 +349,3 @@ export function ProcessDiagram({
     </div>
   );
 }
-
-/** Step number, sat on the shape's upper-left. */
-const StepNo = ({ x, y, n, fill }: { x: number; y: number; n: number; fill: string }) => (
-  <g>
-    <circle cx={x} cy={y} r={10.5} fill={fill} />
-    <text
-      x={x}
-      y={y + 4}
-      textAnchor="middle"
-      className="font-mono"
-      fontSize={11.5}
-      fontWeight={700}
-      fill="hsl(var(--background))"
-    >
-      {n}
-    </text>
-  </g>
-);
