@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import {
   Block,
   Body,
-  Cite,
   Eyebrow,
   Figure,
   Lede,
@@ -241,32 +240,20 @@ export default function Investigation() {
             "research.corruption.investigation.chartTitle",
             "What the Commission decided to do with each investigated complaint, by year",
           )}
-          subtitle={t(
-            "research.corruption.investigation.chartSubtitle",
-            "Orange bars are complaints set aside, dark bars are cases taken to court. The line is the share set aside.",
-          )}
-          caption={
-            <>
-              {t(
-                "research.corruption.investigation.chartCaption",
-                "Every year's figures come from one table in that year's report, and each is checked against either the table's own printed total or the count the report states in its text. FY2069/70 to 2072/73 are missing because those reports present the same decisions in a different and non-comparable form. 'Taken to court' counts decisions to prosecute, which is not the same thing as a case appearing in the court register.",
-              )}{" "}
-              {disposals.map((d, i) => (
-                <span key={d.fy}>
-                  {i > 0 ? " · " : ""}
-                  <Cite href={d.source_url}>
-                    {d.fy} {d.figure}
-                  </Cite>
-                </span>
-              ))}
-            </>
-          }
         >
           <TameliTrend
             rows={disposals}
-            tameliLabel={t("research.corruption.investigation.seriesTameli", "Closed (तामेली)")}
-            filedLabel={t("research.corruption.investigation.seriesFiled", "Prosecute")}
-            shareLabel={t("research.corruption.investigation.seriesShare", "Share closed")}
+            tameliLabel={t("research.corruption.investigation.seriesTameli", "Kept in Tameli")}
+            filedLabel={t("research.corruption.investigation.seriesFiled", "Taken to court")}
+            shareLabel={t("research.corruption.investigation.seriesShare", "Share set aside")}
+            linkTitle={t(
+              "research.corruption.investigation.chartLinkTitle",
+              "Open the {{fy}} annual report",
+            )}
+            sourceHint={t(
+              "research.corruption.investigation.chartSource",
+              "Each fiscal year links to the annual report it is taken from. FY2069/70 to 2072/73 are missing: those reports present the same decisions in a form that cannot be compared with these.",
+            )}
           />
         </Figure>
 
