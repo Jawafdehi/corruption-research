@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-11T05:33:47+00:00",
-    "commit": "bdb00f0",
+    "generatedAt": "2026-10-11T06:59:37+00:00",
+    "commit": "9516a32",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -912,55 +912,260 @@
         "other_procedural": 2,
         "no_outcome_recorded": 315
       }
+    ],
+    "ciaaDecisions": [
+      {
+        "fy": "2075/76",
+        "appealed": 83,
+        "notAppealed": 10
+      },
+      {
+        "fy": "2076/77",
+        "appealed": 20,
+        "notAppealed": 7
+      },
+      {
+        "fy": "2077/78",
+        "appealed": 58,
+        "notAppealed": 27
+      },
+      {
+        "fy": "2078/79",
+        "appealed": 57,
+        "notAppealed": 63
+      },
+      {
+        "fy": "2079/80",
+        "appealed": 238,
+        "notAppealed": 72
+      },
+      {
+        "fy": "2080/81",
+        "appealed": 91,
+        "notAppealed": 76
+      },
+      {
+        "fy": "2081/82",
+        "appealed": 255,
+        "notAppealed": 72
+      }
     ]
   },
   "disposals": [
     {
+      "fy": "2073/74",
+      "filed": 154,
+      "advice": 69,
+      "referred": 146,
+      "tameli": 270,
+      "held": 17,
+      "total": 709,
+      "figure": "तालिका २.४",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/4Gvb5l.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2074/75",
+      "filed": 194,
+      "advice": 45,
+      "referred": 64,
+      "tameli": 202,
+      "held": 10,
+      "total": 526,
+      "figure": "अनुसूची- १६",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/1548567688annual_report_207475.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
       "fy": "2075/76",
       "filed": 351,
+      "advice": 105,
+      "referred": 46,
       "tameli": 137,
+      "held": 10,
       "total": 653,
-      "figure": "तालिका २.५ (p.26)",
+      "figure": "तालिका २.५",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf",
-      "note": "29th annual report. Printed percentages (53.8/21.0) confirmed against the raw counts on the same table."
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2076/77",
+      "filed": 441,
+      "advice": 150,
+      "referred": 23,
+      "tameli": 124,
+      "held": 9,
+      "total": 757,
+      "figure": "तालिका २.५",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
     },
     {
       "fy": "2077/78",
       "filed": 114,
+      "advice": 88,
+      "referred": 11,
       "tameli": 264,
+      "held": 5,
       "total": 488,
       "figure": "तालिका २.९",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/wbZQvp.pdf",
-      "note": "31st annual report. Table counts give tameli 54.10% against the chart's printed 53.89%; the table is used because it carries the counts."
+      "note": "Row counts reconciled against the table's own printed जम्मा."
     },
     {
       "fy": "2078/79",
-      "filed": 115,
+      "filed": 130,
+      "advice": 80,
+      "referred": 17,
       "tameli": 637,
-      "total": 975,
-      "figure": "चित्र २.११ / तालिका २.११",
+      "held": 9,
+      "total": 914,
+      "figure": "तालिका २.१०",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf",
-      "note": "32nd annual report. Tameli = 559 (alone) + 68 (with सुझाव) + 10 (with लेखी पठाउने). Venn figures reconcile exactly with तालिका २.११, total 975."
+      "note": "Row counts reconciled against the table's own printed जम्मा. `filed` is 130 = 115 prosecute-only + 9 prosecute-and-advise + 6 prosecute-and-refer, matching the treatment तामेली already gets."
     },
     {
       "fy": "2079/80",
       "filed": 162,
+      "advice": 58,
+      "referred": 5,
       "tameli": 656,
+      "held": 27,
       "total": 937,
-      "figure": "चित्र २.१० body text",
+      "figure": "तालिका २.११",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/0wS8NV.pdf",
-      "note": "33rd annual report. Counts printed in the body text below the chart; the chart itself carries percentages only."
+      "note": "Row counts reconciled against the table's own printed जम्मा."
     },
     {
       "fy": "2080/81",
       "filed": 201,
+      "advice": 131,
+      "referred": 12,
       "tameli": 825,
+      "held": 18,
       "total": 1187,
-      "figure": "तालिका २.१०",
+      "figure": "तालिका २.10",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf",
-      "note": "34th annual report. Tameli 825 = 694 (alone) + 124 (with सुझाव) + 7 (with लेखी पठाउने), matching the table total."
+      "note": "Row counts reconciled against the table's own printed जम्मा."
+    },
+    {
+      "fy": "2081/82",
+      "filed": 137,
+      "advice": 105,
+      "referred": 11,
+      "tameli": 794,
+      "held": 10,
+      "total": 1057,
+      "figure": "तालिका २.1५",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा."
     }
   ],
+  "defendants": {
+    "accusedRows": 9552,
+    "distinctNames": 8319,
+    "largestCase": 249,
+    "singleAccusedCasesPct": 52.2,
+    "accusedInDecided": 8846,
+    "decidedCases": 2754,
+    "byVerdict": [
+      {
+        "verdict": "ठहर",
+        "cases": 1239,
+        "accused": 1975
+      },
+      {
+        "verdict": "आंशिक ठहर",
+        "cases": 450,
+        "accused": 3038
+      },
+      {
+        "verdict": "सफाई",
+        "cases": 1065,
+        "accused": 3833
+      }
+    ],
+    "byCharge": [
+      {
+        "en": "Bribery",
+        "ne": "रिसवत / घुस",
+        "cases": 915,
+        "accused": 1469
+      },
+      {
+        "en": "Fake credential",
+        "ne": "नक्कली प्रमाण पत्र",
+        "cases": 634,
+        "accused": 642
+      },
+      {
+        "en": "Embezzlement",
+        "ne": "रकम हिनामिना",
+        "cases": 375,
+        "accused": 1368
+      },
+      {
+        "en": "Loss to government",
+        "ne": "हानीनोक्सानी",
+        "cases": 167,
+        "accused": 972
+      },
+      {
+        "en": "Illicit enrichment",
+        "ne": "गैरकानूनी सम्पत्ति",
+        "cases": 95,
+        "accused": 259
+      },
+      {
+        "en": "Illegal benefit",
+        "ne": "गैरकानुनी लाभ",
+        "cases": 135,
+        "accused": 999
+      },
+      {
+        "en": "Money laundering",
+        "ne": "सम्पत्ति शुद्धीकरण",
+        "cases": 84,
+        "accused": 265
+      },
+      {
+        "en": "Irregularity",
+        "ne": "अनियमितता",
+        "cases": 130,
+        "accused": 763
+      },
+      {
+        "en": "Revenue leakage",
+        "ne": "राजश्व चुहावट",
+        "cases": 34,
+        "accused": 264
+      },
+      {
+        "en": "False statement",
+        "ne": "झुठ्ठा विवरण",
+        "cases": 60,
+        "accused": 275
+      },
+      {
+        "en": "Forged document",
+        "ne": "गलत लिखत",
+        "cases": 33,
+        "accused": 211
+      },
+      {
+        "en": "Govt land misregistration",
+        "ne": "सरकारी जग्गा",
+        "cases": 41,
+        "accused": 1098
+      },
+      {
+        "en": "Exam rigging",
+        "ne": "परीक्षा फेरबदल",
+        "cases": 26,
+        "accused": 152
+      }
+    ]
+  },
   "complaintDisposal": [
     {
       "fy": "2081/82",

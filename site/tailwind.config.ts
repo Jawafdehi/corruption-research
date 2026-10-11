@@ -36,6 +36,9 @@ export default {
         popover: { DEFAULT: "hsl(var(--popover))", foreground: "hsl(var(--popover-foreground))" },
         alert: { DEFAULT: "hsl(var(--alert))", foreground: "hsl(var(--alert-foreground))" },
         success: { DEFAULT: "hsl(var(--success))", foreground: "hsl(var(--success-foreground))" },
+        // Second institutional accent, for the judiciary. Registered so `bg-court`
+        // and `text-court` resolve; the token itself lives in index.css.
+        court: "hsl(var(--court))",
       },
       borderRadius: {
         lg: "var(--radius)",

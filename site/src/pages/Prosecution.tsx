@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import { AccusedPerCase } from "@/components/research/AccusedPerCase";
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
   Block,
@@ -19,9 +20,21 @@ import { CITATIONS, REPORT, fyLabel, outcomePct, verdictYearRates } from "@/data
 import { useFormat } from "@/lib/format";
 
 export default function Prosecution() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { n, pct, fy } = useFormat();
-  const { byCharge, chargeMixByYear, ciaa, corpus, overTime } = REPORT;
+  const { byCharge, chargeMixByYear, ciaa, corpus, defendants, overTime } = REPORT;
+
+  // People-per-case for one offence family, formatted to one decimal in the active
+  // locale. Returns an empty string rather than "0.0" when a family is absent, so a
+  // missing row reads as a gap in the sentence instead of as a real measurement.
+  const ratioLabel = (en: string) => {
+    const r = defendants.byCharge.find((c) => c.en === en);
+    if (!r || !r.cases) return "";
+    return new Intl.NumberFormat(language === "ne" ? "ne-NP" : "en-US", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(r.accused / r.cases);
+  };
 
   // Denominator preserved exactly as the original chart defined it: the sum of the
   // six mix families across all years. This is deliberately larger than the
@@ -204,9 +217,65 @@ export default function Prosecution() {
         <Unknown title={t("research.corruption.prosecution.unknownTitle", "Not in this dataset")}>
           {t(
             "research.corruption.prosecution.unknownBody",
-            "बिगो claimed per case, the number of defendants per charge, and the amount the court ultimately upheld are not carried in the register rows this site is built from. The Commission publishes an annual damages total, which is why that figure appears above as a single-year number and is never divided across cases.",
+            "बिगो claimed per case and the amount the court ultimately upheld are not carried in the register rows this site is built from, so no charge on this page can be priced. The Commission publishes an annual damages total, which is why that figure appears above as a single-year number and is never divided across cases. Defendants per case can be counted, and are, in the section below — but the court publishes no outcome for each of them.",
           )}
         </Unknown>
+      </Block>
+
+      <Block>
+        <Eyebrow>{t("research.corruption.size.eyebrow", "How big a case is")}</Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.size.title",
+            "The charges that convict most reliably are the ones with one defendant",
+          )}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.size.body",
+            "Charges do not just differ in how hard they are to prove. They differ in shape. A fake-credential case is one official and one document: {{fakeRatio}} defendants per case on average. A case about granting an unlawful benefit averages {{benefitRatio}}, and the land-registration cases average {{landRatio}} — one docket covering dozens of people at once. The offences at the top of the conviction table are the small ones, and the offences at the bottom are the large ones.",
+            {
+              fakeRatio: ratioLabel("Fake credential"),
+              benefitRatio: ratioLabel("Illegal benefit"),
+              landRatio: ratioLabel("Govt land misregistration"),
+            },
+          )}
+        </Body>
+
+        <Figure
+          title={t(
+            "research.corruption.size.chartTitle",
+            "People charged per case, by offence",
+          )}
+          subtitle={t(
+            "research.corruption.size.chartSubtitle",
+            "Decided cases at the Special Court. The figure under each bar is people charged over cases decided.",
+          )}
+          caption={t(
+            "research.corruption.size.chartCaption",
+            "Counted from the defendant side of the court's own party list, on the same decided cases as the conviction-rate chart. A defendant is a position on a charge sheet rather than a resolved individual, so someone charged in two cases is counted twice.",
+          )}
+        >
+          <AccusedPerCase
+            rows={defendants.byCharge}
+            perCaseLabel={t("research.corruption.size.perCase", "people per case")}
+            language={language}
+          />
+        </Figure>
+
+        <Body>
+          {t(
+            "research.corruption.size.body2",
+            "This matters for how the headline rate should be read. Because the court issues one verdict per docket, a charge tried one defendant at a time produces a clean conviction or a clean acquittal, while a charge tried forty defendants at a time almost has to produce a partial result. Some of the spread between charges is therefore about case structure rather than about evidence or effort — though the data cannot say how much.",
+          )}
+        </Body>
+
+        <Caveat>
+          {t(
+            "research.corruption.size.caveat",
+            "Large cases are not evidence of weak prosecution, and prosecuting many defendants together can be the efficient and correct choice where the conduct was collective. The point here is narrower: case size varies enormously by charge, so a rate computed per case is not comparing like with like across offences.",
+          )}
+        </Caveat>
       </Block>
     </>
   );

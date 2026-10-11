@@ -32,6 +32,11 @@ def _fy(label: str) -> int:
 def _num(v):
     "Keep whole numbers as ints so the UI never renders '2,949.0'."
     f = float(v)
+    # A blank cell arrives as NaN, which `json.dumps` writes as the bare token NaN --
+    # not valid JSON, and TypeScript rejects the import outright. Emit null so a gap in
+    # the source table stays a visible gap rather than becoming a zero.
+    if f != f:
+        return None
     return int(f) if f.is_integer() else round(f, 2)
 
 
@@ -197,8 +202,22 @@ def build() -> dict:
             "cohorts": cohorts,
             "completeThroughFy": complete_through,
         },
-        "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals())},
-        "disposals": _rows(cd.load_disposals()),
+        "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals()),
+                    "ciaaDecisions": _rows(cd.load_investigation_appeal_decisions()
+                                           [["fy", "appealed", "not_appealed"]],
+                                           not_appealed="notAppealed")},
+        # Audit columns (tracked_sum / all_rows_sum / printed_total) stay in the CSV and
+        # out of the site: they exist to prove the parse, not to be rendered.
+        "disposals": _rows(cd.load_disposals()[
+            ["fy", "filed", "advice", "referred", "tameli", "held",
+             "total", "figure", "source_url", "note"]]),
+        "defendants": {
+            # snake_case -> camelCase, so this block matches every other key in the file
+            **{"".join(p.capitalize() if i else p for i, p in enumerate(k.split("_"))): _num(v)
+               for k, v in f["defendant_summary"].iloc[0].items()},
+            "byVerdict": _rows(f["defendants_by_verdict"]),
+            "byCharge": _rows(f["defendants_by_charge"], charge_en="en", charge_ne="ne"),
+        },
         "complaintDisposal": _rows(cd.load_complaint_disposal()),
         "duration": {
             "bands": _rows(f["duration"]),

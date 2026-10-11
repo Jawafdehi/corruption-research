@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { StatusDonut, type DonutSegment } from "@/components/data-quality/StatusDonut";
+import { CasesVersusAccused, type GrainRow } from "@/components/research/CasesVersusAccused";
 import { ConvictionByCharge, type ChargeRow } from "@/components/research/ConvictionByCharge";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { FiledDecidedTrend } from "@/components/research/FiledDecidedTrend";
@@ -40,6 +41,7 @@ export default function CourtOutcomes() {
   const {
     byCharge,
     corpus,
+    defendants,
     filedByMonth,
     justiceMinDecisions,
     justices,
@@ -51,6 +53,45 @@ export default function CourtOutcomes() {
   } = REPORT;
 
   const decided = decidedClean(outcome);
+
+  // The same three verdicts counted per case and per accused. `defendants.byVerdict` is
+  // built on the identical court-published-verdict filter as `outcome`, so the two bars
+  // share a denominator rule and the gap between them is a real difference of grain and
+  // not an artefact of one side counting something the other excludes.
+  const GRAIN_FILL: Record<string, string> = {
+    "ठहर": "hsl(var(--court))",
+    "आंशिक ठहर": "hsl(var(--accent))",
+    "सफाई": "hsl(var(--muted-foreground))",
+  };
+  const grainLabel: Record<string, string> = {
+    "ठहर": t("research.corruption.outcome.convicted", "Convicted"),
+    "आंशिक ठहर": t("research.corruption.grain.partial", "Partly convicted — record does not say who"),
+    "सफाई": t("research.corruption.outcome.acquitted", "Acquitted"),
+  };
+  const grainRows: GrainRow[] = defendants.byVerdict.map((r) => ({
+    key: r.verdict,
+    label: grainLabel[r.verdict] ?? r.verdict,
+    term: r.verdict,
+    cases: r.cases,
+    accused: r.accused,
+    fill: GRAIN_FILL[r.verdict] ?? "hsl(var(--muted-foreground))",
+  }));
+  const grainTotals = grainRows.reduce(
+    (a, r) => ({ cases: a.cases + r.cases, accused: a.accused + r.accused }),
+    { cases: 0, accused: 0 },
+  );
+  const grainOf = (verdict: string) => {
+    const r = grainRows.find((x) => x.key === verdict);
+    if (!r) return { casePct: 0, accusedPct: 0, cases: 0, accused: 0 };
+    return {
+      cases: r.cases,
+      accused: r.accused,
+      casePct: (r.cases / grainTotals.cases) * 100,
+      accusedPct: (r.accused / grainTotals.accused) * 100,
+    };
+  };
+  const fullGrain = grainOf("ठहर");
+  const partGrain = grainOf("आंशिक ठहर");
   const convPct = (outcome.convicted / decided) * 100;
   const partPct = (outcome.partial / decided) * 100;
   const acqPct = (outcome.acquitted / decided) * 100;
@@ -231,6 +272,77 @@ export default function CourtOutcomes() {
             { n: n(verdictsModelDerivedExcluded) },
           )}
         </Caveat>
+      </Block>
+
+      <Block>
+        <Eyebrow>{t("research.corruption.grain.eyebrow", "Cases and people")}</Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.grain.title",
+            "Most cases end in conviction. Most people charged are not in those cases.",
+          )}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.grain.body",
+            "Every rate above counts cases. But a case is a docket, not a person: {{accused}} people were named as defendants in the {{cases}} decided cases, from one apiece up to {{largest}} in a single case. Counting the accused instead of the dockets moves the picture sharply. Cases upheld in full are {{fullCasePct}} of the docket but hold only {{fullAccusedPct}} of the people, because they are small — about half of all cases have a single defendant.",
+            {
+              accused: n(grainTotals.accused),
+              cases: n(grainTotals.cases),
+              largest: n(defendants.largestCase),
+              fullCasePct: pct1(fullGrain.casePct),
+              fullAccusedPct: pct1(fullGrain.accusedPct),
+            },
+          )}
+        </Body>
+
+        <Figure
+          title={t(
+            "research.corruption.grain.chartTitle",
+            "The same verdicts, counted by case and by person charged",
+          )}
+          subtitle={t(
+            "research.corruption.grain.chartSubtitle",
+            "Decided cases at the Special Court. Each bar is 100%; the bands are the same three verdicts.",
+          )}
+          caption={t(
+            "research.corruption.grain.chartCaption",
+            "Both bars use the same cases and the same court-published verdicts, so the only thing that differs is what is being counted. A defendant here is a position on a charge sheet, not a resolved individual: only about one entity row in twenty carries an identity code, so a person charged in two cases counts twice and cannot be merged without guessing from names. One decided case names no defendant at all and sits outside this chart, which is why its case total is one short of the figure above. The middle band is not an outcome — it is the population whose individual outcome the court record does not state.",
+          )}
+        >
+          <CasesVersusAccused
+            rows={grainRows}
+            caseLabel={t("research.corruption.grain.byCase", "Cases")}
+            accusedLabel={t("research.corruption.grain.byAccused", "People charged")}
+          />
+        </Figure>
+
+        <Body>
+          {t(
+            "research.corruption.grain.body2",
+            "The band in the middle matters most. {{partCases}} cases ended in a partial conviction — the court upheld the charge against some defendants and not others. Those cases hold {{partAccused}} people, {{partAccusedPct}} of everyone charged. The register records one verdict for the whole docket and no outcome per defendant, so for roughly a third of the people prosecuted here the public record does not say whether they were convicted or cleared.",
+            {
+              partCases: n(partGrain.cases),
+              partAccused: n(partGrain.accused),
+              partAccusedPct: pct1(partGrain.accusedPct),
+            },
+          )}
+        </Body>
+
+        <Caveat>
+          {t(
+            "research.corruption.grain.caveat",
+            "This is not a per-person conviction rate and cannot be turned into one. The written judgment in each case names who was convicted; the structured record that can be read at scale does not. Nothing here says the courts failed to decide these people's cases — only that the published data cannot tell you how they decided.",
+          )}
+        </Caveat>
+
+        <Unknown title={t("research.corruption.grain.unknownTitle", "What would close this")}>
+          {t(
+            "research.corruption.grain.unknownBody",
+            "A per-defendant outcome field on the court record, or identity codes applied across the defendant table. Either would turn {{accused}} accusations into a countable population of people and make a genuine per-person rate possible for the first time.",
+            { accused: n(defendants.accusedRows) },
+          )}
+        </Unknown>
       </Block>
 
       <Block>
