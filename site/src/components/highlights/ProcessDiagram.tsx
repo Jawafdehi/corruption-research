@@ -38,17 +38,17 @@ export type DiagramLabels = {
 
 const L = {
   w: 1000,
-  h: 384,
+  h: 368,
   labelX: 150,
   laneX: 170,
   laneW: 812,
   node: { w: 140, gap: 15, h: 60 },
-  /** Where an exit arrow stops, and where its label sits above it. */
-  exitTop: 38,
-  exitLabelY: 26,
-  ciaaLane: { y: 58, h: 116 },
-  courtLane: { y: 198, h: 72 },
-  supremeLane: { y: 294, h: 72 },
+  /** Where an exit arrow stops. The arrows are unlabelled: what they mean is set
+      out in the legend under the diagram and in the source note beneath it. */
+  exitTop: 20,
+  ciaaLane: { y: 42, h: 116 },
+  courtLane: { y: 182, h: 72 },
+  supremeLane: { y: 278, h: 72 },
   diamond: { rx: 66, ry: 40 },
   courtNode: { x: 742, w: 220, h: 46 },
 };
@@ -104,6 +104,31 @@ const Title = ({
     </text>
   );
 };
+
+/**
+ * Step number, sat on the top-left corner of its node.
+ *
+ * On the corner rather than inside, because the node titles run to two lines and
+ * there is no room above them. The number is decorative in the sense that the
+ * order is already left-to-right; it is there so a reader can refer to "step 4"
+ * and so the diagram and the prose below can be matched up.
+ */
+const StepNo = ({ x, y, n, fill }: { x: number; y: number; n: number; fill: string }) => (
+  <g>
+    <circle cx={x} cy={y} r={11} fill={fill} />
+    <text
+      x={x}
+      y={y + 4.5}
+      textAnchor="middle"
+      className="font-mono"
+      fontSize={12}
+      fontWeight={700}
+      fill="hsl(var(--background))"
+    >
+      {n}
+    </text>
+  </g>
+);
 
 /** Connector label on a paper chip, so it stays legible over a lane fill. */
 const Chip = ({
@@ -223,20 +248,6 @@ export function ProcessDiagram({
             <path d={`M${DIAMOND_CX} ${ROW - L.diamond.ry} L${DIAMOND_CX} ${L.exitTop}`} />
           </g>
 
-          {[nodeMid(1), nodeMid(2), DIAMOND_CX].map((x) => (
-            <text
-              key={x}
-              x={x}
-              y={L.exitLabelY}
-              textAnchor="middle"
-              className="font-display"
-              fontSize={13.5}
-              fontWeight={700}
-              fill={red}
-            >
-              {labels.exitTitle}
-            </text>
-          ))}
 
           {/* Onward: down into the courts */}
           <path
@@ -278,6 +289,7 @@ export function ProcessDiagram({
                 strokeWidth={1.25}
               />
               <Title x={nodeMid(i)} y={ROW} text={s.title} fill={ink} />
+              <StepNo x={nodeX(i)} y={ROW - L.node.h / 2} n={i + 1} fill="hsl(var(--foreground) / 0.65)" />
             </g>
           ))}
 
@@ -299,11 +311,12 @@ export function ProcessDiagram({
           >
             {labels.decision}
           </text>
+          <StepNo x={DIAMOND_CX - L.diamond.rx * 0.52} y={ROW - L.diamond.ry * 0.46} n={5} fill={red} />
 
           {[
-            { n: court, y: COURT_Y },
-            { n: supreme, y: SUPREME_Y },
-          ].map(({ n, y }) => (
+            { n: court, y: COURT_Y, step: 6 },
+            { n: supreme, y: SUPREME_Y, step: 7 },
+          ].map(({ n, y, step }) => (
             <g key={n.key}>
               <rect
                 x={L.courtNode.x}
@@ -316,6 +329,7 @@ export function ProcessDiagram({
                 strokeWidth={1.75}
               />
               <Title x={COURT_MID} y={y + L.courtNode.h / 2} text={n.title} fill={green} size={15} />
+              <StepNo x={L.courtNode.x} y={y} n={step} fill={green} />
             </g>
           ))}
         </svg>
@@ -346,9 +360,12 @@ export function ProcessDiagram({
                 style={{ borderColor: isCourt ? green : "hsl(var(--border))" }}
               >
                 <h4
-                  className="font-display text-sm font-bold leading-snug"
+                  className="flex items-baseline gap-2 font-display text-sm font-bold leading-snug"
                   style={isCourt ? { color: green } : undefined}
                 >
+                  <span aria-hidden="true" className="font-mono text-xs opacity-60">
+                    {i + 1}
+                  </span>
                   {s.title}
                 </h4>
                 <p className="mt-1 text-sm leading-6 text-foreground/80">{s.body}</p>
