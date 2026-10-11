@@ -482,7 +482,7 @@ export default function Highlights() {
           )}
           meta={{
             source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
-            to: "/gaps",
+            to: "/appeals",
             toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),
           }}
         />

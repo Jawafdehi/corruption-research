@@ -12,8 +12,8 @@ import {
   SectionHeading,
   StatRow,
   StatTile,
-  Unknown,
 } from "@/components/layout/Prose";
+import { GapCallout } from "@/components/research/GapCallout";
 import { TameliTrend } from "@/components/research/TameliTrend";
 import { CITATIONS, FUNNEL_SOURCE, REPORT, tameliPct } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
@@ -316,14 +316,29 @@ export default function Investigation() {
           )}
         </Caveat>
 
-        <Unknown
-          title={t("research.corruption.investigation.unknownTitle", "What would settle this")}
+        <GapCallout
+          label={t("research.corruption.gap.aLabel", "Accountability gap · Investigation")}
+          title={t(
+            "research.corruption.gap.aTitle",
+            "Thousands of closures, not one published reason",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.aEstablishes",
+            "In {{fy}} the Commission closed {{tam}} complaints after investigating them in full and prosecuted {{filed}}. Not one closure carries a published reason.",
+            { fy: last.fy, tam: n(last.tameli), filed: n(last.filed) },
+          )}
+          fix={t(
+            "research.corruption.gap.aNeeded",
+            "A reason recorded against each closed complaint, and a count of closures later reopened. No annual report carries either.",
+          )}
         >
           {t(
-            "research.corruption.investigation.unknownBody",
-            "A reason attached to each closure, or a count of closures later reopened. The annual reports carry neither. Until one of them appears, the share above is as far as the public record goes.",
+            "research.corruption.gap.aBody",
+            "The figures also cannot be followed from one stage to the next. Complaints registered in a year, investigations finished that year and cases filed that year are three different sets of files, so the funnel shows the size of each stage rather than the fate of any one batch of complaints.",
           )}
-        </Unknown>
+        </GapCallout>
       </Block>
     </>
   );

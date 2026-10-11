@@ -4,14 +4,15 @@ import { useFormat } from "@/lib/format";
 
 import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
 import { AppealDecisions } from "@/components/research/AppealDecisions";
-import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
-import { REPORT, decidedClean } from "@/data/research-corruption";
+import { GapCallout } from "@/components/research/GapCallout";
+import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
+import { CITATIONS, REPORT, decidedClean } from "@/data/research-corruption";
 
 
 export default function Appeals() {
   const { t } = useTranslation();
   const { n, pct1 } = useFormat();
-  const { appeals, outcome } = REPORT;
+  const { appeals, ciaa, outcome } = REPORT;
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
@@ -335,6 +336,53 @@ export default function Appeals() {
             "The number of verdicts eligible for appeal in each year, which would turn these counts into a rate, and a reason recorded against each decision not to appeal. Neither appears in any annual report. Without them, the clearest statement the evidence supports is that declining to appeal is a routine outcome rather than a rare one.",
           )}
         </Unknown>
+
+        <GapCallout
+          label={t("research.corruption.gap.dLabel", "Accountability gap · Appeals")}
+          title={t("research.corruption.gap.dTitle", "Half the appeals end in silence")}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.dEstablishes",
+            "{{no}} of the {{total}} appeals traced — {{pct}} — carry no recorded outcome anywhere.",
+            { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: pct1(untracedPct) },
+          )}
+          fix={t(
+            "research.corruption.gap.dNeeded",
+            "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
+          )}
+        >
+          {t(
+            "research.corruption.gap.dBody",
+            "This is the filing system, not the bench. Trial and appeal cases sit in one table with nothing joining them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and failing both, by matching defendant names. Anything unresolved is counted as unknown — never as a case nobody appealed, and never as a loss.",
+          )}
+        </GapCallout>
+
+        <GapCallout
+          label={t("research.corruption.gap.eLabel", "Accountability gap · Recovery")}
+          title={t("research.corruption.gap.eTitle", "The money is where the record simply stops")}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.eEstablishes",
+            "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
+            { bn: ciaa.damagesClaimedYearBn },
+          )}
+          fix={t(
+            "research.corruption.gap.eNeeded",
+            "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
+          )}
+        >
+          <>
+            {t(
+              "research.corruption.gap.eBody",
+              "Every other stage has an institution that publishes something about it. This one has none, which is why it is the only stage with no number against it anywhere on this site. A finding on बिगो is a legal determination; no published source says whether a rupee followed it. Read the blank as missing, not as zero.",
+            )}{" "}
+            <Cite href={CITATIONS.ciaaReports}>
+              {t("research.corruption.gap.eCite", "CIAA annual reports")}
+            </Cite>
+          </>
+        </GapCallout>
       </Block>
     </>
   );
