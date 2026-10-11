@@ -212,21 +212,19 @@ export default function Highlights() {
 
       <Reveal>
         <section className="mt-2 md:mt-4" aria-label={t("research.corruption.flow.title", "How a corruption complaint travels")}>
-          <div className="mt-6 max-w-4xl">
+          {/* Same frame as a finding card, minus the link: it is a figure, not a
+              click-through, so it does not get the hover or the stretched anchor. */}
+          <div className="mt-4 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
             <ProcessDiagram
               stages={flowStages}
               labels={{
-                start: t("research.corruption.flow.start", "Complaint received"),
                 chargeSheet: t("research.corruption.flow.chargeSheet", "charge sheet filed"),
                 ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
                 ifAppealed: t("research.corruption.flow.ifAppealed", "if appealed"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
+                yes: t("research.corruption.flow.yes", "yes"),
+                noTameli: t("research.corruption.flow.noTameli", "no · Tameli"),
                 centreTitle: t("research.corruption.flow.centreTitle", "A complaint's route"),
-                centreSub: t("research.corruption.flow.centreSub", "7 steps · 3 ways out"),
-                exitLegend: t(
-                  "research.corruption.flow.exitLegend",
-                  "A step numbered in red can end in Tameli: set aside, not closed",
-                ),
                 exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",

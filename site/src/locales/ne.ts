@@ -78,8 +78,6 @@ export const ne: Record<string, string> = {
     "भनेको उजुरी हाललाई मात्र तामेलीमा राखिएको हो, सदाका लागि बन्द गरिएको होइन। मिसिल र अभिलेख रहिरहन्छ, र आयोगकै सूचनाले भन्छ — पछि थप प्रमाण फेला परेमा सोही बखत कानूनबमोजिम कारबाही हुन्छ।",
   "research.corruption.flow.exitCite":
     "अख्तियार दुरुपयोग अनुसन्धान आयोग ऐन, २०४८ को दफा १९(१३); कार्यविधि २०७८ को अनुसूची-११ को ढाँचा।",
-  "research.corruption.flow.start": "उजुरी प्राप्त",
-  "research.corruption.flow.chargeSheet": "आरोपपत्र दायर",
   "research.corruption.flow.s7Title": "सर्वोच्च अदालत पुनरावेदन",
   "research.corruption.hl.cdTitle": "आयोगमा रहेका सबै उजुरी, आ.व. २०८१/८२",
   "research.corruption.hl.cdTotal": "{{carried}} अघिल्लो वर्षबाट सरेका + {{fresh}} नयाँ दर्ता",
@@ -93,12 +91,11 @@ export const ne: Record<string, string> = {
   "research.corruption.hl.cdHeld": "मुलतबीमा राखिएका",
   "research.corruption.hl.cdNote":
     "दुवै खण्ड एउटै आर्थिक वर्ष र एउटै प्रतिवेदनका हुन्, र प्रत्येकलाई आ-आफ्नै जम्माले भाग गरिएको छ। यी एउटै समूहलाई पछ्याएका होइनन्: यस वर्ष सम्पन्न भएका अनुसन्धान प्रायः अघिल्ला वर्षमा सुरु भएका हुन्, त्यसैले यी दुईलाई जोडेर रूपान्तरण दर निकाल्न मिल्दैन।",
-  "research.corruption.flow.ifGrounds": "आधार देखिएमा",
   "research.corruption.flow.ifAppealed": "पुनरावेदन परेमा",
   "research.corruption.flow.exitHere": "यहाँ तामेली हुन सक्छ",
+  "research.corruption.flow.yes": "हुन्छ",
+  "research.corruption.flow.noTameli": "हुँदैन · तामेली",
   "research.corruption.flow.centreTitle": "उजुरीको बाटो",
-  "research.corruption.flow.centreSub": "७ चरण · ३ निकास",
-  "research.corruption.flow.exitLegend": "रातो अङ्क भएको चरणबाट उजुरी तामेलीमा जान सक्छ — बन्द होइन, हाललाई मात्र",
   "research.corruption.flow.s1Title": "उजुरी दर्ता",
   "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
 
