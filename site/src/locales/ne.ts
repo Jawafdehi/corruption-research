@@ -81,6 +81,7 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.srIntro":
     "भ्रष्टाचारको उजुरीले लिने बाटो, क्रमैसँग। पहिलो पाँच चरण आयोगमा हुन्छन्; छैटौं र सातौं छुट्टै अदालत हुन्।",
   "research.corruption.flow.srExit": "यस चरणमा उजुरी तामेलीमा राख्न सकिन्छ।",
+  "research.corruption.flow.exitHere": "यहाँ तामेली हुन सक्छ",
   "research.corruption.flow.exitMeaning":
     "भनेको उजुरी हाललाई मात्र तामेलीमा राखिएको हो, सदाका लागि बन्द गरिएको होइन। मिसिल र अभिलेख रहिरहन्छ, र आयोगकै सूचनाले भन्छ — पछि थप प्रमाण फेला परेमा सोही बखत कानूनबमोजिम कारबाही हुन्छ।",
   "research.corruption.flow.exitCite":
