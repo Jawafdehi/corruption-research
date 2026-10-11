@@ -36,18 +36,18 @@ export default function Investigation() {
 
   const stageLabel: Record<string, string> = {
     complaints: t("research.corruption.funnel.stage.complaints", "Complaints to the Commission"),
-    investigated: t("research.corruption.funnel.stage.investigated", "Complaints fully investigated"),
-    filed: t("research.corruption.funnel.stage.filed", "Prosecutions filed"),
-    convicted: t("research.corruption.funnel.stage.convicted", "Convictions (est.)"),
+    investigated: t("research.corruption.funnel.stage.investigated", "Investigated in full"),
+    filed: t("research.corruption.funnel.stage.filed", "Taken to court"),
+    convicted: t("research.corruption.funnel.stage.convicted", "Convictions (estimated)"),
   };
 
   const stageNote: Record<string, string> = {
     investigated: t(
       "research.corruption.funnel.stage.investigatedNote",
-      "only {{pct}}% go to a full investigation",
+      "only {{pct}}% are investigated in full",
       { pct: investigatedShare.toFixed(1) },
     ),
-    filed: t("research.corruption.funnel.stage.filedNote", "≈1 in {{k}} investigated are prosecuted", {
+    filed: t("research.corruption.funnel.stage.filedNote", "about 1 in {{k}} of those reaches a court", {
       k: filedPerInvestigated,
     }),
   };
@@ -67,49 +67,58 @@ export default function Investigation() {
         <SectionHeading>
           {t(
             "research.corruption.investigation.title",
-            "There are two filters, and the second one is invisible",
+            "Where corruption complaints stop before they reach a court",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.investigation.lede",
-            "That almost nothing survives the front desk is well known. The annual reports also carry a second number, scattered across tables and never drawn as a series: what happens to the complaints that do get investigated. Most of them are now closed too.",
+            "The Commission received {{complaints}} new complaints in {{fy}} and filed {{filed}} cases in court. This page follows what happened in between. Complaints are stopped at two separate points — once soon after they arrive, and again after a full investigation — and this looks at how many stop at each, and what the published record says about why.",
+            {
+              complaints: n(ciaa.complaintsYear),
+              fy: cd.fy,
+              filed: n(ciaa.casesFiledYear),
+            },
           )}
         </Lede>
 
         <StatRow>
           <StatTile
             value={n(ciaa.complaintsYear)}
-            label={t("research.corruption.tile.complaints", "Complaints in one year")}
-            note={t("research.corruption.tile.complaintsNote", "new registrations, excluding carried-over backlog")}
+            label={t("research.corruption.tile.complaints", "New complaints received")}
+            note={t("research.corruption.tile.complaintsNote", "in {{fy}}, not counting the backlog carried over", { fy: cd.fy })}
           />
           <StatTile
             value={n(ciaa.investigatedYear)}
-            label={t("research.corruption.investigation.tileInvestigated", "Full investigations completed")}
-            note={t("research.corruption.investigation.tileInvestigatedNote", "{{pct}}% of complaints registered", {
+            label={t("research.corruption.investigation.tileInvestigated", "Investigated in full")}
+            note={t("research.corruption.investigation.tileInvestigatedNote", "{{pct}}% of the complaints received", {
               pct: investigatedShare.toFixed(1),
             })}
           />
           <StatTile
             value={n(ciaa.casesFiledYear)}
-            label={t("research.corruption.tile.filed", "Prosecutions filed")}
-            note={t("research.corruption.tile.filedNote", "same year, at the Special Court")}
+            label={t("research.corruption.tile.filed", "Taken to court")}
+            note={t("research.corruption.tile.filedNote", "cases filed at the Special Court that year")}
           />
           <StatTile
             tone="accent"
             value={pct(tameliPct(last))}
-            label={t("research.corruption.investigation.tileTameli", "Investigated, then closed")}
-            note={t("research.corruption.investigation.tileTameliNote", "तामेली as a share of decisions, {{fy}}", {
+            label={t("research.corruption.investigation.tileTameli", "Investigated, then set aside")}
+            note={t("research.corruption.investigation.tileTameliNote", "share of post-investigation decisions, {{fy}}", {
               fy: last.fy,
             })}
           />
         </StatRow>
 
         <Figure
-          title={t("research.corruption.funnel.title", "From complaint to conviction")}
+          title={t(
+            "research.corruption.funnel.title",
+            "From {{complaints}} complaints to an estimated {{convicted}} convictions",
+            { complaints: n(ciaa.complaintsYear), convicted: n(funnel[funnel.length - 1].count) },
+          )}
           subtitle={t(
             "research.corruption.funnel.subtitle",
-            "One reporting year at the Commission, with the final stage estimated from this archive's conviction rate.",
+            "One year at the Commission, FY2081/82. The last bar is an estimate, not a published figure.",
           )}
           caption={
             <>
@@ -141,23 +150,24 @@ export default function Investigation() {
             that year (बुँदा १३). They are separate events and are kept apart.
           */}
           <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
               {t(
                 "research.corruption.hl.cdTitle",
-                "Every complaint on the Commission's books, FY2081/82",
+                "One complaint in forty is sent for a full investigation",
               )}
-            </p>
-            <p className="mt-2 font-mono text-2xl font-semibold tabular-nums md:text-3xl">
+            </h3>
+            <p className="mt-3 font-mono text-2xl font-semibold tabular-nums text-accent md:text-3xl">
               {n(cd.total_complaints)}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {t("research.corruption.hl.cdTotal", "{{carried}} carried over + {{fresh}} newly registered", {
-                carried: n(cd.carried_in),
-                fresh: n(cd.registered_new),
-              })}
+            <p className="mt-0.5 text-xs leading-5 text-muted-foreground">
+              {t(
+                "research.corruption.hl.cdTotal",
+                "complaints on the Commission's books in {{fy}} — {{carried}} carried over from the year before, {{fresh}} newly registered",
+                { fy: cd.fy, carried: n(cd.carried_in), fresh: n(cd.registered_new) },
+              )}
             </p>
 
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-5 space-y-2.5">
               {[
                 { k: "tameli", v: cd.tameli + cd.tameli_with_advice, l: t("research.corruption.hl.cdTameli", "set aside as Tameli"), hot: true },
                 { k: "other", v: cd.other_action, l: t("research.corruption.hl.cdOther", "other action") },
@@ -176,7 +186,7 @@ export default function Investigation() {
                       </span>
                     </span>
                   </div>
-                  <div className="mt-1 h-1.5 w-full rounded-sm bg-foreground/[0.07]">
+                  <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
                     <div
                       className="h-full rounded-sm"
                       style={{
@@ -191,14 +201,14 @@ export default function Investigation() {
           </div>
 
           <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+            <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
               {t(
                 "research.corruption.hl.cdInvTitle",
-                "And of the {{n}} detailed investigations finished that year",
+                "Of the {{n}} complaints investigated in full, five in six were then set aside",
                 { n: n(cd.investigations_completed) },
               )}
-            </p>
-            <dl className="mt-3 grid grid-cols-3 gap-3">
+            </h3>
+            <dl className="mt-4 grid grid-cols-3 gap-3">
               {[
                 { k: "filed", v: cd.inv_filed, l: t("research.corruption.hl.cdFiled", "taken to court") },
                 { k: "tameli", v: cd.inv_tameli, l: t("research.corruption.hl.cdInvTameli", "set aside as Tameli"), hot: true },
@@ -223,7 +233,7 @@ export default function Investigation() {
           <p className="text-xs leading-5 text-muted-foreground">
             {t(
               "research.corruption.hl.cdNote",
-              "Both blocks are one fiscal year from one report, each divided by its own total. They are not a single cohort followed through: the investigations finished this year mostly began in earlier ones, so the two must not be chained into a conversion rate.",
+              "Both blocks cover FY2081/82 and come from the same report, each divided by its own total. They are not one set of complaints followed through — the investigations finished this year mostly began in earlier ones — so the two cannot be multiplied together into a single survival rate.",
             )}
           </p>
         </div>
@@ -231,17 +241,17 @@ export default function Investigation() {
       </Block>
 
       <Block>
-        <Eyebrow>{t("research.corruption.investigation.tameliEyebrow", "The second filter")}</Eyebrow>
+        <Eyebrow>{t("research.corruption.investigation.tameliEyebrow", "After the investigation")}</Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.investigation.tameliTitle",
-            "The Commission went from prosecuting most of what it investigated to shelving most of it",
+            "Prosecutions fell by two-thirds while closures rose six-fold",
           )}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.investigation.tameliBody",
-            "A complaint that survives screening and gets investigated goes to the Commission's own meeting, which can prosecute it, advise the agency, write to it, or shelve it as तामेली — set it aside without charges. In {{peakFy}} the meeting prosecuted {{peakFiled}} complaints and shelved {{peakTameli}}. In {{lastFy}} it prosecuted {{lastFiled}} and shelved {{lastTameli}}. Shelving went from {{peakPct}} of its decisions to {{lastPct}}.",
+            "Once a complaint has been investigated in full, the Commission's own meeting decides what to do with it: prosecute, advise the agency, write to it, or set it aside as Tameli. Tameli keeps the complaint on record but takes it no further unless new evidence appears. In {{peakFy}} the meeting prosecuted {{peakFiled}} complaints and set aside {{peakTameli}}. In {{lastFy}} it prosecuted {{lastFiled}} and set aside {{lastTameli}}.",
             {
               peakFy: peak.fy,
               peakFiled: n(peak.filed),
@@ -257,7 +267,7 @@ export default function Investigation() {
         <Body>
           {t(
             "research.corruption.investigation.tameliStep",
-            "The change is not a drift. It happens between {{peakFy}} and {{afterFy}}, two consecutive years, with shelving jumping from {{peakPct}} to {{afterPct}}. It has not come back down since. Two things in the public record fall inside that window: the post of chief commissioner sat vacant for about five months from Bhadra {{vacancyBs}}, and it was then filled substantively for the first time since 2073. The reports give no reason for the change, and the coincidence of dates is not evidence that one caused the other.",
+            "This was not a gradual drift. It happened between {{peakFy}} and {{afterFy}} — two consecutive years — with closures jumping from {{peakPct}} of decisions to {{afterPct}}, and it has not come back down. Two things in the public record fall inside that window: the post of chief commissioner was vacant for about five months from Bhadra {{vacancyBs}}, and was then filled substantively for the first time since 2073. The reports give no reason for the change, and dates that coincide are not evidence that one caused the other.",
             {
               peakFy: peak.fy,
               afterFy: afterPeak.fy,
@@ -271,17 +281,17 @@ export default function Investigation() {
         <Figure
           title={t(
             "research.corruption.investigation.chartTitle",
-            "After a full investigation, how often the Commission closes the file",
+            "What the Commission decided to do with each investigated complaint, by year",
           )}
           subtitle={t(
             "research.corruption.investigation.chartSubtitle",
-            "Decisions taken on complaints that completed a detailed investigation, by fiscal year. Bars are counts; the line is तामेली as a share of all decisions that year.",
+            "Orange bars are complaints set aside, dark bars are cases taken to court. The line is the share set aside.",
           )}
           caption={
             <>
               {t(
                 "research.corruption.investigation.chartCaption",
-                "Each year's share divides two numbers printed in the same table of the same report, and every year is checked against either that table's printed total or the filing count the report states in prose. Fiscal years 2069/70 to 2072/73 are missing: those reports present the same decisions as a subject-area cross-tab with different row labels, so splicing them on would compare two different things. 'Prosecute' counts decisions to file, not cases appearing in the court register, so the two are never subtracted.",
+                "Every year's figures come from one table in that year's report, and each is checked against either the table's own printed total or the count the report states in its text. FY2069/70 to 2072/73 are missing because those reports present the same decisions in a different and non-comparable form. 'Taken to court' counts decisions to prosecute, which is not the same thing as a case appearing in the court register.",
               )}{" "}
               {disposals.map((d, i) => (
                 <span key={d.fy}>
@@ -305,7 +315,7 @@ export default function Investigation() {
         <Caveat>
           {t(
             "research.corruption.investigation.tameliCaveat",
-            "Shelving a weak case after investigating it is the right call, and the numbers alone cannot say which is happening here: a Commission that got better at screening early and one that lost its appetite for court both produce this chart. What they do establish is the size of the change, how fast it arrived, and that no closure carries a reason.",
+            "Setting aside a weak case after investigating it is the right call, and these numbers cannot say which is happening here: a Commission that got better at filtering weak complaints early and one that lost its appetite for court would both produce this chart. What the figures do establish is the size of the change, how fast it arrived, and that no closure carries a recorded reason.",
           )}
         </Caveat>
 
@@ -329,7 +339,12 @@ export default function Investigation() {
         >
           {t(
             "research.corruption.gap.aBody",
-            "Closure after a full investigation is now the larger of the Commission's two filters, and it is the one with no published reasoning at all.",
+            "The first filter stops far more complaints — {{first}} against {{second}} — but it stops them before anyone investigates. The second stops a higher share, {{secondPct}} of everything it sees, after the work has already been done. Neither records a reason.",
+            {
+              first: n(cd.tameli + cd.tameli_with_advice),
+              second: n(cd.inv_tameli),
+              secondPct: pct1((cd.inv_tameli / cd.investigations_completed) * 100),
+            },
           )}
         </GapCallout>
       </Block>
