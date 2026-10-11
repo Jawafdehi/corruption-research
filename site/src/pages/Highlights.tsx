@@ -10,7 +10,7 @@ import {
 } from "@/components/highlights/ProcessDiagram";
 import { OutcomeSplit, type OutcomeSegment } from "@/components/highlights/OutcomeSplit";
 import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
-import { TameliTrend } from "@/components/research/TameliTrend";
+import { TameliByYear } from "@/components/highlights/TameliByYear";
 import {
   CITATIONS,
   REPORT,
@@ -283,7 +283,7 @@ export default function Highlights() {
           stat={pct1(tameliPct(lastDisposal))}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of the decisions the CIAA took after a full investigation in {{lastFy}} were to shelve the complaint. In {{peakFy}} it was {{peakPct}}.",
+            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were to put the complaint on hold, compared with {{peakPct}} in {{peakFy}}.",
             {
               lastFy: lastDisposal.fy,
               peakFy: peak.fy,
@@ -296,7 +296,7 @@ export default function Highlights() {
           )}
           explain={t(
             "research.corruption.hl.f1Body",
-            "Shelving a complaint is called Tameli: it is parked rather than closed for good, but nothing happens unless new evidence turns up. In {{peakFy}} the Commission decided to prosecute {{peakFiled}} complaints and shelve {{peakTameli}}. By {{lastFy}} that had reversed to {{lastFiled}} and {{lastTameli}}. The turn took one year and the reports give no reason for it.",
+            "This is called Tameli. It means the CIAA keeps a complaint on record but takes no further action unless new evidence emerges. The numbers show a major shift. In {{peakFy}} the CIAA decided to take {{peakFiled}} complaints to court and put {{peakTameli}} on hold. By {{lastFy}} only {{lastFiled}} complaints were taken to court, while {{lastTameli}} were put on hold. The CIAA's annual reports do not explain why these complaints were placed on hold.",
             {
               peakFy: peak.fy,
               peakFiled: n(peak.filed),
@@ -307,16 +307,16 @@ export default function Highlights() {
             },
           )}
           chart={
-            // Minimum chart width exceeds a phone viewport, so it scrolls inside
-            // its own box rather than widening the page.
-            <div className="chart-scroll">
-              <TameliTrend
-                rows={disposals}
-                tameliLabel={t("research.corruption.investigation.seriesTameli", "Closed (तामेली)")}
-                filedLabel={t("research.corruption.investigation.seriesFiled", "Prosecute")}
-                shareLabel={t("research.corruption.investigation.seriesShare", "Share closed")}
-              />
-            </div>
+            // A table, not the trend chart that carries the same series on the
+            // Investigation tab. Here the reader wants to look a year up; there they
+            // want the shape of the change. Same nine rows, read two ways.
+            <TameliByYear
+              rows={disposals}
+              yearLabel={t("research.corruption.hl.f1Year", "Fiscal year")}
+              courtLabel={t("research.corruption.hl.f1Court", "To court")}
+              holdLabel={t("research.corruption.hl.f1Hold", "On hold")}
+              shareLabel={t("research.corruption.hl.f1Share", "On hold %")}
+            />
           }
           meta={{
             source: t("research.corruption.hl.f1Src", "CIAA annual reports"),
