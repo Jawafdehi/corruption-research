@@ -21,6 +21,12 @@ import { CITATIONS, REPORT, fyLabel, outcomePct, verdictYearRates } from "@/data
 import { useFormat } from "@/lib/format";
 
 /** The one case where a bench put selective prosecution in a reasoned judgment. */
+/** The FY2078/79 annual report, where the Commission quotes the precedent it is
+ *  arguing against. Pinned to the fiscal year rather than to the series, so a
+ *  refreshed dataset cannot silently move the citation to a different report. */
+const CIAA_2078_79 =
+  "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf";
+
 const JALAHARI = {
   case: "https://jawafdehi.org/case/jalahari",
   trial: "https://jawafdehi.org/courtcase/special/080-cr-0047",
@@ -29,7 +35,7 @@ const JALAHARI = {
 
 export default function Prosecution() {
   const { t, language } = useTranslation();
-  const { n, pct, fy } = useFormat();
+  const { n, pct, pct1, fy } = useFormat();
   const { byCharge, chargeMixByYear, ciaa, corpus, defendants, overTime } = REPORT;
 
   // People-per-case for one offence family, formatted to one decimal in the active
@@ -58,6 +64,14 @@ export default function Prosecution() {
   const lastRate = rates[rates.length - 1];
 
   const charge = (en: string) => byCharge.find((c) => c.en === en);
+  // Illicit enrichment, the charge whose arithmetic the courts and the Commission
+  // disagree about. Decided here means a clean disposition, as everywhere else.
+  const ie = charge("Illicit enrichment");
+  const ieDecided = ie ? ie.convicted + ie.partial + ie.acquitted : 0;
+  // The site's canonical full-only rate. Recomputing it over the byCharge rows gives
+  // 45.4% instead of 45.0%, because those rows drop charges that could not be
+  // classified -- a second number for the same thing, which is worse than either.
+  const fullOnlyAvg = REPORT.rates.convictionFullOnlyPct;
   const fake = charge("Fake credential");
   const bribery = charge("Bribery");
   const allFull = byCharge.reduce((sum, c) => sum + c.convicted, 0);
@@ -321,6 +335,59 @@ export default function Prosecution() {
             "research.corruption.gap.bCaveat",
             "One judgment is not a pattern. Defendants raise selective prosecution often and it usually goes nowhere; this one matters because the finding came from the bench, with reasons. An uncharged person, a rejected charge or a party's complaint of bias does not establish selective prosecution, and no case on this site is counted as an instance of it.",
           )}
+        </GapCallout>
+
+        <GapCallout
+          label={t("research.corruption.gap.gLabel", "Accountability gap · Prosecution")}
+          title={t(
+            "research.corruption.gap.gTitle",
+            "The Supreme Court said how to count unexplained wealth. The charge sheets kept counting it another way.",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={
+            <>
+              {t(
+                "research.corruption.gap.gEstablishes",
+                "In 2072 the Supreme Court laid down how an illicit-enrichment figure must be worked out: if the source of the money put into buying a property cannot be proved, only that original investment counts as unlawfully acquired — not what the property is worth now. The Commission's own annual report quotes the ruling, and then argues against it.",
+              )}{" "}
+              <Cite href={CIAA_2078_79}>
+                {t("research.corruption.gap.gCite", "CIAA annual report FY2078/79, quoting ने.का.प. २०७२, नि.नं. ९५०५")}
+              </Cite>
+            </>
+          }
+          fix={t(
+            "research.corruption.gap.gNeeded",
+            "The claimed and upheld amount on each case record, and the basis each was calculated on. Without them, nobody outside can tell which charge sheets follow the ruling and which do not.",
+          )}
+        >
+          <>
+            <p>
+              {t(
+                "research.corruption.gap.gBody",
+                "Illicit enrichment is one of the hardest charges to make stick. Of {{n}} decided cases, {{acq}} ended in outright acquittal — {{acqPct}} — and only {{conv}} were upheld in full, against a court average of {{avg}}.",
+                {
+                  n: n(ieDecided),
+                  acq: n(ie ? ie.acquitted : 0),
+                  acqPct: pct1(ieDecided ? ((ie?.acquitted ?? 0) / ieDecided) * 100 : 0),
+                  conv: pct(ieDecided ? ((ie?.convicted ?? 0) / ieDecided) * 100 : 0),
+                  avg: pct1(fullOnlyAvg),
+                },
+              )}
+            </p>
+            <p className="mt-3">
+              {t(
+                "research.corruption.gap.gBody2",
+                "The annual reports show what the argument is about. Year after year they record the Commission appealing these verdicts on the arithmetic itself — that the court credited income whose source was never shown, that it valued the property at the wrong date, that it set a lower figure than the charge sheet claimed. These are not disputes about whether the official took the money. They are disputes about how to count it.",
+              )}
+            </p>
+            <p className="mt-3">
+              {t(
+                "research.corruption.gap.gCaveat",
+                "What the register cannot show is how often a charge sheet departed from the 2072 ruling, because it carries no amount and no method — only the verdict. So the pattern above is the consequence, and the cause can be read in the judgments one at a time but not counted across them.",
+              )}
+            </p>
+          </>
         </GapCallout>
       </Block>
     </>

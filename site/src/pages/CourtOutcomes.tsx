@@ -527,6 +527,30 @@ export default function CourtOutcomes() {
         </Caveat>
 
         <GapCallout
+          label={t("research.corruption.gap.hLabel", "Accountability gap · Court outcomes")}
+          title={t(
+            "research.corruption.gap.hTitle",
+            "A bench's rate says nothing about whether it was right. What the Supreme Court did with its decisions would.",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.hEstablishes",
+            "The chart above can show that benches convict at very different rates. It cannot show which of them the appeal courts went on to agree with. A bench that convicts rarely and is upheld every time, and one that convicts rarely and is overturned every time, look identical here.",
+          )}
+          fix={t(
+            "research.corruption.gap.hNeeded",
+            "The trial case number on each appeal record. Everything else is already in place: all {{cases}} decided cases carry their bench, and {{appeals}} appeals are established — but the two sets cannot be joined, so no bench can be followed upward.",
+            { cases: n(decided), appeals: n(REPORT.appeals.appeals) },
+          )}
+        >
+          {t(
+            "research.corruption.gap.hBody",
+            "This matters because of how the chart above is most likely to be misread. A conviction rate is not a performance score — a bench hearing mostly documentary fake-certificate cases will convict more often than one hearing contested financial cases, whatever either does. The question worth asking is not how often a bench convicted, but how often its reasoning survived review. That comparison is not published anywhere, and until the court system links an appeal to the case it came from, it cannot be built from outside.",
+          )}
+        </GapCallout>
+
+        <GapCallout
           label={t("research.corruption.gap.cLabel", "Accountability gap · Court outcomes")}
           title={t(
             "research.corruption.gap.cTitle",

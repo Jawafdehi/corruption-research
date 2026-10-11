@@ -188,6 +188,68 @@ on any disagreement other than this one documented correction.
 
 ---
 
+## 6. Illicit enrichment: the courts and the Commission disagree on the arithmetic
+
+| | |
+|---|---|
+| **Stage** | Prosecution (consequence visible in Court outcomes) |
+| **Where** | Prosecution tab |
+| **Confidence** | Established (the ruling, the dispute, the outcome rates) · the per-case link is **not** measurable |
+
+**Source.** The CIAA's own FY2078/79 annual report, which quotes the precedent it is
+arguing against: ने.का.प. २०७२, अंक १२, नि.नं. ९५०५.
+
+**The ruling.** Where the source of the money invested in buying a property cannot be
+proved, only that original investment is illicit acquisition — *"न कि त्यसबाट
+बढेबढाएको हालको मूल्य"*, not the appreciated present value. The Supreme Court
+records this as a principle established (सिद्धान्त प्रतिपादन).
+
+**What the reports show.** Across FY2069/70–2078/79 the appeal-grounds sections
+repeatedly record the Commission appealing illicit-enrichment verdicts on the
+calculation itself: that the court credited income whose source was never shown, that
+it valued property at the wrong date, that it set a lower बिगो than the charge sheet
+claimed.
+
+**Outcome.** Illicit enrichment is upheld in full in 19 of 95 decided cases (20.0%)
+against a court average of 45.0%, and ends in outright acquittal 59 times (62.1%).
+
+**What this does NOT establish.** How often any individual charge sheet departed from
+the 2072 ruling. The register carries no amount and no method, only the verdict, so
+the cause can be read in judgments one at a time but not counted across them. The
+phrase "cash flow method" is deliberately not used on the site: the dispute is
+documented, that specific term is not, in any source available here.
+
+---
+
+## 7. A bench's conviction rate cannot be checked against review
+
+| | |
+|---|---|
+| **Stage** | Court outcomes |
+| **Where** | Court outcomes tab, after the per-justice chart |
+| **Confidence** | Established as a gap — the measurement itself is **not currently possible** |
+
+**The better question.** Comparing Special Court justices by their own conviction and
+acquittal rates is weak: a bench hearing mostly documentary fake-certificate cases
+will convict more often than one hearing contested financial cases, whatever either
+does. The question worth asking is how often a bench's decisions survived appeal.
+
+**Why it cannot be built here.** The trial side is complete — all 2,755 decided cases
+carry their bench, and 39 justices clear the 30-decision threshold. The appeal side is
+shipped as an aggregate only: `dataset/appeals.csv` is five rows keyed by trial outcome
+× appellant, with no case number on any of them. 1,797 appeals are established and not
+one can be traced back to the bench whose decision it challenged.
+
+**What would close it.** The trial case number on each appeal record — one column.
+A per-case pairing was built upstream (see gap D) but only the aggregate is published,
+because the pairings are provisional. `ngm_query_judicial`, which would allow the join
+to be rebuilt, is not available without authentication.
+
+**This is now stated on the site** rather than left as an unstated limitation, because
+a chart that invites a performance reading needs to say what it cannot support.
+
+---
+
 ## Also fixed
 
 - **`--court` was undefined outside the Highlights theme.** Any chart using the court
