@@ -30,12 +30,14 @@ export type DiagramNode = {
 
 export type DiagramLabels = {
   start: string;
+  centreTitle: string;
+  centreSub: string;
+  exitLegend: string;
   chargeSheet: string;
   ifGrounds: string;
   ifAppealed: string;
   exitTitle: string;
   exitHere: string;
-  centreNote: string;
   srIntro: string;
   srExit: string;
 };
@@ -145,80 +147,80 @@ export function ProcessDiagram({
                   markerEnd={next.isCourt ? "url(#ov-green)" : "url(#ov-ink)"}
                 />
                 {label ? (
-                  <text
-                    x={mid.x - out.x * 26}
-                    y={mid.y - out.y * 26 + 4}
-                    textAnchor="middle"
-                    fontSize={12.5}
-                    fontWeight={600}
-                    fill={next.isCourt ? green : "hsl(var(--muted-foreground))"}
-                  >
-                    {label}
-                  </text>
+                  // On a chip and pushed inside the ring: a curved arrow sweeps
+                  // through wherever its own label wants to sit, and nudging text
+                  // around an arc is a losing game.
+                  <g>
+                    <rect
+                      x={mid.x - out.x * 40 - (label.length * 6.5 + 14) / 2}
+                      y={mid.y - out.y * 40 - 10}
+                      width={label.length * 6.5 + 14}
+                      height={20}
+                      rx={4}
+                      fill="hsl(var(--background))"
+                    />
+                    <text
+                      x={mid.x - out.x * 40}
+                      y={mid.y - out.y * 40 + 4}
+                      textAnchor="middle"
+                      fontSize={12.5}
+                      fontWeight={600}
+                      fill={next.isCourt ? green : "hsl(var(--muted-foreground))"}
+                    >
+                      {label}
+                    </text>
+                  </g>
                 ) : null}
               </g>
             );
           })}
 
-          {/* Ways out, radiating away from the ring. */}
+          {/* Ways out. A short outward stub and a dot on the ring, rather than
+              the same word printed three times: one legend under the figure says
+              what they are, and repeating it at each step only added clutter. */}
           {placed.map((p) => {
             if (!p.s.exit) return null;
             const len = Math.hypot(p.x - L.cx, p.y - L.cy);
             const ux = (p.x - L.cx) / len;
             const uy = (p.y - L.cy) / len;
-            const from = { x: p.x + ux * (L.nodeW / 2 - 18), y: p.y + uy * (L.nodeH / 2 + 2) };
-            const to = { x: p.x + ux * L.exitOut, y: p.y + uy * L.exitOut };
+            const from = { x: p.x + ux * (L.nodeW / 2 - 24), y: p.y + uy * (L.nodeH / 2 + 1) };
+            const to = { x: p.x + ux * 104, y: p.y + uy * 104 };
             return (
               <g key={`exit-${p.s.key}`}>
                 <path
-                  d={`M${from.x} ${from.y} L${to.x - ux * (L.exitW / 2)} ${to.y - uy * (L.exitH / 2)}`}
+                  d={`M${from.x} ${from.y} L${to.x} ${to.y}`}
                   fill="none"
                   stroke={red}
-                  strokeWidth={2}
+                  strokeWidth={2.25}
                   strokeLinecap="round"
                   strokeDasharray="6 5"
                   markerEnd="url(#ov-red)"
                 />
-                <rect
-                  x={to.x - L.exitW / 2}
-                  y={to.y - L.exitH / 2}
-                  width={L.exitW}
-                  height={L.exitH}
-                  rx={L.exitH / 2}
-                  fill="hsl(var(--accent) / 0.08)"
-                  stroke={red}
-                  strokeWidth={1.4}
-                  strokeDasharray="5 4"
-                />
-                <text
-                  x={to.x}
-                  y={to.y + 5}
-                  textAnchor="middle"
-                  className="font-display"
-                  fontSize={14}
-                  fontWeight={700}
-                  fill={red}
-                >
-                  {labels.exitTitle}
-                </text>
               </g>
             );
           })}
 
-          {/* Centre: what the three exits lead to. */}
+          {/* Centre: the short title, so the middle of the ring carries the
+              figure's name instead of sitting empty. */}
           <text
             x={L.cx}
-            y={L.cy - 6}
+            y={L.cy - 4}
             textAnchor="middle"
             className="font-display"
-            fontSize={19}
+            fontSize={22}
             fontWeight={700}
-            fill={red}
+            fill={ink}
           >
-            {labels.exitTitle}
+            {labels.centreTitle}
           </text>
-          <text x={L.cx} y={L.cy + 18} textAnchor="middle" fontSize={13} fill="hsl(var(--muted-foreground))">
-            {labels.centreNote}
+          <text
+            x={L.cx}
+            y={L.cy + 22}
+            textAnchor="middle"
+            fontSize={13}
+            fill="hsl(var(--muted-foreground))"
+          >
+            {labels.centreSub}
           </text>
 
           {/* The start sits in the open gap, pushed outside the ring so it
@@ -288,11 +290,14 @@ export function ProcessDiagram({
                     </tspan>
                   ) : null}
                 </text>
+                {/* A step that can end in Tameli carries a red number. The marker
+                    has to be part of the node, not a dot beside it: drawn with the
+                    exits it sat under the node and was invisible. */}
                 <circle
                   cx={p.x - L.nodeW / 2 + 2}
                   cy={p.y}
                   r={11}
-                  fill={p.isCourt ? green : "hsl(var(--foreground) / 0.65)"}
+                  fill={p.s.exit ? red : p.isCourt ? green : "hsl(var(--foreground) / 0.65)"}
                 />
                 <text
                   x={p.x - L.nodeW / 2 + 2}
@@ -310,6 +315,11 @@ export function ProcessDiagram({
           })}
         </svg>
       </div>
+
+      <p className="mt-1 hidden items-center justify-center gap-2 text-xs text-muted-foreground md:flex">
+        <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-accent" />
+        {labels.exitLegend}
+      </p>
 
       {/* ---------- narrow: the same seven steps, stacked ---------- */}
       <ol className="space-y-2 md:hidden" aria-hidden="true">
