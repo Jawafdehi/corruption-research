@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-11T11:10:33+00:00",
-    "commit": "34a0d59",
+    "generatedAt": "2026-10-11T12:08:13+00:00",
+    "commit": "bf9f46d",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -56,6 +56,7 @@
     "convictionFullOnlyPct": 45
   },
   "verdictsModelDerivedExcluded": 69,
+  "verdictsNoDisposition": 46,
   "byCharge": [
     {
       "en": "Fake credential",

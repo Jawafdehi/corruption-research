@@ -169,6 +169,7 @@ def build() -> dict:
             "convictionFullOnlyPct": totals["conviction_rate_full_only_pct"],
         },
         "verdictsModelDerivedExcluded": totals["verdicts_model_derived_excluded"],
+        "verdictsNoDisposition": totals["verdicts_no_disposition"],
         "byCharge": _rows(f["outcome_by_charge"], charge_en="en", charge_ne="ne"),
         "justiceMinDecisions": 30,
         "justices": _rows(f["justices"], justice="name", decisions="decisions", conviction_pct="convPct"),

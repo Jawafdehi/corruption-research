@@ -716,6 +716,12 @@ def _transform(cases, hearings, entities, assumptions):
         # by the court. EXCLUDED from every rate above; surfaced so the exclusion
         # is visible and quantified instead of being a silent filter.
         ["verdicts_model_derived_excluded", int(hc_derived.case_number.nunique())],
+        # Cases the register marks फैसला but for which it publishes no disposition at
+        # all -- not even one a model could read. They carry no hearing row, so they
+        # are invisible to every rate here and, unlike the model-derived ones above,
+        # there is nothing to exclude: the outcome simply is not recorded anywhere.
+        ["verdicts_no_disposition", int(
+            len(set(corpus[corpus.is_decided].case_number) - set(hc.case_number) - set(hc_derived.case_number)))],
         ["corpus_defendant_rows", int(drow["rows"])],
         ["corpus_distinct_defendants", int(drow["distinct"])],
         ["corpus_defendants_resolved", int(drow["resolved"])],

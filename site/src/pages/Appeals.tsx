@@ -259,13 +259,6 @@ export default function Appeals() {
             { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: Math.round(undecidedShare) },
           )}
         </Caveat>
-
-        <Body>
-          {t(
-            "research.corruption.appeals.mapping",
-            "Trial and appeal cases are stored without any link between them, so the pairing had to be built — from the Commission's own register where it prints both case numbers, from Supreme Court judgments naming the trial case, and otherwise by matching defendant names. It is a curated first version, audited at roughly 98% precision on a sample, and the direction of every reversal was checked three separate ways before any figure here was published.",
-          )}
-        </Body>
       </Block>
 
       <Block>

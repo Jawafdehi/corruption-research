@@ -180,7 +180,7 @@ export default function Prosecution() {
         <Body>
           {t(
             "research.corruption.prosecution.whyBody",
-            "In {{firstYear}} fake-credential cases were {{firstShare}} of everything the court decided. By {{lastYear}} they were {{lastShare}}. The headline conviction rate fell over the same years, and these are not two findings. They are one. A reader given only the falling line would reasonably conclude the court had gone soft; the Court outcomes section pulls the two apart.",
+            "The headline conviction rate fell over the same years that this share collapsed, and these are not two findings. They are one. A reader given only the falling line would reasonably conclude the court had gone soft; the Court outcomes section pulls the two apart.",
             {
               firstYear: fyLabel(firstRate.year),
               firstShare: pct(firstRate.fakeSharePct),
