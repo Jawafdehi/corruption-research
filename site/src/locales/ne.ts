@@ -87,6 +87,19 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.dAppeal": "पुनरावेदन पर्‍यो?",
   "research.corruption.flow.chargeSheet": "आरोपपत्र दायर",
   "research.corruption.flow.stands": "फैसला यथावत्",
+  "research.corruption.flow.s7Title": "सर्वोच्च अदालत पुनरावेदन",
+  "research.corruption.hl.cdTitle": "आयोगमा रहेका सबै उजुरी, आ.व. २०८१/८२",
+  "research.corruption.hl.cdTotal": "{{carried}} अघिल्लो वर्षबाट सरेका + {{fresh}} नयाँ दर्ता",
+  "research.corruption.hl.cdTameli": "तामेलीमा राखिएका",
+  "research.corruption.hl.cdOther": "अन्य कारबाही",
+  "research.corruption.hl.cdInv": "विस्तृत अनुसन्धानमा पठाइएका",
+  "research.corruption.hl.cdPending": "फर्छ्यौट हुन बाँकी, अर्को वर्षमा सरेका",
+  "research.corruption.hl.cdInvTitle": "र सोही वर्ष सम्पन्न भएका {{n}} विस्तृत अनुसन्धानमध्ये",
+  "research.corruption.hl.cdFiled": "अदालतमा मुद्दा दायर",
+  "research.corruption.hl.cdInvTameli": "तामेलीमा राखिएका",
+  "research.corruption.hl.cdHeld": "मुलतबीमा राखिएका",
+  "research.corruption.hl.cdNote":
+    "दुवै खण्ड एउटै आर्थिक वर्ष र एउटै प्रतिवेदनका हुन्, र प्रत्येकलाई आ-आफ्नै जम्माले भाग गरिएको छ। यी एउटै समूहलाई पछ्याएका होइनन्: यस वर्ष सम्पन्न भएका अनुसन्धान प्रायः अघिल्ला वर्षमा सुरु भएका हुन्, त्यसैले यी दुईलाई जोडेर रूपान्तरण दर निकाल्न मिल्दैन।",
   "research.corruption.flow.s1Title": "उजुरी दर्ता",
   "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
 
@@ -110,7 +123,6 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.s6":
     "मुद्दा चलाउने निर्णय भएमा आरोपपत्र विशेष अदालतमा दायर गरिन्छ र अदालतले प्रमाणका आधारमा फैसला गर्छ।",
 
-  "research.corruption.flow.s7Title": "पुनरावेदन",
   "research.corruption.flow.s7":
     "फैसला चित्त नबुझेमा कानुनबमोजिम सर्वोच्च अदालतमा पुनरावेदन गर्न सकिन्छ।",
 

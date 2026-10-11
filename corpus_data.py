@@ -253,6 +253,23 @@ def load_dataset(refresh=False):
 def load_assumptions():
     return pd.read_csv(DATA / "assumptions.csv")
 
+def load_complaint_disposal():
+    """What happened to EVERY complaint on the Commission's books in a year.
+
+    The companion to `load_disposals`, one level up: that one covers only
+    complaints that finished a detailed investigation, which is the Commission's
+    second filter. This covers the whole workload, so the first filter is visible
+    too -- and the first filter is where most complaints actually end.
+
+    `total_complaints` is the year's full workload (carried-in + newly registered),
+    which is the denominator the report itself uses for its disposal table. Two
+    columns in here count different events and must never be differenced:
+    `to_investigation` is complaints SENT to detailed investigation during the
+    year; `investigations_completed` is investigations FINISHED during the year,
+    which mostly began earlier.
+    """
+    return pd.read_csv(DATA / "ciaa_complaint_disposal.csv")
+
 def load_disposals():
     """What the Commission decided to do with complaints that COMPLETED a detailed investigation.
 

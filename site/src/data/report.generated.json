@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-10T13:16:59+00:00",
-    "commit": "8e5a5fc",
+    "generatedAt": "2026-10-11T05:33:47+00:00",
+    "commit": "bdb00f0",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -959,6 +959,26 @@
       "figure": "तालिका २.१०",
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf",
       "note": "34th annual report. Tameli 825 = 694 (alone) + 124 (with सुझाव) + 7 (with लेखी पठाउने), matching the table total."
+    }
+  ],
+  "complaintDisposal": [
+    {
+      "fy": "2081/82",
+      "total_complaints": 37026,
+      "carried_in": 8472,
+      "registered_new": 28554,
+      "to_investigation": 927,
+      "tameli": 17130,
+      "tameli_with_advice": 586,
+      "other_action": 11060,
+      "disposed": 29703,
+      "pending_out": 7323,
+      "investigations_completed": 947,
+      "inv_filed": 137,
+      "inv_tameli": 794,
+      "inv_held": 10,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf",
+      "note": "35th annual report. Screening/preliminary figures from तालिका २.१४ (जम्मा row): 927+17130+586+11060 = 29703 disposed, leaving 7323 carried forward. The detailed-investigation outcome is from बुँदा १३ of the summary: 947 investigations COMPLETED in the year, of which 137 filed, 794 tameli, 10 held. Note that `to_investigation` (927, sent) and `investigations_completed` (947, finished) are different events in the same year and must not be differenced."
     }
   ],
   "duration": {

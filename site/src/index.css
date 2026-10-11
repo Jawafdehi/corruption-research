@@ -36,6 +36,11 @@
     --input: 215 20% 88%;
     --ring: 217 62% 14%;
 
+    /* Card face. Defined at the root as well as in `.theme-editorial`, so a
+       component carrying this token still renders when it is used outside
+       the editorial section. */
+    --surface: 60 10.3% 94.3%;
+
     --radius: 0.5rem;
 
     --alert: 25 95% 53%;

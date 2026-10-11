@@ -199,6 +199,7 @@ def build() -> dict:
         },
         "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals())},
         "disposals": _rows(cd.load_disposals()),
+        "complaintDisposal": _rows(cd.load_complaint_disposal()),
         "duration": {
             "bands": _rows(f["duration"]),
             **{k: _num(v) for k, v in f["duration_summary"].iloc[0].items()},

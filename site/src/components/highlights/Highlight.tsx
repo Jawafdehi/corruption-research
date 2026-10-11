@@ -106,10 +106,12 @@ export function Highlight({
     <Reveal className="h-full">
       <article
         className={cn(
-          "flex h-full flex-col",
+          // `relative` anchors the stretched link below, so the whole card is one
+          // hit area without nesting a second interactive element inside a link.
+          "group relative flex h-full flex-col transition-colors",
           lead ? "gap-6" : "gap-4",
           size === "half" &&
-            "rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6",
+            "rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6 hover:border-accent/50",
         )}
       >
         <div className="flex items-center gap-3">
@@ -174,7 +176,7 @@ export function Highlight({
                   href={meta.sourceHref}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+                  className="relative z-10 underline decoration-dotted underline-offset-2 hover:text-foreground"
                 >
                   {meta.source}
                 </a>
@@ -182,9 +184,12 @@ export function Highlight({
                 meta.source
               )}
             </span>
+            {/* Stretched: covers the card so a click anywhere follows it. The
+                source link above sits on its own stacking context so it stays
+                separately clickable. */}
             <Link
               to={meta.to}
-              className="font-medium text-accent underline underline-offset-4 hover:opacity-80"
+              className="font-medium text-accent underline underline-offset-4 after:absolute after:inset-0 after:content-[''] hover:opacity-80"
             >
               {meta.toLabel}
             </Link>
