@@ -29,10 +29,9 @@ export type DiagramNode = {
 };
 
 export type DiagramLabels = {
-  start: string;
   centreTitle: string;
-  centreSub: string;
-  exitLegend: string;
+  yes: string;
+  noTameli: string;
   chargeSheet: string;
   ifGrounds: string;
   ifAppealed: string;
@@ -135,7 +134,9 @@ export function ProcessDiagram({
               x: (mid.x - L.cx) / Math.hypot(mid.x - L.cx, mid.y - L.cy),
               y: (mid.y - L.cy) / Math.hypot(mid.x - L.cx, mid.y - L.cy),
             };
-            const label = i === 2 ? labels.ifGrounds : i === 4 ? labels.chargeSheet : i === 5 ? labels.ifAppealed : null;
+            // A step that can end in Tameli is a decision: its onward arc is the
+            // "yes". The others keep the condition that actually governs them.
+            const label = p.s.exit ? labels.yes : i === 5 ? labels.ifAppealed : null;
             return (
               <g key={`arc-${p.s.key}`}>
                 <path
@@ -196,6 +197,26 @@ export function ProcessDiagram({
                   strokeDasharray="6 5"
                   markerEnd="url(#ov-red)"
                 />
+                {/* On a chip and clear of the arrow tip: a near-horizontal exit
+                    puts its own label straight across the stroke otherwise. */}
+                <rect
+                  x={p.x + ux * 146 - (labels.noTameli.length * 6.6 + 14) / 2}
+                  y={p.y + uy * 146 - 10}
+                  width={labels.noTameli.length * 6.6 + 14}
+                  height={20}
+                  rx={4}
+                  fill="hsl(var(--surface))"
+                />
+                <text
+                  x={p.x + ux * 146}
+                  y={p.y + uy * 146 + 4}
+                  textAnchor="middle"
+                  fontSize={13}
+                  fontWeight={600}
+                  fill={red}
+                >
+                  {labels.noTameli}
+                </text>
               </g>
             );
           })}
@@ -204,7 +225,7 @@ export function ProcessDiagram({
               figure's name instead of sitting empty. */}
           <text
             x={L.cx}
-            y={L.cy - 4}
+            y={L.cy + 6}
             textAnchor="middle"
             className="font-display"
             fontSize={22}
@@ -213,50 +234,6 @@ export function ProcessDiagram({
           >
             {labels.centreTitle}
           </text>
-          <text
-            x={L.cx}
-            y={L.cy + 22}
-            textAnchor="middle"
-            fontSize={13}
-            fill="hsl(var(--muted-foreground))"
-          >
-            {labels.centreSub}
-          </text>
-
-          {/* The start sits in the open gap, pushed outside the ring so it
-              cannot collide with step one, with a short lead-in arrow. */}
-          {(() => {
-            const a = rad(L.start - 44);
-            const g = { x: L.cx + (L.rx + 64) * Math.cos(a), y: L.cy + (L.ry + 64) * Math.sin(a) };
-            const first = onEllipse(L.start);
-            const dx = first.x - g.x;
-            const dy = first.y - g.y;
-            const len = Math.hypot(dx, dy);
-            return (
-              <g>
-                <path
-                  d={`M${g.x + (dx / len) * 86} ${g.y + (dy / len) * 22} L${first.x - (dx / len) * (L.nodeW / 2 + 10)} ${first.y - (dy / len) * 14}`}
-                  fill="none"
-                  stroke="hsl(var(--foreground) / 0.6)"
-                  strokeWidth={2.25}
-                  strokeLinecap="round"
-                  markerEnd="url(#ov-ink)"
-                />
-                <rect x={g.x - 78} y={g.y - 17} width={156} height={34} rx={17} fill="hsl(var(--foreground) / 0.82)" />
-                <text
-                  x={g.x}
-                  y={g.y + 5}
-                  textAnchor="middle"
-                  className="font-display"
-                  fontSize={13.5}
-                  fontWeight={700}
-                  fill="hsl(var(--background))"
-                >
-                  {labels.start}
-                </text>
-              </g>
-            );
-          })()}
 
           {/* Steps */}
           {placed.map((p) => {
@@ -315,11 +292,6 @@ export function ProcessDiagram({
           })}
         </svg>
       </div>
-
-      <p className="mt-1 hidden items-center justify-center gap-2 text-xs text-muted-foreground md:flex">
-        <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-accent" />
-        {labels.exitLegend}
-      </p>
 
       {/* ---------- narrow: the same seven steps, stacked ---------- */}
       <ol className="space-y-2 md:hidden" aria-hidden="true">
