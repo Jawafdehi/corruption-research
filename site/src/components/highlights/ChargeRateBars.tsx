@@ -43,18 +43,24 @@ export function ChargeRateBars({
       <ChartHeading>{rateLabel}</ChartHeading>
 
       <div className="relative">
-        <ul className="relative z-10 space-y-3">
+        <ul className="relative z-10 space-y-2">
           {rows.map((r) => (
             <li key={r.key}>
               <div className="flex items-baseline justify-between gap-3">
                 <span className="truncate text-sm text-foreground/85" title={r.term}>
-                  {r.label}
+                  {r.label}{" "}
+                  {/* Counts sit beside the label instead of on their own line below
+                      the bar: as a third line per row they doubled the height of the
+                      card for information a reader only wants on second glance. */}
+                  <span className="font-mono text-[0.7rem] tabular-nums text-muted-foreground">
+                    {n(r.convicted)}/{n(r.decided)}
+                  </span>
                 </span>
                 <span className="shrink-0 font-mono text-sm font-semibold tabular-nums text-foreground">
                   {pct(r.fullPct)}
                 </span>
               </div>
-              <div className="mt-1.5 h-2.5 w-full rounded-sm bg-foreground/[0.07]">
+              <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
                 <div
                   className="h-full rounded-sm"
                   style={{
@@ -65,9 +71,6 @@ export function ChargeRateBars({
                   title={`${r.label}: ${n(r.convicted)} full convictions of ${n(r.decided)} decided cases`}
                 />
               </div>
-              <p className="mt-1 font-mono text-[0.7rem] tabular-nums text-muted-foreground">
-                {n(r.convicted)} / {n(r.decided)}
-              </p>
             </li>
           ))}
         </ul>
