@@ -283,7 +283,7 @@ export default function Highlights() {
           stat={pct1(tameliPct(lastDisposal))}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were Tameli, compared with {{peakPct}} in {{peakFy}}. Tameli means the complaint is kept on record with no further action unless new evidence emerges.",
+            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were Tameli, compared with {{peakPct}} in {{peakFy}}.",
             {
               lastFy: lastDisposal.fy,
               peakFy: peak.fy,
@@ -305,6 +305,10 @@ export default function Highlights() {
               courtLabel={t("research.corruption.hl.f1Court", "To court")}
               holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
               shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
+              omittedNote={t(
+                "research.corruption.hl.f1Omitted",
+                "2073/74 is not shown: its report states the decisions but not how many investigations they were taken on.",
+              )}
             />
           }
           meta={{

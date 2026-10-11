@@ -19,6 +19,7 @@ export function TameliByYear({
   courtLabel,
   holdLabel,
   shareLabel,
+  omittedNote,
 }: {
   rows: readonly Disposal[];
   yearLabel: string;
@@ -26,9 +27,17 @@ export function TameliByYear({
   courtLabel: string;
   holdLabel: string;
   shareLabel: string;
+  omittedNote: string;
 }) {
   const { n, pct1 } = useFormat();
-  const shares = rows.map(tameliPct);
+  // Only years the report states an investigation total for. FY2073/74 prints its
+  // actions but never how many complaints they were taken on -- checked in the
+  // chapter prose, the annex it points to, and the ministry-wise annex -- so the row
+  // would carry a blank in the column the table exists to show. Filtered rather than
+  // hard-coded, so the row returns by itself if a later source fills the gap.
+  const shown = rows.filter((r) => r.investigated !== null);
+  const dropped = rows.length - shown.length;
+  const shares = shown.map(tameliPct);
   const min = Math.min(...shares);
   const max = Math.max(...shares);
 
@@ -36,7 +45,7 @@ export function TameliByYear({
     <div className="chart-scroll">
       <table className="w-full min-w-[384px] border-collapse text-sm">
         <caption className="sr-only">
-          {`${holdLabel} ${shareLabel}, ${rows[0]?.fy} – ${rows[rows.length - 1]?.fy}`}
+          {`${holdLabel} ${shareLabel}, ${shown[0]?.fy} – ${shown[shown.length - 1]?.fy}`}
         </caption>
         <thead>
           <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
@@ -58,7 +67,7 @@ export function TameliByYear({
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => {
+          {shown.map((r) => {
             const share = tameliPct(r);
             const extreme = share === min || share === max;
             return (
@@ -75,10 +84,8 @@ export function TameliByYear({
                 >
                   {r.fy}
                 </th>
-                {/* An em dash, not a zero: FY2073/74's report does not state how
-                    many investigations it closed, and a 0 would read as "none". */}
-                <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-muted-foreground">
-                  {r.investigated === null ? "—" : n(r.investigated)}
+                <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
+                  {n(r.investigated ?? 0)}
                 </td>
                 <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
                   {n(r.filed)}
@@ -99,6 +106,11 @@ export function TameliByYear({
           })}
         </tbody>
       </table>
+      {/* A dropped row is disclosed rather than silently absent: a table that starts
+          at 2074/75 with no note reads as though the series starts there. */}
+      {dropped > 0 ? (
+        <p className="mt-2 text-[11px] leading-4 text-muted-foreground">{omittedNote}</p>
+      ) : null}
     </div>
   );
 }
