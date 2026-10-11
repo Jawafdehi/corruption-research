@@ -45,20 +45,23 @@ export type DiagramLabels = {
 };
 
 const L = {
-  w: 1140,
-  h: 900,
-  cx: 570,
-  cy: 424,
-  rx: 342,
-  ry: 286,
-  pillW: 152,
-  pillH: 50,
-  dRx: 54,
-  dRy: 35,
-  sweep: 300,
+  w: 1280,
+  h: 980,
+  cx: 640,
+  cy: 466,
+  /** Sized for breathing room, not for compactness. At the previous radius two
+      adjacent pills left a 31px gap and the ring read as crowded; here the
+      tightest neighbours are about 64px apart. */
+  rx: 388,
+  ry: 316,
+  pillW: 146,
+  pillH: 48,
+  dRx: 53,
+  dRy: 34,
+  sweep: 310,
   start: -90,
   /** Distance from a decision out to its "no" terminal. */
-  exitOut: 118,
+  exitOut: 124,
 };
 
 const rad = (d: number) => (d * Math.PI) / 180;
@@ -84,10 +87,15 @@ export function ProcessDiagram({
   stages: readonly DiagramNode[];
   labels: DiagramLabels;
 }) {
+  // A single accent. Crimson is reserved for leaving the process; every other
+  // element is a neutral, so the three ways out are the only thing that pulls the
+  // eye. Before this, the decision diamond was crimson too and competed with the
+  // terminals it pointed at.
   const green = "hsl(var(--court))";
   const red = "hsl(var(--accent))";
   const ink = "hsl(var(--foreground))";
-  const grey = "hsl(var(--foreground) / 0.6)";
+  const grey = "hsl(var(--foreground) / 0.55)";
+  const stone = "hsl(var(--foreground) / 0.3)";
 
   type Ring =
     | { kind: "step"; key: string; label: string; n: number; court?: boolean }
@@ -134,7 +142,7 @@ export function ProcessDiagram({
             ))}
           </defs>
 
-          <ellipse cx={L.cx} cy={L.cy} rx={L.rx} ry={L.ry} fill="none" stroke="hsl(var(--border))" strokeWidth={1} strokeDasharray="2 7" />
+          <ellipse cx={L.cx} cy={L.cy} rx={L.rx} ry={L.ry} fill="none" stroke="hsl(var(--foreground) / 0.12)" strokeWidth={1} strokeDasharray="2 8" />
 
           {/* Arcs. One leaving a decision is that decision's "yes". */}
           {placed.slice(0, -1).map((p, i) => {
@@ -169,7 +177,7 @@ export function ProcessDiagram({
                       height={20}
                       rx={10}
                       fill="hsl(var(--surface))"
-                      stroke={c}
+                      stroke={stone}
                       strokeWidth={1}
                     />
                     <text x={mid.x - ux * 30} y={mid.y - uy * 30 + 4} textAnchor="middle" fontSize={12} fontWeight={700} fill={c}>
@@ -189,10 +197,15 @@ export function ProcessDiagram({
             const uy = (p.y - L.cy) / len;
             const isStands = p.r.exit.tone === "stands";
             const c = isStands ? grey : red;
-            const from = { x: p.x + ux * (L.dRx * 0.6), y: p.y + uy * (L.dRy * 0.7) };
-            const to = { x: p.x + ux * L.exitOut, y: p.y + uy * L.exitOut };
-            const lab = { x: p.x + ux * (L.exitOut + 44), y: p.y + uy * (L.exitOut + 44) };
+            // The arrow has to stop at the terminal's EDGE, and the terminal's
+            // width depends on its label. A fixed arrow length ran the long one,
+            // "Verdict stands", straight through its own pill.
             const w = p.r.exit.label.length * 7.4 + 22;
+            const labDist = L.exitOut + 48;
+            const tipDist = labDist - w / 2 - 6;
+            const from = { x: p.x + ux * (L.dRx * 0.6), y: p.y + uy * (L.dRy * 0.7) };
+            const to = { x: p.x + ux * tipDist, y: p.y + uy * tipDist };
+            const lab = { x: p.x + ux * labDist, y: p.y + uy * labDist };
             return (
               <g key={`no-${p.r.key}`}>
                 <path
@@ -239,21 +252,21 @@ export function ProcessDiagram({
           {/* Nodes */}
           {placed.map((p) => {
             if (p.r.kind === "decision") {
-              const c = p.r.n ? red : ink;
+              const c = "hsl(var(--foreground) / 0.72)";
               return (
                 <g key={p.r.key}>
                   <polygon
                     points={`${p.x},${p.y - L.dRy} ${p.x + L.dRx},${p.y} ${p.x},${p.y + L.dRy} ${p.x - L.dRx},${p.y}`}
-                    fill={p.r.n ? "hsl(var(--accent) / 0.08)" : "hsl(var(--surface))"}
+                    fill="hsl(var(--surface))"
                     stroke={c}
-                    strokeWidth={1.75}
+                    strokeWidth={1.4}
                   />
                   <text x={p.x} y={p.y + 4} textAnchor="middle" className="font-display" fontSize={11.5} fontWeight={700} fill={c}>
                     {p.r.label}
                   </text>
                   {p.r.n ? (
                     <g>
-                      <circle cx={p.x - L.dRx * 0.62} cy={p.y - L.dRy * 0.62} r={10.5} fill={red} />
+                      <circle cx={p.x - L.dRx * 0.62} cy={p.y - L.dRy * 0.62} r={10.5} fill="hsl(var(--foreground) / 0.65)" />
                       <text x={p.x - L.dRx * 0.62} y={p.y - L.dRy * 0.62 + 4} textAnchor="middle" className="font-mono" fontSize={11.5} fontWeight={700} fill="hsl(var(--background))">
                         {p.r.n}
                       </text>
@@ -263,7 +276,7 @@ export function ProcessDiagram({
               );
             }
             const [a, b] = twoLines(p.r.label);
-            const c = p.r.court ? green : "hsl(var(--border))";
+            const c = p.r.court ? green : stone;
             return (
               <g key={p.r.key}>
                 <rect
@@ -274,7 +287,7 @@ export function ProcessDiagram({
                   rx={L.pillH / 2}
                   fill="hsl(var(--surface))"
                   stroke={c}
-                  strokeWidth={p.r.court ? 1.75 : 1.25}
+                  strokeWidth={p.r.court ? 1.6 : 1.1}
                 />
                 <text
                   x={p.x}
