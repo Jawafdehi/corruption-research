@@ -274,16 +274,16 @@ export default function Highlights() {
           stat={pct1(((cd.tameli + cd.tameli_with_advice) / cd.total_complaints) * 100)}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of the {{total}} complaints on the Commission's books in {{fy}} were set aside as Tameli, without a case being filed",
+            "of the {{total}} complaints the CIAA handled in {{fy}} were set aside without any charge being filed",
             { total: n(cd.total_complaints), fy: cd.fy },
           )}
           headline={t(
             "research.corruption.hl.f1",
-            "Most corruption complaints end before a judge ever sees them",
+            "Most complaints are dropped long before a court sees them",
           )}
           explain={t(
             "research.corruption.hl.f1Body",
-            "Of the {{done}} investigations finished that year, {{tam}} still ended in Tameli and only {{filed}} reached a courtroom. The Commission never publishes why.",
+            "Setting a complaint aside is called Tameli. It is parked rather than closed for good: fresh evidence can revive it, but nothing happens unless that evidence turns up. Even among the {{done}} complaints the CIAA investigated in full that year, {{tam}} ended this way and {{filed}} went to court. The CIAA publishes these totals but never the reasons.",
             {
               done: n(cd.investigations_completed),
               tam: n(cd.inv_tameli),
@@ -322,16 +322,16 @@ export default function Highlights() {
           stat={pct1(rates.convictionPct)}
           statCaption={t(
             "research.corruption.hl.f2Stat",
-            "of {{d}} decided cases ended in a conviction, either full or partial. Counting only full convictions, {{full}}.",
+            "of {{d}} decided cases ended in conviction, full or partial. Full convictions alone: {{full}}.",
             { d: n(decided), full: pct1(rates.convictionFullOnlyPct) },
           )}
           headline={t(
             "research.corruption.hl.f2",
-            "How many corruption cases end in conviction?",
+            "A conviction counts the case, not the people in it",
           )}
           explain={t(
             "research.corruption.hl.f2Body",
-            "One verdict covers the whole case, so a partial conviction could mean one junior official convicted and everyone senior cleared. These count cases, never people.",
+            "The court records one verdict for the whole case. A partial conviction can mean a single junior official was convicted while everyone senior walked, and the record does not say which. So this tells you how many cases ended in conviction, not how many people were held to account.",
             { ongoing: n(outcome.ongoing) },
           )}
           chart={
@@ -354,16 +354,16 @@ export default function Highlights() {
           stat={pct(topCharge.fullPct)}
           statCaption={t(
             "research.corruption.hl.f3Stat",
-            "of fake education certificate cases end in full conviction. For cases about handing someone an unlawful benefit, {{bottomPct}}.",
+            "of fake education certificate cases end in full conviction. For cases about granting someone an unlawful benefit: {{bottomPct}}.",
             { bottomPct: pct(bottomCharge.fullPct) },
           )}
           headline={t(
             "research.corruption.hl.f3",
-            "What you are charged with decides the verdict",
+            "The charge the CIAA picks decides the outcome",
           )}
           explain={t(
             "research.corruption.hl.f3Body",
-            "Fake certificate cases supply {{share}} of every full conviction here. Harder charges are genuinely harder to prove, so a low rate is not by itself evidence of a poor investigation.",
+            "A forged certificate is settled by one document. A rigged contract or missing money is not. Those easy cases supply {{share}} of all full convictions here, which flatters the headline rate. A low rate on a hard charge is not proof of a weak investigation.",
             { share: pct(fakeShareOfFull) },
           )}
           chart={
@@ -396,16 +396,16 @@ export default function Highlights() {
           })}
           statCaption={t(
             "research.corruption.hl.f3cCaption",
-            "median from filing to Special Court verdict, over {{m}} decided cases. Half took less, half more.",
+            "median time from filing to verdict at the Special Court, across {{m}} decided cases",
             { m: n(duration.measured) },
           )}
           headline={t(
             "research.corruption.hl.f3c",
-            "How long does the Special Court take to decide a case?",
+            "Most cases are decided within two years, but the slowest are still running",
           )}
           explain={t(
             "research.corruption.hl.f3cBody",
-            "{{within}} are decided within two years. But this counts only cases that finished; the {{pending}} still waiting are the slow ones, so the true figure is longer.",
+            "{{within}} reached a verdict within two years of being filed. That figure covers only cases that have ended. The {{pending}} still waiting are the slow ones, so the real wait is longer than this shows.",
             {
               within: pct1(withinTwoPct),
               over: n(duration.bands[3].cases),
@@ -455,11 +455,11 @@ export default function Highlights() {
           )}
           headline={t(
             "research.corruption.hl.f4",
-            "What happens after the Special Court's verdict?",
+            "A conviction is far easier to overturn than an acquittal",
           )}
           explain={t(
             "research.corruption.hl.f4Body",
-            "Convicted people win {{d}} of {{dd}} decided appeals. The CIAA wins {{c}} of {{cd}}. A striped band marks the {{pct}} with no recorded result at all.",
+            "Of {{dd}} decided appeals brought by convicted people, {{d}} succeeded. Of {{cd}} brought by the CIAA, {{c}} did. For {{pct}} of the appeals we traced, no result is recorded anywhere — a record-keeping failure, not a comment on the court.",
             {
               dec: n(appeals.decided),
               up: n(upheld),
@@ -495,16 +495,16 @@ export default function Highlights() {
           stat={t("research.corruption.hl.f5Stat", "Not published")}
           statCaption={t(
             "research.corruption.hl.f5Caption",
-            "The CIAA said Rs {{bn}} billion was stolen or lost in 2081/82. No institution publishes how much came back.",
+            "The CIAA said Rs {{bn}} billion was taken in 2081/82. No institution reports how much was recovered.",
             { bn: ciaa.damagesClaimedYearBn },
           )}
           headline={t(
             "research.corruption.hl.f5",
-            "Nobody records whether the money ever comes back",
+            "No one tracks whether the money is ever returned",
           )}
           explain={t(
             "research.corruption.hl.f5Body",
-            "बिगो is the amount the CIAA says was taken. If the court agrees it orders repayment, and from there nobody records anything: not the CIAA, not the courts, not the treasury. Read the blank as missing, not as zero.",
+            "When the CIAA files a case it names the sum it says was taken, and the court can order it repaid. After that the trail stops: neither the CIAA, nor the courts, nor the treasury publish what was actually collected. The blank means unknown, not zero.",
           )}
           meta={{
             source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
