@@ -19,7 +19,6 @@ export function TameliByYear({
   courtLabel,
   holdLabel,
   shareLabel,
-  omittedNote,
 }: {
   rows: readonly Disposal[];
   yearLabel: string;
@@ -27,7 +26,6 @@ export function TameliByYear({
   courtLabel: string;
   holdLabel: string;
   shareLabel: string;
-  omittedNote: string;
 }) {
   const { n, pct1 } = useFormat();
   // Only years the report states an investigation total for. FY2073/74 prints its
@@ -36,7 +34,6 @@ export function TameliByYear({
   // would carry a blank in the column the table exists to show. Filtered rather than
   // hard-coded, so the row returns by itself if a later source fills the gap.
   const shown = rows.filter((r) => r.investigated !== null);
-  const dropped = rows.length - shown.length;
   const shares = shown.map(tameliPct);
   const min = Math.min(...shares);
   const max = Math.max(...shares);
@@ -106,11 +103,6 @@ export function TameliByYear({
           })}
         </tbody>
       </table>
-      {/* A dropped row is disclosed rather than silently absent: a table that starts
-          at 2074/75 with no note reads as though the series starts there. */}
-      {dropped > 0 ? (
-        <p className="mt-2 text-[11px] leading-4 text-muted-foreground">{omittedNote}</p>
-      ) : null}
     </div>
   );
 }
