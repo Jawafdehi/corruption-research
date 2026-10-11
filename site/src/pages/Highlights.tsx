@@ -241,10 +241,7 @@ export default function Highlights() {
                 ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
                 ifAppealed: t("research.corruption.flow.ifAppealed", "if either side appeals"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                exitNote: t(
-                  "research.corruption.flow.exitNote",
-                  "complaint closed with no further action",
-                ),
+                exitFrom: t("research.corruption.flow.exitFrom", "reached from three stages"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
                   "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six and seven are separate courts.",
@@ -255,10 +252,35 @@ export default function Highlights() {
                 ),
               }}
             />
+            {/*
+              The meaning of तामेली, stated where there is room for both halves of
+              it. अनुसूची-११ of the कार्यविधि puts the complaint aside "हाललाई" —
+              for the time being — expressly on the footing that it is taken up
+              again if further evidence appears. Calling it simply "closed" drops
+              the second half and overstates how final it is.
+            */}
+            <div className="mt-5 max-w-2xl rounded-md border-l-2 border-accent bg-accent/[0.04] px-4 py-3">
+              <p className="text-sm leading-6 text-foreground/85">
+                <strong className="font-display font-bold text-accent">
+                  {t("research.corruption.flow.exit", "Tameli")}
+                </strong>{" "}
+                {t(
+                  "research.corruption.flow.exitMeaning",
+                  "means the complaint is set aside for the time being, not closed for good. The file and its record are kept, and the Commission's own notice states that if further evidence comes to light the matter is dealt with under the law at that time.",
+                )}
+              </p>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                {t(
+                  "research.corruption.flow.exitCite",
+                  "CIAA Act 2048, section 19(13); form at Schedule 11 of the 2078 procedure.",
+                )}
+              </p>
+            </div>
+
             <FlowNote>
               {t(
                 "research.corruption.flow.source",
-                "Stages follow the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५); appeal under विशेष अदालत ऐन, २०५९ दफा १७. A complaint can be closed as Tameli at three separate points, marked above. No stage follows automatically from the one before it, and an appeal is a right either side may exercise, not a step every case takes.",
+                "Stages follow the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५); appeal under विशेष अदालत ऐन, २०५९ दफा १७. A complaint can be set aside as Tameli at three separate points, marked above. No stage follows automatically from the one before it, and an appeal is a right either side may exercise, not a step every case takes.",
               )}
             </FlowNote>
           </div>
