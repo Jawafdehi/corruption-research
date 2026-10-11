@@ -218,13 +218,15 @@ export default function Highlights() {
             <ProcessDiagram
               stages={flowStages}
               labels={{
-                chargeSheet: t("research.corruption.flow.chargeSheet", "charge sheet filed"),
-                ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
-                ifAppealed: t("research.corruption.flow.ifAppealed", "if appealed"),
-                exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                yes: t("research.corruption.flow.yes", "yes"),
-                noTameli: t("research.corruption.flow.noTameli", "no · Tameli"),
                 centreTitle: t("research.corruption.flow.centreTitle", "A complaint's route"),
+                yes: t("research.corruption.flow.yes", "yes"),
+                no: t("research.corruption.flow.no", "no"),
+                dScreen: t("research.corruption.flow.dScreen", "Taken forward?"),
+                dGrounds: t("research.corruption.flow.dGrounds", "Grounds found?"),
+                dProsecute: t("research.corruption.flow.dProsecute", "Prosecute?"),
+                dAppeal: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
+                exitTitle: t("research.corruption.flow.exit", "Tameli"),
+                standsTitle: t("research.corruption.flow.stands", "Verdict stands"),
                 exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
@@ -243,7 +245,7 @@ export default function Highlights() {
               again if further evidence appears. Calling it simply "closed" drops
               the second half and overstates how final it is.
             */}
-            <div className="mt-5 max-w-2xl rounded-md border-l-2 border-accent bg-accent/[0.04] px-4 py-3">
+            <div className="mx-auto mt-5 max-w-2xl rounded-md border border-accent/40 bg-accent/[0.04] px-5 py-4 text-center">
               <p className="text-sm leading-6 text-foreground/85">
                 <strong className="font-display font-bold text-accent">
                   {t("research.corruption.flow.exit", "Tameli")}
