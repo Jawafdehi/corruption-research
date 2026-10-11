@@ -194,13 +194,13 @@ export default function Method() {
         <Body>
           {t(
             "research.corruption.method.disposalsBody",
-            "The Investigation section's closure series is transcribed from the decision table printed in each annual report, one row per fiscal year, and shipped as its own file in the data pack. Each row carries the figure number and the report it came from, so any share can be checked against two numbers printed side by side in one table.",
+            "The Investigation section's closure series is parsed from the decision table in each annual report by a script in the data pack, rather than re-typed, so it can be re-derived and audited. One row per fiscal year, each carrying the table number and the report it came from, so any share can be checked against two numbers printed side by side in one table. On the chart itself, each fiscal year links to its own report.",
           )}
         </Body>
         <Body>
           {t(
             "research.corruption.method.disposalsLimits",
-            "Years are included only where the report prints both the तामेली count and that table's own total. Two reports in the window show the decision bubbles without a reconcilable disposal total; they are left out rather than derived, because filling them in by arithmetic would hide a gap in the reporting. The 'prosecute' column counts decisions to file, which is a different unit from a case appearing in the court register — the two are never differenced.",
+            "The series runs from FY2073/74 to FY2081/82. Every row is checked against either that table's own printed total or the filing count the report states in its text, and the script refuses to write a series that disagrees with either. FY2069/70 to FY2071/72 are left out because those reports present the same decisions as a subject-area cross-tab with different row labels, which is not the same measurement; FY2072/73 is absent from its own report, and the annex in the following report that claims to carry it reproduces FY2073/74's totals instead. The 'taken to court' column counts decisions to prosecute, which is a different unit from a case appearing in the court register — the two are never differenced.",
           )}
         </Body>
         <div className="chart-scroll mt-6">
