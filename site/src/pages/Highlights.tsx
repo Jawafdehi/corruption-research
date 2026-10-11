@@ -232,7 +232,6 @@ export default function Highlights() {
             <ProcessDiagram
               stages={flowStages}
               labels={{
-                ciaa: t("research.corruption.flow.ciaa", "CIAA"),
                 courtLane: t("research.corruption.flow.courtLane", "Special Court"),
                 supremeLane: t("research.corruption.flow.supremeLane", "Supreme Court"),
                 exitLane: t("research.corruption.flow.exitLane", "Exit"),
@@ -241,7 +240,6 @@ export default function Highlights() {
                 ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
                 ifAppealed: t("research.corruption.flow.ifAppealed", "if either side appeals"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                exitFrom: t("research.corruption.flow.exitFrom", "reached from three stages"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
                   "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six and seven are separate courts.",
