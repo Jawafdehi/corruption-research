@@ -71,21 +71,22 @@ export const ne: Record<string, string> = {
   // as "Tameli"; this side is wholly Nepali. Wording follows the कार्यविधि, २०७८.
   "research.corruption.flow.title": "भ्रष्टाचारको उजुरी कुन बाटो हिँड्छ",
   "research.corruption.flow.exit": "तामेली",
-  "research.corruption.flow.courtLane": "विशेष अदालत",
-  "research.corruption.flow.supremeLane": "सर्वोच्च अदालत",
-  "research.corruption.flow.exitLane": "बाहिरिने",
-  "research.corruption.flow.decisionNode": "मुद्दा चलाउने?",
-  "research.corruption.flow.prosecute": "आरोपपत्र दायर",
-  "research.corruption.flow.ifGrounds": "आधार देखिएमा",
-  "research.corruption.flow.ifAppealed": "पुनरावेदन परेमा",
   "research.corruption.flow.srIntro":
     "भ्रष्टाचारको उजुरीले लिने बाटो, क्रमैसँग। पहिलो पाँच चरण आयोगमा हुन्छन्; छैटौं र सातौं छुट्टै अदालत हुन्।",
   "research.corruption.flow.srExit": "यस चरणमा उजुरी तामेलीमा राख्न सकिन्छ।",
-  "research.corruption.flow.exitHere": "यहाँ तामेली हुन सक्छ",
   "research.corruption.flow.exitMeaning":
     "भनेको उजुरी हाललाई मात्र तामेलीमा राखिएको हो, सदाका लागि बन्द गरिएको होइन। मिसिल र अभिलेख रहिरहन्छ, र आयोगकै सूचनाले भन्छ — पछि थप प्रमाण फेला परेमा सोही बखत कानूनबमोजिम कारबाही हुन्छ।",
   "research.corruption.flow.exitCite":
     "अख्तियार दुरुपयोग अनुसन्धान आयोग ऐन, २०४८ को दफा १९(१३); कार्यविधि २०७८ को अनुसूची-११ को ढाँचा।",
+  "research.corruption.flow.start": "उजुरी प्राप्त",
+  "research.corruption.flow.yes": "हुन्छ",
+  "research.corruption.flow.no": "हुँदैन",
+  "research.corruption.flow.dScreen": "अघि बढाउने?",
+  "research.corruption.flow.dGrounds": "आधार भेटियो?",
+  "research.corruption.flow.dProsecute": "मुद्दा चलाउने?",
+  "research.corruption.flow.dAppeal": "पुनरावेदन पर्‍यो?",
+  "research.corruption.flow.chargeSheet": "आरोपपत्र दायर",
+  "research.corruption.flow.stands": "फैसला यथावत्",
   "research.corruption.flow.s1Title": "उजुरी दर्ता",
   "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
 
