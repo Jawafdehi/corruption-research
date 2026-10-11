@@ -115,7 +115,7 @@ export default function Investigation() {
             <>
               {t(
                 "research.corruption.funnel.caption2",
-                "Complaint, investigation and prosecution counts are the Commission's own published figures for FY2081/82. The conviction bar is not a published number — it applies this archive's measured rate to the prosecutions filed. Stages are counts of cases, not people, and the four bars are not one cohort followed through: a complaint registered this year is not the complaint prosecuted this year.",
+                "The first three bars are the Commission's own published figures for FY2081/82. The conviction bar is not published anywhere — it applies this archive's measured rate to the prosecutions filed. These are four stages in one year, not one set of complaints followed through: a complaint registered this year is not the complaint prosecuted this year.",
               )}{" "}
               <Cite href={CITATIONS[FUNNEL_SOURCE.complaints]}>
                 {t("research.corruption.funnel.source", "Commission annual report")}
@@ -129,13 +129,6 @@ export default function Investigation() {
             ofLabel={(p) => t("research.corruption.funnel.of", "{{pct}} of complaints", { pct: p })}
           />
         </Figure>
-
-        <Caveat>
-          {t(
-            "research.corruption.investigation.cohortCaveat",
-            "These four numbers describe one reporting year, not one set of complaints. A complaint registered in a year is rarely investigated and never prosecuted in that same year, so the bars cannot be read as survival rates for a single cohort. They show the scale of each stage's throughput — which is the only thing the published data supports.",
-          )}
-        </Caveat>
 
         {/* The year's whole workload, divided on the report's own denominators.
             Moved here from Highlights: it is the Investigation story in full, and
@@ -288,7 +281,7 @@ export default function Investigation() {
             <>
               {t(
                 "research.corruption.investigation.chartCaption",
-                "Each year's share divides two numbers printed in the same table of the same annual report, so no figure is combined across sources. Five of the nine years are checked against the table's own printed total and five against the filing counts the reports state in prose. Fiscal years 2069/70 to 2072/73 are missing because those reports present the same decisions as a subject-area cross-tab with different row labels; splicing them on would compare two different things. 'Prosecute' counts decisions to file, which is not the same unit as a case appearing in the court register, so the two are never subtracted from one another.",
+                "Each year's share divides two numbers printed in the same table of the same report, and every year is checked against either that table's printed total or the filing count the report states in prose. Fiscal years 2069/70 to 2072/73 are missing: those reports present the same decisions as a subject-area cross-tab with different row labels, so splicing them on would compare two different things. 'Prosecute' counts decisions to file, not cases appearing in the court register, so the two are never subtracted.",
               )}{" "}
               {disposals.map((d, i) => (
                 <span key={d.fy}>
@@ -312,7 +305,7 @@ export default function Investigation() {
         <Caveat>
           {t(
             "research.corruption.investigation.tameliCaveat",
-            "Shelving a weak case after investigating it is the right call, and a Commission that prosecuted everything it touched would be a worse one. The number alone cannot tell you which of those is happening here: a Commission that got better at screening weak complaints early and one that lost its appetite for court both produce this chart. What the figures do establish is the size of the change, how fast it arrived, and that the reports attach no reason to a single one of these closures.",
+            "Shelving a weak case after investigating it is the right call, and the numbers alone cannot say which is happening here: a Commission that got better at screening early and one that lost its appetite for court both produce this chart. What they do establish is the size of the change, how fast it arrived, and that no closure carries a reason.",
           )}
         </Caveat>
 
@@ -336,7 +329,7 @@ export default function Investigation() {
         >
           {t(
             "research.corruption.gap.aBody",
-            "The figures also cannot be followed from one stage to the next. Complaints registered in a year, investigations finished that year and cases filed that year are three different sets of files, so the funnel shows the size of each stage rather than the fate of any one batch of complaints.",
+            "Closure after a full investigation is now the larger of the Commission's two filters, and it is the one with no published reasoning at all.",
           )}
         </GapCallout>
       </Block>

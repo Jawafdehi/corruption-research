@@ -53,6 +53,7 @@ export default function CourtOutcomes() {
     rates,
     trend,
     verdictsModelDerivedExcluded,
+    verdictsNoDisposition,
   } = REPORT;
 
   const decided = decidedClean(outcome);
@@ -201,7 +202,7 @@ export default function CourtOutcomes() {
           )}
           caption={t(
             "research.corruption.donut.caption",
-            "A partial conviction is where a mixed bench lands — some accused convicted and others cleared, or conviction on some counts only. Because no per-accused outcome is published anywhere, a partial cannot be resolved into how many people were actually convicted. That is why this site reports both a full-only rate and a full-plus-partial rate and never picks one silently.",
+            "A partial conviction is some accused convicted and others cleared, or conviction on some counts only. This site therefore reports a full-only rate and a full-plus-partial rate side by side, and never picks one silently.",
           )}
         >
           <StatusDonut
@@ -271,8 +272,8 @@ export default function CourtOutcomes() {
         <Caveat>
           {t(
             "research.corruption.outcomes.derived",
-            "{{n}} further cases carry a disposition that was read out of the court's written judgment rather than published on a cause list. Every rate on this site excludes them, and the count is shown here so the exclusion is a visible number rather than a silent filter.",
-            { n: n(verdictsModelDerivedExcluded) },
+            "Two groups of decided cases sit outside every rate here. {{n}} carry a disposition read out of the court's written judgment rather than published on a cause list. A further {{silent}} are marked decided by the register and carry no outcome at all — no cause-list entry, no hearing row, nothing a reader or a machine could read. Both counts are printed so the exclusions are visible numbers rather than a silent filter.",
+            { n: n(verdictsModelDerivedExcluded), silent: n(verdictsNoDisposition) },
           )}
         </Caveat>
       </Block>
@@ -335,7 +336,7 @@ export default function CourtOutcomes() {
         <Caveat>
           {t(
             "research.corruption.grain.caveat",
-            "This is not a per-person conviction rate and cannot be turned into one. The written judgment in each case names who was convicted; the structured record that can be read at scale does not. Nothing here says the courts failed to decide these people's cases — only that the published data cannot tell you how they decided.",
+            "This is not a per-person conviction rate and cannot be turned into one. The written judgment names who was convicted; the structured record does not. Nothing here says the courts failed to decide these cases — only that the published data cannot tell you how they did.",
           )}
         </Caveat>
 
