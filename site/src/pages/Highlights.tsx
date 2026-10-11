@@ -131,42 +131,39 @@ export default function Highlights() {
 
 
   // The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान
-  // आयोग कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७. The conditional
-  // wording on stages 4 and 6 is load-bearing: neither follows automatically from
-  // the step before it, and flattening that would misdescribe the process.
+  // आयोग कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
+  //
+  // तामेली exits sit on stages 2, 3 and 5 because the कार्यविधि gives one at each:
+  // दफा २१(३) at screening, दफा २२(३)(छ) after the preliminary inquiry, and
+  // दफा २५(ग) when the Commission rules on the investigation report. Stage 4 has
+  // none of its own; its report goes to stage 5, which is where it can be closed.
   const flowStages: FlowStage[] = [
     {
       key: "darta",
-      term: "उजुरी दर्ता",
-      roman: "Complaint registration",
+      title: t("research.corruption.flow.s1Title", "Complaint registration"),
       body: t("research.corruption.flow.s1", "Every complaint the Commission receives is registered."),
     },
     {
       key: "parikshan",
-      term: "उजुरी परीक्षण",
-      roman: "Screening",
+      title: t("research.corruption.flow.s2Title", "Screening"),
       body: t(
         "research.corruption.flow.s2",
-        "A screening committee assesses what the complaint is about and recommends what should happen to it.",
+        "A screening committee assesses what the complaint is about and recommends what should happen to it. The Commissioner decides.",
       ),
-      branch: {
-        ends: t("research.corruption.flow.s2End", "तामेलीमा राख्ने"),
-        continues: t("research.corruption.flow.s2Go", "थप कारबाहीका लागि पठाउने"),
-      },
+      exit: t("research.corruption.flow.exit", "Tameli"),
     },
     {
       key: "prarambhik",
-      term: "प्रारम्भिक छानबिन",
-      roman: "Preliminary inquiry",
+      title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
       body: t(
         "research.corruption.flow.s3",
         "Documents are called for, the office concerned is asked to respond, and the available facts are checked.",
       ),
+      exit: t("research.corruption.flow.exit", "Tameli"),
     },
     {
       key: "bistrit",
-      term: "विस्तृत अनुसन्धान",
-      roman: "Detailed investigation",
+      title: t("research.corruption.flow.s4Title", "Detailed investigation"),
       body: t(
         "research.corruption.flow.s4",
         "If grounds for corruption appear, an investigating officer is appointed and a full investigation goes ahead.",
@@ -174,17 +171,16 @@ export default function Highlights() {
     },
     {
       key: "abhiyojan",
-      term: "अभियोजनको निर्णय",
-      roman: "Prosecution decision",
+      title: t("research.corruption.flow.s5Title", "Prosecution decision"),
       body: t(
         "research.corruption.flow.s5",
         "On the evidence the investigation produced, the Commission decides whether or not to prosecute.",
       ),
+      exit: t("research.corruption.flow.exit", "Tameli"),
     },
     {
       key: "adalat",
-      term: "विशेष अदालत",
-      roman: "Special Court",
+      title: t("research.corruption.flow.s6Title", "Special Court"),
       body: t(
         "research.corruption.flow.s6",
         "If it decides to prosecute, a charge sheet is filed at the Special Court, which decides the case on the evidence.",
@@ -192,8 +188,7 @@ export default function Highlights() {
     },
     {
       key: "punarabedan",
-      term: "पुनरावेदन",
-      roman: "Appeal",
+      title: t("research.corruption.flow.s7Title", "Appeal"),
       body: t(
         "research.corruption.flow.s7",
         "A party dissatisfied with the verdict may appeal to the Supreme Court as the law allows.",
@@ -232,12 +227,15 @@ export default function Highlights() {
           <div className="mt-5">
             <ProcessFlow
               stages={flowStages}
-              endsLabel={t("research.corruption.flow.endsHere", "ends here")}
+              exitNote={t(
+                "research.corruption.flow.exitNote",
+                "complaint closed with no further action",
+              )}
             />
             <FlowNote>
               {t(
                 "research.corruption.flow.source",
-                "Stages follow the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५); appeal under विशेष अदालत ऐन, २०५९ दफा १७. Not every stage follows automatically from the one before it, and an appeal is a right either side may exercise, not a step every case takes.",
+                "Stages follow the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५); appeal under विशेष अदालत ऐन, २०५९ दफा १७. A complaint can be closed as Tameli at three separate points, marked above. No stage follows automatically from the one before it, and an appeal is a right either side may exercise, not a step every case takes.",
               )}
             </FlowNote>
           </div>
