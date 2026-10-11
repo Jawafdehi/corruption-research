@@ -67,30 +67,40 @@ export const ne: Record<string, string> = {
 
 
   // --- प्रक्रिया चित्र (flowchart) -------------------------------------------
-  // The stage names themselves (उजुरी दर्ता, उजुरी परीक्षण …) are legal terms and
-  // stay Nepali in both languages, so they are not keyed here. Only the one-line
-  // descriptions and the labels switch.
+  // One language at a time: the English side reads English and romanises तामेली
+  // as "Tameli"; this side is wholly Nepali. Wording follows the कार्यविधि, २०७८.
   "research.corruption.flow.title": "भ्रष्टाचारको उजुरी कुन बाटो हिँड्छ",
-  "research.corruption.flow.endsHere": "यहीँ टुंगिन्छ",
+  "research.corruption.flow.exit": "तामेली",
+  "research.corruption.flow.exitNote": "उजुरी बन्द, थप कारबाही नहुने",
   "research.corruption.flow.source":
-    "चरणहरू अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५) अनुसार; पुनरावेदन विशेष अदालत ऐन, २०५९ को दफा १७ बमोजिम। हरेक चरण अघिल्लोबाट स्वतः हुने होइन, र पुनरावेदन दुवै पक्षले प्रयोग गर्न सक्ने अधिकार हो, हरेक मुद्दा जाने चरण होइन।",
+    "चरणहरू अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५) अनुसार; पुनरावेदन विशेष अदालत ऐन, २०५९ को दफा १७ बमोजिम। उजुरी माथि देखाइएका तीन ठाउँमा तामेलीमा जान सक्छ। कुनै पनि चरण अघिल्लोबाट स्वतः हुने होइन, र पुनरावेदन दुवै पक्षले प्रयोग गर्न सक्ने अधिकार हो, हरेक मुद्दा जाने चरण होइन।",
 
-  "research.corruption.flow.s1":
-    "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
+  "research.corruption.flow.s1Title": "उजुरी दर्ता",
+  "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
+
+  "research.corruption.flow.s2Title": "उजुरी परीक्षण",
   "research.corruption.flow.s2":
-    "उजुरी परीक्षण समितिले उजुरीको प्रकृति र आवश्यक कारबाहीबारे मूल्याङ्कन गरी सिफारिस गर्छ।",
+    "उजुरी परीक्षण समितिले उजुरीको प्रकृति र आवश्यक कारबाहीबारे मूल्याङ्कन गरी सिफारिस गर्छ। निर्णय आयुक्तबाट हुन्छ।",
+
+  "research.corruption.flow.s3Title": "प्रारम्भिक छानबिन",
   "research.corruption.flow.s3":
     "आवश्यक कागजात, सम्बन्धित निकायको प्रतिक्रिया र उपलब्ध तथ्य जाँच गरिन्छ।",
+
+  "research.corruption.flow.s4Title": "विस्तृत अनुसन्धान",
   "research.corruption.flow.s4":
     "भ्रष्टाचार भएको आधार देखिएमा अनुसन्धान अधिकृत तोकी विस्तृत अनुसन्धान अघि बढाइन्छ।",
+
+  "research.corruption.flow.s5Title": "अभियोजनको निर्णय",
   "research.corruption.flow.s5":
     "अनुसन्धानबाट प्राप्त प्रमाणका आधारमा मुद्दा चलाउने वा नचलाउने निर्णय गरिन्छ।",
+
+  "research.corruption.flow.s6Title": "विशेष अदालत",
   "research.corruption.flow.s6":
     "मुद्दा चलाउने निर्णय भएमा आरोपपत्र विशेष अदालतमा दायर गरिन्छ र अदालतले प्रमाणका आधारमा फैसला गर्छ।",
+
+  "research.corruption.flow.s7Title": "पुनरावेदन",
   "research.corruption.flow.s7":
     "फैसला चित्त नबुझेमा कानुनबमोजिम सर्वोच्च अदालतमा पुनरावेदन गर्न सकिन्छ।",
-  "research.corruption.flow.s2End": "तामेलीमा राख्ने",
-  "research.corruption.flow.s2Go": "थप कारबाहीका लागि पठाउने",
 
   // --- Overview -------------------------------------------------------------
   "research.corruption.funnel.stage.investigatedNote":

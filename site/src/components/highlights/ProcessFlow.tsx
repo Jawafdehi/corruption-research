@@ -1,36 +1,40 @@
-import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 /**
  * The route a corruption complaint takes, as a compact diagram.
  *
- * Stages and wording check against the अख्तियार दुरुपयोग अनुसन्धान आयोग
- * कार्यविधि, २०७८ (approved २०७८।३।७); the appeal forum against the विशेष अदालत
- * ऐन, २०५९ दफा १७. Section numbers live in one source note under the diagram
- * rather than on every box, so the boxes stay readable.
+ * Checked against the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८; the
+ * appeal forum against the विशेष अदालत ऐन, २०५९ दफा १७.
  *
- * Conditional language is load-bearing and deliberately kept: stage 4 reads
- * "आधार देखिएमा" and stage 6 "निर्णय भएमा", because neither step follows
- * automatically from the one before it.
+ * One language at a time: every string here comes through `t()`, so the English
+ * reader gets English and the Nepali reader gets Nepali rather than both at once.
+ * तामेली is romanised as "Tameli" on the English side, because there is no English
+ * word for it and translating it as "closed" would lose that it is a specific
+ * disposition with its own legal consequences.
+ *
+ * A complaint can be put in तामेली at THREE points, not one: at screening
+ * (दफा २१), after the preliminary inquiry (दफा २२(३)(छ)), and at the Commission's
+ * decision on the investigation report (दफा २५(ग)). Each of those boxes carries
+ * its own exit. Detailed investigation has no exit of its own because the
+ * कार्यविधि routes its report to the Commission's decision instead.
  */
 
 export type FlowStage = {
   key: string;
-  /** Nepali legal term. Heads the box in both languages. */
-  term: string;
-  /** English name, small, under the term. */
-  roman: string;
-  /** One sentence. */
+  title: string;
   body: string;
-  /** Optional two-way split shown beside this stage. */
-  branch?: { ends: string; continues: string };
+  /** A तामेली exit available at this stage. Omitted where the rule gives none. */
+  exit?: string;
+  /** Label for the path that continues, shown only where the split matters. */
+  continues?: string;
 };
 
 const Connector = () => (
-  <div aria-hidden="true" className="flex justify-center py-1.5">
-    <svg width="14" height="22" viewBox="0 0 14 22" className="text-border">
-      <line x1="7" y1="0" x2="7" y2="15" stroke="currentColor" strokeWidth="1.5" />
+  <div aria-hidden="true" className="flex justify-center py-1">
+    <svg width="14" height="20" viewBox="0 0 14 20" className="text-border">
+      <line x1="7" y1="0" x2="7" y2="13" stroke="currentColor" strokeWidth="1.5" />
       <path
-        d="M3 14 L7 20 L11 14"
+        d="M3 12 L7 18 L11 12"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
@@ -43,58 +47,60 @@ const Connector = () => (
 
 export function ProcessFlow({
   stages,
-  endsLabel,
+  exitNote,
 }: {
   stages: readonly FlowStage[];
-  endsLabel: string;
-}) {
+  /** Short gloss shown once beside the first exit, e.g. "closed, no further action". */
+  exitNote: string;
+  }) {
+  let firstExitSeen = false;
+
   return (
     <ol className="max-w-xl">
-      {stages.map((s, i) => (
-        <li key={s.key}>
-          <div className="rounded-md border border-border bg-[hsl(var(--surface))] px-4 py-3">
-            <div className="flex items-baseline gap-2.5">
-              <span
-                aria-hidden="true"
-                className="font-mono text-xs font-semibold tabular-nums text-accent"
-              >
-                {i + 1}
-              </span>
-              <h4 lang="ne" className="font-display text-sm font-bold leading-snug md:text-base">
-                {s.term}
-              </h4>
-              <span className="text-xs text-muted-foreground">{s.roman}</span>
-            </div>
-            <p className="mt-1.5 pl-6 text-sm leading-6 text-foreground/80">{s.body}</p>
-          </div>
+      {stages.map((s, i) => {
+        const showNote = Boolean(s.exit) && !firstExitSeen;
+        if (s.exit) firstExitSeen = true;
 
-          {s.branch ? (
-            // The one split worth drawing. Both outcomes are real, so neither is
-            // styled as the default path; the terminal one is simply marked.
-            <div className="flex flex-wrap items-stretch gap-2 pl-6 pt-2">
-              <span className="flex items-center gap-2 rounded border border-border bg-background px-2.5 py-1 text-xs">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-foreground/35" />
-                <span lang="ne" className="font-medium">
-                  {s.branch.ends}
+        return (
+          <li key={s.key}>
+            <div className="rounded-md border border-border bg-[hsl(var(--surface))] px-4 py-3">
+              <div className="flex items-baseline gap-2.5">
+                <span
+                  aria-hidden="true"
+                  className="font-mono text-xs font-semibold tabular-nums text-accent"
+                >
+                  {i + 1}
                 </span>
-                <span className="text-muted-foreground">{endsLabel}</span>
-              </span>
-              <span className="flex items-center gap-2 rounded border border-accent/40 bg-accent/5 px-2.5 py-1 text-xs">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
-                <span lang="ne" className="font-medium text-accent">
-                  {s.branch.continues}
-                </span>
-              </span>
+                <h4 className="font-display text-sm font-bold leading-snug md:text-base">
+                  {s.title}
+                </h4>
+              </div>
+              <p className="mt-1.5 pl-6 text-sm leading-6 text-foreground/80">{s.body}</p>
             </div>
-          ) : null}
 
-          {i < stages.length - 1 ? <Connector /> : null}
-        </li>
-      ))}
+            {s.exit ? (
+              // Drawn as a sideways exit rather than a fork, because the main line
+              // continues either way. The dot and the arrow carry the direction;
+              // the wording carries the meaning.
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-6 pt-1.5 text-xs">
+                <span aria-hidden="true" className="text-muted-foreground">
+                  ↳
+                </span>
+                <span className="rounded border border-border bg-background px-2 py-0.5 font-medium">
+                  {s.exit}
+                </span>
+                {showNote ? <span className="text-muted-foreground">{exitNote}</span> : null}
+              </div>
+            ) : null}
+
+            {i < stages.length - 1 ? <Connector /> : null}
+          </li>
+        );
+      })}
     </ol>
   );
 }
 
-export const FlowNote = ({ children }: { children: React.ReactNode }) => (
-  <p className={cn("mt-4 max-w-xl text-xs leading-5 text-muted-foreground")}>{children}</p>
+export const FlowNote = ({ children }: { children: ReactNode }) => (
+  <p className="mt-4 max-w-xl text-xs leading-5 text-muted-foreground">{children}</p>
 );
