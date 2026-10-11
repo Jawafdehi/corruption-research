@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
 import { DurationBands } from "@/components/highlights/DurationBands";
-import { FlowNote, ProcessFlow, type FlowStage } from "@/components/highlights/ProcessFlow";
+import {
+  FlowNote,
+  ProcessDiagram,
+  type DiagramNode,
+} from "@/components/highlights/ProcessDiagram";
 import { OutcomeSplit, type OutcomeSegment } from "@/components/highlights/OutcomeSplit";
 import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
 import { TameliTrend } from "@/components/research/TameliTrend";
@@ -137,7 +141,7 @@ export default function Highlights() {
   // दफा २१(३) at screening, दफा २२(३)(छ) after the preliminary inquiry, and
   // दफा २५(ग) when the Commission rules on the investigation report. Stage 4 has
   // none of its own; its report goes to stage 5, which is where it can be closed.
-  const flowStages: FlowStage[] = [
+  const flowStages: DiagramNode[] = [
     {
       key: "darta",
       title: t("research.corruption.flow.s1Title", "Complaint registration"),
@@ -224,13 +228,32 @@ export default function Highlights() {
           <h3 id="flow-heading" className="font-display text-lg font-bold leading-snug md:text-xl">
             {t("research.corruption.flow.title", "How a corruption complaint travels")}
           </h3>
-          <div className="mt-5">
-            <ProcessFlow
+          <div className="mt-6 max-w-4xl">
+            <ProcessDiagram
               stages={flowStages}
-              exitNote={t(
-                "research.corruption.flow.exitNote",
-                "complaint closed with no further action",
-              )}
+              labels={{
+                ciaa: t("research.corruption.flow.ciaa", "CIAA"),
+                courtLane: t("research.corruption.flow.courtLane", "Special Court"),
+                supremeLane: t("research.corruption.flow.supremeLane", "Supreme Court"),
+                exitLane: t("research.corruption.flow.exitLane", "Exit"),
+                decision: t("research.corruption.flow.decisionNode", "Prosecute?"),
+                prosecute: t("research.corruption.flow.prosecute", "charge sheet filed"),
+                ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
+                ifAppealed: t("research.corruption.flow.ifAppealed", "if either side appeals"),
+                exitTitle: t("research.corruption.flow.exit", "Tameli"),
+                exitNote: t(
+                  "research.corruption.flow.exitNote",
+                  "complaint closed with no further action",
+                ),
+                srIntro: t(
+                  "research.corruption.flow.srIntro",
+                  "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six and seven are separate courts.",
+                ),
+                srExit: t(
+                  "research.corruption.flow.srExit",
+                  "A complaint may be closed as Tameli at this stage.",
+                ),
+              }}
             />
             <FlowNote>
               {t(

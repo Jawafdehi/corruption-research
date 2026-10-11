@@ -75,6 +75,9 @@
     --border: 40 16% 82%;       /* #D9D4CA stone */
     --muted-foreground: 30 8% 38%;
     --surface: 44 30% 97%;      /* near-white card face */
+    /* Second institutional accent, for the courts, so the judiciary never reads
+       as a department of the Commission. 8.2:1 on paper. */
+    --court: 152 26% 24%;       /* #2E4E3F deep green */
     --card: 44 30% 97%;
   }
 }
