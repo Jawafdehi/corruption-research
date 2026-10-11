@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
-import { BenchSpread } from "@/components/highlights/BenchSpread";
 import { DurationBands } from "@/components/highlights/DurationBands";
 import {
   ProcessDiagram,
@@ -27,15 +26,8 @@ const MIN_DECIDED = 60;
 export default function Highlights() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
-  const { appeals, byCharge, ciaa, disposals, justiceMinDecisions, justices, outcome, rates } =
-    REPORT;
+  const { appeals, byCharge, ciaa, disposals, outcome, rates } = REPORT;
 
-  // 06 — bench spread. Same threshold the Court outcomes tab uses, so a bench with
-  // too few decisions to carry a rate is excluded here for the same reason there.
-  const benches = justices.filter((j) => j.decisions >= justiceMinDecisions);
-  const benchRates = benches.map((j) => j.convPct);
-  const benchLow = Math.min(...benchRates);
-  const benchHigh = Math.max(...benchRates);
 
   const decided = decidedClean(outcome);
 
@@ -477,49 +469,6 @@ export default function Highlights() {
             }}
           />
 
-          <Highlight
-            index={6}
-            stat={t("research.corruption.hl.f6Stat", "{{low}} to {{high}}", {
-              low: pct(benchLow),
-              high: pct(benchHigh),
-            })}
-            statCaption={t(
-              "research.corruption.hl.f6Caption",
-              "conviction rates, full or partial, across the {{n}} benches that have decided enough cases to carry a rate. The court's own average is {{avg}}.",
-              {
-                n: n(benches.length),
-                avg: pct1(rates.convictionPct),
-              },
-            )}
-            headline={t(
-              "research.corruption.hl.f6",
-              "Which bench hears the case changes the odds",
-            )}
-            explain={t(
-              "research.corruption.hl.f6Body",
-              "Benches are not assigned the same mix of cases, and a panel that hears mostly fake-certificate cases will convict more often whatever it does. So this is not evidence that any judge is lenient or harsh. It does mean the court's single average hides a very wide range.",
-            )}
-            chart={
-              <BenchSpread
-                justices={benches}
-                avgPct={rates.convictionPct}
-                heading={t(
-                  "research.corruption.hl.f6Chart",
-                  "Conviction rate of each bench, full or partial, {{n}} benches",
-                  { n: n(benches.length) },
-                )}
-                lowLabel={t("research.corruption.hl.f6Low", "Lowest bench")}
-                avgLabel={t("research.corruption.hl.f6Avg", "Court average")}
-                highLabel={t("research.corruption.hl.f6High", "Highest bench")}
-              />
-            }
-            meta={{
-              source: t("research.corruption.hl.f6Src", "Special Court register"),
-              sourceHref: CITATIONS.courtRecords,
-              to: "/court-outcomes",
-              toLabel: t("research.corruption.hl.f6Link", "Every bench, named"),
-            }}
-          />
         </div>
       </div>
 
@@ -529,7 +478,7 @@ export default function Highlights() {
           item in a set. */}
       <div className="mt-6 lg:mt-8">
         <Highlight
-          index={7}
+          index={6}
           stat={t("research.corruption.hl.f5Stat", "Not published")}
           statCaption={t(
             "research.corruption.hl.f5Caption",
