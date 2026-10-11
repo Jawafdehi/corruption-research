@@ -250,10 +250,6 @@ export default function Investigation() {
               "research.corruption.investigation.chartLinkTitle",
               "Open the {{fy}} annual report",
             )}
-            sourceHint={t(
-              "research.corruption.investigation.chartSource",
-              "Each fiscal year links to the annual report it is taken from. FY2069/70 to 2072/73 are missing: those reports present the same decisions in a form that cannot be compared with these.",
-            )}
           />
         </Figure>
 

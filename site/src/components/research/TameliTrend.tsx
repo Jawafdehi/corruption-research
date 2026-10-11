@@ -63,15 +63,12 @@ export function TameliTrend({
   tameliLabel,
   filedLabel,
   shareLabel,
-  sourceHint,
   linkTitle,
 }: {
   rows: readonly Disposal[];
   tameliLabel: string;
   filedLabel: string;
   shareLabel: string;
-  /** Note under the chart, telling a reader the years are links. */
-  sourceHint: string;
   /** Hover title on a year tick, e.g. "Open the {{fy}} annual report". */
   linkTitle: string;
 }) {
@@ -184,8 +181,6 @@ export function TameliTrend({
         </ComposedChart>
       </ResponsiveContainer>
       </div>
-
-      <p className="mt-2 text-xs text-muted-foreground">{sourceHint}</p>
     </div>
   );
 }
