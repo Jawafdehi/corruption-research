@@ -1,3 +1,4 @@
+import { ChartHeading } from "@/components/highlights/ChartHeading";
 import { useFormat } from "@/lib/format";
 
 export type ChargeRate = {
@@ -39,7 +40,7 @@ export function ChargeRateBars({
 
   return (
     <div>
-      <p className="mb-3 text-xs uppercase tracking-wide text-muted-foreground">{rateLabel}</p>
+      <ChartHeading>{rateLabel}</ChartHeading>
 
       <div className="relative">
         <ul className="relative z-10 space-y-3">
