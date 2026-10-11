@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 
-import { AccountabilityFunnel, type FunnelStage } from "@/components/data-quality/AccountabilityFunnel";
 import {
   Block,
   Body,
@@ -15,20 +14,21 @@ import {
 } from "@/components/layout/Prose";
 import { GapCallout } from "@/components/research/GapCallout";
 import { TameliTrend } from "@/components/research/TameliTrend";
-import { CITATIONS, FUNNEL_SOURCE, REPORT, tameliPct } from "@/data/research-corruption";
+import { REPORT, tameliPct } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
 export default function Investigation() {
   const { t } = useTranslation();
   const { n, pct1 } = useFormat();
-  const { ciaa, disposals, funnel } = REPORT;
+  const { disposals } = REPORT;
   const cd = REPORT.complaintDisposal[0];
 
-  const investigatedShare = (ciaa.investigatedYear / ciaa.complaintsYear) * 100;
-  const filedPerInvestigated = Math.round(ciaa.investigatedYear / ciaa.casesFiledYear);
-  // Same denominator as the investigated share beside it, so the tile row reads as one
-  // funnel rather than as three unrelated percentages.
-  const filedShare = (ciaa.casesFiledYear / ciaa.complaintsYear) * 100;
+  const sentShare = (cd.to_investigation / cd.total_complaints) * 100;
+  // NOTE on the third tile: its 137 is deliberately NOT given as a share of the 37,026.
+  // Those cases came out of the 947 investigations FINISHED this year, which is a
+  // different population from the 927 sent for investigation this year. Dividing one
+  // into the other would read as a survival rate for a single batch of complaints, and
+  // the reports do not support that. The base is named instead.
 
   const last = disposals[disposals.length - 1];
   // The turn is the finding, so it is derived rather than written down: the year the
@@ -37,31 +37,8 @@ export default function Investigation() {
   const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
   const afterPeak = disposals[disposals.indexOf(peak) + 1] ?? last;
 
-  const stageLabel: Record<string, string> = {
-    complaints: t("research.corruption.funnel.stage.complaints", "Complaints to the Commission"),
-    investigated: t("research.corruption.funnel.stage.investigated", "Investigated in full"),
-    filed: t("research.corruption.funnel.stage.filed", "Taken to court"),
-    convicted: t("research.corruption.funnel.stage.convicted", "Convictions (estimated)"),
-  };
 
-  const stageNote: Record<string, string> = {
-    investigated: t(
-      "research.corruption.funnel.stage.investigatedNote",
-      "only {{pct}}% are investigated in full",
-      { pct: investigatedShare.toFixed(1) },
-    ),
-    filed: t("research.corruption.funnel.stage.filedNote", "about 1 in {{k}} of those reaches a court", {
-      k: filedPerInvestigated,
-    }),
-  };
 
-  const funnelStages: FunnelStage[] = funnel.map((s) => ({
-    key: s.key,
-    label: stageLabel[s.key] ?? s.key,
-    count: s.count,
-    color: "hsl(var(--accent))",
-    note: stageNote[s.key],
-  }));
 
   return (
     <>
@@ -76,33 +53,33 @@ export default function Investigation() {
         <Lede>
           {t(
             "research.corruption.investigation.lede",
-            "The Commission received {{complaints}} new complaints in {{fy}} and filed {{filed}} cases in court. This page follows what happened in between. Complaints are stopped at two separate points — once soon after they arrive, and again after a full investigation — and this looks at how many stop at each, and what the published record says about why.",
-            {
-              complaints: n(ciaa.complaintsYear),
-              fy: cd.fy,
-              filed: n(ciaa.casesFiledYear),
-            },
+            "In {{fy}} the Commission had {{total}} corruption complaints on its books, and sent {{sent}} of them for a full investigation. This page follows what happened to the rest, and to the ones it did investigate. Complaints are stopped at two separate points — soon after they arrive, and again after a full investigation — and this looks at how many stop at each, and what the published record says about why.",
+            { fy: cd.fy, total: n(cd.total_complaints), sent: n(cd.to_investigation) },
           )}
         </Lede>
 
         <StatRow>
           <StatTile
-            value={n(ciaa.complaintsYear)}
-            label={t("research.corruption.tile.complaints", "New complaints received")}
-            note={t("research.corruption.tile.complaintsNote", "in {{fy}}, not counting the backlog carried over", { fy: cd.fy })}
-          />
-          <StatTile
-            value={n(ciaa.investigatedYear)}
-            label={t("research.corruption.investigation.tileInvestigated", "Investigated in full")}
-            note={t("research.corruption.investigation.tileInvestigatedNote", "{{pct}}% of the complaints received", {
-              pct: investigatedShare.toFixed(1),
+            value={n(cd.total_complaints)}
+            label={t("research.corruption.tile.complaints", "Complaints on the Commission's books")}
+            note={t("research.corruption.tile.complaintsNote", "{{carried}} carried over, {{fresh}} newly registered, {{fy}}", {
+              carried: n(cd.carried_in),
+              fresh: n(cd.registered_new),
+              fy: cd.fy,
             })}
           />
           <StatTile
-            value={n(ciaa.casesFiledYear)}
+            value={n(cd.to_investigation)}
+            label={t("research.corruption.investigation.tileInvestigated", "Sent for a full investigation")}
+            note={t("research.corruption.investigation.tileInvestigatedNote", "{{pct}} of those complaints", {
+              pct: pct1(sentShare),
+            })}
+          />
+          <StatTile
+            value={n(cd.inv_filed)}
             label={t("research.corruption.tile.filed", "Taken to court")}
-            note={t("research.corruption.tile.filedNote", "{{pct}}% of the complaints received", {
-              pct: filedShare.toFixed(1),
+            note={t("research.corruption.tile.filedNote", "of the {{done}} investigations completed that year", {
+              done: n(cd.investigations_completed),
             })}
           />
           <StatTile
@@ -116,34 +93,6 @@ export default function Investigation() {
           />
         </StatRow>
 
-        <Figure
-          title={t(
-            "research.corruption.funnel.title",
-            "From {{complaints}} complaints to an estimated {{convicted}} convictions",
-            { complaints: n(ciaa.complaintsYear), convicted: n(funnel[funnel.length - 1].count) },
-          )}
-          subtitle={t(
-            "research.corruption.funnel.subtitle",
-            "One year at the Commission, FY2081/82. The last bar is an estimate, not a published figure.",
-          )}
-          caption={
-            <>
-              {t(
-                "research.corruption.funnel.caption2",
-                "The first three bars are the Commission's own published figures for FY2081/82. The conviction bar is not published anywhere — it applies this archive's measured rate to the prosecutions filed. These are four stages in one year, not one set of complaints followed through: a complaint registered this year is not the complaint prosecuted this year.",
-              )}{" "}
-              <Cite href={CITATIONS[FUNNEL_SOURCE.complaints]}>
-                {t("research.corruption.funnel.source", "Commission annual report")}
-              </Cite>
-            </>
-          }
-        >
-          <AccountabilityFunnel
-            stages={funnelStages}
-            isLoading={false}
-            ofLabel={(p) => t("research.corruption.funnel.of", "{{pct}} of complaints", { pct: p })}
-          />
-        </Figure>
 
         {/* The year's whole workload, divided on the report's own denominators.
             Moved here from Highlights: it is the Investigation story in full, and
@@ -168,7 +117,7 @@ export default function Investigation() {
             <p className="mt-0.5 text-xs leading-5 text-muted-foreground">
               {t(
                 "research.corruption.hl.cdTotal",
-                "complaints on the Commission's books in {{fy}} — {{carried}} carried over from the year before, {{fresh}} newly registered",
+                "{{carried}} complaints carried over from the previous year, and {{fresh}} new complaints registered during the year.",
                 { fy: cd.fy, carried: n(cd.carried_in), fresh: n(cd.registered_new) },
               )}
             </p>
@@ -236,12 +185,6 @@ export default function Investigation() {
             </dl>
           </div>
 
-          <p className="text-xs leading-5 text-muted-foreground">
-            {t(
-              "research.corruption.hl.cdNote",
-              "Both blocks cover FY2081/82 and come from the same report, each divided by its own total. They are not one set of complaints followed through — the investigations finished this year mostly began in earlier ones — so the two cannot be multiplied together into a single survival rate.",
-            )}
-          </p>
         </div>
 
       </Block>

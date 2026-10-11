@@ -35,34 +35,38 @@ export function GapCallout({
   children?: ReactNode;
 }) {
   return (
-    <aside className="mt-8 overflow-hidden rounded-lg border border-border bg-[hsl(var(--surface))]">
-      {/* The accent edge is the only thing marking these as a set now that they no
-          longer sit on a page of their own. */}
-      <div className="border-l-[3px] border-accent px-5 py-5 md:px-6 md:py-6">
-        <p className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-accent">
+    <aside className="mt-10 overflow-hidden rounded-lg border border-accent/35 bg-accent/[0.045] shadow-sm">
+      {/* Deliberately the loudest block on its page. These are the findings the whole
+          project exists for -- the point where the public record stops answering -- and
+          on a page of charts a quiet bordered aside reads as a footnote. A tinted face,
+          a heavier accent edge and a rule under the tag give it the weight of a
+          section without making it a second page. */}
+      <div className="border-l-4 border-accent px-5 py-6 md:px-7 md:py-7">
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-accent">
           {label}
         </p>
-        <h3 className="mt-2 font-display text-lg font-bold leading-snug text-foreground md:text-xl">
+        <div aria-hidden="true" className="mt-2.5 h-px w-12 bg-accent/45" />
+        <h3 className="mt-3 max-w-3xl font-display text-xl font-bold leading-tight tracking-tight text-foreground md:text-2xl">
           {title}
         </h3>
 
-        <dl className="mt-4 grid gap-x-8 gap-y-4 md:grid-cols-2">
+        <dl className="mt-6 grid gap-x-10 gap-y-5 md:grid-cols-2">
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <dt className="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-accent/85">
               {showsLabel}
             </dt>
-            <dd className="mt-1.5 text-sm leading-6 text-foreground/85">{shows}</dd>
+            <dd className="mt-2 text-sm leading-6 text-foreground/90">{shows}</dd>
           </div>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <dt className="text-[0.7rem] font-bold uppercase tracking-[0.1em] text-accent/85">
               {fixLabel}
             </dt>
-            <dd className="mt-1.5 text-sm leading-6 text-foreground/85">{fix}</dd>
+            <dd className="mt-2 text-sm leading-6 text-foreground/90">{fix}</dd>
           </div>
         </dl>
 
         {children ? (
-          <div className="mt-4 border-t border-border pt-4 text-sm leading-6 text-muted-foreground">
+          <div className="mt-6 border-t border-accent/25 pt-4 text-sm leading-6 text-foreground/70">
             {children}
           </div>
         ) : null}
