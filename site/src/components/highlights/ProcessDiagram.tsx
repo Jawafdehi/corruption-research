@@ -328,7 +328,7 @@ export function ProcessDiagram({
                   y={cy - L.boxH / 2}
                   width={L.boxW}
                   height={L.boxH}
-                  rx={6}
+                  rx={L.boxH / 2}
                   fill="hsl(var(--surface))"
                   stroke={c}
                   strokeWidth={s.tone === "court" ? 1.75 : 1.25}
@@ -345,8 +345,8 @@ export function ProcessDiagram({
                   {s.label}
                 </text>
                 <StepNo
-                  x={L.spineX - L.boxW / 2}
-                  y={cy - L.boxH / 2}
+                  x={L.spineX - L.boxW / 2 + 2}
+                  y={cy}
                   n={s.n}
                   fill={s.tone === "court" ? green : "hsl(var(--foreground) / 0.65)"}
                 />
