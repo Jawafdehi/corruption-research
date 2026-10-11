@@ -22,6 +22,7 @@ export default function Investigation() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
   const { ciaa, disposals, funnel } = REPORT;
+  const cd = REPORT.complaintDisposal[0];
 
   const investigatedShare = (ciaa.investigatedYear / ciaa.complaintsYear) * 100;
   const filedPerInvestigated = Math.round(ciaa.investigatedYear / ciaa.casesFiledYear);
@@ -131,6 +132,105 @@ export default function Investigation() {
             "These four numbers describe one reporting year, not one set of complaints. A complaint registered in a year is rarely investigated and never prosecuted in that same year, so the bars cannot be read as survival rates for a single cohort. They show the scale of each stage's throughput — which is the only thing the published data supports.",
           )}
         </Caveat>
+
+        {/* The year's whole workload, divided on the report's own denominators.
+            Moved here from Highlights: it is the Investigation story in full, and
+            a highlight should point at it rather than contain it. */}
+        <div className="mt-6 space-y-4">
+          {/*
+            Both of the Commission's filters, in one place and on the report's
+            own denominators. The first row divides the year's whole workload
+            (तालिका २.१४); the second is the outcome of investigations finished
+            that year (बुँदा १३). They are separate events and are kept apart.
+          */}
+          <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              {t(
+                "research.corruption.hl.cdTitle",
+                "Every complaint on the Commission's books, FY2081/82",
+              )}
+            </p>
+            <p className="mt-2 font-mono text-2xl font-semibold tabular-nums md:text-3xl">
+              {n(cd.total_complaints)}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {t("research.corruption.hl.cdTotal", "{{carried}} carried over + {{fresh}} newly registered", {
+                carried: n(cd.carried_in),
+                fresh: n(cd.registered_new),
+              })}
+            </p>
+
+            <ul className="mt-4 space-y-2">
+              {[
+                { k: "tameli", v: cd.tameli + cd.tameli_with_advice, l: t("research.corruption.hl.cdTameli", "set aside as Tameli"), hot: true },
+                { k: "other", v: cd.other_action, l: t("research.corruption.hl.cdOther", "other action") },
+                { k: "inv", v: cd.to_investigation, l: t("research.corruption.hl.cdInv", "sent to detailed investigation") },
+                { k: "pending", v: cd.pending_out, l: t("research.corruption.hl.cdPending", "still pending, carried to the next year") },
+              ].map((r) => (
+                <li key={r.k}>
+                  <div className="flex items-baseline justify-between gap-3 text-sm">
+                    <span className={r.hot ? "font-medium text-accent" : "text-foreground/80"}>
+                      {r.l}
+                    </span>
+                    <span className="shrink-0 font-mono tabular-nums">
+                      {n(r.v)}
+                      <span className={r.hot ? "ml-2 font-semibold text-accent" : "ml-2 text-muted-foreground"}>
+                        {pct1((r.v / cd.total_complaints) * 100)}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 w-full rounded-sm bg-foreground/[0.07]">
+                    <div
+                      className="h-full rounded-sm"
+                      style={{
+                        width: `${(r.v / cd.total_complaints) * 100}%`,
+                        backgroundColor: r.hot ? "hsl(var(--accent))" : "hsl(var(--foreground) / 0.35)",
+                      }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">
+              {t(
+                "research.corruption.hl.cdInvTitle",
+                "And of the {{n}} detailed investigations finished that year",
+                { n: n(cd.investigations_completed) },
+              )}
+            </p>
+            <dl className="mt-3 grid grid-cols-3 gap-3">
+              {[
+                { k: "filed", v: cd.inv_filed, l: t("research.corruption.hl.cdFiled", "taken to court") },
+                { k: "tameli", v: cd.inv_tameli, l: t("research.corruption.hl.cdInvTameli", "set aside as Tameli"), hot: true },
+                { k: "held", v: cd.inv_held, l: t("research.corruption.hl.cdHeld", "held in abeyance") },
+              ].map((r) => (
+                <div key={r.k}>
+                  <dt
+                    className="font-mono text-xl font-semibold tabular-nums md:text-2xl"
+                    style={r.hot ? { color: "hsl(var(--accent))" } : undefined}
+                  >
+                    {n(r.v)}
+                    <span className="ml-1.5 text-sm font-normal text-muted-foreground">
+                      {pct1((r.v / cd.investigations_completed) * 100)}
+                    </span>
+                  </dt>
+                  <dd className="mt-1 text-xs leading-4 text-muted-foreground">{r.l}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <p className="text-xs leading-5 text-muted-foreground">
+            {t(
+              "research.corruption.hl.cdNote",
+              "Both blocks are one fiscal year from one report, each divided by its own total. They are not a single cohort followed through: the investigations finished this year mostly began in earlier ones, so the two must not be chained into a conversion rate.",
+            )}
+          </p>
+        </div>
+
       </Block>
 
       <Block>

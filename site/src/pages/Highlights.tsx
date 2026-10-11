@@ -16,7 +16,6 @@ import {
   REPORT,
   decidedClean,
   outcomePct,
-  tameliPct,
 } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
@@ -31,6 +30,7 @@ export default function Highlights() {
   const decided = decidedClean(outcome);
 
   // 01 — the Commission's second filter.
+  const cd = REPORT.complaintDisposal[0];
   const firstDisposal = disposals[0];
   const lastDisposal = disposals[disposals.length - 1];
 
@@ -191,7 +191,7 @@ export default function Highlights() {
     },
     {
       key: "punarabedan",
-      title: t("research.corruption.flow.s7Title", "Appeal"),
+      title: t("research.corruption.flow.s7Title", "Supreme Court appeal"),
       body: t(
         "research.corruption.flow.s7",
         "A party dissatisfied with the verdict may appeal to the Supreme Court as the law allows.",
@@ -203,30 +203,17 @@ export default function Highlights() {
     <div className="theme-editorial -mx-4 bg-background px-4 py-10 text-foreground md:-mx-6 md:px-6 md:py-14">
       <Reveal>
         <header className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
-            {t("research.corruption.hl.eyebrow", "The findings")}
-          </p>
           <h2 className="mt-3 font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
             {t(
               "research.corruption.hl.title",
               "How a corruption case moves, and where it stops",
             )}
           </h2>
-          <p className="mt-5 text-base leading-7 text-foreground/75 md:text-[1.0625rem] md:leading-8">
-            {t(
-              "research.corruption.hl.lede",
-              "A complaint to the anti-corruption commission, the CIAA, has to clear several filters before anyone reaches a courtroom, and most never do. The diagram below is the legal route, taken from the Commission's own rules. The findings after it show how many cases actually fall out at each stage, counted from {{cases}} prosecutions in the Special Court register and fourteen years of CIAA annual reports.",
-              { cases: n(corpus.ciaaProsecutions) },
-            )}
-          </p>
         </header>
       </Reveal>
 
       <Reveal>
-        <section className="mt-10 md:mt-12" aria-labelledby="flow-heading">
-          <h3 id="flow-heading" className="font-display text-lg font-bold leading-snug md:text-xl">
-            {t("research.corruption.flow.title", "How a corruption complaint travels")}
-          </h3>
+        <section className="mt-2 md:mt-4" aria-label={t("research.corruption.flow.title", "How a corruption complaint travels")}>
           <div className="mt-6 max-w-4xl">
             <ProcessDiagram
               stages={flowStages}
@@ -285,24 +272,23 @@ export default function Highlights() {
         <Highlight
           index={1}
           size="lead"
-          stat={pct(tameliPct(lastDisposal))}
+          stat={pct1(((cd.tameli + cd.tameli_with_advice) / cd.total_complaints) * 100)}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of complaints that finished a full investigation were closed with no charges in {{fy}}. Five years earlier it was {{was}}.",
-            { fy: lastDisposal.fy, was: pct(tameliPct(firstDisposal)), wasFy: firstDisposal.fy },
+            "of the {{total}} complaints on the Commission's books in {{fy}} were set aside as Tameli, without a case being filed",
+            { total: n(cd.total_complaints), fy: cd.fy },
           )}
           headline={t(
             "research.corruption.hl.f1",
-            "What happens after a corruption complaint is filed?",
+            "Most corruption complaints end before a judge ever sees them",
           )}
           explain={t(
             "research.corruption.hl.f1Body",
-            "A complaint goes through two filters, not one. The first is a quick screening that rejects almost everything, and that part is well known. The second is what this chart shows. These complaints passed the screening and were properly investigated. At that point the CIAA decides to either file a case in court or close the file. Closing it is called तामेली, which means no charges and no court. In {{wasFy}} the CIAA closed {{was}} of these investigated complaints. By {{fy}} it was closing {{pct}}, while the number it sent to court barely moved. The CIAA publishes how many it closes but never why it closed any particular one, so nobody outside it can check whether the cases were weak or the decisions were.",
+            "A complaint passes two filters and most never clear the first. Of the {{done}} investigations that did survive and were finished that year, {{tam}} still ended in Tameli and {{filed}} reached a courtroom. The Commission publishes how many it sets aside but never why it set aside any particular one.",
             {
-              wasFy: firstDisposal.fy,
-              was: pct(tameliPct(firstDisposal)),
-              fy: lastDisposal.fy,
-              pct: pct(tameliPct(lastDisposal)),
+              done: n(cd.investigations_completed),
+              tam: n(cd.inv_tameli),
+              filed: n(cd.inv_filed),
             },
           )}
           chart={
@@ -335,43 +321,6 @@ export default function Highlights() {
             the same year, so an arrow between them would assert a progression the
             reports do not support.
           */}
-          <div className="mt-6 rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">
-              {t("research.corruption.hl.f1StagesTitle", "One year at the CIAA, FY2081/82")}
-            </p>
-            <dl className="mt-3 grid grid-cols-3 gap-3">
-              {[
-                {
-                  k: "complaints",
-                  v: n(ciaa.complaintsYear),
-                  l: t("research.corruption.hl.stageComplaints", "complaints received"),
-                },
-                {
-                  k: "investigated",
-                  v: n(ciaa.investigatedYear),
-                  l: t("research.corruption.hl.stageInvestigated", "full investigations finished"),
-                },
-                {
-                  k: "filed",
-                  v: n(ciaa.casesFiledYear),
-                  l: t("research.corruption.hl.stageFiled", "cases filed in court"),
-                },
-              ].map((i) => (
-                <div key={i.k}>
-                  <dt className="font-mono text-xl font-semibold tabular-nums text-foreground md:text-2xl">
-                    {i.v}
-                  </dt>
-                  <dd className="mt-1 text-xs leading-4 text-muted-foreground">{i.l}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-3 border-t border-border pt-2.5 text-xs leading-5 text-muted-foreground">
-              {t(
-                "research.corruption.hl.f1StagesNote",
-                "These are three separate annual totals, not one group of complaints followed through. A complaint received this year is rarely investigated this year and almost never prosecuted this year, so these figures cannot be read as a conversion rate.",
-              )}
-            </p>
-          </div>
         </Highlight>
       </div>
 
