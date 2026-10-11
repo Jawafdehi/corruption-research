@@ -26,9 +26,10 @@ export default function Investigation() {
   // total. The two are different populations and are never chained into a rate, but
   // they are both outcomes for complaints on the same year's books, so adding them is
   // a count of complaints -- not a conversion.
-  const bothFilters = cd.tameli + cd.tameli_with_advice + cd.inv_tameli;
-  const nineYearTameli = disposals.reduce((a, r) => a + r.tameli, 0);
-  const nineYearFiled = disposals.reduce((a, r) => a + r.filed, 0);
+  // Both of the report's Tameli rows over the year's own total. One population, one
+  // denominator -- not the two filters added together, which mixes two.
+  const tameliShareOfBooks =
+    ((cd.tameli + cd.tameli_with_advice) / cd.total_complaints) * 100;
   // NOTE on the third tile: its 137 is deliberately NOT given as a share of the 37,026.
   // Those cases came out of the 947 investigations FINISHED this year, which is a
   // different population from the 927 sent for investigation this year. Dividing one
@@ -129,11 +130,24 @@ export default function Investigation() {
 
             <ul className="mt-5 space-y-2.5">
               {[
-                { k: "tameli", v: cd.tameli + cd.tameli_with_advice, l: t("research.corruption.hl.cdTameli", "set aside as Tameli"), hot: true },
+                {
+                  k: "tameli",
+                  v: cd.tameli + cd.tameli_with_advice,
+                  l: t("research.corruption.hl.cdTameli", "kept in Tameli"),
+                  hot: true,
+                  // The report prints these as two rows. Both are Tameli decisions, so
+                  // they are one row here -- with the split named, because a reader
+                  // checking against the table will otherwise find neither figure.
+                  sub: t(
+                    "research.corruption.hl.cdTameliSplit",
+                    "{{alone}} outright, {{advice}} with advice to the agency",
+                    { alone: n(cd.tameli), advice: n(cd.tameli_with_advice) },
+                  ),
+                },
                 { k: "other", v: cd.other_action, l: t("research.corruption.hl.cdOther", "other action") },
                 { k: "inv", v: cd.to_investigation, l: t("research.corruption.hl.cdInv", "sent to detailed investigation") },
                 { k: "pending", v: cd.pending_out, l: t("research.corruption.hl.cdPending", "still pending, carried to the next year") },
-              ].map((r) => (
+              ].map((r: { k: string; v: number; l: string; hot?: boolean; sub?: string }) => (
                 <li key={r.k}>
                   <div className="flex items-baseline justify-between gap-3 text-sm">
                     <span className={r.hot ? "font-medium text-accent" : "text-foreground/80"}>
@@ -146,6 +160,9 @@ export default function Investigation() {
                       </span>
                     </span>
                   </div>
+                  {r.sub ? (
+                    <p className="mt-0.5 text-xs text-muted-foreground">{r.sub}</p>
+                  ) : null}
                   <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
                     <div
                       className="h-full rounded-sm"
@@ -164,14 +181,14 @@ export default function Investigation() {
             <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
               {t(
                 "research.corruption.hl.cdInvTitle",
-                "Of the {{n}} complaints investigated in full, five in six were then set aside",
+                "Of the {{n}} complaints investigated in full, five in six were then kept in Tameli",
                 { n: n(cd.investigations_completed) },
               )}
             </h3>
             <dl className="mt-4 grid grid-cols-3 gap-3">
               {[
                 { k: "filed", v: cd.inv_filed, l: t("research.corruption.hl.cdFiled", "taken to court") },
-                { k: "tameli", v: cd.inv_tameli, l: t("research.corruption.hl.cdInvTameli", "set aside as Tameli"), hot: true },
+                { k: "tameli", v: cd.inv_tameli, l: t("research.corruption.hl.cdInvTameli", "kept in Tameli"), hot: true },
                 { k: "held", v: cd.inv_held, l: t("research.corruption.hl.cdHeld", "held in abeyance") },
               ].map((r) => (
                 <div key={r.k}>
@@ -261,48 +278,22 @@ export default function Investigation() {
         </Figure>
 
         <ClosingAnalysis
-          eyebrow={t(
-            "research.corruption.investigation.closeEyebrow",
-            "What the investigation record adds up to",
+          headline={t(
+            "research.corruption.investigation.closeHeadline",
+            "Nearly half of every complaint ends in Tameli, and not one of those decisions carries a reason",
           )}
-          stat={n(bothFilters)}
+          stat={pct1(tameliShareOfBooks)}
           statCaption={t(
             "research.corruption.investigation.closeStat",
-            "complaints — almost exactly half of everything on the Commission's books in {{fy}} — were kept in Tameli.",
-            { fy: cd.fy },
+            "of the {{total}} complaints on the Commission's books in {{fy}} were kept in Tameli — {{alone}} outright and {{advice}} with advice to the agency. After a full investigation the share is higher still, {{after}}.",
+            {
+              total: n(cd.total_complaints),
+              fy: cd.fy,
+              alone: n(cd.tameli),
+              advice: n(cd.tameli_with_advice),
+              after: pct1((cd.inv_tameli / cd.investigations_completed) * 100),
+            },
           )}
-          points={[
-            {
-              stat: t("research.corruption.investigation.closeP1Stat", "{{v}} of {{t}}", {
-                v: n(cd.tameli + cd.tameli_with_advice),
-                t: n(cd.total_complaints),
-              }),
-              text: t(
-                "research.corruption.investigation.closeP1",
-                "At the first point, before anyone investigates, Tameli is the single most common outcome — larger than referrals, larger than investigations, larger than the backlog carried forward.",
-              ),
-            },
-            {
-              stat: t("research.corruption.investigation.closeP2Stat", "{{v}} of {{t}}", {
-                v: n(cd.inv_tameli),
-                t: n(cd.investigations_completed),
-              }),
-              text: t(
-                "research.corruption.investigation.closeP2",
-                "At the second point, after the work has been done, it is not merely the most common outcome but nearly the only one. Five years earlier it was the minority outcome.",
-              ),
-            },
-            {
-              stat: t("research.corruption.investigation.closeP3Stat", "{{tam}} against {{filed}}", {
-                tam: n(nineYearTameli),
-                filed: n(nineYearFiled),
-              }),
-              text: t(
-                "research.corruption.investigation.closeP3",
-                "Across the nine years the reports allow us to follow, the Commission set aside more than two complaints after investigating them for every one it took to court.",
-              ),
-            },
-          ]}
           questionLabel={t("research.corruption.investigation.closeQLabel", "The open question")}
           question={t(
             "research.corruption.investigation.closeQ",
@@ -312,19 +303,13 @@ export default function Investigation() {
           <p>
             {t(
               "research.corruption.investigation.closeA1",
-              "Tameli is not a failure in itself. The Commission has to be able to close complaints that fall outside its jurisdiction, that carry no usable evidence, or that have no basis to go further, and closing a weak case after investigating it is the right call. The figures above cannot tell us how many of these were that.",
+              "Tameli is not a failure in itself. The Commission has to be able to close complaints that fall outside its jurisdiction, that carry no usable evidence, or that have no basis to go further. The figures cannot tell us how many of these were that — because the published record stops exactly where the justification would begin.",
             )}
           </p>
           <p>
             {t(
               "research.corruption.investigation.closeA2",
-              "What they do tell us is that the published record stops exactly where the justification would begin. The reports count Tameli decisions precisely — by year, by stage, to the last complaint — and explain not one of them. Nor do they say how many were ever revived: Tameli is reversible when new evidence appears, so a count of revivals would show whether these files are being parked or simply cleared. No report has ever published one.",
-            )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.investigation.closeA3",
-              "Until a reason sits beside each decision, the volume is all anyone outside the Commission can see — and volume alone cannot tell a careful filter from an overloaded one.",
+              "The reports count these decisions to the last complaint and explain not one of them. Nor do they say how many were ever revived, and Tameli is reversible when new evidence appears — so a count of revivals would show whether these files are being parked or simply cleared. No report has published one.",
             )}
           </p>
         </ClosingAnalysis>
