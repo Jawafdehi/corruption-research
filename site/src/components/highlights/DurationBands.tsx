@@ -67,17 +67,13 @@ export function DurationBands({
         ))}
       </ul>
 
-      <dl className="mt-4 space-y-1.5 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
-        <div className="flex gap-2">
-          <dt className="shrink-0 font-medium text-foreground/80">{labels.cumulative}</dt>
-        </div>
-        <div className="flex gap-2">
-          <dt className="shrink-0">{labels.medianNote}</dt>
-        </div>
-        <div className="flex gap-2">
-          <dt className="shrink-0">{labels.pendingNote}</dt>
-        </div>
-      </dl>
+      {/* Plain paragraphs: these are sentences, not term/definition pairs, and a
+          `shrink-0` flex child here refused to wrap and overflowed the page. */}
+      <div className="mt-4 space-y-1.5 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
+        <p className="font-medium text-foreground/80">{labels.cumulative}</p>
+        <p>{labels.medianNote}</p>
+        <p>{labels.pendingNote}</p>
+      </div>
     </div>
   );
 }

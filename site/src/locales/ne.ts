@@ -75,6 +75,17 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.source":
     "चरणहरू अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५) अनुसार; पुनरावेदन विशेष अदालत ऐन, २०५९ को दफा १७ बमोजिम। उजुरी माथि देखाइएका तीन ठाउँमा तामेलीमा जान सक्छ। कुनै पनि चरण अघिल्लोबाट स्वतः हुने होइन, र पुनरावेदन दुवै पक्षले प्रयोग गर्न सक्ने अधिकार हो, हरेक मुद्दा जाने चरण होइन।",
 
+  "research.corruption.flow.ciaa": "अख्तियार",
+  "research.corruption.flow.courtLane": "विशेष अदालत",
+  "research.corruption.flow.supremeLane": "सर्वोच्च अदालत",
+  "research.corruption.flow.exitLane": "बाहिरिने",
+  "research.corruption.flow.decisionNode": "मुद्दा चलाउने?",
+  "research.corruption.flow.prosecute": "आरोपपत्र दायर",
+  "research.corruption.flow.ifGrounds": "आधार देखिएमा",
+  "research.corruption.flow.ifAppealed": "पुनरावेदन परेमा",
+  "research.corruption.flow.srIntro":
+    "भ्रष्टाचारको उजुरीले लिने बाटो, क्रमैसँग। पहिलो पाँच चरण आयोगमा हुन्छन्; छैटौं र सातौं छुट्टै अदालत हुन्।",
+  "research.corruption.flow.srExit": "यस चरणमा उजुरी तामेलीमा राख्न सकिन्छ।",
   "research.corruption.flow.s1Title": "उजुरी दर्ता",
   "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
 
