@@ -55,18 +55,13 @@ const Reveal = ({ children, className }: { children: ReactNode; className?: stri
   );
 };
 
-/** The crimson rule that marks the lead finding, and only the lead finding. */
-const Rule = ({ lead }: { lead?: boolean }) => (
-  <div
-    aria-hidden="true"
-    className={cn("h-[3px] w-14 rounded-full", lead ? "bg-accent" : "bg-foreground/25")}
-  />
+/** Short rule beside the index number. */
+const Rule = () => (
+  <div aria-hidden="true" className="h-[3px] w-10 rounded-full bg-accent/60" />
 );
 
 export type HighlightMeta = {
-  /** Fiscal years, population and denominator. Shown under the finding, not hidden. */
-  context: string;
-  /** Where the figure comes from. */
+  /** Where the figure comes from, in a few words. Rendered after a *. */
   source: string;
   sourceHref?: string;
   /** Section to read next. */
@@ -81,7 +76,6 @@ export type HighlightMeta = {
  */
 export function Highlight({
   index,
-  size = "half",
   stat,
   statCaption,
   headline,
@@ -91,7 +85,6 @@ export function Highlight({
   children,
 }: {
   index: number;
-  size?: "lead" | "half" | "full";
   stat?: string;
   statCaption?: string;
   headline: string;
@@ -100,36 +93,29 @@ export function Highlight({
   meta: HighlightMeta;
   children?: ReactNode;
 }) {
-  const lead = size === "lead";
-
   return (
-    <Reveal className="h-full">
+    <Reveal className="h-full min-w-0">
       <article
         className={cn(
           // `relative` anchors the stretched link below, so the whole card is one
           // hit area without nesting a second interactive element inside a link.
-          "group relative flex h-full flex-col transition-colors",
-          lead ? "gap-6" : "gap-4",
-          // Every card gets the same box. The sizes differ in how much room they
-          // take and how their chart sits, not in whether they look like a card.
-          "rounded-lg border border-border bg-[hsl(var(--surface))] hover:border-accent/50",
-          lead ? "p-6 md:p-8" : "p-5 md:p-6",
+          // One shape for every finding, so the grid reads as a set rather than a
+          // hierarchy. `h-full` lets the grid equalise heights across a row.
+          "group relative flex h-full flex-col gap-4 rounded-lg border border-border",
+          "bg-[hsl(var(--surface))] p-5 transition-colors hover:border-accent/50 md:p-6",
         )}
       >
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs tabular-nums text-muted-foreground">
             {String(index).padStart(2, "0")}
           </span>
-          <Rule lead={lead} />
+          <Rule />
         </div>
 
-        <div className={cn(lead && "grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]")}>
+        <div>
           <div>
             <h3
-              className={cn(
-                "font-display font-bold leading-[1.15] tracking-tight text-foreground",
-                lead ? "text-2xl md:text-[2.1rem]" : "text-lg md:text-xl",
-              )}
+              className="font-display text-lg font-bold leading-snug tracking-tight text-foreground md:text-xl"
             >
               {headline}
             </h3>
@@ -137,10 +123,7 @@ export function Highlight({
             {stat ? (
               <p className="mt-5">
                 <span
-                  className={cn(
-                    "block font-mono font-semibold leading-none tracking-tight text-accent",
-                    lead ? "text-5xl md:text-6xl" : "text-3xl md:text-4xl",
-                  )}
+                  className="block font-mono text-3xl font-semibold leading-none tracking-tight text-accent md:text-4xl"
                 >
                   {stat}
                 </span>
@@ -152,27 +135,20 @@ export function Highlight({
               </p>
             ) : null}
 
-            <p
-              className={cn(
-                "mt-5 max-w-prose leading-7 text-foreground/80",
-                lead ? "text-base md:text-[1.0625rem]" : "text-sm md:text-base md:leading-7",
-              )}
-            >
-              {explain}
-            </p>
+            <p className="mt-4 text-sm leading-6 text-foreground/80">{explain}</p>
 
             {children}
           </div>
 
-          {lead && chart ? <div className="min-w-0 self-center">{chart}</div> : null}
         </div>
 
-        {!lead && chart ? <div className="min-w-0">{chart}</div> : null}
+        {chart ? <div className="chart-scroll min-w-0">{chart}</div> : null}
 
-        <footer className="mt-auto space-y-2 border-t border-border pt-4 text-xs leading-5 text-muted-foreground">
-          <p>{meta.context}</p>
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span>
+        <footer className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
+          <span>
+            <span aria-hidden="true" className="mr-1">
+              *
+            </span>
               {meta.sourceHref ? (
                 <a
                   href={meta.sourceHref}
@@ -182,10 +158,10 @@ export function Highlight({
                 >
                   {meta.source}
                 </a>
-              ) : (
-                meta.source
-              )}
-            </span>
+            ) : (
+              meta.source
+            )}
+          </span>
             {/* Stretched: covers the card so a click anywhere follows it. The
                 source link above sits on its own stacking context so it stays
                 separately clickable. */}
@@ -193,9 +169,8 @@ export function Highlight({
               to={meta.to}
               className="font-medium text-accent underline underline-offset-4 after:absolute after:inset-0 after:content-[''] hover:opacity-80"
             >
-              {meta.toLabel}
-            </Link>
-          </p>
+            {meta.toLabel}
+          </Link>
         </footer>
       </article>
     </Reveal>
