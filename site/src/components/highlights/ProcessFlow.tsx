@@ -1,133 +1,100 @@
-import type { ReactNode } from "react";
-
 import { cn } from "@/lib/utils";
 
 /**
- * How a corruption complaint moves from the CIAA to the Special Court and on to
- * appeal.
+ * The route a corruption complaint takes, as a compact diagram.
  *
- * Every stage, branch and branch-condition here is taken from the अख्तियार
- * दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (approved २०७८।३।७), and the appeal
- * forum from the विशेष अदालत ऐन, २०५९. Section numbers sit on each stage so a
- * reader can check the diagram against the law rather than trust it. Nothing is
- * added for narrative tidiness: the कार्यविधि gives four outcomes at the
- * Commission's decision, and all four are drawn even though only one leads to
- * court.
+ * Stages and wording check against the अख्तियार दुरुपयोग अनुसन्धान आयोग
+ * कार्यविधि, २०७८ (approved २०७८।३।७); the appeal forum against the विशेष अदालत
+ * ऐन, २०५९ दफा १७. Section numbers live in one source note under the diagram
+ * rather than on every box, so the boxes stay readable.
  *
- * The Nepali term is the heading in both languages, because it is the name the
- * law uses and the one that appears in every CIAA report. The description beside
- * it follows the language toggle.
+ * Conditional language is load-bearing and deliberately kept: stage 4 reads
+ * "आधार देखिएमा" and stage 6 "निर्णय भएमा", because neither step follows
+ * automatically from the one before it.
  */
-
-export type FlowBranch = {
-  key: string;
-  /** Arrow label: the condition under which this branch is taken. */
-  condition: string;
-  term: string;
-  note: string;
-  /** Terminal branches end the complaint's life; only one continues to court. */
-  ends?: boolean;
-};
 
 export type FlowStage = {
   key: string;
-  /** Nepali legal term, used as the heading in both languages. */
+  /** Nepali legal term. Heads the box in both languages. */
   term: string;
-  /** English name, shown small under the term when reading in English. */
-  roman?: string;
-  cite: string;
+  /** English name, small, under the term. */
+  roman: string;
+  /** One sentence. */
   body: string;
-  branches?: FlowBranch[];
-  /** Label on the arrow leading OUT of this stage into the next one. */
-  continues?: string;
+  /** Optional two-way split shown beside this stage. */
+  branch?: { ends: string; continues: string };
 };
 
-const Arrow = ({ label }: { label?: string }) => (
-  <div className="flex items-stretch gap-3 pl-[1.1rem]">
-    <div aria-hidden="true" className="flex w-px flex-col items-center bg-border" />
-    {label ? (
-      <p className="py-2 text-xs font-medium leading-4 text-accent">{label}</p>
-    ) : (
-      <div className="py-2" />
-    )}
+const Connector = () => (
+  <div aria-hidden="true" className="flex justify-center py-1.5">
+    <svg width="14" height="22" viewBox="0 0 14 22" className="text-border">
+      <line x1="7" y1="0" x2="7" y2="15" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3 14 L7 20 L11 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   </div>
 );
 
 export function ProcessFlow({
   stages,
-  labels,
+  endsLabel,
 }: {
   stages: readonly FlowStage[];
-  labels: { endsHere: string; romanLang: "en" | "ne" };
+  endsLabel: string;
 }) {
   return (
-    <ol className="space-y-0">
-      {stages.map((stage, i) => (
-        <li key={stage.key}>
-          <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4 md:p-5">
-            <div className="flex items-start gap-3">
+    <ol className="max-w-xl">
+      {stages.map((s, i) => (
+        <li key={s.key}>
+          <div className="rounded-md border border-border bg-[hsl(var(--surface))] px-4 py-3">
+            <div className="flex items-baseline gap-2.5">
               <span
                 aria-hidden="true"
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-accent/40 font-mono text-xs font-semibold text-accent"
+                className="font-mono text-xs font-semibold tabular-nums text-accent"
               >
                 {i + 1}
               </span>
-              <div className="min-w-0 flex-1">
-                <h4 lang="ne" className="font-display text-base font-bold leading-snug md:text-lg">
-                  {stage.term}
-                </h4>
-                {stage.roman ? (
-                  <p lang="en" className="mt-0.5 text-xs leading-4 text-muted-foreground">
-                    {stage.roman}
-                  </p>
-                ) : null}
-                <p className="mt-2 text-sm leading-6 text-foreground/80">{stage.body}</p>
-                <p className="mt-2 font-mono text-[0.7rem] leading-4 text-muted-foreground">
-                  {stage.cite}
-                </p>
-              </div>
+              <h4 lang="ne" className="font-display text-sm font-bold leading-snug md:text-base">
+                {s.term}
+              </h4>
+              <span className="text-xs text-muted-foreground">{s.roman}</span>
             </div>
-
-            {stage.branches?.length ? (
-              <ul className="mt-4 space-y-2 border-t border-border pt-3">
-                {stage.branches.map((b) => (
-                  <li key={b.key} className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm">
-                    <span
-                      aria-hidden="true"
-                      className={cn(
-                        "mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full",
-                        b.ends ? "bg-foreground/35" : "bg-accent",
-                      )}
-                    />
-                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      {b.condition}
-                    </span>
-                    <span lang="ne" className="font-semibold text-foreground">
-                      {b.term}
-                    </span>
-                    <span className="w-full pl-3.5 text-xs leading-5 text-muted-foreground">
-                      {b.note}
-                      {b.ends ? (
-                        <span className="ml-1.5 whitespace-nowrap rounded border border-border px-1 py-0.5 text-[0.65rem] uppercase tracking-wide">
-                          {labels.endsHere}
-                        </span>
-                      ) : null}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+            <p className="mt-1.5 pl-6 text-sm leading-6 text-foreground/80">{s.body}</p>
           </div>
 
-          {i < stages.length - 1 ? <Arrow label={stage.continues} /> : null}
+          {s.branch ? (
+            // The one split worth drawing. Both outcomes are real, so neither is
+            // styled as the default path; the terminal one is simply marked.
+            <div className="flex flex-wrap items-stretch gap-2 pl-6 pt-2">
+              <span className="flex items-center gap-2 rounded border border-border bg-background px-2.5 py-1 text-xs">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-foreground/35" />
+                <span lang="ne" className="font-medium">
+                  {s.branch.ends}
+                </span>
+                <span className="text-muted-foreground">{endsLabel}</span>
+              </span>
+              <span className="flex items-center gap-2 rounded border border-accent/40 bg-accent/5 px-2.5 py-1 text-xs">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span lang="ne" className="font-medium text-accent">
+                  {s.branch.continues}
+                </span>
+              </span>
+            </div>
+          ) : null}
+
+          {i < stages.length - 1 ? <Connector /> : null}
         </li>
       ))}
     </ol>
   );
 }
 
-export const FlowNote = ({ children }: { children: ReactNode }) => (
-  <p className="mt-4 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
-    {children}
-  </p>
+export const FlowNote = ({ children }: { children: React.ReactNode }) => (
+  <p className={cn("mt-4 max-w-xl text-xs leading-5 text-muted-foreground")}>{children}</p>
 );
