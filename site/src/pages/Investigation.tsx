@@ -10,7 +10,7 @@ import {
   StatRow,
   StatTile,
 } from "@/components/layout/Prose";
-import { GapCallout } from "@/components/research/GapCallout";
+import { ClosingAnalysis } from "@/components/research/ClosingAnalysis";
 import { TameliTrend } from "@/components/research/TameliTrend";
 import { REPORT, tameliPct } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
@@ -22,6 +22,13 @@ export default function Investigation() {
   const cd = REPORT.complaintDisposal[0];
 
   const sentShare = (cd.to_investigation / cd.total_complaints) * 100;
+  // What the whole page adds up to: Tameli at both filters, against the year's own
+  // total. The two are different populations and are never chained into a rate, but
+  // they are both outcomes for complaints on the same year's books, so adding them is
+  // a count of complaints -- not a conversion.
+  const bothFilters = cd.tameli + cd.tameli_with_advice + cd.inv_tameli;
+  const nineYearTameli = disposals.reduce((a, r) => a + r.tameli, 0);
+  const nineYearFiled = disposals.reduce((a, r) => a + r.filed, 0);
   // NOTE on the third tile: its 137 is deliberately NOT given as a share of the 37,026.
   // Those cases came out of the 947 investigations FINISHED this year, which is a
   // different population from the 927 sent for investigation this year. Dividing one
@@ -253,49 +260,74 @@ export default function Investigation() {
           />
         </Figure>
 
-        <GapCallout
-          label={t("research.corruption.gap.aLabel", "Accountability gap · Investigation")}
-          title={t(
-            "research.corruption.gap.aTitle",
-            "Thousands of closures, not one published reason",
+        <ClosingAnalysis
+          eyebrow={t(
+            "research.corruption.investigation.closeEyebrow",
+            "What the investigation record adds up to",
           )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
-          shows={t(
-            "research.corruption.gap.aEstablishes",
-            "In {{fy}} the Commission closed {{tam}} complaints after investigating them in full and prosecuted {{filed}}. Not one closure carries a published reason.",
-            { fy: last.fy, tam: n(last.tameli), filed: n(last.filed) },
+          stat={n(bothFilters)}
+          statCaption={t(
+            "research.corruption.investigation.closeStat",
+            "complaints — almost exactly half of everything on the Commission's books in {{fy}} — were kept in Tameli.",
+            { fy: cd.fy },
           )}
-          fix={t(
-            "research.corruption.gap.aNeeded",
-            "A reason recorded against each closed complaint, and a count of closures later reopened. No annual report carries either.",
+          points={[
+            {
+              stat: t("research.corruption.investigation.closeP1Stat", "{{v}} of {{t}}", {
+                v: n(cd.tameli + cd.tameli_with_advice),
+                t: n(cd.total_complaints),
+              }),
+              text: t(
+                "research.corruption.investigation.closeP1",
+                "At the first point, before anyone investigates, Tameli is the single most common outcome — larger than referrals, larger than investigations, larger than the backlog carried forward.",
+              ),
+            },
+            {
+              stat: t("research.corruption.investigation.closeP2Stat", "{{v}} of {{t}}", {
+                v: n(cd.inv_tameli),
+                t: n(cd.investigations_completed),
+              }),
+              text: t(
+                "research.corruption.investigation.closeP2",
+                "At the second point, after the work has been done, it is not merely the most common outcome but nearly the only one. Five years earlier it was the minority outcome.",
+              ),
+            },
+            {
+              stat: t("research.corruption.investigation.closeP3Stat", "{{tam}} against {{filed}}", {
+                tam: n(nineYearTameli),
+                filed: n(nineYearFiled),
+              }),
+              text: t(
+                "research.corruption.investigation.closeP3",
+                "Across the nine years the reports allow us to follow, the Commission set aside more than two complaints after investigating them for every one it took to court.",
+              ),
+            },
+          ]}
+          questionLabel={t("research.corruption.investigation.closeQLabel", "The open question")}
+          question={t(
+            "research.corruption.investigation.closeQ",
+            "What justified setting aside so many?",
           )}
         >
-          <>
-            <p>
-              {t(
-                "research.corruption.gap.aBody",
-                "Setting a complaint aside is not in itself a failure. The Commission has to be able to close complaints that fall outside its jurisdiction, that carry no usable evidence, or that have no proper basis to go further — and after a full investigation, closing a weak case is the right call.",
-              )}
-            </p>
-            <p className="mt-3">
-              {t(
-                "research.corruption.gap.aBody2",
-                "What the rise raises is a different question: what justified setting aside so many? Whether each decision followed the prescribed process and weighed the evidence in that case, or rested on something else, is not something the published figures can answer. That is the gap. When closures climb this steeply and no record explains a single one of them, there is no way to judge whether the power is being used consistently and within the law.",
-              )}
-            </p>
-            <p className="mt-3">
-              {t(
-                "research.corruption.gap.aBody3",
-                "The same silence covers the earlier filter, which stops far more — {{first}} complaints against {{second}} — but stops them before anyone has investigated.",
-                {
-                  first: n(cd.tameli + cd.tameli_with_advice),
-                  second: n(cd.inv_tameli),
-                },
-              )}
-            </p>
-          </>
-        </GapCallout>
+          <p>
+            {t(
+              "research.corruption.investigation.closeA1",
+              "Tameli is not a failure in itself. The Commission has to be able to close complaints that fall outside its jurisdiction, that carry no usable evidence, or that have no basis to go further, and closing a weak case after investigating it is the right call. The figures above cannot tell us how many of these were that.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.investigation.closeA2",
+              "What they do tell us is that the published record stops exactly where the justification would begin. The reports count Tameli decisions precisely — by year, by stage, to the last complaint — and explain not one of them. Nor do they say how many were ever revived: Tameli is reversible when new evidence appears, so a count of revivals would show whether these files are being parked or simply cleared. No report has ever published one.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.investigation.closeA3",
+              "Until a reason sits beside each decision, the volume is all anyone outside the Commission can see — and volume alone cannot tell a careful filter from an overloaded one.",
+            )}
+          </p>
+        </ClosingAnalysis>
       </Block>
     </>
   );
