@@ -285,7 +285,7 @@ export default function Investigation() {
           stat={pct1(tameliShareOfBooks)}
           statCaption={t(
             "research.corruption.investigation.closeStat",
-            "of the {{total}} complaints on the Commission's books in {{fy}} were kept in Tameli — {{alone}} outright and {{advice}} with advice to the agency. After a full investigation the share is higher still, {{after}}.",
+            "Of the {{total}} complaints on the Commission's records in {{fy}}, {{alone}} were placed under Tameli and another {{advice}} were set aside with advice to the relevant agency. The share was even higher among complaints that had undergone a full investigation: {{after}} were placed under Tameli.",
             {
               total: n(cd.total_complaints),
               fy: cd.fy,
