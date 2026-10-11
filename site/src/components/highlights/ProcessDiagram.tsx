@@ -24,6 +24,8 @@ export type DiagramNode = {
 };
 
 export type DiagramLabels = {
+  /** Short phrase above each exit arrow, e.g. "can go to Tameli here". */
+  exitHere: string;
   courtLane: string;
   supremeLane: string;
   exitLane: string;
@@ -38,17 +40,19 @@ export type DiagramLabels = {
 
 const L = {
   w: 1000,
-  h: 368,
+  h: 390,
   labelX: 150,
   laneX: 170,
   laneW: 812,
-  node: { w: 140, gap: 15, h: 60 },
-  /** Where an exit arrow stops. The arrows are unlabelled: what they mean is set
-      out in the legend under the diagram and in the source note beneath it. */
-  exitTop: 20,
-  ciaaLane: { y: 42, h: 116 },
-  courtLane: { y: 182, h: 72 },
-  supremeLane: { y: 278, h: 72 },
+  /** Gap is deliberately wider than it needs to be. At 15px the arrow between two
+      steps was a stub and the row read as four boxes standing next to each other;
+      at 34px it reads as one step leading to the next. */
+  node: { w: 132, gap: 30, h: 60 },
+  exitTop: 42,
+  exitLabelY: 27,
+  ciaaLane: { y: 64, h: 116 },
+  courtLane: { y: 204, h: 72 },
+  supremeLane: { y: 300, h: 72 },
   diamond: { rx: 66, ry: 40 },
   courtNode: { x: 742, w: 220, h: 46 },
 };
@@ -249,6 +253,20 @@ export function ProcessDiagram({
           </g>
 
 
+          {[nodeMid(1), nodeMid(2), DIAMOND_CX].map((x) => (
+            <text
+              key={x}
+              x={x}
+              y={L.exitLabelY}
+              textAnchor="middle"
+              fontSize={11.5}
+              fontWeight={600}
+              fill={red}
+            >
+              {labels.exitHere}
+            </text>
+          ))}
+
           {/* Onward: down into the courts */}
           <path
             d={`M${DIAMOND_CX} ${ROW + L.diamond.ry} C ${DIAMOND_CX} ${ROW + L.diamond.ry + 34}, ${COURT_MID} ${COURT_Y - 40}, ${COURT_MID} ${COURT_Y - 4}`}
@@ -373,7 +391,7 @@ export function ProcessDiagram({
               {s.exit ? (
                 <p className="flex items-center gap-1.5 pl-3 pt-1 text-xs font-medium text-accent">
                   <span aria-hidden="true">↑</span>
-                  {s.exit}
+                  {labels.exitHere}
                 </p>
               ) : null}
               {i < stages.length - 1 ? (

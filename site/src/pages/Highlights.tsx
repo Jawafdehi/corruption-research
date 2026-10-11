@@ -239,6 +239,7 @@ export default function Highlights() {
                 ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
                 ifAppealed: t("research.corruption.flow.ifAppealed", "if either side appeals"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
+                exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
                   "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six and seven are separate courts.",
