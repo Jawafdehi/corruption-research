@@ -22,16 +22,58 @@ import { type Disposal, tameliPct } from "@/data/research-corruption";
  * as "the Commission got busier" — the share is the finding. Both come from the
  * same table in the same annual report, so the line never divides across sources.
  */
+/**
+ * A fiscal-year tick that links to the report it came from.
+ *
+ * The citation belongs on the year it describes, not in a run of nine links under the
+ * chart where a reader has to match them back up by eye. Dotted underline so the
+ * affordance is visible without the axis turning into a row of blue links.
+ */
+function FyTick({ x, y, payload, hrefs, linkTitle }: any) {
+  const href = hrefs[payload.value];
+  const label = (
+    <text
+      x={0}
+      y={0}
+      dy={10}
+      textAnchor="middle"
+      fontSize={11}
+      fill="hsl(var(--muted-foreground))"
+      style={href ? { textDecoration: "underline dotted", cursor: "pointer" } : undefined}
+    >
+      {payload.value}
+    </text>
+  );
+  return (
+    <g transform={`translate(${x},${y})`}>
+      {href ? (
+        <a href={href} target="_blank" rel="noreferrer">
+          <title>{linkTitle.replace("{{fy}}", payload.value)}</title>
+          {label}
+        </a>
+      ) : (
+        label
+      )}
+    </g>
+  );
+}
+
 export function TameliTrend({
   rows,
   tameliLabel,
   filedLabel,
   shareLabel,
+  sourceHint,
+  linkTitle,
 }: {
   rows: readonly Disposal[];
   tameliLabel: string;
   filedLabel: string;
   shareLabel: string;
+  /** Note under the chart, telling a reader the years are links. */
+  sourceHint: string;
+  /** Hover title on a year tick, e.g. "Open the {{fy}} annual report". */
+  linkTitle: string;
 }) {
   const { n, pct } = useFormat();
   const mounted = useMounted();
@@ -43,14 +85,34 @@ export function TameliTrend({
     share: Math.round(tameliPct(r) * 10) / 10,
   }));
 
+  const hrefs = Object.fromEntries(rows.map((r) => [r.fy, r.source_url]));
+
   const ariaLabel = data
     .map((d) => `${d.fy}: ${tameliLabel} ${n(d.tameli)}, ${shareLabel} ${pct(d.share)}`)
     .join("; ");
 
   if (!mounted) return <div className="h-[300px] w-full" />;
 
+  const swatch = (color: string, label: string, line = false) => (
+    <span className="flex items-center gap-2">
+      <span
+        aria-hidden="true"
+        className={line ? "h-0.5 w-4 rounded-full" : "h-2.5 w-2.5 rounded-sm"}
+        style={{ backgroundColor: color }}
+      />
+      {label}
+    </span>
+  );
+
   return (
-    <div className="w-full" role="img" aria-label={ariaLabel}>
+    <div className="w-full">
+      <ul className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted-foreground">
+        <li>{swatch("hsl(var(--alert))", tameliLabel)}</li>
+        <li>{swatch("hsl(var(--primary))", filedLabel)}</li>
+        <li>{swatch("hsl(var(--accent))", shareLabel, true)}</li>
+      </ul>
+
+      <div role="img" aria-label={ariaLabel}>
       <ResponsiveContainer width="100%" height={300} minWidth={440}>
         <ComposedChart data={data} margin={{ top: 8, right: 16, bottom: 4, left: 0 }}>
           <CartesianGrid stroke="hsl(var(--border))" vertical={false} />
@@ -58,7 +120,9 @@ export function TameliTrend({
             dataKey="fy"
             tickLine={false}
             axisLine={false}
-            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            interval={0}
+            height={34}
+            tick={<FyTick hrefs={hrefs} linkTitle={linkTitle} />}
           />
           <YAxis
             yAxisId="count"
@@ -119,6 +183,9 @@ export function TameliTrend({
           />
         </ComposedChart>
       </ResponsiveContainer>
+      </div>
+
+      <p className="mt-2 text-xs text-muted-foreground">{sourceHint}</p>
     </div>
   );
 }
