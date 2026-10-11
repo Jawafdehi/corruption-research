@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { StatusDonut, type DonutSegment } from "@/components/data-quality/StatusDonut";
 import { CasesVersusAccused, type GrainRow } from "@/components/research/CasesVersusAccused";
 import { ConvictionByCharge, type ChargeRow } from "@/components/research/ConvictionByCharge";
+import { GapCallout } from "@/components/research/GapCallout";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { FiledDecidedTrend } from "@/components/research/FiledDecidedTrend";
 import { JusticeSpread } from "@/components/research/JusticeSpread";
@@ -40,8 +41,10 @@ export default function CourtOutcomes() {
   const { n, pct, pct1 } = useFormat();
   const {
     byCharge,
+    ciaa,
     corpus,
     defendants,
+    entityResolution,
     filedByMonth,
     justiceMinDecisions,
     justices,
@@ -522,12 +525,63 @@ export default function CourtOutcomes() {
           )}
         </Caveat>
 
-        <Unknown title={t("research.corruption.outcomes.unknownTitle", "Not in the court record")}>
-          {t(
-            "research.corruption.outcomes.unknownBody",
-            "How much of the बिगो the Commission claimed was actually upheld, and how many individual defendants were convicted in a case recorded as a partial. The register carries one verdict per case and no amount, so neither can be derived from it — they are absent here rather than estimated at zero.",
+        <GapCallout
+          label={t("research.corruption.gap.cLabel", "Accountability gap · Court outcomes")}
+          title={t(
+            "research.corruption.gap.cTitle",
+            "The charge said 1,491 grams were missing. The court made it 58.",
           )}
-        </Unknown>
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.cEstablishes",
+            "In 080-CR-0047 the Commission said 1,491.718g of gold was missing, worth Rs 1,17,01,781.85. The court credited 623g returned, 809.33g of other metals and 73.88g of natural loss, and put the unexplained difference at about 58g.",
+          )}
+          fix={t(
+            "research.corruption.gap.cNeeded",
+            "A बिगो field on the case record carrying both the amount claimed and the amount upheld. The register rows carry neither, so no claimed-versus-upheld rate can be computed for any case here.",
+          )}
+        >
+          {t(
+            "research.corruption.gap.cBody",
+            "That case is an illustration, not a measurement — it is one judgment read in full, and it shows how far the two figures can sit apart. Across the archive the comparison cannot be made at all. The Commission publishes a yearly damages total, Rs {{bn}} billion for FY2081/82, and nobody publishes the matching upheld figure, so the two are never subtracted on this site.",
+            { bn: ciaa.damagesClaimedYearBn },
+          )}
+        </GapCallout>
+
+        <GapCallout
+          label={t("research.corruption.gap.fLabel", "Accountability gap · Records")}
+          title={t(
+            "research.corruption.gap.fTitle",
+            "The same person is a different name in every file",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.fEstablishes",
+            "The archive holds {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} of those names — about {{pct}} — are matched to a known person or office.",
+            {
+              rows: n(entityResolution.defendantRows),
+              distinct: n(entityResolution.distinctNames),
+              resolved: n(entityResolution.resolved),
+              pct: pct((entityResolution.resolved / entityResolution.distinctNames) * 100),
+            },
+          )}
+          fix={t(
+            "research.corruption.gap.fNeeded",
+            "A stable identifier for each person and office, used across charge sheets, judgments and annual reports.",
+          )}
+        >
+          <>
+            {t(
+              "research.corruption.gap.fBody",
+              "This is what stops the counts above becoming counts of people. Someone charged in two cases appears twice and cannot be merged without guessing from names, which collide heavily in Nepali, so no defendant on this site is identified as a repeat defendant. Matching a name is identification only and is never a statement that the person was convicted.",
+            )}{" "}
+            <Cite href={CITATIONS.dataQuality}>
+              {t("research.corruption.gap.fCite", "Coverage and data quality")}
+            </Cite>
+          </>
+        </GapCallout>
       </Block>
     </>
   );

@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { AccusedPerCase } from "@/components/research/AccusedPerCase";
+import { GapCallout } from "@/components/research/GapCallout";
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
   Block,
@@ -18,6 +19,13 @@ import {
 } from "@/components/layout/Prose";
 import { CITATIONS, REPORT, fyLabel, outcomePct, verdictYearRates } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
+
+/** The one case where a bench put selective prosecution in a reasoned judgment. */
+const JALAHARI = {
+  case: "https://jawafdehi.org/case/jalahari",
+  trial: "https://jawafdehi.org/courtcase/special/080-cr-0047",
+  appeal: "https://jawafdehi.org/courtcase/supreme/081-cr-1635",
+};
 
 export default function Prosecution() {
   const { t, language } = useTranslation();
@@ -276,6 +284,44 @@ export default function Prosecution() {
             "Large cases are not evidence of weak prosecution, and prosecuting many defendants together can be the efficient and correct choice where the conduct was collective. The point here is narrower: case size varies enormously by charge, so a rate computed per case is not comparing like with like across offences.",
           )}
         </Caveat>
+
+        <GapCallout
+          label={t("research.corruption.gap.bLabel", "Accountability gap · Prosecution")}
+          title={t(
+            "research.corruption.gap.bTitle",
+            "A bench acquitted three men because of who was not charged",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={
+            <>
+              {t(
+                "research.corruption.gap.bEstablishes",
+                "In case 080-CR-0047 the Special Court held that charging only some of the people equally responsible offends equal justice, and acquitted all three defendants on 2081/01/18. The Commission appealed on 2081/11/09, saying the court had stepped into a decision the constitution leaves to prosecutors. The appeal is still pending.",
+              )}{" "}
+              <Cite href={JALAHARI.case}>
+                {t("research.corruption.gap.bCite", "The case, with sources")}
+              </Cite>
+              {" · "}
+              <Cite href={JALAHARI.trial}>
+                {t("research.corruption.gap.bCiteTrial", "Trial record 080-CR-0047")}
+              </Cite>
+              {" · "}
+              <Cite href={JALAHARI.appeal}>
+                {t("research.corruption.gap.bCiteAppeal", "Appeal 081-CR-1635")}
+              </Cite>
+            </>
+          }
+          fix={t(
+            "research.corruption.gap.bNeeded",
+            "A Supreme Court ruling on whether selective charging can ground an acquittal, and a way to identify equally-placed people who were not charged. Neither exists, so no rate can be put on this.",
+          )}
+        >
+          {t(
+            "research.corruption.gap.bCaveat",
+            "One judgment is not a pattern. Defendants raise selective prosecution often and it usually goes nowhere; this one matters because the finding came from the bench, with reasons. An uncharged person, a rejected charge or a party's complaint of bias does not establish selective prosecution, and no case on this site is counted as an instance of it.",
+          )}
+        </GapCallout>
       </Block>
     </>
   );

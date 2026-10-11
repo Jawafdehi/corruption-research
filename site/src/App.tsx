@@ -13,7 +13,6 @@ const Investigation = lazy(() => import("@/pages/Investigation"));
 const Prosecution = lazy(() => import("@/pages/Prosecution"));
 const CourtOutcomes = lazy(() => import("@/pages/CourtOutcomes"));
 const Appeals = lazy(() => import("@/pages/Appeals"));
-const Gaps = lazy(() => import("@/pages/Gaps"));
 const Method = lazy(() => import("@/pages/Method"));
 
 /**
@@ -33,7 +32,6 @@ export const SECTIONS = [
   { path: "/prosecution", key: "prosecution", label: "Prosecution", blurb: "What gets charged" },
   { path: "/court-outcomes", key: "courtOutcomes", label: "Court outcomes", blurb: "What the court decides" },
   { path: "/appeals", key: "appeals", label: "Appeals", blurb: "What survives the Supreme Court" },
-  { path: "/gaps", key: "gaps", label: "Accountability gaps", blurb: "Where the trail breaks" },
   { path: "/method", key: "method", label: "Method", blurb: "Sources, limits and provenance" },
 ] as const;
 
@@ -46,9 +44,11 @@ export default function App() {
         <Route path="prosecution" element={<Prosecution />} />
         <Route path="court-outcomes" element={<CourtOutcomes />} />
         <Route path="appeals" element={<Appeals />} />
-        <Route path="gaps" element={<Gaps />} />
         <Route path="method" element={<Method />} />
-        {/* The pre-redesign paths, kept so existing links and bookmarks still land. */}
+        {/* The pre-redesign paths, kept so existing links and bookmarks still land.
+            /gaps is among them now: its six findings moved into the stage each one
+            belongs to, so the nearest thing to the old page is the stage list itself. */}
+        <Route path="gaps" element={<Navigate to="/investigation" replace />} />
         <Route path="outcomes" element={<Navigate to="/court-outcomes" replace />} />
         <Route path="over-time" element={<Navigate to="/court-outcomes" replace />} />
         <Route path="benches" element={<Navigate to="/court-outcomes" replace />} />
