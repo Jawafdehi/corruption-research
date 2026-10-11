@@ -96,7 +96,9 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.ifGrounds": "आधार देखिएमा",
   "research.corruption.flow.ifAppealed": "पुनरावेदन परेमा",
   "research.corruption.flow.exitHere": "यहाँ तामेली हुन सक्छ",
-  "research.corruption.flow.centreNote": "बन्द होइन, हाललाई मात्र। तीन ठाउँबाट।",
+  "research.corruption.flow.centreTitle": "उजुरीको बाटो",
+  "research.corruption.flow.centreSub": "७ चरण · ३ निकास",
+  "research.corruption.flow.exitLegend": "रातो अङ्क भएको चरणबाट उजुरी तामेलीमा जान सक्छ — बन्द होइन, हाललाई मात्र",
   "research.corruption.flow.s1Title": "उजुरी दर्ता",
   "research.corruption.flow.s1": "आयोगमा प्राप्त उजुरी दर्ता गरिन्छ।",
 

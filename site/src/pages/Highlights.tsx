@@ -221,11 +221,13 @@ export default function Highlights() {
                 ifGrounds: t("research.corruption.flow.ifGrounds", "if grounds found"),
                 ifAppealed: t("research.corruption.flow.ifAppealed", "if appealed"),
                 exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
-                centreNote: t(
-                  "research.corruption.flow.centreNote",
-                  "set aside, not closed. Three ways out.",
+                centreTitle: t("research.corruption.flow.centreTitle", "A complaint's route"),
+                centreSub: t("research.corruption.flow.centreSub", "7 steps · 3 ways out"),
+                exitLegend: t(
+                  "research.corruption.flow.exitLegend",
+                  "A step numbered in red can end in Tameli: set aside, not closed",
                 ),
+                exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
                 srIntro: t(
                   "research.corruption.flow.srIntro",
                   "The route a corruption complaint takes, in order. Steps one to five sit with the Commission; steps six and seven are separate courts.",
