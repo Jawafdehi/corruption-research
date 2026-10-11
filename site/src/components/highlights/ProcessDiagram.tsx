@@ -415,7 +415,3 @@ export function ProcessDiagram({
     </div>
   );
 }
-
-export const FlowNote = ({ children }: { children: React.ReactNode }) => (
-  <p className="mt-5 max-w-2xl text-xs leading-5 text-muted-foreground">{children}</p>
-);

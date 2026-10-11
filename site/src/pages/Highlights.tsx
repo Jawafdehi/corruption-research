@@ -5,7 +5,6 @@ import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
 import { DurationBands } from "@/components/highlights/DurationBands";
 import {
-  FlowNote,
   ProcessDiagram,
   type DiagramNode,
 } from "@/components/highlights/ProcessDiagram";
@@ -264,7 +263,7 @@ export default function Highlights() {
                 </strong>{" "}
                 {t(
                   "research.corruption.flow.exitMeaning",
-                  "means the complaint is set aside for the time being, not closed for good. The file and its record are kept, and the Commission's own notice states that if further evidence comes to light the matter is dealt with under the law at that time.",
+                  "means the complaint is set aside for the time being and not closed permanently. The file and its record are kept, and the Commission's own notice states that if further evidence comes to light the matter is dealt with under the law at that time.",
                 )}
               </p>
               <p className="mt-1.5 text-xs text-muted-foreground">
@@ -275,12 +274,6 @@ export default function Highlights() {
               </p>
             </div>
 
-            <FlowNote>
-              {t(
-                "research.corruption.flow.source",
-                "Stages follow the अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५); appeal under विशेष अदालत ऐन, २०५९ दफा १७. A complaint can be set aside as Tameli at three separate points, marked above. No stage follows automatically from the one before it, and an appeal is a right either side may exercise, not a step every case takes.",
-              )}
-            </FlowNote>
           </div>
         </section>
       </Reveal>
