@@ -209,7 +209,7 @@ def build() -> dict:
         # Audit columns (tracked_sum / all_rows_sum / printed_total) stay in the CSV and
         # out of the site: they exist to prove the parse, not to be rendered.
         "disposals": _rows(cd.load_disposals()[
-            ["fy", "filed", "advice", "referred", "tameli", "held",
+            ["fy", "investigated", "filed", "advice", "referred", "tameli", "held",
              "total", "figure", "source_url", "note"]]),
         "defendants": {
             # snake_case -> camelCase, so this block matches every other key in the file

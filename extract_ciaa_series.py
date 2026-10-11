@@ -129,6 +129,24 @@ def _action_table(text: str) -> dict | None:
     return row if len(row) > 1 else None
 
 
+def _investigations_completed(text: str) -> int | None:
+    """How many complaints finished a detailed investigation that year.
+
+    The denominator the action table is missing. It matters because the two do not
+    match and are not supposed to: the FY2080/81 report says so outright — "केही
+    विस्तृत अनुसन्धानतर्फका फाइलहरूमा एकभन्दा बढी निर्णय हुने हुँदा" (some files draw
+    more than one decision), which is why 1,050 files produce 1,187 actions.
+
+    Returns None where the report does not state it, so the gap shows as a gap.
+    """
+    m = re.search(
+        r"जम्मा\s*([०-९\d,]+)\s*वटा\s*(?:फाइलहरूको|उजुरीको)[^।]{0,140}?"
+        r"विस्तृत\s*अनुसन्धान[^।]{0,80}?सम्पन्न",
+        text,
+    )
+    return _num(m.group(1)) if m else None
+
+
 def _appeal_decisions(text: str) -> dict:
     """पुनरावेदन गने / पुनरावेदन नगने from the Commission-decisions table.
 
@@ -182,7 +200,9 @@ def main() -> None:
                 note += (" `filed` is 130 = 115 prosecute-only + 9 prosecute-and-advise"
                          " + 6 prosecute-and-refer, matching the treatment तामेली already gets.")
             inv_rows.append({
-                "fy": fy, **counts,
+                "fy": fy,
+                "investigated": _investigations_completed(text),
+                **counts,
                 "total_actions": total,
                 "tracked_sum": sum(v for v in counts.values() if v is not None),
                 "all_rows_sum": action["all_rows_sum"],
@@ -235,6 +255,16 @@ def _validate(rows: list[dict]) -> None:
     if bad:
         raise SystemExit("filing counts disagree with the reports' own prose:\n  " + "\n  ".join(bad))
 
+    # A file can draw more than one decision, never fewer, so actions must not fall
+    # below the count of investigations closed. If they ever do, the two figures have
+    # been read off tables that are not talking about the same population.
+    impossible = [
+        f"{r['fy']}: {r['investigated']} investigations but only {r['total_actions']} actions"
+        for r in rows if r["investigated"] and r["investigated"] > r["total_actions"]
+    ]
+    if impossible:
+        raise SystemExit("actions below investigations closed:\n  " + "\n  ".join(impossible))
+
     printed = [r for r in rows if r["printed_total"] != ""]
     mismatched = [r["fy"] for r in printed if r["printed_total"] != r["all_rows_sum"]]
     if mismatched:
@@ -242,6 +272,9 @@ def _validate(rows: list[dict]) -> None:
 
     print(f"  filing counts matching the reports' prose: {len(PROSE_FILED)}/{len(PROSE_FILED)}")
     print(f"  row sums matching the printed जम्मा: {len(printed) - len(mismatched)}/{len(printed)}")
+    got = [r for r in rows if r["investigated"]]
+    print(f"  years stating investigations closed: {len(got)}/{len(rows)}"
+          f" (actions >= investigations in all {len(got)})")
 
 
 if __name__ == "__main__":

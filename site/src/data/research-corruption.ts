@@ -196,6 +196,13 @@ export const decidedClean = (o: OutcomeCounts): number => o.convicted + o.partia
  */
 export type Disposal = {
   fy: string;
+  /**
+   * Complaints that finished a detailed investigation that year, where the report
+   * states it. Deliberately NOT the denominator for `tameli`: a single file can draw
+   * more than one decision, which the FY2080/81 report says outright, so the actions
+   * total runs above this. `null` where the report does not print it.
+   */
+  investigated: number | null;
   /** मुद्दा दायर — decisions to prosecute. A decision count, not a register filing. */
   filed: number;
   /** तामेली — closed after a full investigation had been carried out. */

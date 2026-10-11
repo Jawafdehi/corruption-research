@@ -15,12 +15,14 @@ import { useFormat } from "@/lib/format";
 export function TameliByYear({
   rows,
   yearLabel,
+  investigatedLabel,
   courtLabel,
   holdLabel,
   shareLabel,
 }: {
   rows: readonly Disposal[];
   yearLabel: string;
+  investigatedLabel: string;
   courtLabel: string;
   holdLabel: string;
   shareLabel: string;
@@ -32,7 +34,7 @@ export function TameliByYear({
 
   return (
     <div className="chart-scroll">
-      <table className="w-full min-w-[320px] border-collapse text-sm">
+      <table className="w-full min-w-[384px] border-collapse text-sm">
         <caption className="sr-only">
           {`${holdLabel} ${shareLabel}, ${rows[0]?.fy} – ${rows[rows.length - 1]?.fy}`}
         </caption>
@@ -40,6 +42,9 @@ export function TameliByYear({
           <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
             <th scope="col" className="py-2 pr-3 text-left font-medium">
               {yearLabel}
+            </th>
+            <th scope="col" className="py-2 pr-3 text-right font-medium">
+              {investigatedLabel}
             </th>
             <th scope="col" className="py-2 pr-3 text-right font-medium">
               {courtLabel}
@@ -70,6 +75,11 @@ export function TameliByYear({
                 >
                   {r.fy}
                 </th>
+                {/* An em dash, not a zero: FY2073/74's report does not state how
+                    many investigations it closed, and a 0 would read as "none". */}
+                <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-muted-foreground">
+                  {r.investigated === null ? "—" : n(r.investigated)}
+                </td>
                 <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
                   {n(r.filed)}
                 </td>

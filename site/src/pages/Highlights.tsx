@@ -283,7 +283,7 @@ export default function Highlights() {
           stat={pct1(tameliPct(lastDisposal))}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were to put the complaint on hold, compared with {{peakPct}} in {{peakFy}}.",
+            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were Tameli, compared with {{peakPct}} in {{peakFy}}. Tameli means the complaint is kept on record with no further action unless new evidence emerges.",
             {
               lastFy: lastDisposal.fy,
               peakFy: peak.fy,
@@ -294,18 +294,6 @@ export default function Highlights() {
             "research.corruption.hl.f1",
             "Most complaints are dropped long before a court sees them",
           )}
-          explain={t(
-            "research.corruption.hl.f1Body",
-            "This is called Tameli. It means the CIAA keeps a complaint on record but takes no further action unless new evidence emerges. The numbers show a major shift. In {{peakFy}} the CIAA decided to take {{peakFiled}} complaints to court and put {{peakTameli}} on hold. By {{lastFy}} only {{lastFiled}} complaints were taken to court, while {{lastTameli}} were put on hold. The CIAA's annual reports do not explain why these complaints were placed on hold.",
-            {
-              peakFy: peak.fy,
-              peakFiled: n(peak.filed),
-              peakTameli: n(peak.tameli),
-              lastFy: lastDisposal.fy,
-              lastFiled: n(lastDisposal.filed),
-              lastTameli: n(lastDisposal.tameli),
-            },
-          )}
           chart={
             // A table, not the trend chart that carries the same series on the
             // Investigation tab. Here the reader wants to look a year up; there they
@@ -313,9 +301,10 @@ export default function Highlights() {
             <TameliByYear
               rows={disposals}
               yearLabel={t("research.corruption.hl.f1Year", "Fiscal year")}
+              investigatedLabel={t("research.corruption.hl.f1Inv", "Investigated")}
               courtLabel={t("research.corruption.hl.f1Court", "To court")}
-              holdLabel={t("research.corruption.hl.f1Hold", "On hold")}
-              shareLabel={t("research.corruption.hl.f1Share", "On hold %")}
+              holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
+              shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
             />
           }
           meta={{
