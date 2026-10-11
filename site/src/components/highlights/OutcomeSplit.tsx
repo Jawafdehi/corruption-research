@@ -33,44 +33,36 @@ export function OutcomeSplit({
 
   return (
     <div>
-      <div
-        className="flex h-11 w-full overflow-hidden rounded border border-border"
-        role="img"
-        aria-label={segments
-          .map((s) => `${s.label} ${n(s.value)}, ${pct1(share(s.value))}`)
-          .join("; ")}
-      >
+      {/*
+        One bar per disposition rather than a single stacked run. Stacked, the
+        three read as slices of a whole and the eye compares segment lengths
+        against each other; separated, each one is its own measured quantity
+        against the same baseline, which is what a reader actually wants here.
+      */}
+      <ul className="space-y-3">
         {segments.map((s) => (
-          <div
-            key={s.key}
-            className="h-full border-r border-[hsl(var(--surface))] last:border-r-0"
-            style={{ width: `${share(s.value)}%`, backgroundColor: s.fill }}
-            title={`${s.label} (${s.term}): ${n(s.value)} of ${n(total)} — ${s.definition}`}
-          />
-        ))}
-      </div>
-
-      <dl className="mt-4 space-y-2.5">
-        {segments.map((s) => (
-          <div key={s.key} className="flex items-baseline gap-2.5" title={s.definition}>
-            <span
-              aria-hidden="true"
-              className="mt-1.5 inline-block h-2.5 w-2.5 shrink-0 rounded-sm"
-              style={{ backgroundColor: s.fill }}
-            />
-            <dt className="min-w-0 flex-1 text-sm leading-5 text-foreground/85">
-              {s.label}{" "}
-              <span lang="ne" className="text-muted-foreground">
-                {s.term}
+          <li key={s.key} title={s.definition}>
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-sm text-foreground/85">
+                {s.label}{" "}
+                <span lang="ne" className="text-muted-foreground">
+                  {s.term}
+                </span>
               </span>
-            </dt>
-            <dd className="shrink-0 font-mono text-sm tabular-nums text-foreground">
-              {n(s.value)}
-              <span className="ml-2 text-muted-foreground">{pct1(share(s.value))}</span>
-            </dd>
-          </div>
+              <span className="shrink-0 font-mono text-sm tabular-nums text-foreground">
+                {n(s.value)}
+                <span className="ml-2 font-semibold">{pct1(share(s.value))}</span>
+              </span>
+            </div>
+            <div className="mt-1.5 h-2.5 w-full rounded-sm bg-foreground/[0.07]">
+              <div
+                className="h-full rounded-sm"
+                style={{ width: `${share(s.value)}%`, backgroundColor: s.fill }}
+              />
+            </div>
+          </li>
         ))}
-      </dl>
+      </ul>
 
       <p className="mt-3 border-t border-border pt-2.5 text-right font-mono text-xs tabular-nums text-muted-foreground">
         {totalLabel} {n(total)}
