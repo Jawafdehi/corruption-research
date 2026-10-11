@@ -16,6 +16,7 @@ import {
   REPORT,
   decidedClean,
   outcomePct,
+  tameliPct,
 } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
@@ -25,12 +26,20 @@ const MIN_DECIDED = 60;
 export default function Highlights() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
-  const { appeals, byCharge, ciaa, disposals, outcome, rates } = REPORT;
+  const { appeals, byCharge, ciaa, defendants, disposals, outcome, rates } = REPORT;
 
   const decided = decidedClean(outcome);
 
-  // 01 — the Commission's second filter.
-  const cd = REPORT.complaintDisposal[0];
+  // 01 — the Commission's second filter, and the year it turned over. The peak is
+  // derived rather than written down so the card cannot drift when a report is added.
+  const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
+  const lastDisposal = disposals[disposals.length - 1];
+
+  // 02 — the same verdicts counted per accused rather than per case.
+  const accusedTotal = defendants.byVerdict.reduce((sum, r) => sum + r.accused, 0);
+  const accusedIn = (verdict: string) =>
+    defendants.byVerdict.find((r) => r.verdict === verdict)?.accused ?? 0;
+  const partAccusedPct = accusedTotal ? (accusedIn("आंशिक ठहर") / accusedTotal) * 100 : 0;
 
   // 02 — what the court decides, over the cases carrying a clean disposition.
   const outcomeSegments: OutcomeSegment[] = [
@@ -271,23 +280,30 @@ export default function Highlights() {
       <div className="mt-10 grid gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
         <Highlight
           index={1}
-          stat={pct1(((cd.tameli + cd.tameli_with_advice) / cd.total_complaints) * 100)}
+          stat={pct1(tameliPct(lastDisposal))}
           statCaption={t(
             "research.corruption.hl.f1Stat",
-            "of the {{total}} complaints the CIAA handled in {{fy}} were set aside without any charge being filed",
-            { total: n(cd.total_complaints), fy: cd.fy },
+            "of the decisions the CIAA took after a full investigation in {{lastFy}} were to shelve the complaint. In {{peakFy}} it was {{peakPct}}.",
+            {
+              lastFy: lastDisposal.fy,
+              peakFy: peak.fy,
+              peakPct: pct1(tameliPct(peak)),
+            },
           )}
           headline={t(
             "research.corruption.hl.f1",
-            "Most complaints are dropped long before a court sees them",
+            "The Commission used to prosecute most of what it investigated. Now it shelves most of it.",
           )}
           explain={t(
             "research.corruption.hl.f1Body",
-            "Setting a complaint aside is called Tameli. It is parked rather than closed for good: fresh evidence can revive it, but nothing happens unless that evidence turns up. Even among the {{done}} complaints the CIAA investigated in full that year, {{tam}} ended this way and {{filed}} went to court. The CIAA publishes these totals but never the reasons.",
+            "Shelving a complaint is called Tameli: it is parked rather than closed for good, but nothing happens unless new evidence turns up. In {{peakFy}} the Commission decided to prosecute {{peakFiled}} complaints and shelve {{peakTameli}}. By {{lastFy}} that had reversed to {{lastFiled}} and {{lastTameli}}. The turn took one year and the reports give no reason for it.",
             {
-              done: n(cd.investigations_completed),
-              tam: n(cd.inv_tameli),
-              filed: n(cd.inv_filed),
+              peakFy: peak.fy,
+              peakFiled: n(peak.filed),
+              peakTameli: n(peak.tameli),
+              lastFy: lastDisposal.fy,
+              lastFiled: n(lastDisposal.filed),
+              lastTameli: n(lastDisposal.tameli),
             },
           )}
           chart={
@@ -331,8 +347,12 @@ export default function Highlights() {
           )}
           explain={t(
             "research.corruption.hl.f2Body",
-            "The court records one verdict for the whole case. A partial conviction can mean a single junior official was convicted while everyone senior walked, and the record does not say which. So this tells you how many cases ended in conviction, not how many people were held to account.",
-            { ongoing: n(outcome.ongoing) },
+            "One verdict covers the whole docket, and a docket can hold anything from one accused to {{largest}}. Counting people instead of cases, {{partPct}} of the {{accused}} charged sit in cases the court upheld only in part — convicted on some counts or against some defendants, with no record of which. For them the public record does not say what happened.",
+            {
+              largest: n(defendants.largestCase),
+              partPct: pct1(partAccusedPct),
+              accused: n(accusedTotal),
+            },
           )}
           chart={
             <OutcomeSplit

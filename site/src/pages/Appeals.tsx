@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useFormat } from "@/lib/format";
 
 import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
+import { AppealDecisions } from "@/components/research/AppealDecisions";
 import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
 import { REPORT, decidedClean } from "@/data/research-corruption";
 
@@ -14,6 +15,22 @@ export default function Appeals() {
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
+
+  // The Commission's own appeal/decline decisions, from the annual reports. Kept
+  // entirely separate from the Supreme Court figures: a decision has no denominator
+  // here, so these are only ever reported as counts and a share of each other.
+  const ciaaDecisions = appeals.ciaaDecisions;
+  const decisionTotals = ciaaDecisions.reduce(
+    (a, r) => ({
+      appealed: a.appealed + r.appealed,
+      notAppealed: a.notAppealed + r.notAppealed,
+      minAppealed: Math.min(a.minAppealed, r.appealed),
+      maxAppealed: Math.max(a.maxAppealed, r.appealed),
+    }),
+    { appealed: 0, notAppealed: 0, minAppealed: Infinity, maxAppealed: 0 },
+  );
+  const declinedTotal = decisionTotals.appealed + decisionTotals.notAppealed;
+  const declinedPct = declinedTotal ? (decisionTotals.notAppealed / declinedTotal) * 100 : 0;
 
   // Share of established appeals we cannot follow to an end. Surfaced before the
   // rates, not after, so the 36.6%/1.1% pair is read as the decided minority.
@@ -241,6 +258,76 @@ export default function Appeals() {
             "Trial and appeal cases are stored without any link between them, so the pairing had to be built — from the Commission's own register where it prints both case numbers, from Supreme Court judgments naming the trial case, and otherwise by matching defendant names. It is a curated first version, audited at roughly 98% precision on a sample, and the direction of every reversal was checked three separate ways before any figure here was published.",
           )}
         </Body>
+      </Block>
+
+      <Block>
+        <Eyebrow>{t("research.corruption.appealDecisions.eyebrow", "Before the appeal exists")}</Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.appealDecisions.title",
+            "The Commission decides whether a loss gets appealed at all, and often decides not to",
+          )}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.appealDecisions.body",
+            "Everything above counts appeals that were filed. But a verdict only reaches the Supreme Court if the Commission's own meeting votes to take it there, and that meeting records both answers. Across the {{years}} fiscal years where the annual reports print the decision table, it voted to appeal {{yes}} times and voted not to appeal {{no}} times — declining in {{noPct}} of the decisions it took.",
+            {
+              years: n(ciaaDecisions.length),
+              yes: n(decisionTotals.appealed),
+              no: n(decisionTotals.notAppealed),
+              noPct: pct1(declinedPct),
+            },
+          )}
+        </Body>
+
+        <Figure
+          title={t(
+            "research.corruption.appealDecisions.chartTitle",
+            "The Commission's own decisions on whether to appeal, by fiscal year",
+          )}
+          subtitle={t(
+            "research.corruption.appealDecisions.chartSubtitle",
+            "Decisions recorded at Commission meetings. Above the line: appeal. Below: do not appeal.",
+          )}
+          caption={
+            <>
+              {t(
+                "research.corruption.appealDecisions.chartCaption",
+                "A decision is not a filing, and the year a decision is taken is not the year the verdict was handed down, so these counts are never divided into the Supreme Court figures above and no success rate is built from them. The reports print no reason for any individual decision not to appeal, and no case number, so a declined appeal cannot be traced to the verdict it concerned.",
+              )}{" "}
+              {ciaaDecisions.map((d, i) => (
+                <span key={d.fy}>
+                  {i > 0 ? " · " : ""}
+                  {d.fy}
+                </span>
+              ))}
+            </>
+          }
+        >
+          <AppealDecisions
+            rows={ciaaDecisions}
+            appealedLabel={t("research.corruption.appealDecisions.yes", "Decided to appeal")}
+            declinedLabel={t("research.corruption.appealDecisions.no", "Decided not to appeal")}
+          />
+        </Figure>
+
+        <Body>
+          {t(
+            "research.corruption.appealDecisions.body2",
+            "The two series move independently. Decisions to appeal swing from {{min}} in one year to {{max}} in another, while decisions to decline stay far steadier. A reader should resist the obvious inference: the reports do not say how many eligible verdicts there were in any year, so a low appeal count may mean the Commission lost less, declined more, or simply met less often.",
+            { min: n(decisionTotals.minAppealed), max: n(decisionTotals.maxAppealed) },
+          )}
+        </Body>
+
+        <Unknown
+          title={t("research.corruption.appealDecisions.unknownTitle", "What would make this readable")}
+        >
+          {t(
+            "research.corruption.appealDecisions.unknownBody",
+            "The number of verdicts eligible for appeal in each year, which would turn these counts into a rate, and a reason recorded against each decision not to appeal. Neither appears in any annual report. Without them, the clearest statement the evidence supports is that declining to appeal is a routine outcome rather than a rare one.",
+          )}
+        </Unknown>
       </Block>
     </>
   );

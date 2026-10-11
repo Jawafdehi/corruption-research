@@ -279,15 +279,55 @@ def load_disposals():
     One row per fiscal year, transcribed from the decision table (or reconciled Venn figure) printed
     in that year's annual report, with the figure number and report URL on the row.
 
-    Only years where the report prints BOTH the तामेली count AND the table total are included, so
-    every share is computed from two numbers in one table rather than across sources. 2076/77 and
-    2081/82 print the decision bubbles without a reconcilable disposal total and are left out rather
-    than derived — the gap is in the reporting, and filling it by arithmetic would hide that.
+    Built by `extract_ciaa_series.py`, which parses the decision table out of each report's own
+    committed text conversion rather than re-typing it, and refuses to write a series that disagrees
+    with the filing counts the reports state in prose. FY2073/74–2081/82; the four earlier years are
+    skipped because they report the same material as a subject-area cross-tab with a different row
+    vocabulary. `extract_ciaa_series.KNOWN_GAPS` records which year is missing and why.
 
     `filed` is मुद्दा दायर on the same table. It counts DECISIONS to prosecute in that year, which is
     not the same unit as the court register's filings, so the two are never differenced here.
+
+    The superseded hand-compiled `ciaa_disposals.csv` is kept as a regression check, not as data.
+    It is reconciled here on every overlapping year, with one documented correction: it recorded
+    2078/79 `filed` as 115, which is the report's "मुद्दा दायर गने मात्र" row. The comparable figure
+    is 130, adding the 9 "दायर and सुझाव both" and 6 "दायर and लेखी पठाउने both" decisions — exactly
+    the treatment its own तामेली figure already used (559 + 68 + 10 = 637).
     """
-    return pd.read_csv(DATA / "ciaa_disposals.csv")
+    df = pd.read_csv(DATA / "ciaa_investigation_decisions.csv").rename(columns={"total_actions": "total"})
+    _reconcile_disposals(df)
+    return df
+
+
+#: Years where the superseded compilation differs from the parsed series, and why. Any OTHER
+#: disagreement is a regression and raises.
+_DISPOSAL_CORRECTIONS = {("2078/79", "filed"): "counted the 'prosecute only' row, excluding combined decisions",
+                         ("2078/79", "total"): "totalled all Commission decisions, not post-investigation actions"}
+
+
+def _reconcile_disposals(df):
+    legacy = pd.read_csv(DATA / "ciaa_disposals.csv").set_index("fy")
+    cur = df.set_index("fy")
+    drift = [f"{fy} {col}: {legacy.loc[fy, col]} -> {cur.loc[fy, col]}"
+             for fy in legacy.index if fy in cur.index
+             for col in ("filed", "tameli", "total")
+             if legacy.loc[fy, col] != cur.loc[fy, col] and (fy, col) not in _DISPOSAL_CORRECTIONS]
+    if drift:
+        raise ValueError("parsed disposal series drifted from the committed compilation:\n  " + "\n  ".join(drift))
+
+
+def load_investigation_appeal_decisions():
+    """Whether the Commission decided to APPEAL a Special Court verdict, by fiscal year.
+
+    From the "आयोगका निर्णयहरूको विवरण" table (पुनरावेदन गने / पुनरावेदन नगने). These are the
+    Commission's own decisions, taken at its meetings, so they are the upstream half of the appeal
+    story the Supreme Court register shows downstream.
+
+    ⚠️ A decision is not a filing, and the year a decision is taken is not the year the underlying
+    verdict was handed down. These counts are NOT a denominator for any appeal-success rate, and
+    they are not differenced against the Supreme Court figures anywhere.
+    """
+    return pd.read_csv(DATA / "ciaa_appeal_decisions.csv")
 
 def load_appeals():
     """Trial outcome x who appealed x Supreme Court outcome, as counts of CASES.
@@ -471,6 +511,51 @@ def _transform(cases, hearings, entities, assumptions):
         oc.append(([*FAM[k], cv, pt, aq], cv / tot if tot else 0))
     f["outcome_by_charge"] = pd.DataFrame([r for r, _ in sorted(oc, key=lambda x: -x[1])],
         columns=["charge_en", "charge_ne", "convicted", "partial", "acquitted"])
+
+    # ------------------------------------------------------------ defendant grain
+    #
+    # Every rate above counts CASES. A case is not a person: the register carries one
+    # verdict per docket but anywhere from one to 249 accused under it. Counting the
+    # accused as well as the dockets is what makes the case-grain rates interpretable,
+    # because the two grains do not move together -- the charges that convict most
+    # reliably are also the ones tried one defendant at a time.
+    #
+    # These are defendant ROWS (positions on a charge sheet), not resolved people. Only
+    # ~5% of entity rows carry an `nes_id`, so the same individual charged in two cases
+    # counts twice and cannot be deduplicated without guessing from names, which collide
+    # heavily in Nepali. A row is one accusation, which is the honest unit here.
+    INSTITUTIONAL = {"नेपाल सरकार", "अ.दु.अ.आ."}  # the prosecutor, mis-filed on the defence side
+    acc = entities[(entities.side == "defendant") & (~entities.name.isin(INSTITUTIONAL))]
+    per_case = acc.groupby("case_number").size().rename("accused")
+
+    # Inner join on `hc`, so the defendant grain inherits the same exclusions as every
+    # case-grain rate: court-published verdicts only, model-derived ones left out.
+    verdict_of = hc.drop_duplicates("case_number").set_index("case_number").decision_type
+    dgrain = pd.concat([per_case, verdict_of.rename("verdict")], axis=1, join="inner")
+    dgrain = dgrain.join(corpus.set_index("case_number").family)
+
+    by_verdict = dgrain.groupby("verdict").agg(cases=("accused", "size"), accused=("accused", "sum"))
+    f["defendants_by_verdict"] = (
+        by_verdict.reindex(list(DECISIONS)).fillna(0).astype(int)
+        .rename_axis("verdict").reset_index())
+
+    # Accused per case by charge family -- the mechanism behind the charge-rate spread
+    # already on the Prosecution page: fake-credential cases are one-defendant documentary
+    # cases, illegal-benefit cases are large multi-accused ones.
+    dfam = dgrain.groupby("family").agg(cases=("accused", "size"), accused=("accused", "sum"))
+    f["defendants_by_charge"] = pd.DataFrame(
+        [[*FAM[k], int(dfam.loc[k, "cases"]), int(dfam.loc[k, "accused"])]
+         for k in FAM if k not in DROP_FAM and k in dfam.index],
+        columns=["charge_en", "charge_ne", "cases", "accused"])
+
+    f["defendant_summary"] = pd.DataFrame([{
+        "accused_rows": int(len(acc)),
+        "distinct_names": int(acc.name.nunique()),
+        "largest_case": int(per_case.max()),
+        "single_accused_cases_pct": round(100 * (per_case == 1).mean(), 1),
+        "accused_in_decided": int(dgrain.accused.sum()),
+        "decided_cases": int(len(dgrain)),
+    }])
 
     fams = ["bribery", "fake", "embezzlement", "benefit", "loss", "other"]
     ct = corpus.case_type.fillna("")

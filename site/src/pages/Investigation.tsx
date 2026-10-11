@@ -27,8 +27,12 @@ export default function Investigation() {
   const investigatedShare = (ciaa.investigatedYear / ciaa.complaintsYear) * 100;
   const filedPerInvestigated = Math.round(ciaa.investigatedYear / ciaa.casesFiledYear);
 
-  const first = disposals[0];
   const last = disposals[disposals.length - 1];
+  // The turn is the finding, so it is derived rather than written down: the year the
+  // Commission decided to prosecute most, and the year right after it. Taking the peak
+  // from the data means the copy cannot drift when another report is added.
+  const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
+  const afterPeak = disposals[disposals.indexOf(peak) + 1] ?? last;
 
   const stageLabel: Record<string, string> = {
     complaints: t("research.corruption.funnel.stage.complaints", "Complaints to the Commission"),
@@ -238,18 +242,35 @@ export default function Investigation() {
         <SectionHeading>
           {t(
             "research.corruption.investigation.tameliTitle",
-            "One in five became seven in ten",
+            "The Commission went from prosecuting most of what it investigated to shelving most of it",
           )}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.investigation.tameliBody",
-            "A complaint that survives screening and gets investigated goes to the Commission's own meeting, which can prosecute it, advise the agency, write to it, or shelve it as तामेली. In {{firstFy}} the meeting shelved {{firstPct}} of what reached it. By {{lastFy}} it shelved {{lastPct}}. Decisions to prosecute barely moved across the same years.",
+            "A complaint that survives screening and gets investigated goes to the Commission's own meeting, which can prosecute it, advise the agency, write to it, or shelve it as तामेली — set it aside without charges. In {{peakFy}} the meeting prosecuted {{peakFiled}} complaints and shelved {{peakTameli}}. In {{lastFy}} it prosecuted {{lastFiled}} and shelved {{lastTameli}}. Shelving went from {{peakPct}} of its decisions to {{lastPct}}.",
             {
-              firstFy: first.fy,
-              firstPct: pct1(tameliPct(first)),
+              peakFy: peak.fy,
+              peakFiled: n(peak.filed),
+              peakTameli: n(peak.tameli),
               lastFy: last.fy,
+              lastFiled: n(last.filed),
+              lastTameli: n(last.tameli),
+              peakPct: pct1(tameliPct(peak)),
               lastPct: pct1(tameliPct(last)),
+            },
+          )}
+        </Body>
+        <Body>
+          {t(
+            "research.corruption.investigation.tameliStep",
+            "The change is not a drift. It happens between {{peakFy}} and {{afterFy}}, two consecutive years, with shelving jumping from {{peakPct}} to {{afterPct}}. It has not come back down since. Two things in the public record fall inside that window: the post of chief commissioner sat vacant for about five months from Bhadra {{vacancyBs}}, and it was then filled substantively for the first time since 2073. The reports give no reason for the change, and the coincidence of dates is not evidence that one caused the other.",
+            {
+              peakFy: peak.fy,
+              afterFy: afterPeak.fy,
+              peakPct: pct1(tameliPct(peak)),
+              afterPct: pct1(tameliPct(afterPeak)),
+              vacancyBs: "2077",
             },
           )}
         </Body>
@@ -267,7 +288,7 @@ export default function Investigation() {
             <>
               {t(
                 "research.corruption.investigation.chartCaption",
-                "Each year's share divides two numbers printed in the same table of the same annual report, so no figure is combined across sources. Years where the report prints the decision bubbles without a reconcilable total are left out rather than derived — the gap is in the reporting. 'Prosecute' counts decisions to file, which is not the same unit as a case appearing in the court register, so the two are never subtracted from one another.",
+                "Each year's share divides two numbers printed in the same table of the same annual report, so no figure is combined across sources. Five of the nine years are checked against the table's own printed total and five against the filing counts the reports state in prose. Fiscal years 2069/70 to 2072/73 are missing because those reports present the same decisions as a subject-area cross-tab with different row labels; splicing them on would compare two different things. 'Prosecute' counts decisions to file, which is not the same unit as a case appearing in the court register, so the two are never subtracted from one another.",
               )}{" "}
               {disposals.map((d, i) => (
                 <span key={d.fy}>
@@ -291,7 +312,7 @@ export default function Investigation() {
         <Caveat>
           {t(
             "research.corruption.investigation.tameliCaveat",
-            "Shelving a weak case after investigating it is the right call, and a Commission that prosecuted everything it touched would be a worse one. The number alone cannot tell you which of those is happening here. What it does tell you is the size of the change and the direction of it, and that the reports attach no reason to a single one of these closures.",
+            "Shelving a weak case after investigating it is the right call, and a Commission that prosecuted everything it touched would be a worse one. The number alone cannot tell you which of those is happening here: a Commission that got better at screening weak complaints early and one that lost its appetite for court both produce this chart. What the figures do establish is the size of the change, how fast it arrived, and that the reports attach no reason to a single one of these closures.",
           )}
         </Caveat>
 

@@ -40,6 +40,11 @@
        component carrying this token still renders when it is used outside
        the editorial section. */
     --surface: 60 10.3% 94.3%;
+    /* Same reasoning as --surface above: the court green was defined only inside
+       .theme-editorial, so a chart using it on Court outcomes or Appeals rendered
+       its court-coloured band as nothing at all. Defined here too; the editorial
+       section is still free to override it. */
+    --court: 152 26% 24%;       /* #2E4E3F deep green */
 
     --radius: 0.5rem;
 
