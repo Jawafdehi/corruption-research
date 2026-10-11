@@ -115,13 +115,6 @@ export default function Highlights() {
   const untracedPct = appeals.appeals ? (appeals.no_outcome / appeals.appeals) * 100 : 0;
 
   // D — how the Supreme Court treated the judgment below it, summed across the
-  // trial-outcome rows. "Upheld" counts both an affirmed judgment and an appeal
-  // whose claim was rejected: in each the Special Court's decision survives.
-  const sumCol = (k: "affirmed" | "claim_denied" | "reversed" | "partially_reversed") =>
-    appeals.byTrialOutcome.reduce((acc, r) => acc + r[k], 0);
-  const upheld = sumCol("affirmed") + sumCol("claim_denied");
-  const overturned = sumCol("reversed");
-  const partlyChanged = sumCol("partially_reversed");
 
   // C — duration, over decided cases only.
   const duration = REPORT.duration;
@@ -268,223 +261,236 @@ export default function Highlights() {
       </Reveal>
 
       {/* Four findings, one shape each. */}
-      {/* `items-start` so a card is its own height. Grid items stretch by default,
-          which left the shorter card in each row with a block of empty space. */}
+      {/* Two independent columns rather than a two-column grid. A grid holds every
+          row to the height of its tallest card, so a short card leaves dead space
+          beneath it until the next row begins; separate columns let each card sit
+          directly under the one above. Split by parity, so the left column still
+          reads 01, 03, 05 against 02, 04, 06 on the right -- the same pairing the
+          grid gave, without the gaps. */}
       <div className="mt-10 grid items-start gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
-        <Highlight
-          index={1}
-          stat={pct1(tameliPct(lastDisposal))}
-          statCaption={t(
-            "research.corruption.hl.f1Stat",
-            "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were Tameli, compared with {{peakPct}} in {{peakFy}}.",
-            {
-              lastFy: lastDisposal.fy,
-              peakFy: peak.fy,
-              peakPct: pct1(tameliPct(peak)),
-            },
-          )}
-          headline={t(
-            "research.corruption.hl.f1",
-            "Most complaints are dropped long before a court sees them",
-          )}
-          chart={
-            // A table, not the trend chart that carries the same series on the
-            // Investigation tab. Here the reader wants to look a year up; there they
-            // want the shape of the change. Same nine rows, read two ways.
-            <TameliByYear
-              rows={disposals}
-              yearLabel={t("research.corruption.hl.f1Year", "Fiscal year")}
-              investigatedLabel={t("research.corruption.hl.f1Inv", "Investigated")}
-              courtLabel={t("research.corruption.hl.f1Court", "To court")}
-              holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
-              shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
-            />
-          }
-          meta={{
-            source: t("research.corruption.hl.f1Src", "CIAA annual reports"),
-            sourceHref: CITATIONS.ciaaReports,
-            to: "/investigation",
-            toLabel: t("research.corruption.hl.f1Link", "The year-by-year series"),
-          }}
-        >
-          {/*
-            The three CIAA stage figures, shown as separate annual totals rather
-            than a funnel. They are three different sets of complaints counted in
-            the same year, so an arrow between them would assert a progression the
-            reports do not support.
-          */}
-        </Highlight>
-
-        <Highlight
-          index={2}
-          stat={pct1(rates.convictionPct)}
-          statCaption={t(
-            "research.corruption.hl.f2Stat",
-            "of {{d}} decided cases ended in conviction, full or partial. Full convictions alone: {{full}}.",
-            { d: n(decided), full: pct1(rates.convictionFullOnlyPct) },
-          )}
-          headline={t(
-            "research.corruption.hl.f2",
-            "How many corruption cases end in conviction?",
-          )}
-          chart={
-            <OutcomeSplit
-              segments={outcomeSegments}
-              total={decided}
-              totalLabel={t("research.corruption.hl.decidedTotal", "Decided cases")}
-            />
-          }
-          meta={{
-            source: t("research.corruption.hl.f2Src", "Special Court register"),
-            sourceHref: CITATIONS.courtRecords,
-            to: "/court-outcomes",
-            toLabel: t("research.corruption.hl.f2Link", "Outcomes in full"),
-          }}
-        />
-
-        <Highlight
-          index={3}
-          stat={pct(topCharge.fullPct)}
-          statCaption={t(
-            "research.corruption.hl.f3Stat",
-            "of cases involving fake educational certificates end in full conviction. For cases involving illegal benefit, the figure is just {{bottomPct}}.",
-            { bottomPct: pct(bottomCharge.fullPct) },
-          )}
-          headline={t(
-            "research.corruption.hl.f3",
-            "What you are charged with decides the verdict",
-          )}
-          chart={
-            <ChargeRateBars
-              rows={chargeRows}
-              avgPct={fullOnlyAvg}
-              rateLabel={t(
-                "research.corruption.hl.f3Rate",
-                "Percentage of decided cases ending in a full conviction, by type of charge",
-              )}
-            />
-          }
-          meta={{
-            source: t("research.corruption.hl.f3Src", "Charge sheets"),
-            sourceHref: CITATIONS.chargeSheets,
-            to: "/prosecution",
-            toLabel: t("research.corruption.hl.f3Link", "What gets charged"),
-          }}
-        />
-
-        <Highlight
-          index={4}
-          stat={t("research.corruption.hl.f3cStat", "{{m}} months", {
-            m: n(Math.round(duration.median_months)),
-          })}
-          statCaption={t(
-            "research.corruption.hl.f3cCaption",
-            "Median time from filing to verdict at the Special Court, based on {{m}} decided cases.",
-            { m: n(duration.measured) },
-          )}
-          headline={t(
-            "research.corruption.hl.f3c",
-            "How long does a corruption trial take in the Special Court?",
-          )}
-          explain={t(
-            "research.corruption.hl.f3cBody",
-            "{{within}} of decided cases reached a verdict within two years. But this figure excludes the {{pending}} cases still pending. Since these cases have yet to reach a verdict, the actual time taken across all cases may be longer.",
-            {
-              within: pct1(withinTwoPct),
-              over: n(duration.bands[3].cases),
-              pending: n(duration.pending),
-            },
-          )}
-          chart={
-            <DurationBands
-              bands={duration.bands}
-              measured={duration.measured}
-              labels={{
-                heading: t(
-                  "research.corruption.hl.durHeading",
-                  "Time from filing to verdict, decided cases only",
-                ),
-                band: t("research.corruption.hl.durBand", "Time to verdict"),
-                cases: t("research.corruption.hl.durCases", "Cases"),
-                share: t("research.corruption.hl.durShare", "Share of decided cases"),
-              }}
-            />
-          }
-          meta={{
-            source: t("research.corruption.hl.f3cSrc", "Special Court register"),
-            sourceHref: CITATIONS.courtRecords,
-            to: "/court-outcomes",
-            toLabel: t("research.corruption.hl.f3cLink", "Pace and backlog by year"),
-          }}
-        />
-
-        <Highlight
-          index={5}
-          stat={n(appeals.defendant.reversed)}
-          statCaption={t(
-            "research.corruption.hl.f4Stat",
-            "appeals by convicted people succeeded outright. The CIAA, appealing cases it had lost, succeeded {{c}} times.",
-            { c: n(appeals.commission.reversed) },
-          )}
-          headline={t(
-            "research.corruption.hl.f4",
-            "A conviction is far easier to overturn than an acquittal",
-          )}
-          explain={t(
-            "research.corruption.hl.f4Body",
-            "Of {{dd}} decided appeals brought by convicted people, {{d}} succeeded. Of {{cd}} brought by the CIAA, {{c}} did. For {{pct}} of the appeals we traced, no result is recorded anywhere — a record-keeping failure, not a comment on the court.",
-            {
-              dec: n(appeals.decided),
-              up: n(upheld),
-              ov: n(overturned),
-              part: n(partlyChanged),
-              c: n(appeals.commission.reversed),
-              cd: n(appeals.commission.decided),
-              d: n(appeals.defendant.reversed),
-              dd: n(appeals.defendant.decided),
-              pct: pct1(untracedPct),
-            },
-          )}
-          chart={
-            <div className="mt-2">
-              <AppealAsymmetry
-                sides={appealSides}
-                wonLabel={t("research.corruption.appeals.won", "won outright")}
-                otherLabel={t("research.corruption.appeals.otherDecided", "decided")}
-                unknownLabel={t("research.corruption.appeals.noOutcome", "no outcome recorded")}
+        <div className="flex min-w-0 flex-col gap-6 lg:gap-8">
+          <Highlight
+            index={1}
+            stat={pct1(tameliPct(lastDisposal))}
+            statCaption={t(
+              "research.corruption.hl.f1Stat",
+              "of the decisions the CIAA took on fully investigated complaints in {{lastFy}} were Tameli, compared with {{peakPct}} in {{peakFy}}.",
+              {
+                lastFy: lastDisposal.fy,
+                peakFy: peak.fy,
+                peakPct: pct1(tameliPct(peak)),
+              },
+            )}
+            headline={t(
+              "research.corruption.hl.f1",
+              "Most complaints are dropped long before a court sees them",
+            )}
+            chart={
+              // A table, not the trend chart that carries the same series on the
+              // Investigation tab. Here the reader wants to look a year up; there they
+              // want the shape of the change. Same nine rows, read two ways.
+              <TameliByYear
+                rows={disposals}
+                yearLabel={t("research.corruption.hl.f1Year", "Fiscal year")}
+                investigatedLabel={t("research.corruption.hl.f1Inv", "Investigated")}
+                courtLabel={t("research.corruption.hl.f1Court", "To court")}
+                holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
+                shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
               />
-            </div>
-          }
-          meta={{
-            source: t("research.corruption.hl.f4Src", "Supreme Court records"),
-            sourceHref: CITATIONS.courtRecords,
-            to: "/appeals",
-            toLabel: t("research.corruption.hl.f4Link", "The appeal record"),
-          }}
-        />
+            }
+            meta={{
+              source: t("research.corruption.hl.f1Src", "CIAA annual reports"),
+              sourceHref: CITATIONS.ciaaReports,
+              to: "/investigation",
+              toLabel: t("research.corruption.hl.f1Link", "The year-by-year series"),
+            }}
+          >
+            {/*
+              The three CIAA stage figures, shown as separate annual totals rather
+              than a funnel. They are three different sets of complaints counted in
+              the same year, so an arrow between them would assert a progression the
+              reports do not support.
+            */}
+          </Highlight>
 
-        <Highlight
-          index={6}
-          stat={t("research.corruption.hl.f5Stat", "Not published")}
-          statCaption={t(
-            "research.corruption.hl.f5Caption",
-            "The CIAA said Rs {{bn}} billion was taken in 2081/82. No institution reports how much was recovered.",
-            { bn: ciaa.damagesClaimedYearBn },
-          )}
-          headline={t(
-            "research.corruption.hl.f5",
-            "No one tracks whether the money is ever returned",
-          )}
-          explain={t(
-            "research.corruption.hl.f5Body",
-            "When the CIAA files a case it names the sum it says was taken, and the court can order it repaid. After that the trail stops: neither the CIAA, nor the courts, nor the treasury publish what was actually collected. The blank means unknown, not zero.",
-          )}
-          meta={{
-            source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
-            to: "/gaps",
-            toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),
-          }}
-        />
+          <Highlight
+            index={3}
+            stat={pct(topCharge.fullPct)}
+            statCaption={t(
+              "research.corruption.hl.f3Stat",
+              "of cases involving fake educational certificates end in full conviction. For cases involving illegal benefit, the figure is just {{bottomPct}}.",
+              { bottomPct: pct(bottomCharge.fullPct) },
+            )}
+            headline={t(
+              "research.corruption.hl.f3",
+              "What you are charged with decides the verdict",
+            )}
+            chart={
+              <ChargeRateBars
+                rows={chargeRows}
+                avgPct={fullOnlyAvg}
+                rateLabel={t(
+                  "research.corruption.hl.f3Rate",
+                  "Percentage of decided cases ending in a full conviction, by type of charge",
+                )}
+              />
+            }
+            meta={{
+              source: t("research.corruption.hl.f3Src", "Charge sheets"),
+              sourceHref: CITATIONS.chargeSheets,
+              to: "/prosecution",
+              toLabel: t("research.corruption.hl.f3Link", "What gets charged"),
+            }}
+          />
+
+          <Highlight
+            index={5}
+            stat={n(appeals.defendant.reversed)}
+            statCaption={t(
+              "research.corruption.hl.f4Stat",
+              "convicted people had their convictions overturned on appeal. The CIAA succeeded in overturning just {{c}} acquittals.",
+              { c: n(appeals.commission.reversed) },
+            )}
+            headline={t(
+              "research.corruption.hl.f4",
+              "A conviction is far easier to overturn than an acquittal",
+            )}
+            explain={t(
+              "research.corruption.hl.f4Body",
+              "Of the {{dd}} decided appeals filed by convicted people, {{d}} ({{dpct}}) succeeded. By comparison, the CIAA succeeded in just {{c}} of its {{cd}} decided appeals ({{cpct}}). In simple terms, convicted people were much more likely to win their appeals than the CIAA was to overturn an acquittal. There is also a major gap in the records: no outcome could be found for {{pct}} of the appeals traced. These missing records make it harder to assess the full picture.",
+              {
+                c: n(appeals.commission.reversed),
+                cd: n(appeals.commission.decided),
+                cpct: pct1(appeals.commission.decided ? (appeals.commission.reversed / appeals.commission.decided) * 100 : 0),
+                d: n(appeals.defendant.reversed),
+                dd: n(appeals.defendant.decided),
+                dpct: pct1(appeals.defendant.decided ? (appeals.defendant.reversed / appeals.defendant.decided) * 100 : 0),
+                pct: pct1(untracedPct),
+              },
+            )}
+            chart={
+              <div className="mt-2">
+                <AppealAsymmetry
+                  sides={appealSides}
+                  wonLabel={t("research.corruption.appeals.won", "succeeded of")}
+                  ofDecidedLabel={t(
+                    "research.corruption.appeals.ofDecided",
+                    "{{won}} of {{decided}} decided appeals succeeded",
+                  )}
+                  untraced={{ missing: appeals.no_outcome, total: appeals.appeals }}
+                  untracedLabel={t(
+                    "research.corruption.appeals.untraced",
+                    "Not counted above: {{missing}} of the {{total}} appeals traced ({{pct}}) have no recorded outcome.",
+                  )}
+                />
+              </div>
+            }
+            meta={{
+              source: t("research.corruption.hl.f4Src", "Supreme Court records"),
+              sourceHref: CITATIONS.courtRecords,
+              to: "/appeals",
+              toLabel: t("research.corruption.hl.f4Link", "The appeal record"),
+            }}
+          />
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-6 lg:gap-8">
+          <Highlight
+            index={2}
+            stat={pct1(rates.convictionPct)}
+            statCaption={t(
+              "research.corruption.hl.f2Stat",
+              "of {{d}} decided cases ended in conviction, full or partial. Full convictions alone: {{full}}.",
+              { d: n(decided), full: pct1(rates.convictionFullOnlyPct) },
+            )}
+            headline={t(
+              "research.corruption.hl.f2",
+              "How many corruption cases end in conviction?",
+            )}
+            chart={
+              <OutcomeSplit
+                segments={outcomeSegments}
+                total={decided}
+                totalLabel={t("research.corruption.hl.decidedTotal", "Decided cases")}
+              />
+            }
+            meta={{
+              source: t("research.corruption.hl.f2Src", "Special Court register"),
+              sourceHref: CITATIONS.courtRecords,
+              to: "/court-outcomes",
+              toLabel: t("research.corruption.hl.f2Link", "Outcomes in full"),
+            }}
+          />
+
+          <Highlight
+            index={4}
+            stat={t("research.corruption.hl.f3cStat", "{{m}} months", {
+              m: n(Math.round(duration.median_months)),
+            })}
+            statCaption={t(
+              "research.corruption.hl.f3cCaption",
+              "Median time from filing to verdict at the Special Court, based on {{m}} decided cases.",
+              { m: n(duration.measured) },
+            )}
+            headline={t(
+              "research.corruption.hl.f3c",
+              "How long does a corruption trial take in the Special Court?",
+            )}
+            explain={t(
+              "research.corruption.hl.f3cBody",
+              "{{within}} of decided cases reached a verdict within two years. But this figure excludes the {{pending}} cases still pending. Since these cases have yet to reach a verdict, the actual time taken across all cases may be longer.",
+              {
+                within: pct1(withinTwoPct),
+                over: n(duration.bands[3].cases),
+                pending: n(duration.pending),
+              },
+            )}
+            chart={
+              <DurationBands
+                bands={duration.bands}
+                measured={duration.measured}
+                labels={{
+                  heading: t(
+                    "research.corruption.hl.durHeading",
+                    "Time from filing to verdict, decided cases only",
+                  ),
+                  band: t("research.corruption.hl.durBand", "Time to verdict"),
+                  cases: t("research.corruption.hl.durCases", "Cases"),
+                  share: t("research.corruption.hl.durShare", "Share of decided cases"),
+                }}
+              />
+            }
+            meta={{
+              source: t("research.corruption.hl.f3cSrc", "Special Court register"),
+              sourceHref: CITATIONS.courtRecords,
+              to: "/court-outcomes",
+              toLabel: t("research.corruption.hl.f3cLink", "Pace and backlog by year"),
+            }}
+          />
+
+          <Highlight
+            index={6}
+            stat={t("research.corruption.hl.f5Stat", "Not published")}
+            statCaption={t(
+              "research.corruption.hl.f5Caption",
+              "The CIAA said Rs {{bn}} billion was taken in 2081/82. No institution reports how much was recovered.",
+              { bn: ciaa.damagesClaimedYearBn },
+            )}
+            headline={t(
+              "research.corruption.hl.f5",
+              "No one tracks whether the money is ever returned",
+            )}
+            explain={t(
+              "research.corruption.hl.f5Body",
+              "When the CIAA files a case it names the sum it says was taken, and the court can order it repaid. After that the trail stops: neither the CIAA, nor the courts, nor the treasury publish what was actually collected. The blank means unknown, not zero.",
+            )}
+            meta={{
+              source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
+              to: "/gaps",
+              toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),
+            }}
+          />
+        </div>
       </div>
 
       <Reveal>
