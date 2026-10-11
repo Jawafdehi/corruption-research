@@ -22,11 +22,10 @@ const MIN_DECIDED = 60;
 
 export default function Highlights() {
   const { t } = useTranslation();
-  const { n, pct, pct1, fy } = useFormat();
+  const { n, pct, pct1 } = useFormat();
   const { appeals, byCharge, ciaa, corpus, disposals, outcome, rates } = REPORT;
 
   const decided = decidedClean(outcome);
-  const period = `${fy(corpus.fiscalYears[0])}–${fy(corpus.fiscalYears[corpus.fiscalYears.length - 1])}`;
 
   // 01 — the Commission's second filter.
   const firstDisposal = disposals[0];
@@ -202,25 +201,6 @@ export default function Highlights() {
     },
   ];
 
-  const scope = [
-    { k: "period", label: t("research.corruption.scope.period", "Period"), v: period },
-    {
-      k: "court",
-      label: t("research.corruption.scope.court", "Court"),
-      v: t("research.corruption.scope.courtValue", "Special Court"),
-    },
-    {
-      k: "cases",
-      label: t("research.corruption.scope.cases", "Prosecutions"),
-      v: n(corpus.ciaaProsecutions),
-    },
-    {
-      k: "decided",
-      label: t("research.corruption.scope.decided", "With a clear verdict"),
-      v: n(decided),
-    },
-  ];
-
   return (
     <div className="theme-editorial -mx-4 bg-background px-4 py-10 text-foreground md:-mx-6 md:px-6 md:py-14">
       <Reveal>
@@ -241,14 +221,6 @@ export default function Highlights() {
               { cases: n(corpus.ciaaProsecutions) },
             )}
           </p>
-          <dl className="mt-7 flex flex-wrap gap-x-10 gap-y-4 border-y border-border py-4">
-            {scope.map((i) => (
-              <div key={i.k}>
-                <dt className="text-xs uppercase tracking-wide text-muted-foreground">{i.label}</dt>
-                <dd className="mt-1 font-mono text-sm font-medium tabular-nums">{i.v}</dd>
-              </div>
-            ))}
-          </dl>
         </header>
       </Reveal>
 
