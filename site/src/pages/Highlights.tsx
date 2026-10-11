@@ -261,13 +261,13 @@ export default function Highlights() {
                 </strong>{" "}
                 {t(
                   "research.corruption.flow.exitMeaning",
-                  "means the complaint is set aside for the time being and not closed permanently. The file and its record are kept, and the Commission's own notice states that if further evidence comes to light the matter is dealt with under the law at that time.",
+                  "means the complaint is set aside for the time being. The file and its record are kept, and if further evidence comes to light the matter is dealt with under the law at that time. Hence, Tameli does not mean the case is settled permanently.",
                 )}
               </p>
               <p className="mt-1.5 text-xs text-muted-foreground">
                 {t(
                   "research.corruption.flow.exitCite",
-                  "CIAA Act 2048, section 19(13); form at Schedule 11 of the 2078 procedure.",
+                  "CIAA Act 2048, section 19(13).",
                 )}
               </p>
             </div>
@@ -292,7 +292,7 @@ export default function Highlights() {
           )}
           headline={t(
             "research.corruption.hl.f1",
-            "The Commission used to prosecute most of what it investigated. Now it shelves most of it.",
+            "Most complaints are dropped long before a court sees them",
           )}
           explain={t(
             "research.corruption.hl.f1Body",
