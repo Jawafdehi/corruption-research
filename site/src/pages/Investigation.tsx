@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import {
   Block,
   Body,
-  Caveat,
   Cite,
   Eyebrow,
   Figure,
@@ -194,13 +193,19 @@ export default function Investigation() {
         <SectionHeading>
           {t(
             "research.corruption.investigation.tameliTitle",
-            "Prosecutions fell by two-thirds while closures rose six-fold",
+            "Prosecutions fell sharply as Tameli decisions increased",
           )}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.investigation.tameliBody",
-            "Once a complaint has been investigated in full, the Commission's own meeting decides what to do with it: prosecute, advise the agency, write to it, or set it aside as Tameli. Tameli keeps the complaint on record but takes it no further unless new evidence appears. In {{peakFy}} the meeting prosecuted {{peakFiled}} complaints and set aside {{peakTameli}}. In {{lastFy}} it prosecuted {{lastFiled}} and set aside {{lastTameli}}.",
+            "After a full investigation, the Commission decides whether to file a case in court, recommend action to the relevant agency, write to the agency, or place the complaint under Tameli. A Tameli decision keeps a complaint on record but suspends further action unless new evidence or information emerges.",
+          )}
+        </Body>
+        <Body>
+          {t(
+            "research.corruption.investigation.tameliCounts",
+            "In {{peakFy}}, the Commission decided to prosecute {{peakFiled}} complaints and place {{peakTameli}} under Tameli. By {{lastFy}}, prosecutions had fallen to {{lastFiled}}, while Tameli decisions had risen to {{lastTameli}}.",
             {
               peakFy: peak.fy,
               peakFiled: n(peak.filed),
@@ -208,22 +213,26 @@ export default function Investigation() {
               lastFy: last.fy,
               lastFiled: n(last.filed),
               lastTameli: n(last.tameli),
-              peakPct: pct1(tameliPct(peak)),
-              lastPct: pct1(tameliPct(last)),
             },
           )}
         </Body>
         <Body>
           {t(
             "research.corruption.investigation.tameliStep",
-            "This was not a gradual drift. It happened between {{peakFy}} and {{afterFy}} — two consecutive years — with closures jumping from {{peakPct}} of decisions to {{afterPct}}, and it has not come back down. Two things in the public record fall inside that window: the post of chief commissioner was vacant for about five months from Bhadra {{vacancyBs}}, and was then filled substantively for the first time since 2073. The reports give no reason for the change, and dates that coincide are not evidence that one caused the other.",
+            "The shift happened quickly. Between {{peakFy}} and {{afterFy}}, the share of decisions resulting in Tameli rose from {{peakPct}} to {{afterPct}}. It remained high in the years that followed.",
             {
               peakFy: peak.fy,
               afterFy: afterPeak.fy,
               peakPct: pct1(tameliPct(peak)),
               afterPct: pct1(tameliPct(afterPeak)),
-              vacancyBs: "2077",
             },
+          )}
+        </Body>
+        <Body>
+          {t(
+            "research.corruption.investigation.tameliLeadership",
+            "Two developments in the public record fall within this period. The chief commissioner's post was vacant for about five months from Bhadra {{vacancyBs}}, before a new chief commissioner was appointed — the first substantive appointment since 2073. The available reports do not explain why the Commission's decisions changed, and the timing alone does not establish that the leadership change caused the shift.",
+            { vacancyBs: "2077" },
           )}
         </Body>
 
@@ -261,13 +270,6 @@ export default function Investigation() {
           />
         </Figure>
 
-        <Caveat>
-          {t(
-            "research.corruption.investigation.tameliCaveat",
-            "Setting aside a weak case after investigating it is the right call, and these numbers cannot say which is happening here: a Commission that got better at filtering weak complaints early and one that lost its appetite for court would both produce this chart. What the figures do establish is the size of the change, how fast it arrived, and that no closure carries a recorded reason.",
-          )}
-        </Caveat>
-
         <GapCallout
           label={t("research.corruption.gap.aLabel", "Accountability gap · Investigation")}
           title={t(
@@ -286,15 +288,30 @@ export default function Investigation() {
             "A reason recorded against each closed complaint, and a count of closures later reopened. No annual report carries either.",
           )}
         >
-          {t(
-            "research.corruption.gap.aBody",
-            "The first filter stops far more complaints — {{first}} against {{second}} — but it stops them before anyone investigates. The second stops a higher share, {{secondPct}} of everything it sees, after the work has already been done. Neither records a reason.",
-            {
-              first: n(cd.tameli + cd.tameli_with_advice),
-              second: n(cd.inv_tameli),
-              secondPct: pct1((cd.inv_tameli / cd.investigations_completed) * 100),
-            },
-          )}
+          <>
+            <p>
+              {t(
+                "research.corruption.gap.aBody",
+                "Setting a complaint aside is not in itself a failure. The Commission has to be able to close complaints that fall outside its jurisdiction, that carry no usable evidence, or that have no proper basis to go further — and after a full investigation, closing a weak case is the right call.",
+              )}
+            </p>
+            <p className="mt-3">
+              {t(
+                "research.corruption.gap.aBody2",
+                "What the rise raises is a different question: what justified setting aside so many? Whether each decision followed the prescribed process and weighed the evidence in that case, or rested on something else, is not something the published figures can answer. That is the gap. When closures climb this steeply and no record explains a single one of them, there is no way to judge whether the power is being used consistently and within the law.",
+              )}
+            </p>
+            <p className="mt-3">
+              {t(
+                "research.corruption.gap.aBody3",
+                "The same silence covers the earlier filter, which stops far more — {{first}} complaints against {{second}} — but stops them before anyone has investigated.",
+                {
+                  first: n(cd.tameli + cd.tameli_with_advice),
+                  second: n(cd.inv_tameli),
+                },
+              )}
+            </p>
+          </>
         </GapCallout>
       </Block>
     </>
