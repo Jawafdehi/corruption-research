@@ -110,8 +110,10 @@ export function Highlight({
           // hit area without nesting a second interactive element inside a link.
           "group relative flex h-full flex-col transition-colors",
           lead ? "gap-6" : "gap-4",
-          size === "half" &&
-            "rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6 hover:border-accent/50",
+          // Every card gets the same box. The sizes differ in how much room they
+          // take and how their chart sits, not in whether they look like a card.
+          "rounded-lg border border-border bg-[hsl(var(--surface))] hover:border-accent/50",
+          lead ? "p-6 md:p-8" : "p-5 md:p-6",
         )}
       >
         <div className="flex items-center gap-3">
