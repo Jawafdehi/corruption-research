@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-11T06:59:37+00:00",
-    "commit": "9516a32",
+    "generatedAt": "2026-10-11T11:10:33+00:00",
+    "commit": "34a0d59",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -954,6 +954,7 @@
   "disposals": [
     {
       "fy": "2073/74",
+      "investigated": null,
       "filed": 154,
       "advice": 69,
       "referred": 146,
@@ -966,6 +967,7 @@
     },
     {
       "fy": "2074/75",
+      "investigated": 504,
       "filed": 194,
       "advice": 45,
       "referred": 64,
@@ -978,6 +980,7 @@
     },
     {
       "fy": "2075/76",
+      "investigated": 610,
       "filed": 351,
       "advice": 105,
       "referred": 46,
@@ -990,6 +993,7 @@
     },
     {
       "fy": "2076/77",
+      "investigated": 687,
       "filed": 441,
       "advice": 150,
       "referred": 23,
@@ -1002,6 +1006,7 @@
     },
     {
       "fy": "2077/78",
+      "investigated": 478,
       "filed": 114,
       "advice": 88,
       "referred": 11,
@@ -1014,6 +1019,7 @@
     },
     {
       "fy": "2078/79",
+      "investigated": 821,
       "filed": 130,
       "advice": 80,
       "referred": 17,
@@ -1026,6 +1032,7 @@
     },
     {
       "fy": "2079/80",
+      "investigated": 878,
       "filed": 162,
       "advice": 58,
       "referred": 5,
@@ -1038,6 +1045,7 @@
     },
     {
       "fy": "2080/81",
+      "investigated": 1050,
       "filed": 201,
       "advice": 131,
       "referred": 12,
@@ -1050,6 +1058,7 @@
     },
     {
       "fy": "2081/82",
+      "investigated": 947,
       "filed": 137,
       "advice": 105,
       "referred": 11,

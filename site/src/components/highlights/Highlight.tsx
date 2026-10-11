@@ -88,7 +88,8 @@ export function Highlight({
   stat?: string;
   statCaption?: string;
   headline: string;
-  explain: string;
+  /** Optional: a card whose figure and table speak for themselves omits it. */
+  explain?: string;
   chart?: ReactNode;
   meta: HighlightMeta;
   children?: ReactNode;
@@ -135,7 +136,9 @@ export function Highlight({
               </p>
             ) : null}
 
-            <p className="mt-4 text-sm leading-6 text-foreground/80">{explain}</p>
+            {explain ? (
+              <p className="mt-4 text-sm leading-6 text-foreground/80">{explain}</p>
+            ) : null}
 
             {children}
           </div>
