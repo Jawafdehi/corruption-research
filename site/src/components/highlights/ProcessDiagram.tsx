@@ -33,7 +33,7 @@ export type DiagramLabels = {
   ifGrounds: string;
   ifAppealed: string;
   exitTitle: string;
-  exitNote: string;
+  exitFrom: string;
   srIntro: string;
   srExit: string;
 };
@@ -167,7 +167,7 @@ export function ProcessDiagram({
         >
           <defs>
             {[
-              ["pd-a", "hsl(var(--muted-foreground))"],
+              ["pd-a", "hsl(var(--foreground) / 0.55)"],
               ["pd-g", "hsl(var(--court))"],
               ["pd-r", "hsl(var(--accent))"],
             ].map(([id, c]) => (
@@ -177,11 +177,11 @@ export function ProcessDiagram({
                 viewBox="0 0 10 10"
                 refX="9"
                 refY="5"
-                markerWidth="6.5"
-                markerHeight="6.5"
+                markerWidth="5.2"
+                markerHeight="5.2"
                 orient="auto-start-reverse"
               >
-                <path d="M0 1 L9 5 L0 9 z" fill={c} />
+                <path d="M0 0.5 L10 5 L0 9.5 Z" fill={c} />
               </marker>
             ))}
           </defs>
@@ -215,15 +215,25 @@ export function ProcessDiagram({
             {labels.supremeLane}
           </LaneLabel>
 
-          <text x={L.laneX + 18} y={L.exitLane.y + 21} className="font-display" fontSize={15} fontWeight={700} fill={red}>
+          {/* The bar names the destination only. What तामेली actually means is a
+              two-clause idea that does not belong inside a node, so it sits in a
+              legend under the diagram where it can be read properly. */}
+          <text
+            x={L.laneX + 18}
+            y={L.exitLane.y + 29}
+            className="font-display"
+            fontSize={16}
+            fontWeight={700}
+            fill={red}
+          >
             {labels.exitTitle}
           </text>
-          <text x={L.laneX + 18} y={L.exitLane.y + 37} fontSize={12} fill={red} fillOpacity={0.85}>
-            {labels.exitNote}
+          <text x={L.laneX + 18 + labels.exitTitle.length * 9.4 + 14} y={L.exitLane.y + 29} fontSize={12.5} fill={red} fillOpacity={0.75}>
+            {labels.exitFrom}
           </text>
 
           {/* The run along the Commission's lane */}
-          <g fill="none" stroke="hsl(var(--muted-foreground))" strokeWidth={1.5} markerEnd="url(#pd-a)">
+          <g fill="none" stroke="hsl(var(--foreground) / 0.55)" strokeWidth={2.5} strokeLinecap="round" markerEnd="url(#pd-a)">
             {[0, 1, 2].map((i) => (
               <path key={i} d={`M${nodeX(i) + L.node.w} ${ROW} L${nodeX(i + 1) - 4} ${ROW}`} />
             ))}
@@ -240,7 +250,7 @@ export function ProcessDiagram({
           </Chip>
 
           {/* Exits: up and out of the pipeline, into one bar */}
-          <g fill="none" stroke={red} strokeWidth={1.5} strokeDasharray="5 4" markerEnd="url(#pd-r)">
+          <g fill="none" stroke={red} strokeWidth={2.25} strokeLinecap="round" strokeDasharray="7 5" markerEnd="url(#pd-r)">
             <path d={`M${nodeMid(1)} ${ROW - L.node.h / 2} L${nodeMid(1)} ${L.exitLane.y + L.exitLane.h + 4}`} />
             <path d={`M${nodeMid(2)} ${ROW - L.node.h / 2} L${nodeMid(2)} ${L.exitLane.y + L.exitLane.h + 4}`} />
             <path d={`M${DIAMOND_CX} ${ROW - L.diamond.ry} L${DIAMOND_CX} ${L.exitLane.y + L.exitLane.h + 4}`} />
@@ -251,7 +261,8 @@ export function ProcessDiagram({
             d={`M${DIAMOND_CX} ${ROW + L.diamond.ry} C ${DIAMOND_CX} ${ROW + L.diamond.ry + 34}, ${COURT_MID} ${COURT_Y - 40}, ${COURT_MID} ${COURT_Y - 4}`}
             fill="none"
             stroke={green}
-            strokeWidth={2}
+            strokeWidth={2.75}
+            strokeLinecap="round"
             markerEnd="url(#pd-g)"
           />
           <Chip x={COURT_MID} y={COURT_Y - 20} fill={green}>
@@ -262,8 +273,9 @@ export function ProcessDiagram({
             d={`M${COURT_MID} ${COURT_Y + L.courtNode.h} L${COURT_MID} ${SUPREME_Y - 4}`}
             fill="none"
             stroke={green}
-            strokeWidth={1.75}
-            strokeDasharray="5 5"
+            strokeWidth={2.25}
+            strokeLinecap="round"
+            strokeDasharray="7 5"
             markerEnd="url(#pd-g)"
           />
           <Chip x={COURT_MID} y={SUPREME_Y - 18} fill={green}>
@@ -331,7 +343,7 @@ export function ProcessDiagram({
       <div className="md:hidden" aria-hidden="true">
         <div className="mb-3 rounded-md border border-dashed border-accent bg-accent/5 px-3 py-2">
           <p className="font-display text-sm font-bold text-accent">{labels.exitTitle}</p>
-          <p className="text-xs leading-5 text-accent/85">{labels.exitNote}</p>
+          <p className="text-xs leading-5 text-accent/85">{labels.exitFrom}</p>
         </div>
 
         {stages.map((s, i) => {
