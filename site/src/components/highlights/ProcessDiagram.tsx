@@ -24,7 +24,6 @@ export type DiagramNode = {
 };
 
 export type DiagramLabels = {
-  ciaa: string;
   courtLane: string;
   supremeLane: string;
   exitLane: string;
@@ -33,22 +32,23 @@ export type DiagramLabels = {
   ifGrounds: string;
   ifAppealed: string;
   exitTitle: string;
-  exitFrom: string;
   srIntro: string;
   srExit: string;
 };
 
 const L = {
   w: 1000,
-  h: 452,
+  h: 384,
   labelX: 150,
   laneX: 170,
   laneW: 812,
   node: { w: 140, gap: 15, h: 60 },
-  exitLane: { y: 36, h: 46 },
-  ciaaLane: { y: 106, h: 116 },
-  courtLane: { y: 246, h: 72 },
-  supremeLane: { y: 342, h: 72 },
+  /** Where an exit arrow stops, and where its label sits above it. */
+  exitTop: 38,
+  exitLabelY: 26,
+  ciaaLane: { y: 58, h: 116 },
+  courtLane: { y: 198, h: 72 },
+  supremeLane: { y: 294, h: 72 },
   diamond: { rx: 66, ry: 40 },
   courtNode: { x: 742, w: 220, h: 46 },
 };
@@ -190,24 +190,7 @@ export function ProcessDiagram({
           <rect x={L.laneX} y={L.ciaaLane.y} width={L.laneW} height={L.ciaaLane.h} rx={8} fill="hsl(var(--foreground) / 0.035)" />
           <rect x={L.laneX} y={L.courtLane.y} width={L.laneW} height={L.courtLane.h} rx={8} fill="hsl(var(--court) / 0.055)" />
           <rect x={L.laneX} y={L.supremeLane.y} width={L.laneW} height={L.supremeLane.h} rx={8} fill="hsl(var(--court) / 0.055)" />
-          <rect
-            x={L.laneX}
-            y={L.exitLane.y}
-            width={L.laneW}
-            height={L.exitLane.h}
-            rx={8}
-            fill="hsl(var(--accent) / 0.06)"
-            stroke={red}
-            strokeWidth={1.25}
-            strokeDasharray="5 4"
-          />
 
-          <LaneLabel y={L.exitLane.y + 28} fill={red}>
-            {labels.exitLane}
-          </LaneLabel>
-          <LaneLabel y={ROW + 4} fill="hsl(var(--muted-foreground))">
-            {labels.ciaa}
-          </LaneLabel>
           <LaneLabel y={L.courtLane.y + 42} fill={green}>
             {labels.courtLane}
           </LaneLabel>
@@ -215,22 +198,6 @@ export function ProcessDiagram({
             {labels.supremeLane}
           </LaneLabel>
 
-          {/* The bar names the destination only. What तामेली actually means is a
-              two-clause idea that does not belong inside a node, so it sits in a
-              legend under the diagram where it can be read properly. */}
-          <text
-            x={L.laneX + 18}
-            y={L.exitLane.y + 29}
-            className="font-display"
-            fontSize={16}
-            fontWeight={700}
-            fill={red}
-          >
-            {labels.exitTitle}
-          </text>
-          <text x={L.laneX + 18 + labels.exitTitle.length * 9.4 + 14} y={L.exitLane.y + 29} fontSize={12.5} fill={red} fillOpacity={0.75}>
-            {labels.exitFrom}
-          </text>
 
           {/* The run along the Commission's lane */}
           <g fill="none" stroke="hsl(var(--foreground) / 0.55)" strokeWidth={2.5} strokeLinecap="round" markerEnd="url(#pd-a)">
@@ -251,10 +218,25 @@ export function ProcessDiagram({
 
           {/* Exits: up and out of the pipeline, into one bar */}
           <g fill="none" stroke={red} strokeWidth={2.25} strokeLinecap="round" strokeDasharray="7 5" markerEnd="url(#pd-r)">
-            <path d={`M${nodeMid(1)} ${ROW - L.node.h / 2} L${nodeMid(1)} ${L.exitLane.y + L.exitLane.h + 4}`} />
-            <path d={`M${nodeMid(2)} ${ROW - L.node.h / 2} L${nodeMid(2)} ${L.exitLane.y + L.exitLane.h + 4}`} />
-            <path d={`M${DIAMOND_CX} ${ROW - L.diamond.ry} L${DIAMOND_CX} ${L.exitLane.y + L.exitLane.h + 4}`} />
+            <path d={`M${nodeMid(1)} ${ROW - L.node.h / 2} L${nodeMid(1)} ${L.exitTop}`} />
+            <path d={`M${nodeMid(2)} ${ROW - L.node.h / 2} L${nodeMid(2)} ${L.exitTop}`} />
+            <path d={`M${DIAMOND_CX} ${ROW - L.diamond.ry} L${DIAMOND_CX} ${L.exitTop}`} />
           </g>
+
+          {[nodeMid(1), nodeMid(2), DIAMOND_CX].map((x) => (
+            <text
+              key={x}
+              x={x}
+              y={L.exitLabelY}
+              textAnchor="middle"
+              className="font-display"
+              fontSize={13.5}
+              fontWeight={700}
+              fill={red}
+            >
+              {labels.exitTitle}
+            </text>
+          ))}
 
           {/* Onward: down into the courts */}
           <path
@@ -343,13 +325,12 @@ export function ProcessDiagram({
       <div className="md:hidden" aria-hidden="true">
         <div className="mb-3 rounded-md border border-dashed border-accent bg-accent/5 px-3 py-2">
           <p className="font-display text-sm font-bold text-accent">{labels.exitTitle}</p>
-          <p className="text-xs leading-5 text-accent/85">{labels.exitFrom}</p>
         </div>
 
         {stages.map((s, i) => {
           const isCourt = i >= 5;
           const lane =
-            i === 0 ? labels.ciaa : i === 5 ? labels.courtLane : i === 6 ? labels.supremeLane : null;
+            i === 5 ? labels.courtLane : i === 6 ? labels.supremeLane : null;
           return (
             <div key={s.key}>
               {lane ? (

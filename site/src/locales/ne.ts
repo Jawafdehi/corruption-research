@@ -73,8 +73,6 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.exit": "तामेली",
   "research.corruption.flow.source":
     "चरणहरू अख्तियार दुरुपयोग अनुसन्धान आयोग कार्यविधि, २०७८ (दफा २०–२५) अनुसार; पुनरावेदन विशेष अदालत ऐन, २०५९ को दफा १७ बमोजिम। उजुरी माथि देखाइएका तीन ठाउँमा तामेलीमा जान सक्छ। कुनै पनि चरण अघिल्लोबाट स्वतः हुने होइन, र पुनरावेदन दुवै पक्षले प्रयोग गर्न सक्ने अधिकार हो, हरेक मुद्दा जाने चरण होइन।",
-
-  "research.corruption.flow.ciaa": "अख्तियार",
   "research.corruption.flow.courtLane": "विशेष अदालत",
   "research.corruption.flow.supremeLane": "सर्वोच्च अदालत",
   "research.corruption.flow.exitLane": "बाहिरिने",
@@ -85,7 +83,6 @@ export const ne: Record<string, string> = {
   "research.corruption.flow.srIntro":
     "भ्रष्टाचारको उजुरीले लिने बाटो, क्रमैसँग। पहिलो पाँच चरण आयोगमा हुन्छन्; छैटौं र सातौं छुट्टै अदालत हुन्।",
   "research.corruption.flow.srExit": "यस चरणमा उजुरी तामेलीमा राख्न सकिन्छ।",
-  "research.corruption.flow.exitFrom": "तीन चरणबाट आइपुग्ने",
   "research.corruption.flow.exitMeaning":
     "भनेको उजुरी सदाका लागि बन्द भएको होइन, हाललाई मात्र तामेलीमा राखिएको हो। मिसिल र अभिलेख रहिरहन्छ, र आयोगकै सूचनाले भन्छ — पछि थप प्रमाण फेला परेमा सोही बखत कानूनबमोजिम कारबाही हुन्छ।",
   "research.corruption.flow.exitCite":
