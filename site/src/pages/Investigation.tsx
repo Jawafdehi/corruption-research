@@ -20,12 +20,15 @@ import { useFormat } from "@/lib/format";
 
 export default function Investigation() {
   const { t } = useTranslation();
-  const { n, pct, pct1 } = useFormat();
+  const { n, pct1 } = useFormat();
   const { ciaa, disposals, funnel } = REPORT;
   const cd = REPORT.complaintDisposal[0];
 
   const investigatedShare = (ciaa.investigatedYear / ciaa.complaintsYear) * 100;
   const filedPerInvestigated = Math.round(ciaa.investigatedYear / ciaa.casesFiledYear);
+  // Same denominator as the investigated share beside it, so the tile row reads as one
+  // funnel rather than as three unrelated percentages.
+  const filedShare = (ciaa.casesFiledYear / ciaa.complaintsYear) * 100;
 
   const last = disposals[disposals.length - 1];
   // The turn is the finding, so it is derived rather than written down: the year the
@@ -98,13 +101,16 @@ export default function Investigation() {
           <StatTile
             value={n(ciaa.casesFiledYear)}
             label={t("research.corruption.tile.filed", "Taken to court")}
-            note={t("research.corruption.tile.filedNote", "cases filed at the Special Court that year")}
+            note={t("research.corruption.tile.filedNote", "{{pct}}% of the complaints received", {
+              pct: filedShare.toFixed(1),
+            })}
           />
           <StatTile
             tone="accent"
-            value={pct(tameliPct(last))}
-            label={t("research.corruption.investigation.tileTameli", "Investigated, then set aside")}
-            note={t("research.corruption.investigation.tileTameliNote", "share of post-investigation decisions, {{fy}}", {
+            value={n(last.tameli)}
+            label={t("research.corruption.investigation.tileTameli", "Investigated, then kept in Tameli")}
+            note={t("research.corruption.investigation.tileTameliNote", "{{pct}} of the decisions taken after a full investigation, {{fy}}", {
+              pct: pct1(tameliPct(last)),
               fy: last.fy,
             })}
           />
