@@ -30,7 +30,11 @@ function useReveal<T extends HTMLElement>() {
           io.disconnect();
         }
       },
-      { rootMargin: "0px 0px -10% 0px" },
+      // Reveal BEFORE the card enters the viewport, not after. The old margin held
+      // it back until it was a tenth of the way in, so on any normal scroll the reader
+      // met a blank card-shaped hole that filled a beat later -- which reads as a gap
+      // in the page, not as an animation.
+      { rootMargin: "400px 0px 400px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -45,7 +49,7 @@ const Reveal = ({ children, className }: { children: ReactNode; className?: stri
     <div
       ref={ref}
       className={cn(
-        "motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out",
+        "motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out",
         shown ? "opacity-100 translate-y-0" : "opacity-0 motion-safe:translate-y-3",
         className,
       )}

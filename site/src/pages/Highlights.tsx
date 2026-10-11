@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
@@ -192,7 +191,7 @@ export default function Highlights() {
   ];
 
   return (
-    <div className="theme-editorial -mx-4 bg-background px-4 py-10 text-foreground md:-mx-6 md:px-6 md:py-14">
+    <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
       <Reveal>
         <header className="max-w-3xl">
           <h2 className="mt-3 font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
@@ -208,7 +207,7 @@ export default function Highlights() {
         <section className="mt-2 md:mt-4" aria-label={t("research.corruption.flow.title", "How a corruption complaint travels")}>
           {/* Same frame as a finding card, minus the link: it is a figure, not a
               click-through, so it does not get the hover or the stretched anchor. */}
-          <div className="mt-4 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
+          <div className="mt-3 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
             <ProcessDiagram
               stages={flowStages}
               labels={{
@@ -239,7 +238,7 @@ export default function Highlights() {
               again if further evidence appears. Calling it simply "closed" drops
               the second half and overstates how final it is.
             */}
-            <div className="mx-auto mt-5 max-w-2xl rounded-md border border-accent/40 bg-accent/[0.04] px-5 py-4 text-center">
+            <div className="mx-auto mt-4 max-w-2xl rounded-md border border-accent/40 bg-accent/[0.04] px-5 py-4 text-center">
               <p className="text-sm leading-6 text-foreground/85">
                 <strong className="font-display font-bold text-accent">
                   {t("research.corruption.flow.exit", "Tameli")}
@@ -266,7 +265,7 @@ export default function Highlights() {
           falls under the final card -- where it is simply the end of the section, not
           a hole with content below it. Two independent columns closed those gaps and
           opened a much worse one: the columns differed by a thousand pixels. */}
-      <div className="mt-10 grid items-start gap-6 md:mt-12 lg:grid-cols-2 lg:gap-8">
+      <div className="mt-8 grid items-start gap-6 md:mt-10 lg:grid-cols-2 lg:gap-8">
         <Highlight
           index={1}
           stat={pct1(tameliPct(lastDisposal))}
@@ -488,29 +487,6 @@ export default function Highlights() {
         />
       </div>
 
-      <Reveal>
-        <p className="mt-12 max-w-3xl border-t border-border pt-6 text-sm leading-6 text-muted-foreground">
-          {t(
-            "research.corruption.hl.footer",
-            "Every number on this page is produced from the published dataset when the page is built, so the page cannot drift from the data behind it. Complaints, investigations, court cases, verdicts and appeals are counted separately and never added together, because they are different things counted at different times.",
-          )}{" "}
-          <Link
-            to="/method"
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground"
-          >
-            {t("research.corruption.hl.methodLink", "How these numbers were produced")}
-          </Link>
-          {" · "}
-          <a
-            href={CITATIONS.researchPack}
-            target="_blank"
-            rel="noreferrer"
-            className="underline decoration-dotted underline-offset-2 hover:text-foreground"
-          >
-            {t("research.corruption.hl.repoLink", "The dataset and the code")}
-          </a>
-        </p>
-      </Reveal>
     </div>
   );
 }

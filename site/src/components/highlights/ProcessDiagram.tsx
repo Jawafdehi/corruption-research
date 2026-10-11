@@ -46,7 +46,11 @@ export type DiagramLabels = {
 
 const L = {
   w: 1280,
-  h: 980,
+  // The drawn content ends at y≈912, so the old 980 carried 68 units of empty
+  // canvas under the ring that the browser scaled up into real whitespace. The
+  // ring's own radii are untouched -- they were widened deliberately so the nodes
+  // would not read as crowded, and that is not what this trims.
+  h: 925,
   cx: 640,
   cy: 466,
   /** Sized for breathing room, not for compactness. At the previous radius two
