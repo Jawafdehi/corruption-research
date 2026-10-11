@@ -26,7 +26,7 @@ const MIN_DECIDED = 60;
 export default function Highlights() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
-  const { appeals, byCharge, ciaa, defendants, disposals, outcome, rates } = REPORT;
+  const { appeals, byCharge, ciaa, disposals, outcome, rates } = REPORT;
 
   const decided = decidedClean(outcome);
 
@@ -35,11 +35,6 @@ export default function Highlights() {
   const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
   const lastDisposal = disposals[disposals.length - 1];
 
-  // 02 — the same verdicts counted per accused rather than per case.
-  const accusedTotal = defendants.byVerdict.reduce((sum, r) => sum + r.accused, 0);
-  const accusedIn = (verdict: string) =>
-    defendants.byVerdict.find((r) => r.verdict === verdict)?.accused ?? 0;
-  const partAccusedPct = accusedTotal ? (accusedIn("आंशिक ठहर") / accusedTotal) * 100 : 0;
 
   // 02 — what the court decides, over the cases carrying a clean disposition.
   const outcomeSegments: OutcomeSegment[] = [
@@ -94,10 +89,6 @@ export default function Highlights() {
   const fullOnlyAvg = decided ? (outcome.convicted / decided) * 100 : 0;
   const topCharge = chargeRows[0];
   const bottomCharge = chargeRows[chargeRows.length - 1];
-  const allFull = byCharge.reduce((s, c) => s + c.convicted, 0);
-  const fakeShareOfFull = allFull
-    ? ((byCharge.find((c) => c.en === "Fake credential")?.convicted ?? 0) / allFull) * 100
-    : 0;
 
   // 04 — appeals, drawn over every established appeal so the untraced share shows.
   const appealSides: AppealSide[] = [
@@ -305,10 +296,6 @@ export default function Highlights() {
               courtLabel={t("research.corruption.hl.f1Court", "To court")}
               holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
               shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
-              omittedNote={t(
-                "research.corruption.hl.f1Omitted",
-                "2073/74 is not shown: its report states the decisions but not how many investigations they were taken on.",
-              )}
             />
           }
           meta={{
@@ -336,16 +323,7 @@ export default function Highlights() {
           )}
           headline={t(
             "research.corruption.hl.f2",
-            "A conviction counts the case, not the people in it",
-          )}
-          explain={t(
-            "research.corruption.hl.f2Body",
-            "One verdict covers the whole docket, and a docket can hold anything from one accused to {{largest}}. Counting people instead of cases, {{partPct}} of the {{accused}} charged sit in cases the court upheld only in part — convicted on some counts or against some defendants, with no record of which. For them the public record does not say what happened.",
-            {
-              largest: n(defendants.largestCase),
-              partPct: pct1(partAccusedPct),
-              accused: n(accusedTotal),
-            },
+            "How many corruption cases end in conviction?",
           )}
           chart={
             <OutcomeSplit
@@ -367,17 +345,12 @@ export default function Highlights() {
           stat={pct(topCharge.fullPct)}
           statCaption={t(
             "research.corruption.hl.f3Stat",
-            "of fake education certificate cases end in full conviction. For cases about granting someone an unlawful benefit: {{bottomPct}}.",
+            "of cases involving fake educational certificates end in full conviction. For cases involving illegal benefit, the figure is just {{bottomPct}}.",
             { bottomPct: pct(bottomCharge.fullPct) },
           )}
           headline={t(
             "research.corruption.hl.f3",
-            "The charge the CIAA picks decides the outcome",
-          )}
-          explain={t(
-            "research.corruption.hl.f3Body",
-            "A forged certificate is settled by one document. A rigged contract or missing money is not. Those easy cases supply {{share}} of all full convictions here, which flatters the headline rate. A low rate on a hard charge is not proof of a weak investigation.",
-            { share: pct(fakeShareOfFull) },
+            "What you are charged with decides the verdict",
           )}
           chart={
             <ChargeRateBars
@@ -386,11 +359,6 @@ export default function Highlights() {
               rateLabel={t(
                 "research.corruption.hl.f3Rate",
                 "Share of decided cases ending in a full conviction, by type of charge",
-              )}
-              avgLabel={t(
-                "research.corruption.hl.f3Avg",
-                "Court average, full convictions only: {{pct}}",
-                { pct: pct1(fullOnlyAvg) },
               )}
             />
           }
