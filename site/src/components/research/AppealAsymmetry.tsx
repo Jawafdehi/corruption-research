@@ -12,108 +12,97 @@ export type AppealSide = {
 };
 
 /**
- * The appeal asymmetry and the tracing gap in one figure.
+ * How often each side wins the appeals it brings.
  *
- * Each row is every appeal one side brought, split three ways: won outright,
- * decided some other way, and no outcome in the record. Drawn over the full
- * established count rather than over decided appeals only, so the grey band is
- * part of the picture instead of a footnote under it. A reader cannot take the
- * win rates away without also seeing how much of the record is missing.
+ * ⚠️ Drawn over DECIDED appeals, not over every appeal established.
  *
- * Plain divs rather than a chart library: one side's winning band is well under
- * one percent, and a bar that thin needs a guaranteed minimum width and its own
- * label to stay readable at all.
+ * The earlier version drew one bar across all appeals and split it three ways --
+ * won, decided otherwise, and no outcome recorded -- then printed the success rate
+ * underneath. Those two things disagree: 157 of 429 is 36.6%, but 157 of the 705
+ * appeals the defence actually brought is 22%, so the band a reader measured by eye
+ * was never the number in the caption. Two different denominators in one figure is
+ * the whole reason it read as confusing.
+ *
+ * So the bar now answers exactly one question -- of the appeals that reached a
+ * decision, what share succeeded -- and the untraced appeals are stated once below,
+ * as a count, where they cannot be mistaken for part of the rate.
+ *
+ * Plain divs rather than a chart library: one side's bar is barely one percent wide
+ * and needs a guaranteed minimum width to stay visible at all.
  */
 export function AppealAsymmetry({
   sides,
   wonLabel,
-  otherLabel,
-  unknownLabel,
+  ofDecidedLabel,
+  untraced,
+  untracedLabel,
 }: {
   sides: readonly AppealSide[];
   wonLabel: string;
-  otherLabel: string;
-  unknownLabel: string;
+  /** "{{won}} of {{decided}} decided appeals succeeded" */
+  ofDecidedLabel: string;
+  untraced: { missing: number; total: number } | null;
+  /** "No outcome is recorded for {{missing}} of the {{total}} appeals traced ({{pct}})." */
+  untracedLabel: string;
 }) {
   const { n, pct1 } = useFormat();
 
   return (
-    <div className="space-y-7">
-      {sides.map((s) => {
-        const otherDecided = s.decided - s.reversed;
-        const unknown = s.appeals - s.decided;
-        const share = (v: number) => (s.appeals ? (v / s.appeals) * 100 : 0);
-        // The winning band carries the finding, so it never renders thinner than
-        // a hairline even when it is a fraction of a percent of the row.
-        const wonWidth = Math.max(share(s.reversed), 0.6);
-        const rate = s.decided ? (s.reversed / s.decided) * 100 : 0;
+    <div>
+      <ul className="space-y-6">
+        {sides.map((s) => {
+          const rate = s.decided ? (s.reversed / s.decided) * 100 : 0;
+          // Never thinner than a hairline: the Commission's bar is ~1% and would
+          // otherwise vanish, which would read as "no data" rather than "almost never".
+          const width = Math.max(rate, 0.8);
 
-        return (
-          <div key={s.key}>
-            <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <p className="text-sm font-semibold text-foreground">{s.who}</p>
-              <p className="text-xs text-muted-foreground">{s.stake}</p>
-            </div>
+          return (
+            <li key={s.key}>
+              <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+                <p className="text-sm font-semibold text-foreground">{s.who}</p>
+                <p className="text-xs text-muted-foreground">{s.stake}</p>
+              </div>
 
-            <div
-              className="flex h-9 w-full overflow-hidden rounded border border-border"
-              role="img"
-              aria-label={`${s.who}: ${n(s.reversed)} ${wonLabel}, ${n(otherDecided)} ${otherLabel}, ${n(unknown)} ${unknownLabel}, of ${n(s.appeals)}`}
-            >
-              <div
-                className="h-full bg-primary"
-                style={{ width: `${wonWidth}%` }}
-                title={`${wonLabel}: ${n(s.reversed)}`}
-              />
-              <div
-                className="h-full bg-muted-foreground/35"
-                style={{ width: `${share(otherDecided)}%` }}
-                title={`${otherLabel}: ${n(otherDecided)}`}
-              />
-              <div
-                className="h-full bg-muted/60"
-                style={{
-                  width: `${share(unknown)}%`,
-                  backgroundImage:
-                    "repeating-linear-gradient(45deg, hsl(var(--border)) 0 4px, transparent 4px 8px)",
-                }}
-                title={`${unknownLabel}: ${n(unknown)}`}
-              />
-            </div>
+              <div className="flex items-center gap-3">
+                <div
+                  className="h-7 min-w-0 flex-1 overflow-hidden rounded-sm bg-foreground/[0.07]"
+                  role="img"
+                  aria-label={`${s.who}: ${n(s.reversed)} ${wonLabel} ${n(s.decided)} — ${pct1(rate)}`}
+                >
+                  <div
+                    className="h-full rounded-sm bg-accent"
+                    style={{ width: `${width}%` }}
+                  />
+                </div>
+                <span className="shrink-0 font-mono text-base font-semibold tabular-nums text-accent">
+                  {pct1(rate)}
+                </span>
+              </div>
 
-            <p className="mt-2 font-mono text-sm tabular-nums text-foreground">
-              <span className="font-semibold text-primary">
-                {n(s.reversed)} {wonLabel}
-              </span>
-              <span className="text-muted-foreground">
-                {" "}
-                / {n(s.decided)} {otherLabel.toLowerCase()} = {pct1(rate)}
-              </span>
-            </p>
-          </div>
-        );
-      })}
+              <p className="mt-1.5 font-mono text-xs tabular-nums text-muted-foreground">
+                {ofDecidedLabel
+                  .replace("{{won}}", n(s.reversed))
+                  .replace("{{decided}}", n(s.decided))}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
 
-      <div className="flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-3 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-primary" />
-          {wonLabel}
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-muted-foreground/35" />
-          {otherLabel}
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span
-            className="inline-block h-2.5 w-2.5 rounded-sm border border-border"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(45deg, hsl(var(--border)) 0 3px, transparent 3px 6px)",
-            }}
-          />
-          {unknownLabel}
-        </span>
-      </div>
+      {/* Stated as a count under the bars rather than drawn as a third band inside
+          them: it is not part of either rate, and inside the bar it kept being read
+          as though it were. */}
+      {untraced ? (
+        <p className="mt-5 border-t border-border pt-3 text-xs leading-5 text-muted-foreground">
+          {untracedLabel
+            .replace("{{missing}}", n(untraced.missing))
+            .replace("{{total}}", n(untraced.total))
+            .replace(
+              "{{pct}}",
+              pct1(untraced.total ? (untraced.missing / untraced.total) * 100 : 0),
+            )}
+        </p>
+      ) : null}
     </div>
   );
 }

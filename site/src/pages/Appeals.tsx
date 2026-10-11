@@ -132,9 +132,16 @@ export default function Appeals() {
         >
           <AppealAsymmetry
             sides={asymSides}
-            wonLabel={t("research.corruption.appeals.won", "won outright")}
-            otherLabel={t("research.corruption.appeals.otherDecided", "decided")}
-            unknownLabel={t("research.corruption.appeals.noOutcome", "no outcome recorded")}
+            wonLabel={t("research.corruption.appeals.won", "succeeded of")}
+            ofDecidedLabel={t(
+              "research.corruption.appeals.ofDecided",
+              "{{won}} of {{decided}} decided appeals succeeded",
+            )}
+            untraced={{ missing: appeals.no_outcome, total: appeals.appeals }}
+            untracedLabel={t(
+              "research.corruption.appeals.untraced",
+              "Not counted above: {{missing}} of the {{total}} appeals traced ({{pct}}) have no recorded outcome.",
+            )}
           />
         </Figure>
       </Block>
