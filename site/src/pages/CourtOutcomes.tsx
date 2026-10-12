@@ -4,7 +4,6 @@ import { StatusDonut, type DonutSegment } from "@/components/data-quality/Status
 import { CasesVersusAccused, type GrainRow } from "@/components/research/CasesVersusAccused";
 import { ConvictionByCharge, type ChargeRow } from "@/components/research/ConvictionByCharge";
 import { GapCallout } from "@/components/research/GapCallout";
-import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { FiledDecidedTrend } from "@/components/research/FiledDecidedTrend";
 import { JusticeSpread } from "@/components/research/JusticeSpread";
 import { PipelineHealth, type PipelinePoint } from "@/components/research/PipelineHealth";
@@ -45,7 +44,6 @@ export default function CourtOutcomes() {
     corpus,
     defendants,
     entityResolution,
-    filedByMonth,
     justiceMinDecisions,
     justices,
     outcome,
@@ -166,8 +164,6 @@ export default function CourtOutcomes() {
   const courtAvg = rates.convictionPct;
   const justiceDecisions = justices.reduce((s, j) => s + j.decisions, 0);
 
-  const peak = filedByMonth.reduce((a, b) => (b.mean > a.mean ? b : a), filedByMonth[0]);
-  const trough = filedByMonth.reduce((a, b) => (b.mean < a.mean ? b : a), filedByMonth[0]);
 
   return (
     <>
@@ -457,24 +453,6 @@ export default function CourtOutcomes() {
           />
         </Figure>
 
-        <Figure
-          title={t("research.corruption.month.title", "When in the year cases get filed")}
-          subtitle={t(
-            "research.corruption.month.subtitle",
-            "Mean cases filed per Nepali month, with one standard deviation either side.",
-          )}
-          caption={t(
-            "research.corruption.month.caption",
-            "Averaged across complete fiscal years. Filings peak in {{peak}} at the close of the fiscal year and fall away in {{trough}} during the festival period. The spread is wide enough that a single year can look nothing like this shape.",
-            { peak: peak.name, trough: trough.name },
-          )}
-        >
-          <FiledByMonth
-            data={filedByMonth}
-            meanLabel={t("research.corruption.month.mean", "mean filings")}
-            sdLabel={t("research.corruption.month.sd", "±1 SD")}
-          />
-        </Figure>
       </Block>
 
       <Block>

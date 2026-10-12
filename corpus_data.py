@@ -316,6 +316,23 @@ def _reconcile_disposals(df):
         raise ValueError("parsed disposal series drifted from the committed compilation:\n  " + "\n  ".join(drift))
 
 
+def load_bigo_demanded():
+    """Total बिगो claimed across every case the Commission filed, by fiscal year.
+
+    From "कुल बिगो मागदाबी" in each annual report -- the prose sentence where the
+    report states it, otherwise that table's own जम्मा row.
+
+    ⚠️ CLAIMED, never upheld and never recovered. The court register carries no amount
+    at all, so this figure has no counterpart to be differenced against; it is the
+    opening claim and nothing on this site turns it into a loss.
+
+    Seven of the nine years are cross-checked in `extract_ciaa_series`: the case count
+    on the बिगो table must equal `filed` from the decisions table, which is printed in
+    a different chapter of the same report.
+    """
+    return pd.read_csv(DATA / "ciaa_bigo_demanded.csv")
+
+
 def load_investigation_appeal_decisions():
     """Whether the Commission decided to APPEAL a Special Court verdict, by fiscal year.
 

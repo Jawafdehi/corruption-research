@@ -209,6 +209,8 @@ def build() -> dict:
                                            not_appealed="notAppealed")},
         # Audit columns (tracked_sum / all_rows_sum / printed_total) stay in the CSV and
         # out of the site: they exist to prove the parse, not to be rendered.
+        "bigoDemanded": _rows(cd.load_bigo_demanded()[["fy", "bigo_demanded_rs", "source_url"]],
+                              bigo_demanded_rs="rs"),
         "disposals": _rows(cd.load_disposals()[
             ["fy", "investigated", "filed", "advice", "referred", "tameli", "held",
              "total", "figure", "source_url", "note"]]),
