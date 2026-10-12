@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-11T12:08:13+00:00",
-    "commit": "bf9f46d",
+    "generatedAt": "2026-10-12T03:10:29+00:00",
+    "commit": "a3691c1",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -952,6 +952,53 @@
       }
     ]
   },
+  "bigoDemanded": [
+    {
+      "fy": "2071/72",
+      "rs": 1394016071,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/eyIL96.pdf"
+    },
+    {
+      "fy": "2073/74",
+      "rs": 11521132530,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/4Gvb5l.pdf"
+    },
+    {
+      "fy": "2074/75",
+      "rs": 405559262,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/1548567688annual_report_207475.pdf"
+    },
+    {
+      "fy": "2075/76",
+      "rs": 4053763888.65,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf"
+    },
+    {
+      "fy": "2077/78",
+      "rs": 1894735434,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/wbZQvp.pdf"
+    },
+    {
+      "fy": "2078/79",
+      "rs": 2792748100.11,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf"
+    },
+    {
+      "fy": "2079/80",
+      "rs": 1745216634.17,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/0wS8NV.pdf"
+    },
+    {
+      "fy": "2080/81",
+      "rs": 8390649407,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf"
+    },
+    {
+      "fy": "2081/82",
+      "rs": 6018472692,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf"
+    }
+  ],
   "disposals": [
     {
       "fy": "2073/74",

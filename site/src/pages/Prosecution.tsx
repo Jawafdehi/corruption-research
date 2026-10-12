@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { AccusedPerCase } from "@/components/research/AccusedPerCase";
+import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { GapCallout } from "@/components/research/GapCallout";
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
@@ -36,7 +37,7 @@ const JALAHARI = {
 export default function Prosecution() {
   const { t, language } = useTranslation();
   const { n, pct, pct1, fy } = useFormat();
-  const { byCharge, chargeMixByYear, ciaa, corpus, defendants, overTime } = REPORT;
+  const { byCharge, chargeMixByYear, corpus, defendants, overTime } = REPORT;
 
   // People-per-case for one offence family, formatted to one decimal in the active
   // locale. Returns an empty string rather than "0.0" when a family is absent, so a
@@ -62,6 +63,18 @@ export default function Prosecution() {
   const rates = verdictYearRates(overTime.byVerdictYear);
   const firstRate = rates[0];
   const lastRate = rates[rates.length - 1];
+
+  const cdz = REPORT.complaintDisposal[0];
+  const bigoDemanded = REPORT.bigoDemanded;
+  const bigoTotalBn = bigoDemanded.reduce((a, r) => a + r.rs, 0) / 1e9;
+
+  // When in the year the Commission files. Ashadh is the last month of the Nepali
+  // fiscal year, so the peak sitting there is the thing worth asking about.
+  const filedByMonth = REPORT.filedByMonth;
+  const peakMonth = filedByMonth.reduce((a, b) => (b.mean > a.mean ? b : a));
+  const otherMonthMean =
+    filedByMonth.filter((m) => m.name !== peakMonth.name).reduce((a, m) => a + m.mean, 0) /
+    (filedByMonth.length - 1);
 
   const charge = (en: string) => byCharge.find((c) => c.en === en);
   // Illicit enrichment, the charge whose arithmetic the courts and the Commission
@@ -90,22 +103,27 @@ export default function Prosecution() {
         <SectionHeading>
           {t(
             "research.corruption.prosecution.title",
-            "The Commission charges what it can prove, and what it can prove is paperwork",
+            "Which complaints become court cases, and what the Commission claims they cost",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.prosecution.lede",
-            "About one in {{k}} investigated complaints becomes a prosecution. Which ones is the most consequential choice in the whole process, because the court record shows the charge predicts the verdict better than almost anything else about a case.",
-            { k: Math.round(ciaa.investigatedYear / ciaa.casesFiledYear) },
+            "Of the {{total}} complaints on the Commission's books in {{fy}}, {{filed}} became cases in court — {{pct}}. This page looks at which complaints make that journey, how the mix has changed, and how much money the Commission says was at stake.",
+            {
+              total: n(cdz.total_complaints),
+              fy: cdz.fy,
+              filed: n(cdz.inv_filed),
+              pct: `${((cdz.inv_filed / cdz.total_complaints) * 100).toFixed(2)}%`,
+            },
           )}
         </Lede>
 
         <StatRow>
           <StatTile
-            value={n(corpus.ciaaProsecutions)}
-            label={t("research.corruption.prosecution.tileCorpus", "Prosecutions in the archive")}
-            note={t("research.corruption.tile.corpusNote", "{{years}} complete fiscal years of the criminal register", {
+            value={n(corpus.ciaaProsecutions - corpus.moneyLaundering)}
+            label={t("research.corruption.prosecution.tileCorpus", "Corruption cases filed in court")}
+            note={t("research.corruption.tile.corpusNote", "over {{years}} fiscal years, money laundering excluded", {
               years: corpus.fiscalYears.length,
             })}
           />
@@ -115,9 +133,11 @@ export default function Prosecution() {
             note={t("research.corruption.prosecution.tileRateNote", "across the whole window")}
           />
           <StatTile
-            value={`Rs ${ciaa.damagesClaimedYearBn}bn`}
-            label={t("research.corruption.prosecution.tileBigo", "Damages demanded")}
-            note={t("research.corruption.prosecution.tileBigoNote", "बिगो claimed by the Commission, FY2081/82")}
+            value={`Rs ${bigoTotalBn.toFixed(1)}bn`}
+            label={t("research.corruption.prosecution.tileBigo", "Total amount claimed")}
+            note={t("research.corruption.prosecution.tileBigoNote", "across the {{n}} years the reports state it; claimed, never upheld", {
+              n: bigoDemanded.length,
+            })}
           />
           <StatTile
             tone="accent"
@@ -388,6 +408,93 @@ export default function Prosecution() {
               )}
             </p>
           </>
+        </GapCallout>
+
+        <Figure
+          title={t(
+            "research.corruption.month.title",
+            "Filings cluster in the last month of the fiscal year",
+          )}
+          subtitle={t(
+            "research.corruption.month.subtitle",
+            "Average cases filed in each Nepali month, across complete fiscal years. The band is one standard deviation either side.",
+          )}
+          caption={t(
+            "research.corruption.month.caption",
+            "Averaged over {{years}} fiscal years. The spread is wide enough that any single year can look nothing like this shape.",
+            { years: corpus.fiscalYears.length },
+          )}
+        >
+          <FiledByMonth
+            data={filedByMonth}
+            meanLabel={t("research.corruption.month.mean", "mean filings")}
+            sdLabel={t("research.corruption.month.sd", "±1 SD")}
+          />
+        </Figure>
+
+        <Body>
+          {t(
+            "research.corruption.month.body",
+            "{{peak}} is the last month of the Nepali fiscal year, and it is when the Commission files most: an average of {{peakMean}} cases against {{otherMean}} in the other eleven months. Why filings should bunch at the year end is not something the figures can answer. A case becomes ready when it becomes ready, and nothing about an investigation makes {{peak}} a natural month to finish in. It is a pattern worth an explanation, and no annual report offers one.",
+            {
+              peak: peakMonth.name,
+              peakMean: peakMonth.mean.toFixed(1),
+              otherMean: otherMonthMean.toFixed(1),
+            },
+          )}
+        </Body>
+
+        <GapCallout
+          label={t("research.corruption.gap.iLabel", "Accountability gap · Prosecution")}
+          title={t(
+            "research.corruption.gap.iTitle",
+            "Nobody publishes how long the Commission takes to decide whether to prosecute",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.iEstablishes",
+            "The court register carries the date a case was filed. Nothing carries the date the complaint arrived, and no annual report states how long an investigation takes — not an average, not a median, not a range. The time between a complaint being made and a charge being brought is unmeasured.",
+          )}
+          fix={t(
+            "research.corruption.gap.iNeeded",
+            "A complaint registration date on each case, or a published figure for how long investigations take. Either would make the Commission's own pace measurable for the first time.",
+          )}
+        >
+          {t(
+            "research.corruption.gap.iBody",
+            "This is the one stage of the process with no clock on it at all. The Special Court's pace can be measured to the month, and is: a median of 15 months from filing to verdict. The Supreme Court's can be estimated. What happens before a case is filed cannot be timed from outside at all, which means the stage where most complaints end is also the stage whose speed nobody can question.",
+          )}
+        </GapCallout>
+
+        <GapCallout
+          label={t("research.corruption.gap.jLabel", "Accountability gap · Prosecution")}
+          title={t(
+            "research.corruption.gap.jTitle",
+            "Rs {{bn}} billion has been claimed. How much of it the courts accepted is not recorded anywhere.",
+            { bn: bigoTotalBn.toFixed(1) },
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          shows={t(
+            "research.corruption.gap.jEstablishes",
+            "Across the {{n}} years the annual reports state it, the Commission claimed Rs {{bn}} billion in बिगो — the loss or unlawful gain alleged in its charge sheets. The figure swings hard from year to year, from Rs {{lo}} billion to Rs {{hi}} billion, because a single large case can dominate a year.",
+            {
+              n: bigoDemanded.length,
+              bn: bigoTotalBn.toFixed(1),
+              lo: (Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
+              hi: (Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
+            },
+          )}
+          fix={t(
+            "research.corruption.gap.jNeeded",
+            "An amount field on the case record carrying what was claimed and what the court upheld. The register has neither, so the claim can be totalled and the outcome cannot.",
+          )}
+        >
+          {t(
+            "research.corruption.gap.jBody",
+            "Every figure here is the opening claim and nothing more. We checked whether the upheld amount could be recovered from the archive case by case: it cannot, because the court record carries the verdict and no sum. One judgment read in full showed a claim of 1,491 grams of gold reduced to about 58 — how typical that is cannot be established, and this site never subtracts one of these numbers from the other.",
+          )}
         </GapCallout>
       </Block>
     </>

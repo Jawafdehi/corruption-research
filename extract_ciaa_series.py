@@ -35,6 +35,7 @@ ROOT = Path(__file__).resolve().parent
 REPORTS = ROOT / "ciaa-annual-reports"
 OUT_INV = ROOT / "dataset" / "ciaa_investigation_decisions.csv"
 OUT_APP = ROOT / "dataset" / "ciaa_appeal_decisions.csv"
+OUT_BIGO = ROOT / "dataset" / "ciaa_bigo_demanded.csv"
 
 #: Years deliberately not emitted, and why. Printed on every run so the gap is visible.
 KNOWN_GAPS = {
@@ -173,17 +174,107 @@ def _fy(folder: Path) -> str:
     return f"{start}/{end}"
 
 
+# ------------------------------------------------------------------ बिगो demanded
+#
+# The total बिगो (alleged loss / unlawful gain) the Commission claimed across every
+# case it filed that year. Stated in one sentence in the prosecution chapter:
+#
+#   "आयोगले आर्थिक वर्ष 07९/८० मा दायर गरेका मुद्दाहरूमा जम्मा रु. १,७४,५२,१६,६३४.१७
+#    बिगो मागदाबी लिइएको छ।"
+#
+# ⚠️ This is the amount CLAIMED in a charge sheet, never an amount a court upheld and
+# never an amount recovered. The register carries no amount at all, so the claimed
+# figure can never be differenced against either.
+_BIGO_SENTENCE = re.compile(
+    r"आयोगले\s*आर्थिक\s*वर्ष\s*[^।]{0,30}?दायर\s*गरेका\s*मुद्दा(?:हरू)?मा\s*जम्मा\s*"
+    r"रु[\.\s]*([०-९\d,\.]{9,})"
+)
+#: FY2081/82 states it only as the जम्मा row of तालिका २.१७. Anchored to a block whose
+#: own header says बिगो मागदाबी -- an unanchored "any जम्मा row" fallback matched
+#: unrelated tables and produced a Rs 11.5 billion figure for FY2073/74.
+_BIGO_HEADER = "बिगो मागदाबी"
+
+
+def _rupees(raw: str) -> float | None:
+    """A rupee figure, which the OCR leaves with a Devanagari danda for its decimal."""
+    s = raw.translate(_TR).replace(",", "")
+    m = re.match(r"\d+(?:\.\d+)?", s)
+    return float(m.group()) if m else None
+
+
+def _bigo_demanded(text: str) -> float | None:
+    """Total बिगो claimed across every case filed that year, or None.
+
+    Returns None rather than a guess. Only two shapes are accepted: the prose sentence
+    the reports use from FY2077/78, and the जम्मा row of a table that names बिगो
+    मागदाबी in its own header. Anything outside Rs 0.1-100 billion is rejected as a
+    mis-parse -- a yearly total for this Commission is not plausibly outside that.
+    """
+    m = _BIGO_SENTENCE.search(text)
+    if m:
+        v = _rupees(m.group(1))
+        return v if v and 1e8 < v < 1e11 else None
+
+    for block in _blocks(text):
+        if _BIGO_HEADER not in block:
+            continue
+        for line in block.splitlines():
+            if "जम्मा" not in line:
+                continue
+            cells = [c.strip() for c in line.split("|")]
+            v = _rupees(cells[-1])
+            if v and 1e8 < v < 1e11:
+                return v
+    return None
+
+
+def _bigo_table_cases(text: str) -> int | None:
+    """The case count on the बिगो table's own जम्मा row.
+
+    Checked against `filed` from the decisions table. The two are printed in different
+    chapters of the same report and must agree; if they do not, the parser has found
+    the wrong table and the amount beside it cannot be trusted either.
+    """
+    for block in _blocks(text):
+        if _BIGO_HEADER not in block:
+            continue
+        for line in block.splitlines():
+            if "जम्मा" not in line:
+                continue
+            cells = [c.strip() for c in line.split("|")]
+            for cell in cells[1:]:
+                n = _num(cell)
+                if n is not None:
+                    return n
+    return None
+
+
 def main() -> None:
-    inv_rows, app_rows = [], []
+    inv_rows, app_rows, bigo_rows = [], [], []
     urls = _report_urls()
     for folder in sorted(REPORTS.glob("20*-*")):
         files = list(folder.glob("*.likhit.md"))
         if not files:
             continue
         fy = _fy(folder)
+        text = files[0].read_text(errors="ignore")
+
+        # बिगो is read for every year that prints the table, including the years
+        # skipped below. KNOWN_GAPS is about the decision-ACTION vocabulary being
+        # non-comparable across reports; it says nothing about the amount claimed,
+        # which is a plain total on a table of its own.
+        bigo = _bigo_demanded(text)
+        if bigo:
+            bigo_rows.append({
+                "fy": fy,
+                "bigo_demanded_rs": f"{bigo:.2f}",
+                "cases_on_that_table": _bigo_table_cases(text),
+                "source_url": urls.get(fy, ""),
+                "source": files[0].relative_to(ROOT).as_posix(),
+            })
+
         if fy in KNOWN_GAPS:
             continue
-        text = files[0].read_text(errors="ignore")
 
         action = _action_table(text)
         if action:
@@ -224,7 +315,8 @@ def main() -> None:
                 "source": files[0].relative_to(ROOT).as_posix(),
             })
 
-    for path, rows in ((OUT_INV, inv_rows), (OUT_APP, app_rows)):
+    _check_bigo(inv_rows, bigo_rows)
+    for path, rows in ((OUT_INV, inv_rows), (OUT_APP, app_rows), (OUT_BIGO, bigo_rows)):
         with path.open("w", newline="", encoding="utf-8") as fh:
             w = csv.DictWriter(fh, fieldnames=list(rows[0]))
             w.writeheader()
@@ -243,6 +335,22 @@ def main() -> None:
 PROSE_FILED = {
     "2073/74": 154, "2074/75": 194, "2075/76": 351, "2076/77": 441, "2081/82": 137,
 }
+
+
+def _check_bigo(inv_rows: list[dict], bigo_rows: list[dict]) -> None:
+    """The बिगो table and the decisions table must agree on how many cases were filed."""
+    filed = {r["fy"]: r["filed"] for r in inv_rows}
+    bad = [
+        f"{r['fy']}: बिगो table says {r['cases_on_that_table']} cases, decisions table says {filed[r['fy']]}"
+        for r in bigo_rows
+        if r["fy"] in filed and r["cases_on_that_table"] not in (None, filed[r["fy"]])
+    ]
+    if bad:
+        raise SystemExit("बिगो table does not match the decisions table:\n  " + "\n  ".join(bad))
+    checked = [r for r in bigo_rows if r["fy"] in filed and r["cases_on_that_table"]]
+    total = sum(float(r["bigo_demanded_rs"]) for r in bigo_rows)
+    print(f"  बिगो years: {len(bigo_rows)}, total Rs {total/1e9:.2f} billion"
+          f" ({len(checked)} cross-checked against the decisions table)")
 
 
 def _validate(rows: list[dict]) -> None:
