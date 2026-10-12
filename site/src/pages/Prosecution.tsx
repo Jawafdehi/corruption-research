@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 
 import { AccusedPerCase } from "@/components/research/AccusedPerCase";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
@@ -8,7 +7,6 @@ import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
   Block,
   Body,
-  Caveat,
   Cite,
   Eyebrow,
   Figure,
@@ -17,7 +15,7 @@ import {
   StatRow,
   StatTile,
 } from "@/components/layout/Prose";
-import { CITATIONS, REPORT, fyLabel, outcomePct, verdictYearRates } from "@/data/research-corruption";
+import { CITATIONS, REPORT } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
 /** The one case where a bench put selective prosecution in a reasoned judgment. */
@@ -36,7 +34,7 @@ const JALAHARI = {
 export default function Prosecution() {
   const { t, language } = useTranslation();
   const { n, pct, pct1, fy } = useFormat();
-  const { byCharge, chargeMixByYear, corpus, defendants, overTime } = REPORT;
+  const { byCharge, chargeMixByYear, corpus, defendants } = REPORT;
 
 
   // Denominator preserved exactly as the original chart defined it: the sum of the
@@ -48,9 +46,6 @@ export default function Prosecution() {
     0,
   );
 
-  const rates = verdictYearRates(overTime.byVerdictYear);
-  const firstRate = rates[0];
-  const lastRate = rates[rates.length - 1];
 
   const cdz = REPORT.complaintDisposal[0];
   const bigoDemanded = REPORT.bigoDemanded;
@@ -65,6 +60,19 @@ export default function Prosecution() {
     (filedByMonth.length - 1);
 
   const charge = (en: string) => byCharge.find((c) => c.en === en);
+
+  // Average defendants and full-conviction rate per offence, joined on the offence
+  // name. Both sides already count the same decided cases on the same
+  // court-published-verdict rule, so the two columns share a population even though
+  // one is a count of people and the other a share of cases.
+  const accusedRows = defendants.byCharge.map((d) => {
+    const c = charge(d.en);
+    const decidedForCharge = c ? c.convicted + c.partial + c.acquitted : 0;
+    return {
+      ...d,
+      fullPct: decidedForCharge ? (c!.convicted / decidedForCharge) * 100 : 0,
+    };
+  });
   // Illicit enrichment, the charge whose arithmetic the courts and the Commission
   // disagree about. Decided here means a clean disposition, as everywhere else.
   const ie = charge("Illicit enrichment");
@@ -73,9 +81,6 @@ export default function Prosecution() {
   // 45.4% instead of 45.0%, because those rows drop charges that could not be
   // classified -- a second number for the same thing, which is worse than either.
   const fullOnlyAvg = REPORT.rates.convictionFullOnlyPct;
-  const fake = charge("Fake credential");
-  const bribery = charge("Bribery");
-  const allFull = byCharge.reduce((sum, c) => sum + c.convicted, 0);
 
   const mixFirst = chargeMixByYear[0];
   const mixLast = chargeMixByYear[chargeMixByYear.length - 1];
@@ -123,16 +128,9 @@ export default function Prosecution() {
           <StatTile
             value={`Rs ${bigoTotalBn.toFixed(1)}bn`}
             label={t("research.corruption.prosecution.tileBigo", "Total amount claimed")}
-            note={t("research.corruption.prosecution.tileBigoNote", "{{n}} of the {{all}} years state a total; claimed, never upheld", {
+            note={t("research.corruption.prosecution.tileBigoNote", "across the {{n}} fiscal years the Commission reports a total", {
               n: bigoDemanded.length,
-              all: corpus.fiscalYears.length,
             })}
-          />
-          <StatTile
-            tone="accent"
-            value={pct(fake ? (fake.convicted / allFull) * 100 : 0)}
-            label={t("research.corruption.prosecution.tileFake", "Of all full convictions")}
-            note={t("research.corruption.prosecution.tileFakeNote", "come from one charge: fake credentials")}
           />
         </StatRow>
       </Block>
@@ -192,60 +190,6 @@ export default function Prosecution() {
         </Body>
       </Block>
 
-      <Block>
-        <Eyebrow>{t("research.corruption.prosecution.whyEyebrow", "Why it matters downstream")}</Eyebrow>
-        <SectionHeading>
-          {t(
-            "research.corruption.prosecution.whyTitle",
-            "When the headline rate fell, the docket had already changed",
-          )}
-        </SectionHeading>
-        <Body>
-          {t(
-            "research.corruption.prosecution.whyBody",
-            "The headline conviction rate fell over the same years that this share collapsed, and these are not two findings. They are one. A reader given only the falling line would reasonably conclude the court had gone soft; the Court outcomes section pulls the two apart.",
-            {
-              firstYear: fyLabel(firstRate.year),
-              firstShare: pct(firstRate.fakeSharePct),
-              lastYear: fyLabel(lastRate.year),
-              lastShare: pct(lastRate.fakeSharePct),
-            },
-          )}
-        </Body>
-
-        <Body>
-          {t(
-            "research.corruption.prosecution.easyBody",
-            "Bribery is the Commission's largest charge, {{briberyDecided}} decided cases, and it converts at {{briberyPct}} in full. So this is not a body that avoids hard cases. It is one whose published record leaned for years on an offence that convicts almost automatically, and that thinned out.",
-            {
-              briberyDecided: n(
-                bribery ? bribery.convicted + bribery.partial + bribery.acquitted : 0,
-              ),
-              briberyPct: pct(bribery ? outcomePct(bribery, "convicted") : 0),
-            },
-          )}
-        </Body>
-
-        <p className="mt-6 text-sm">
-          <Link
-            to="/court-outcomes"
-            className="font-medium text-accent underline underline-offset-4 hover:opacity-80"
-          >
-            {t(
-              "research.corruption.prosecution.toOutcomes",
-              "See conviction rates by charge, and the trend decomposed →",
-            )}
-          </Link>
-        </p>
-
-        <Caveat>
-          {t(
-            "research.corruption.prosecution.caveat",
-            "An acquittal is not proof that the prosecution was wrong to bring the case, and a low conviction rate for a charge is not by itself evidence of bad investigation. Financial offences are genuinely harder to prove than a forged certificate, and the court record carries the verdict but not the reason for it. What the data supports is the association between charge type and outcome — not a judgement about any individual prosecution.",
-          )}
-        </Caveat>
-
-      </Block>
 
       <Block>
         <Eyebrow>{t("research.corruption.size.eyebrow", "How cases differ")}</Eyebrow>
@@ -266,7 +210,7 @@ export default function Prosecution() {
           title={t("research.corruption.size.howToTitle", "How to read this chart")}
           subtitle={t(
             "research.corruption.size.howTo",
-            "The figures show the average number of defendants per decided case, grouped by offence type. A higher value means more defendants were charged together on average. These figures do not measure conviction rates or the strength of the evidence.",
+            "Two different measurements, side by side. The first column is a count of people: the average number of defendants per decided case. The second is a share of cases: how often that charge was upheld in full. Offences charged against fewer people tend to show higher full-conviction rates, but these figures do not establish why, and neither column explains the other.",
           )}
           caption={t(
             "research.corruption.size.chartCaption",
@@ -274,11 +218,16 @@ export default function Prosecution() {
           )}
         >
           <AccusedPerCase
-            rows={defendants.byCharge}
-            heading={t("research.corruption.size.chartTitle", "Average defendants per case")}
+            rows={accusedRows}
+            heading={t("research.corruption.size.chartTitle", "Defendants per case, and how often the charge is upheld")}
             subheading={t("research.corruption.size.chartSubtitle", "Decided cases at the Special Court")}
-            casesLabel={t("research.corruption.size.cases", "Cases:")}
-            defendantsLabel={t("research.corruption.size.defendants", "Defendants charged:")}
+            offenceLabel={t("research.corruption.size.colOffence", "Offence")}
+            averageLabel={t("research.corruption.size.colAverage", "Average defendants")}
+            averageUnit={t("research.corruption.size.colAverageUnit", "people per case")}
+            convictionLabel={t("research.corruption.size.colConviction", "Upheld in full")}
+            casesLabel={t("research.corruption.size.colConvictionUnit", "% of decided cases")}
+            casesWord={t("research.corruption.size.wordCases", "cases")}
+            defendantsWord={t("research.corruption.size.wordDefendants", "defendants")}
             language={language}
           />
         </Figure>
