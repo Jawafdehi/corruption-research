@@ -135,8 +135,9 @@ export default function Prosecution() {
           <StatTile
             value={`Rs ${bigoTotalBn.toFixed(1)}bn`}
             label={t("research.corruption.prosecution.tileBigo", "Total amount claimed")}
-            note={t("research.corruption.prosecution.tileBigoNote", "across the {{n}} years the reports state it; claimed, never upheld", {
+            note={t("research.corruption.prosecution.tileBigoNote", "{{n}} of the {{all}} years state a total; claimed, never upheld", {
               n: bigoDemanded.length,
+              all: corpus.fiscalYears.length,
             })}
           />
           <StatTile
@@ -478,10 +479,12 @@ export default function Prosecution() {
           fixLabel={t("research.corruption.gap.fix", "What would close it")}
           shows={t(
             "research.corruption.gap.jEstablishes",
-            "Across the {{n}} years the annual reports state it, the Commission claimed Rs {{bn}} billion in बिगो — the loss or unlawful gain alleged in its charge sheets. The figure swings hard from year to year, from Rs {{lo}} billion to Rs {{hi}} billion, because a single large case can dominate a year.",
+            "The Commission claimed Rs {{bn}} billion in बिगो — the loss or unlawful gain alleged in its charge sheets — across the {{n}} fiscal years whose reports state a total. The other {{missing}} do not: three reports in the window print no yearly figure, and the {{lastFy}} report is not yet published. The total swings hard year to year, from Rs {{lo}} billion to Rs {{hi}} billion, because one large case can dominate a year.",
             {
               n: bigoDemanded.length,
               bn: bigoTotalBn.toFixed(1),
+              missing: corpus.fiscalYears.length - bigoDemanded.length,
+              lastFy: "2082/83",
               lo: (Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
               hi: (Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
             },

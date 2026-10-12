@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-12T03:10:29+00:00",
-    "commit": "a3691c1",
+    "generatedAt": "2026-10-12T03:17:15+00:00",
+    "commit": "82dd8c5",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -972,6 +972,11 @@
       "fy": "2075/76",
       "rs": 4053763888.65,
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf"
+    },
+    {
+      "fy": "2076/77",
+      "rs": 2536698268.5,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf"
     },
     {
       "fy": "2077/78",
