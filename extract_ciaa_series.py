@@ -195,10 +195,15 @@ _BIGO_SENTENCE = re.compile(
 _BIGO_HEADER = "बिगो मागदाबी"
 
 
+#: Thousands separators the OCR produces for a rupee figure. The cedilla is not a
+#: typo on our side -- the 2076/77 report's digits come through as "२¸५३¸६६¸९८¸२६८.५०".
+_SEPARATORS = str.maketrans("", "", ",¸'` ")
+
+
 def _rupees(raw: str) -> float | None:
-    """A rupee figure, which the OCR leaves with a Devanagari danda for its decimal."""
-    s = raw.translate(_TR).replace(",", "")
-    m = re.match(r"\d+(?:\.\d+)?", s)
+    """A rupee figure, tolerating the separators the OCR substitutes for a comma."""
+    s = raw.translate(_TR).translate(_SEPARATORS)
+    m = re.search(r"\d+(?:\.\d+)?", s)
     return float(m.group()) if m else None
 
 
@@ -221,10 +226,16 @@ def _bigo_demanded(text: str) -> float | None:
         for line in block.splitlines():
             if "जम्मा" not in line:
                 continue
-            cells = [c.strip() for c in line.split("|")]
-            v = _rupees(cells[-1])
-            if v and 1e8 < v < 1e11:
-                return v
+            # Scan every token on the row, not just the last cell: the 2076/77 table
+            # runs the amount on after the defendant count inside one cell, so a
+            # last-cell rule reads 1,212 defendants and misses Rs 2.54 billion.
+            best = None
+            for tok in re.split(r"[|\s]+", line):
+                v = _rupees(tok)
+                if v and 1e8 < v < 1e11 and (best is None or v > best):
+                    best = v
+            if best:
+                return best
     return None
 
 
