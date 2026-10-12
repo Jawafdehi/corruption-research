@@ -20,6 +20,7 @@ export function GapCallout({
   fix,
   showsLabel,
   fixLabel,
+  intro,
   children,
 }: {
   /** Short stage tag, e.g. "Investigation". */
@@ -31,6 +32,8 @@ export function GapCallout({
   fix: ReactNode;
   showsLabel: string;
   fixLabel: string;
+  /** Optional framing sentence between the title and the two columns. */
+  intro?: ReactNode;
   /** Optional detail: a worked case, a caveat, a link. */
   children?: ReactNode;
 }) {
@@ -49,6 +52,10 @@ export function GapCallout({
         <h3 className="mt-3 max-w-3xl font-display text-xl font-bold leading-tight tracking-tight text-foreground md:text-2xl">
           {title}
         </h3>
+
+        {intro ? (
+          <p className="mt-4 max-w-3xl text-sm leading-6 text-foreground/85">{intro}</p>
+        ) : null}
 
         <dl className="mt-6 grid gap-x-10 gap-y-5 md:grid-cols-2">
           <div>

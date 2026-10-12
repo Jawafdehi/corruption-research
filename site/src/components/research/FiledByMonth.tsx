@@ -41,6 +41,11 @@ export function FiledByMonth({
   // (e.g. Kartik mean 11.2 ± 11.3) must not push the auto-domain below zero;
   // the max still clears every upper whisker (mean + sd).
   const maxY = Math.ceil(Math.max(...data.map((d) => d.mean + d.sd)) / 10) * 10;
+  // Explicit ticks. `domain` alone does not stop Recharts deriving tick VALUES from
+  // the data, and the error bars reach below zero -- Kartik is 11.7 ± 11.8 -- so the
+  // axis was labelling itself "-0.10000000000000142" and "14.899999999999999".
+  const step = maxY <= 20 ? 5 : 10;
+  const ticks = Array.from({ length: maxY / step + 1 }, (_, i) => i * step);
 
   if (!mounted) return <div className="w-full" style={{ height }} />;
 
@@ -67,6 +72,9 @@ export function FiledByMonth({
             <YAxis
               width={36}
               domain={[0, maxY]}
+              ticks={ticks}
+              allowDataOverflow
+              tickFormatter={(v: number) => n(v)}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
