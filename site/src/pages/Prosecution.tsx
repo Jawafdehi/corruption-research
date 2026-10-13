@@ -4,7 +4,10 @@ import { AccusedPerCase } from "@/components/research/AccusedPerCase";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
 import { DataNote } from "@/components/research/DataNote";
 import { GapCallout } from "@/components/research/GapCallout";
+import { CaseLedger } from "@/components/research/CaseLedger";
+import { EvidenceTimeline } from "@/components/research/EvidenceTimeline";
 import { MethodComparison } from "@/components/research/MethodComparison";
+import { ReadingNotes } from "@/components/research/ReadingNotes";
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
   Block,
@@ -21,11 +24,11 @@ import { CITATIONS, REPORT } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
 /** The one case where a bench put selective prosecution in a reasoned judgment. */
-/** The FY2078/79 annual report, where the Commission quotes the precedent it is
- *  arguing against. Pinned to the fiscal year rather than to the series, so a
- *  refreshed dataset cannot silently move the citation to a different report. */
-const CIAA_2078_79 =
-  "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf";
+/** FY2070/71, which records two Tameli decisions taken on cash-flow reasoning — the
+ *  method in use before the 2072 ruling. Pinned to the fiscal year rather than to the
+ *  series, so a refreshed dataset cannot silently move a citation to another report. */
+const CIAA_2070_71 =
+  "https://ciaa.gov.np/uploads/publicationsAndReports/MlV2KJ.pdf";
 /** नि.नं. ९४३३, नेपाल सरकार वि. हरेकृष्ण भगत — where the Supreme Court applied the
  *  check-period method and declined to engage with the cash-flow objection. */
 const NKP_9433 = "https://nkp.gov.np/full_detail/8476";
@@ -382,30 +385,82 @@ export default function Prosecution() {
             <>
               <p>
                 {t(
-                  "research.corruption.gap.gEstablishes",
-                  "Illicit enrichment can be assessed two ways. The cash-flow method follows income and spending in sequence and treats a shortfall at any point as unexplained. The check-period method takes the whole period of service as one unit, totals lawful income against total assets and spending, and asks whether the difference is disproportionate.",
+                  "research.corruption.gap.gLede",
+                  "Two ways of adding up the same facts can reach opposite conclusions about the same official. One judgment shows how narrow the margin can be.",
                 )}
-              </p>
-              <p>
-                {t(
-                  "research.corruption.gap.gEstablishes2",
-                  "In Nepal Government v. Harekrishna Bhagat, decision no. 9433 of 2072, the Supreme Court recorded that the case had been registered on a cash-flow basis while the Special Court had assessed it on a check-period basis. It declined to reopen the question, holding that the method was already settled: property is analysed over the check period, with income and expenditure assessed separately for that period. The appeal was dismissed.",
-                )}{" "}
-                <Cite href={NKP_9433}>
-                  {t("research.corruption.gap.gCite", "Read decision no. 9433")}
-                </Cite>
               </p>
 
+              {/*
+                BLOCK 1 — the arithmetic of decision no. 9433, laid out as arithmetic.
+                Figures and the ten per cent rule are quoted from the judgment text at
+                nkp.gov.np/full_detail/8476 (paras 47-49), re-checked against the
+                original Nepali before publication: जाँच अवधिमा जम्मा रू.७४,५१,४२६।२५,
+                रू.६८,४७,५३५।९० वैध मौद्रिक आय, and ८.१० प्रतिशत अर्थात् रू.६,०३,८९०।
+                Para 48 is where the court says a difference of up to १० प्रतिशत cannot
+                be called अमिल्दो र अस्वाभाविक. It is the court's reasoning in this case,
+                not a figure written into the Act, and the caption says so.
+              */}
+              <CaseLedger
+                label={t("research.corruption.ledger.label", "The case")}
+                title={t(
+                  "research.corruption.ledger.title",
+                  "Nepal Government v. Harekrishna Bhagat, decision no. 9433 of 2072",
+                )}
+                cite={
+                  <Cite href={NKP_9433}>
+                    {t("research.corruption.gap.gCite", "Read decision no. 9433")}
+                  </Cite>
+                }
+                rows={[
+                  {
+                    key: "assets",
+                    label: t("research.corruption.ledger.assets", "Property held over the check period"),
+                    value: t("research.corruption.ledger.assetsV", "Rs 74,51,426"),
+                  },
+                  {
+                    key: "income",
+                    op: "−",
+                    label: t("research.corruption.ledger.income", "Lawful income for the same period"),
+                    value: t("research.corruption.ledger.incomeV", "Rs 68,47,536"),
+                  },
+                  {
+                    key: "gap",
+                    op: "=",
+                    total: true,
+                    label: t("research.corruption.ledger.diff", "Difference the court had to explain"),
+                    value: t("research.corruption.ledger.diffV", "Rs 6,03,890"),
+                  },
+                ]}
+                share={8.1}
+                shareLabel={t(
+                  "research.corruption.ledger.share",
+                  "of the property held — the size of the gap, measured against everything the defendant owned",
+                )}
+                threshold={10}
+                thresholdLabel={t(
+                  "research.corruption.ledger.threshold",
+                  "10% — the point the court used in this case",
+                )}
+                outcome={t(
+                  "research.corruption.ledger.outcome",
+                  "The court held that a difference of up to ten per cent between property and income cannot be called disproportionate or unnatural. The acquittal stood. Ten per cent is the court's reasoning in this case, not a figure written into the Act.",
+                )}
+              />
+
+              {/*
+                BLOCK 2 — why the same facts can come out differently. Reduced to the
+                single thing that separates the methods: the stretch of time compared.
+              */}
               <MethodComparison
                 scenario={t(
-                  "research.corruption.method.scenario",
-                  "In decision no. 9433 the court compared a Senior Divisional Engineer's assets over his service with the lawful income he could show for the same period: assets of Rs 74,51,426.25 against income of Rs 68,47,535.90.",
+                  "research.corruption.method.scenario2",
+                  "Both methods compare the same two things — property held against income lawfully earned. They differ on one point only.",
                 )}
                 question={t(
-                  "research.corruption.method.question",
-                  "Is that difference evidence of illicit enrichment?",
+                  "research.corruption.method.question2",
+                  "Over what stretch of time do you compare them?",
                 )}
-                outputArrowLabel={t("research.corruption.method.arrow", "gives")}
+                outputArrowLabel={t("research.corruption.method.arrow", "so")}
                 methods={[
                   {
                     key: "checkperiod",
@@ -415,13 +470,13 @@ export default function Prosecution() {
                       "research.corruption.method.m1Kicker",
                       "The method the Supreme Court applied and treated as settled",
                     ),
-                    inputLabel: t("research.corruption.method.m1In", "Assets against lawful income, whole period"),
-                    inputValue: t("research.corruption.method.m1InV", "Rs 74,51,426 vs Rs 68,47,536"),
-                    outputLabel: t("research.corruption.method.m1OutLabel", "Difference"),
-                    outputValue: t("research.corruption.method.m1OutV", "8.10%"),
+                    inputLabel: t("research.corruption.method.inLabel", "Period compared"),
+                    inputValue: t("research.corruption.method.m1InV2", "The whole service, as one"),
+                    outputLabel: t("research.corruption.method.outLabel", "Counts as unexplained"),
+                    outputValue: t("research.corruption.method.m1OutV2", "The final gap"),
                     body: t(
-                      "research.corruption.method.m1Body",
-                      "The whole period of service is taken as one unit. Here the difference fell below the ten per cent the court treated as the threshold, so the gap was not held to be disproportionate and the defendant was not convicted.",
+                      "research.corruption.method.m1Body2",
+                      "Everything earned and everything spent across the years in office are totalled once, and the question is whether what is left over is disproportionate. A lean year that is made up later never appears.",
                     ),
                   },
                   {
@@ -431,62 +486,151 @@ export default function Prosecution() {
                       "research.corruption.method.m2Kicker",
                       "The method the Commission registered the case on",
                     ),
-                    inputLabel: t("research.corruption.method.m2In", "Income and spending, in sequence"),
-                    inputValue: t("research.corruption.method.m2InV", "Year by year"),
-                    outputLabel: t("research.corruption.method.m2OutLabel", "Treated as unexplained"),
-                    outputValue: t("research.corruption.method.m2OutV", "Any shortfall"),
+                    inputLabel: t("research.corruption.method.inLabel", "Period compared"),
+                    inputValue: t("research.corruption.method.m2InV2", "Year by year, in sequence"),
+                    outputLabel: t("research.corruption.method.outLabel", "Counts as unexplained"),
+                    outputValue: t("research.corruption.method.m2OutV2", "Every year in deficit"),
                     body: t(
-                      "research.corruption.method.m2Body",
-                      "Income and spending are followed in order, and a point where spending runs ahead of income counts as unexplained even if the totals balance across the full period. A sequence can dip into deficit and recover; the two methods can therefore reach different answers on the same facts.",
+                      "research.corruption.method.m2Body2",
+                      "Each year is checked on its own, and a year where spending ran ahead of income is counted as unexplained property even if the totals balance by the end. The shortfalls add up, so this method can produce a large figure from a period the other method finds nothing in.",
                     ),
                   },
                 ]}
-                illustrativeNote={t(
-                  "research.corruption.method.note",
-                  "The figures are from the judgment itself. The ten per cent threshold is as the court applied it in this case; it is not a statutory rule, and the assessment in any case depends on the evidence before the court.",
+                footnote={t(
+                  "research.corruption.method.note2",
+                  "Neither method is named in the Act. The Supreme Court has applied the check period; the Commission has gone on registering cases on cash flow, and no record states which was used in any given charge sheet.",
+                )}
+              />
+
+              {/*
+                BLOCK 3 — the sequence. The FY2076/77 entry is the strongest evidence on
+                the page because the same case carries both answers: the Special Court
+                found income exceeded expenditure over the whole period and acquitted,
+                while the charge sheet's own chart, reproduced in the Commission's appeal
+                grounds, totals Rs 2,54,69,887 of property with no source shown.
+                Verified in the report's own text (30th annual report, FY2076/77).
+              */}
+              <EvidenceTimeline
+                label={t(
+                  "research.corruption.gap.gTimeline",
+                  "The method, before and after the ruling",
+                )}
+                entries={[
+                  {
+                    key: "before",
+                    when: t("research.corruption.gap.gT1When", "FY2070/71 — before the ruling"),
+                    kind: t(
+                      "research.corruption.gap.gT1Kind",
+                      "Two investigations closed because the cash flow never went negative",
+                    ),
+                    body: t(
+                      "research.corruption.gap.gT1Body",
+                      "The Commission's own report records two files placed in Tameli, on 2071/3/12 and 2071/3/13, on the stated ground that income exceeded spending and \"at no stage of the cash flow was there a negative position\". The method decided the outcome in the officials' favour.",
+                    ),
+                  },
+                  {
+                    key: "ruling",
+                    pivot: true,
+                    when: t("research.corruption.gap.gT2When", "2072 — Supreme Court"),
+                    kind: t(
+                      "research.corruption.gap.gT2Kind",
+                      "Decision no. 9433 treats the check period as settled",
+                    ),
+                    body: t(
+                      "research.corruption.gap.gT2Body",
+                      "The court recorded that the case had been registered on a cash-flow basis while the Special Court had assessed it on a check-period basis. It declined to reopen the question, holding that property is analysed over the check period, and dismissed the appeal.",
+                    ),
+                  },
+                  {
+                    key: "after",
+                    when: t("research.corruption.gap.gT3When", "FY2076/77 — four years later"),
+                    kind: t(
+                      "research.corruption.gap.gT3Kind",
+                      "A charge sheet's own Cash Flow Chart, printed in the Commission's appeal grounds",
+                    ),
+                    body: t(
+                      "research.corruption.gap.gT3Body",
+                      "Appealing the acquittal of Ram Babu Adhikari and Malati Sharma Adhikari, the Commission reproduced the chart the charge sheet was built on — year by year from 2046/47 to 2073/12/31. The Special Court had taken the whole check period as one unit and found that income exceeded expenditure. The chart, read year by year, finds the opposite.",
+                    ),
+                    stat: t("research.corruption.gap.gT3Stat", "Rs 2,54,69,887"),
+                    statCaption: t(
+                      "research.corruption.gap.gT3StatCap",
+                      "property with no source shown, as totalled by the charge sheet's chart — in the same case the court decided the other way",
+                    ),
+                  },
+                ]}
+              />
+
+              <p className="text-xs">
+                <Cite href={CIAA_2070_71}>
+                  {t("research.corruption.gap.gCite4", "CIAA annual report, FY2070/71")}
+                </Cite>
+                {" · "}
+                <Cite href={CIAA_2076_77}>
+                  {t("research.corruption.gap.gCite2", "CIAA annual report, FY2076/77")}
+                </Cite>
+              </p>
+
+              {/* BLOCK 4 — what the charge looks like once it reaches a verdict. */}
+              <ReadingNotes
+                label={t("research.corruption.gap.gOutcome", "What the case data shows")}
+                notes={[
+                  {
+                    key: "decided",
+                    stat: n(ieDecided),
+                    title: t("research.corruption.gap.gO1", "Illicit-enrichment cases decided"),
+                    body: t(
+                      "research.corruption.gap.gO1Body",
+                      "Every case in the archive charged as illicit enrichment that has reached a clear verdict, across the fourteen years.",
+                    ),
+                  },
+                  {
+                    key: "acquitted",
+                    stat: n(ie ? ie.acquitted : 0),
+                    title: t("research.corruption.gap.gO2", "Ended in acquittal"),
+                    body: t(
+                      "research.corruption.gap.gO2Body",
+                      "{{share}} of them — the defendants walked out cleared of the charge.",
+                      {
+                        share: pct(ieDecided ? ((ie?.acquitted ?? 0) / ieDecided) * 100 : 0),
+                      },
+                    ),
+                  },
+                  {
+                    key: "full",
+                    stat: pct(ieDecided ? ((ie?.convicted ?? 0) / ieDecided) * 100 : 0),
+                    title: t("research.corruption.gap.gO3", "Upheld in full"),
+                    body: t(
+                      "research.corruption.gap.gO3Body",
+                      "Against {{avg}} across all offences. The charge does worse in court than the average charge, though it is not the weakest of any.",
+                      { avg: pct1(fullOnlyAvg) },
+                    ),
+                  },
+                ]}
+                footnote={t(
+                  "research.corruption.gap.gOutcomeFoot",
+                  "These figures show a difference in outcomes. They do not show that the method caused it: an acquittal can turn on the evidence, the source of funds or anything else, and the archive records a verdict but never the method behind the figure.",
                 )}
               />
             </>
           }
           questionLabel={t("research.corruption.gap.open", "The open question")}
           question={t(
-            "research.corruption.gap.gQuestion",
-            "Why does the Commission keep bringing cases on a method the Supreme Court has already set aside?",
+            "research.corruption.gap.gQuestion2",
+            "How many charge sheets are built on a method the courts will not decide them by?",
           )}
         >
           <p>
             {t(
-              "research.corruption.gap.gBody",
-              "The Commission's own reports show the cash-flow method still in use on both sides of the 2072 ruling. In FY2069/70 and FY2070/71 they record complaints closed as Tameli because \"at no stage of the cash flow was there a negative position\". And the FY2076/77 report, four years after the ruling, reproduces a charge sheet's own \"Cash Flow Chart\" running from 2046/47 to 2073/12/31 — in the Commission's grounds for appealing an acquittal in which the Special Court had examined the whole check period as one.",
+              "research.corruption.gap.gBody5",
+              "Nobody can say. The method behind the amount in a charge sheet is not written down anywhere a reader can reach, so the only way to find out is case by case, from the reports that happen to reprint a chart. Three fields on each case would turn that into something countable:",
             )}
           </p>
-          <p className="text-xs">
-            <Cite href={CIAA_2076_77}>
-              {t("research.corruption.gap.gCite2", "CIAA annual report, FY2076/77")}
-            </Cite>
-            {" · "}
-            <Cite href={CIAA_2078_79}>
-              {t("research.corruption.gap.gCite3", "CIAA annual report, FY2078/79")}
-            </Cite>
-          </p>
-          <p>
-            {t(
-              "research.corruption.gap.gBody2",
-              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences — well below the court-wide rate, though not the lowest of any charge. These figures show a difference in outcomes. They do not prove the method caused it: an acquittal can turn on the evidence, the source of funds or any number of things, and this dataset records a verdict but never the method behind the figure.",
-              {
-                n: n(ieDecided),
-                acq: n(ie ? ie.acquitted : 0),
-                conv: pct(ieDecided ? ((ie?.convicted ?? 0) / ieDecided) * 100 : 0),
-                avg: pct1(fullOnlyAvg),
-              },
-            )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.gap.gBody3",
-              "That is the gap. The method used to reach the amount in a charge sheet is not recorded anywhere a reader can reach, so the question of how often the Commission builds on cash flow can only be answered case by case, from reports that happen to reproduce a chart. Recording the method, the amount claimed and the amount upheld on each case would turn a question that currently needs a judgment read in full into one that could be counted.",
-            )}
-          </p>
+          <ul className="ml-4 list-disc space-y-1.5 marker:text-accent">
+            <li>{t("research.corruption.gap.gNeed1", "the method used to calculate the amount")}</li>
+            <li>{t("research.corruption.gap.gNeed2", "the amount claimed in the charge sheet")}</li>
+            <li>{t("research.corruption.gap.gNeed3", "the amount the court upheld")}</li>
+          </ul>
         </GapCallout>
 
         <GapCallout

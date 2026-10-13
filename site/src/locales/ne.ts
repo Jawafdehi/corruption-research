@@ -392,4 +392,115 @@ export const ne: Record<string, string> = {
   "research.corruption.method.repoEnd":
     "। अदालतका मूल अभिलेख र आयोगका प्रतिवेदन यहाँ प्रकाशित छन्",
   "research.corruption.method.repoEnd2": "।",
+
+  // --- Reading the chart ----------------------------------------------------
+  "research.corruption.reading": "चार्ट कसरी पढ्ने",
+  "research.corruption.pipeline.n1Stat": "{{fast}} → {{slow}} महिना",
+  "research.corruption.pipeline.n1Title": "पर्खाइ वर्षैपिच्छे उस्तै छैन",
+  "research.corruption.pipeline.n1Body":
+    "लगभग किनारा लागिसकेका समूहमा मध्यक {{fastYear}} मा दायर मुद्दाका लागि करिब {{fast}} महिनादेखि {{slowYear}} का लागि करिब {{slow}} महिनासम्म रह्यो — मुद्दा कुन बेला आयो भन्ने आधारमा उही अदालतले {{times}} गुणा बढी समय लिएको।",
+  "research.corruption.pipeline.n2Stat": "{{year}} देखि",
+  "research.corruption.pipeline.n2Title": "पछिल्ला पट्टी सुध्रिने होइन, झन् लम्बिने हुन्",
+  "research.corruption.pipeline.n2Body":
+    "{{complete}} पछिका समूह अझै खुला छन्, र तिनका मध्यकले सकिइसकेका मुद्दा मात्र गन्छन्। ढिलो चल्नेहरू अझै टुंगिएका छैनन्, त्यसैले औसतमा नै परेका छैनन् — यिनै वर्ष वास्तविकभन्दा छिटो देखिन्छन्। त्यसैले यी धर्के रेखामा छन्।",
+  "research.corruption.pipeline.n3Title": "अझै फैसला नभएका मुद्दा",
+  "research.corruption.pipeline.n3Body":
+    "सबै समूह गरी {{backlog}} मुद्दा अझै पर्खिरहेका छन्, र तीमध्ये {{heavy}} {{heavyYear}} मा दायर भएका हुन्। पुराना समूह खाली भइसके; बाँकी रहेका भर्खरका हुन्।",
+  "research.corruption.trend.n1Title": "दायरी रेखाले के गन्छ",
+  "research.corruption.trend.n1Body":
+    "विशेष अदालतमा दर्ता भएको वर्षअनुसार गनिएका मुद्दा। चौध वर्ष जोड्दा संग्रहका पूरै {{filed}} अभियोजन बन्छन्।",
+  "research.corruption.trend.n2Title": "फैसला रेखाले के गन्छ",
+  "research.corruption.trend.n2Body":
+    "मुद्दा जुनसुकै वर्ष आएको भए पनि त्यस वर्ष सुनाइएका फैसला। एक वर्ष दायर भई तीन वर्षपछि फैसला भएको मुद्दा चार्टमा दुई फरक ठाउँमा बस्छ, त्यसैले यी रेखा भेटिनुपर्ने होइन।",
+  "research.corruption.trend.n3Stat": "{{lag}} वर्ष",
+  "research.corruption.trend.n3Title": "फैसलाको शिखर दायरीभन्दा निकै पछि आउँछ",
+  "research.corruption.trend.n3Body":
+    "दायरी {{filedYear}} मा {{filed}} पुग्यो; फैसला {{decidedYear}} मा {{decided}}। त्यो दूरी नै थाती मुद्दा बिस्तारै किनारा लाग्दै गएको हो — माथिका मध्यकले नाप्ने उही ढिलाइ, पात्रोमा देखिएको।",
+  "research.corruption.trend.foot":
+    "दायरी दर्ता भएको वर्षमा, फैसला सुनाइएको वर्षमा आधारित।",
+
+  // --- Charge calculation: the method behind the figure ----------------------
+  "research.corruption.gap.shows": "अभिलेखले के देखाउँछ",
+  "research.corruption.gap.open": "खुला प्रश्न",
+  "research.corruption.gap.gLabel": "जवाफदेहिता ग्याप · बिगो गणना",
+  "research.corruption.gap.gTitle":
+    "गैरकानुनी सम्पत्ति कसरी जाँच्ने भन्ने सर्वोच्चले टुंग्याइसक्यो। आयोगले भने अर्कै विधिमा मुद्दा बनाउँदै छ।",
+  "research.corruption.method.m1": "जाँच अवधि",
+  "research.corruption.method.m1Kicker":
+    "सर्वोच्चले लागू गरेको र स्थापित सिद्धान्त मानेको विधि",
+  "research.corruption.method.m2": "क्यास फ्लो",
+  "research.corruption.method.m2Kicker": "आयोगले मुद्दा दर्ता गरेको विधि",
+  "research.corruption.gap.gLede":
+    "उही तथ्यलाई जोड्ने दुई तरिकाले उही कर्मचारीबारे ठीक उल्टो निष्कर्ष निकाल्न सक्छन्। एउटा फैसलाले त्यो सीमा कति साँघुरो हुन सक्छ भन्ने देखाउँछ।",
+  "research.corruption.ledger.label": "मुद्दा",
+  "research.corruption.ledger.title":
+    "नेपाल सरकार वि. हरेकृष्ण भगत, नि.नं. ९४३३, २०७२",
+  "research.corruption.ledger.assets": "जाँच अवधिभरको कुल सम्पत्ति",
+  "research.corruption.ledger.assetsV": "रू. ७४,५१,४२६",
+  "research.corruption.ledger.income": "सोही अवधिको वैध आय",
+  "research.corruption.ledger.incomeV": "रू. ६८,४७,५३६",
+  "research.corruption.ledger.diff": "अदालतले छुट्याउनुपर्ने फरक",
+  "research.corruption.ledger.diffV": "रू. ६,०३,८९०",
+  "research.corruption.ledger.share":
+    "कुल सम्पत्तिको — प्रतिवादीसँग भएको सबै सम्पत्तिसँग तुलना गर्दाको फरकको आकार",
+  "research.corruption.ledger.threshold": "१०% — यस मुद्दामा अदालतले लिएको बिन्दु",
+  "research.corruption.ledger.outcome":
+    "सम्पत्ति र आयबीचको फरक १० प्रतिशतसम्म भएमा त्यसलाई अमिल्दो वा अस्वाभाविक भन्न मिल्दैन भन्ने अदालतको ठहर रह्यो। सफाइ कायमै रह्यो। १० प्रतिशत यस मुद्दामा अदालतले अपनाएको आधार हो, ऐनमा लेखिएको अंक होइन।",
+  "research.corruption.method.scenario2":
+    "दुवै विधिले तुलना गर्ने कुरा उही हो — आर्जित सम्पत्ति र वैध रूपमा कमाएको आय। फरक एउटै कुरामा छ।",
+  "research.corruption.method.question2": "कति अवधिलाई एकै ठाउँमा राखेर तुलना गर्ने?",
+  "research.corruption.method.arrow": "त्यसैले",
+  "research.corruption.method.inLabel": "तुलना गरिने अवधि",
+  "research.corruption.method.outLabel": "स्रोत नखुलेको मानिने",
+  "research.corruption.method.m1InV2": "पूरै सेवा अवधि, एकमुष्ट",
+  "research.corruption.method.m1OutV2": "अन्त्यको फरक",
+  "research.corruption.method.m1Body2":
+    "सेवा अवधिभरको सबै आय र सबै व्यय एकपटक जोडिन्छ, र बाँकी रहेको रकम अमिल्दो हो कि होइन भन्ने प्रश्न सोधिन्छ। पछि पूर्ति भइसकेको कुनै एक वर्षको घाटा यहाँ देखिँदै देखिँदैन।",
+  "research.corruption.method.m2InV2": "वर्षैपिच्छे, क्रमैसँग",
+  "research.corruption.method.m2OutV2": "ऋणात्मक भएका हरेक वर्ष",
+  "research.corruption.method.m2Body2":
+    "हरेक वर्ष छुट्टै जाँचिन्छ, र आयभन्दा व्यय बढी भएको वर्ष स्रोत नखुलेको सम्पत्तिका रूपमा गनिन्छ — अन्त्यसम्ममा हिसाब मिले पनि। ती घाटा जोडिँदै जान्छन्, त्यसैले अर्को विधिले केही नभेट्ने अवधिबाट पनि यो विधिले ठूलो अंक निकाल्न सक्छ।",
+  "research.corruption.method.note2":
+    "दुवै विधि ऐनमा नामै तोकिएका होइनन्। सर्वोच्चले जाँच अवधि (check period) लागू गरेको छ; आयोगले क्यास फ्लोकै आधारमा मुद्दा दर्ता गर्दै आएको छ, र कुन अभियोगपत्र कुन विधिमा बनेको हो भन्ने कहीँ अभिलेख हुँदैन।",
+  "research.corruption.gap.gTimeline": "फैसला अघि र पछिको विधि",
+  "research.corruption.gap.gT1When": "आ.व. २०७०/७१ — फैसलाअघि",
+  "research.corruption.gap.gT1Kind":
+    "क्यास फ्लो कहिल्यै ऋणात्मक नभएकाले दुई अनुसन्धान तामेलीमा",
+  "research.corruption.gap.gT1Body":
+    "आयोगकै प्रतिवेदनले २०७१।३।१२ र २०७१।३।१३ मा दुई फाइल तामेलीमा राखिएको अभिलेख गर्छ — आय व्ययभन्दा बढी देखिएको र \"क्यासफ्लोको कुनै चरणमा ऋणात्मक अवस्था नदेखिएको\" आधारमा। विधिले नै नतिजा कर्मचारीकै पक्षमा पार्‍यो।",
+  "research.corruption.gap.gT2When": "२०७२ — सर्वोच्च अदालत",
+  "research.corruption.gap.gT2Kind":
+    "नि.नं. ९४३३ ले जाँच अवधिलाई स्थापित सिद्धान्त मान्छ",
+  "research.corruption.gap.gT2Body":
+    "मुद्दा क्यास फ्लोका आधारमा दर्ता भएको तर विशेष अदालतले जाँच अवधिका आधारमा मूल्यांकन गरेको कुरा अदालतले उल्लेख गर्‍यो। त्यो प्रश्न पुनः खोल्न इन्कार गर्दै सम्पत्तिको विश्लेषण जाँच अवधिभित्रै गरिने ठहर गरी पुनरावेदन खारेज गर्‍यो।",
+  "research.corruption.gap.gT3When": "आ.व. २०७६/७७ — चार वर्षपछि",
+  "research.corruption.gap.gT3Kind":
+    "आयोगकै पुनरावेदन आधारमा छापिएको अभियोगपत्रकै Cash Flow Chart",
+  "research.corruption.gap.gT3Body":
+    "रामबाबु अधिकारी र मालती शर्मा अधिकारीको सफाइविरुद्ध पुनरावेदन गर्दा आयोगले अभियोगपत्र जुन तालिकामा बनेको थियो, त्यही छाप्यो — २०४६।४७ देखि २०७३।१२।३१ सम्म वर्षैपिच्छे। विशेष अदालतले पूरै जाँच अवधिलाई एकमुष्ट लिएर व्ययभन्दा आय बढी देखेको थियो। त्यही तालिका वर्षैपिच्छे पढ्दा ठीक उल्टो देखिन्छ।",
+  "research.corruption.gap.gT3Stat": "रू. २,५४,६९,८८७",
+  "research.corruption.gap.gT3StatCap":
+    "अभियोगपत्रकै तालिकाले जोडेको स्रोत नखुलेको सम्पत्ति — अदालतले उल्टो फैसला गरेकै मुद्दामा",
+  "research.corruption.gap.gCite4": "आयोगको वार्षिक प्रतिवेदन, आ.व. २०७०/७१",
+  "research.corruption.gap.gCite2": "आयोगको वार्षिक प्रतिवेदन, आ.व. २०७६/७७",
+  "research.corruption.gap.gCite": "नि.नं. ९४३३ पढ्नुहोस्",
+  "research.corruption.gap.gOutcome": "मुद्दाको तथ्यांकले के देखाउँछ",
+  "research.corruption.gap.gO1": "फैसला भएका गैरकानुनी सम्पत्तिका मुद्दा",
+  "research.corruption.gap.gO1Body":
+    "चौध वर्षभरि संग्रहमा गैरकानुनी सम्पत्ति आर्जनको अभियोग लागेका र स्पष्ट फैसलासम्म पुगेका सबै मुद्दा।",
+  "research.corruption.gap.gO2": "सफाइमा टुंगिए",
+  "research.corruption.gap.gO2Body":
+    "तीमध्ये {{share}} — प्रतिवादीहरू अभियोगबाट सफाइ पाएर निस्किए।",
+  "research.corruption.gap.gO3": "पूर्ण ठहर भए",
+  "research.corruption.gap.gO3Body":
+    "सबै कसुर मिलाउँदाको {{avg}} को तुलनामा। यो अभियोग अदालतमा औसत अभियोगभन्दा कमजोर देखिन्छ, तर सबैभन्दा कमजोर भने होइन।",
+  "research.corruption.gap.gOutcomeFoot":
+    "यी अंकले नतिजामा फरक देखाउँछन्। विधिले नै त्यो फरक ल्यायो भन्ने चाहिँ देखाउँदैनन्: सफाइ प्रमाण, स्रोत वा अरू जुनसुकै कुरामा अडिन सक्छ, र संग्रहले फैसला त राख्छ, अंकपछाडिको विधि कहिल्यै राख्दैन।",
+  "research.corruption.gap.gQuestion2":
+    "अदालतले जुन विधिबाट फैसला गर्दैन, त्यही विधिमा कति अभियोगपत्र बनेका छन्?",
+  "research.corruption.gap.gBody5":
+    "कसैले भन्न सक्दैन। अभियोगपत्रको अंक कुन विधिबाट निस्कियो भन्ने कुरा पाठकले पुग्न सक्ने कहीँ पनि लेखिँदैन, त्यसैले पत्ता लगाउने एक मात्र बाटो मुद्दापिच्छे हो — कुनै प्रतिवेदनले संयोगले तालिका छापेको भरमा। हरेक मुद्दामा तीन महल थपिए यो गन्न सकिने कुरा बन्थ्यो:",
+  "research.corruption.gap.gNeed1": "अंक निकाल्न प्रयोग भएको विधि",
+  "research.corruption.gap.gNeed2": "अभियोगपत्रमा दाबी गरिएको रकम",
+  "research.corruption.gap.gNeed3": "अदालतले कायम गरेको रकम",
 };

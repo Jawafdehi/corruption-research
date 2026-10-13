@@ -30,6 +30,8 @@ export function useFormat() {
       pct: (v: number) => digits(`${Math.round(v)}%`),
       /** Percentage to one decimal, for figures where the tenth carries meaning. */
       pct1: (v: number) => digits(`${v.toFixed(1)}%`),
+      /** Two decimals, for a percentage quoted from a judgment exactly as written. */
+      pct2: (v: number) => digits(`${v.toFixed(2)}%`),
       /** Bare fiscal-year label for axis ticks: `2069/70` / `२०६९/७०`. */
       fy: (year: number) => digits(fyLabel(year)),
       /**

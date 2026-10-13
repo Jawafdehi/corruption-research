@@ -1,16 +1,15 @@
 import { useTranslation } from "react-i18next";
 
 import { StatusDonut, type DonutSegment } from "@/components/data-quality/StatusDonut";
-import { CasesVersusAccused, type GrainRow } from "@/components/research/CasesVersusAccused";
 import { ConvictionByCharge, type ChargeRow } from "@/components/research/ConvictionByCharge";
+import { KeyFinding } from "@/components/research/KeyFinding";
 import { GapCallout } from "@/components/research/GapCallout";
 import { FiledDecidedTrend } from "@/components/research/FiledDecidedTrend";
-import { JusticeSpread } from "@/components/research/JusticeSpread";
 import { PipelineHealth, type PipelinePoint } from "@/components/research/PipelineHealth";
+import { ReadingNotes } from "@/components/research/ReadingNotes";
 import { RateTrend, type RatePoint } from "@/components/research/RateTrend";
 import {
   Block,
-  Body,
   Caveat,
   Cite,
   Eyebrow,
@@ -19,7 +18,6 @@ import {
   SectionHeading,
   StatRow,
   StatTile,
-  Unknown,
 } from "@/components/layout/Prose";
 import {
   CITATIONS,
@@ -32,68 +30,22 @@ import {
 import { useFormat } from "@/lib/format";
 
 /** Band thresholds for the bench chart — preserved from the original page. */
-const BAND_HIGH = 55;
-const BAND_LOW = 37;
 
 export default function CourtOutcomes() {
   const { t, language } = useTranslation();
   const { n, pct, pct1 } = useFormat();
   const {
     byCharge,
-    ciaa,
-    corpus,
-    defendants,
-    entityResolution,
-    justiceMinDecisions,
-    justices,
+
+
     outcome,
     overTime,
     rates,
     trend,
-    verdictsModelDerivedExcluded,
-    verdictsNoDisposition,
   } = REPORT;
 
   const decided = decidedClean(outcome);
 
-  // The same three verdicts counted per case and per accused. `defendants.byVerdict` is
-  // built on the identical court-published-verdict filter as `outcome`, so the two bars
-  // share a denominator rule and the gap between them is a real difference of grain and
-  // not an artefact of one side counting something the other excludes.
-  const GRAIN_FILL: Record<string, string> = {
-    "ठहर": "hsl(var(--court))",
-    "आंशिक ठहर": "hsl(var(--accent))",
-    "सफाई": "hsl(var(--muted-foreground))",
-  };
-  const grainLabel: Record<string, string> = {
-    "ठहर": t("research.corruption.outcome.convicted", "Convicted"),
-    "आंशिक ठहर": t("research.corruption.grain.partial", "Partly convicted — record does not say who"),
-    "सफाई": t("research.corruption.outcome.acquitted", "Acquitted"),
-  };
-  const grainRows: GrainRow[] = defendants.byVerdict.map((r) => ({
-    key: r.verdict,
-    label: grainLabel[r.verdict] ?? r.verdict,
-    term: r.verdict,
-    cases: r.cases,
-    accused: r.accused,
-    fill: GRAIN_FILL[r.verdict] ?? "hsl(var(--muted-foreground))",
-  }));
-  const grainTotals = grainRows.reduce(
-    (a, r) => ({ cases: a.cases + r.cases, accused: a.accused + r.accused }),
-    { cases: 0, accused: 0 },
-  );
-  const grainOf = (verdict: string) => {
-    const r = grainRows.find((x) => x.key === verdict);
-    if (!r) return { casePct: 0, accusedPct: 0, cases: 0, accused: 0 };
-    return {
-      cases: r.cases,
-      accused: r.accused,
-      casePct: (r.cases / grainTotals.cases) * 100,
-      accusedPct: (r.accused / grainTotals.accused) * 100,
-    };
-  };
-  const fullGrain = grainOf("ठहर");
-  const partGrain = grainOf("आंशिक ठहर");
   const convPct = (outcome.convicted / decided) * 100;
   const partPct = (outcome.partial / decided) * 100;
   const acqPct = (outcome.acquitted / decided) * 100;
@@ -160,9 +112,28 @@ export default function CourtOutcomes() {
   const slowest = settled.reduce((a, b) => (b.medianMonths > a.medianMonths ? b : a), settled[0]);
   const fastest = settled.reduce((a, b) => (b.medianMonths < a.medianMonths ? b : a), settled[0]);
   const backlog = overTime.cohorts.reduce((s, c) => s + c.pending, 0);
+  // The cohort still carrying most of that backlog, named so the figure is not left
+  // looking like a court-wide pile-up when it is mostly the newest year.
+  const heaviestPending = overTime.cohorts.reduce(
+    (a, b) => (b.pending > a.pending ? b : a),
+    overTime.cohorts[0],
+  );
+  const firstProvisional = overTime.cohorts.find((c) => c.fy > overTime.completeThroughFy);
 
-  const courtAvg = rates.convictionPct;
-  const justiceDecisions = justices.reduce((s, j) => s + j.decisions, 0);
+  // Peaks on the two lines below, read off the series rather than typed in.
+  const peakOf = (series: readonly number[]) => {
+    let at = 0;
+    series.forEach((v, i) => {
+      if (v > series[at]) at = i;
+    });
+    return { fy: trend.years[at], value: series[at] };
+  };
+  const peakFiled = peakOf(trend.filed);
+  const peakDecided = peakOf(trend.decided);
+  const filedTotal = trend.filed.reduce((s, v) => s + v, 0);
+  const decidedTotal = trend.decided.reduce((s, v) => s + v, 0);
+  const peakLagYears = peakDecided.fy - peakFiled.fy;
+
 
 
   return (
@@ -178,7 +149,7 @@ export default function CourtOutcomes() {
         <Lede>
           {t(
             "research.corruption.outcomes.lede2",
-            "Across {{decided}} cases with a clear verdict, {{rate}} ended in conviction in whole or in part, {{full}} in full. Quoted alone that number is close to meaningless, because it averages an offence the court upholds nine times in ten with offences it upholds one time in five.",
+            "Across {{decided}} cases with a clear verdict, {{rate}} resulted in conviction in whole or in part, while {{full}} resulted in full conviction. But these overall figures hide major differences between offences. Courts uphold some types of charges in nearly 90% of cases, while others succeed in only about 20%. A single conviction rate does not show these differences.",
             { decided: n(decided), rate: pct1(rates.convictionPct), full: pct1(rates.convictionFullOnlyPct) },
           )}
         </Lede>
@@ -230,7 +201,7 @@ export default function CourtOutcomes() {
             <>
               {t(
                 "research.corruption.byCharge.caption",
-                "Covers {{n}} of the {{clean}} cases with a clear verdict; the rest carry charge text that could not be classified. Money laundering keeps its own row even though it sits outside the substantive corpus, because it is prosecuted under a separate statute. Every rate is per case, never per accused.",
+                "Each bar is one offence type, split into the three outcomes a court can record. Rates are per case, never per accused. Covers {{n}} of the {{clean}} decided cases; the rest carry charge text that could not be classified.",
                 { n: n(chargeDecidedTotal), clean: n(decided) },
               )}{" "}
               <Cite href={CITATIONS.chargeSheets}>
@@ -251,112 +222,36 @@ export default function CourtOutcomes() {
           />
         </Figure>
 
-        <Body>
-          {t(
-            "research.corruption.byCharge.body2",
-            "Fake-credential cases are upheld in full {{fakePct}} of the time and alone account for about {{fakeShare}} of every full conviction here. Bribery, the next largest charge, converts at {{briberyPct}} across {{briberyDecided}} decided cases. Strip those two out and the rest of the docket — embezzlement, loss to the state, illicit enrichment, irregularity — is upheld in full just {{restPct}} of the time.",
+        <KeyFinding
+          label={t("research.corruption.byCharge.keyLabel", "The finding")}
+          stats={[
             {
-              fakePct: pct(fake.pct),
-              fakeShare: pct(fake.share),
-              briberyPct: pct(bribery.pct),
-              briberyDecided: n(bribery.decided),
-              restPct: pct(restPct),
+              value: pct(fake.pct),
+              caption: t("research.corruption.byCharge.keyFake", "of fake-credential cases upheld in full — the highest of any charge"),
             },
-          )}
-        </Body>
-
-        <Caveat>
-          {t(
-            "research.corruption.outcomes.derived",
-            "Two groups of decided cases sit outside these rates. In {{n}} cases the outcome was taken from the court's written judgment rather than a published cause-list entry. Another {{silent}} are marked decided in the register but carry no outcome in the available data. Counting them here keeps the exclusions visible. The archive reconciles exactly: {{clean}} with a published verdict, plus {{n}}, plus {{silent}}, plus {{open}} still open and {{nostatus}} carrying no status at all, is the {{filed}} cases filed.",
             {
-              n: n(verdictsModelDerivedExcluded),
-              silent: n(verdictsNoDisposition),
-              clean: n(decided),
-              open: n(outcome.ongoing),
-              nostatus: n(corpus.ciaaProsecutions - decided - verdictsModelDerivedExcluded - verdictsNoDisposition - outcome.ongoing),
-              filed: n(corpus.ciaaProsecutions),
+              value: pct(bribery.pct),
+              caption: t("research.corruption.byCharge.keyBribery", "of bribery cases, the next largest category, across {{n}} decided cases", {
+                n: n(bribery.decided),
+              }),
             },
-          )}
-        </Caveat>
-      </Block>
-
-      <Block>
-        <Eyebrow>{t("research.corruption.grain.eyebrow", "Cases and people")}</Eyebrow>
-        <SectionHeading>
-          {t(
-            "research.corruption.grain.title",
-            "A case conviction is not the same as a person convicted",
-          )}
-        </SectionHeading>
-        <Body>
-          {t(
-            "research.corruption.grain.body",
-            "Every rate above counts cases. But a case is a docket, not a person: {{accused}} people were named as defendants in the {{cases}} decided cases, from one apiece up to {{largest}} in a single case. Counting the accused instead of the dockets moves the picture sharply. Cases upheld in full are {{fullCasePct}} of the docket but hold only {{fullAccusedPct}} of the people, because they are small — about half of all cases have a single defendant.",
             {
-              accused: n(grainTotals.accused),
-              cases: n(grainTotals.cases),
-              largest: n(defendants.largestCase),
-              fullCasePct: pct1(fullGrain.casePct),
-              fullAccusedPct: pct1(fullGrain.accusedPct),
+              value: pct(restPct),
+              caption: t("research.corruption.byCharge.keyRest", "for every other offence combined"),
             },
-          )}
-        </Body>
-
-        <Figure
-          title={t(
-            "research.corruption.grain.chartTitle",
-            "The same verdicts, counted by case and by person charged",
-          )}
-          subtitle={t(
-            "research.corruption.grain.chartSubtitle",
-            "Decided cases at the Special Court. Each bar is 100%; the bands are the same three verdicts.",
-          )}
-          caption={t(
-            "research.corruption.grain.chartCaption",
-            "Both bars cover the same cases and the same court-published verdicts; the only difference is what is being counted. One decided case names no defendant and sits outside this comparison, which is why its case total is {{grain}} against {{all}} elsewhere, and its acquittals {{ga}} against {{aa}}. The middle band is not an outcome: it is the group whose individual result the court record does not state.",
-            {
-              grain: n(grainTotals.cases),
-              all: n(decided),
-              ga: n(grainRows.find((r) => r.key === "सफाई")?.cases ?? 0),
-              aa: n(outcome.acquitted),
-            },
-          )}
+          ]}
         >
-          <CasesVersusAccused
-            rows={grainRows}
-            caseLabel={t("research.corruption.grain.byCase", "Cases")}
-            accusedLabel={t("research.corruption.grain.byAccused", "People charged")}
-          />
-        </Figure>
+          <p>
+            {t(
+              "research.corruption.byCharge.body2",
+              "Fake-credential cases also account for about {{fakeShare}} of all full convictions in the dataset. For all other offences combined — including embezzlement, loss to the state, illicit enrichment and irregularities — the full-conviction rate drops to {{restPct}}.",
+              { fakeShare: pct(fake.share), restPct: pct(restPct) },
+            )}
+          </p>
+        </KeyFinding>
 
-        <Body>
-          {t(
-            "research.corruption.grain.body2",
-            "The band in the middle matters most. {{partCases}} cases ended in a partial conviction — the court upheld the charge against some defendants and not others. Those cases hold {{partAccused}} people, {{partAccusedPct}} of everyone charged. The register records one verdict for the whole docket and no outcome per defendant, so for roughly a third of the people prosecuted here the public record does not say whether they were convicted or cleared.",
-            {
-              partCases: n(partGrain.cases),
-              partAccused: n(partGrain.accused),
-              partAccusedPct: pct1(partGrain.accusedPct),
-            },
-          )}
-        </Body>
-
-        <Caveat>
-          {t(
-            "research.corruption.grain.caveat",
-            "This is not a per-person conviction rate and cannot be turned into one. The written judgment names who was convicted; the structured record does not. Nothing here says the courts failed to decide these cases — only that the published data cannot tell you how they did.",
-          )}
-        </Caveat>
-
-        <Unknown title={t("research.corruption.grain.unknownTitle", "What data is missing?")}>
-          {t(
-            "research.corruption.grain.unknownBody",
-            "A per-defendant outcome field on the court record, or identity codes applied across the defendant table. Either would turn {{accused}} accusations into a countable population of people and make a genuine per-person rate possible for the first time.",
-            { accused: n(defendants.accusedRows) },
-          )}
-        </Unknown>
       </Block>
+
 
       <Block>
         <Eyebrow>{t("research.corruption.overTime.eyebrow", "How the docket moved")}</Eyebrow>
@@ -369,10 +264,6 @@ export default function CourtOutcomes() {
           subtitle={t(
             "research.corruption.rateTrend.subtitle",
             "Full-conviction and acquittal rates, with the same conviction rate recomputed after removing fake-credential cases.",
-          )}
-          caption={t(
-            "research.corruption.rateTrend.caption",
-            "Keyed on the fiscal year the verdict was delivered, not the year the case was filed — so a single case appears in a different bar here than on the filing charts below. The dashed line is the rate once documentary fake-credential cases are taken out; the gap between the two lines is how much of the headline those cases were carrying.",
           )}
         >
           <RateTrend
@@ -389,13 +280,6 @@ export default function CourtOutcomes() {
             ]}
           />
         </Figure>
-
-        <Body>
-          {t(
-            "research.corruption.rateTrend.body2",
-            "The dashed line answers the question the solid line raises. Take the documentary cases out and the rest of the docket does not collapse the same way. The headline fell mostly because the easy charge left, not because the court hardened against serious graft.",
-          )}
-        </Body>
 
         <Caveat>
           {t(
@@ -420,11 +304,6 @@ export default function CourtOutcomes() {
             "research.corruption.pipeline.subtitle",
             "By the fiscal year a case was filed: bars are cases still awaiting a verdict, the line is the median months to decision.",
           )}
-          caption={t(
-            "research.corruption.pipeline.caption",
-            "Cohorts through {{complete}} are essentially fully adjudicated, so their medians are settled. Later cohorts are still open and shown dashed: their medians are drawn only from the cases that have already finished, which makes them look faster than they will turn out to be.",
-            { complete: fyLabel(overTime.completeThroughFy) },
-          )}
         >
           <PipelineHealth
             data={pipeline}
@@ -434,31 +313,66 @@ export default function CourtOutcomes() {
           />
         </Figure>
 
-        <Body>
-          {t(
-            "research.corruption.pipeline.body",
-            "Among the settled cohorts the median ran from about {{fast}} months for cases filed in {{fastYear}} to about {{slow}} months for {{slowYear}}. {{backlog}} cases across all cohorts are still waiting.",
+        {/*
+          The three things that used to be one paragraph: how far the pace swings, why
+          the newest bars cannot be taken at face value, and where the waiting cases
+          actually sit. Split and numbered so each can be read on its own.
+        */}
+        <ReadingNotes
+          label={t("research.corruption.reading", "Reading the chart")}
+          notes={[
             {
-              fast: Math.round(fastest.medianMonths),
-              fastYear: fyLabel(fastest.fy),
-              slow: Math.round(slowest.medianMonths),
-              slowYear: fyLabel(slowest.fy),
-              backlog: n(backlog),
+              key: "spread",
+              stat: t("research.corruption.pipeline.n1Stat", "{{fast}} → {{slow}} months", {
+                fast: Math.round(fastest.medianMonths),
+                slow: Math.round(slowest.medianMonths),
+              }),
+              title: t("research.corruption.pipeline.n1Title", "The wait is not the same from year to year"),
+              body: t(
+                "research.corruption.pipeline.n1Body",
+                "Among cohorts that have essentially finished, the median ran from about {{fast}} months for cases filed in {{fastYear}} to about {{slow}} months for {{slowYear}} — the same court taking {{times}} times as long depending on when a case arrived.",
+                {
+                  fast: Math.round(fastest.medianMonths),
+                  fastYear: fyLabel(fastest.fy),
+                  slow: Math.round(slowest.medianMonths),
+                  slowYear: fyLabel(slowest.fy),
+                  times: n(Math.round(slowest.medianMonths / fastest.medianMonths)),
+                },
+              ),
             },
-          )}
-        </Body>
+            {
+              key: "provisional",
+              stat: firstProvisional
+                ? t("research.corruption.pipeline.n2Stat", "{{year}} onward", {
+                    year: fyLabel(firstProvisional.fy),
+                  })
+                : undefined,
+              title: t("research.corruption.pipeline.n2Title", "The newest bars will get worse, not better"),
+              body: t(
+                "research.corruption.pipeline.n2Body",
+                "Cohorts after {{complete}} are still open, and their medians count only the cases that have already finished. The slow ones are missing from the average because they have not ended yet, so these years look faster than they will turn out to be. They are drawn dashed for that reason.",
+                { complete: fyLabel(overTime.completeThroughFy) },
+              ),
+            },
+            {
+              key: "backlog",
+              stat: n(backlog),
+              title: t("research.corruption.pipeline.n3Title", "Cases still without a verdict"),
+              body: t(
+                "research.corruption.pipeline.n3Body",
+                "{{backlog}} cases across every cohort are still waiting, and {{heavy}} of them were filed in {{heavyYear}}. The older cohorts have emptied out; what is left is recent.",
+                {
+                  backlog: n(backlog),
+                  heavy: n(heaviestPending.pending),
+                  heavyYear: fyLabel(heaviestPending.fy),
+                },
+              ),
+            },
+          ]}
+        />
 
         <Figure
           title={t("research.corruption.trend.title", "Cases filed and cases decided")}
-          subtitle={t(
-            "research.corruption.trend.subtitle",
-            "Filings keyed on the year of registration; decisions on the year the verdict landed.",
-          )}
-          caption={t(
-            "research.corruption.trend.caption",
-            "The two lines count different events, so they are not expected to meet in any given year — a case filed in one year is commonly decided two or three years later. Filings across the {{years}} fiscal years sum to the full {{corpus}}-case archive.",
-            { years: corpus.fiscalYears.length, corpus: n(corpus.ciaaProsecutions) },
-          )}
         >
           <FiledDecidedTrend
             years={trend.years}
@@ -469,112 +383,89 @@ export default function CourtOutcomes() {
           />
         </Figure>
 
-      </Block>
-
-      <Block>
-        <Eyebrow>{t("research.corruption.benches.eyebrow", "Who decides")}</Eyebrow>
-        <SectionHeading>
-          {t("research.corruption.benches.title2", "Conviction rates differ across benches")}
-        </SectionHeading>
-        <Body>
-          {t(
-            "research.corruption.benches.lede",
-            "Counting full and partial convictions together, the court-wide rate is {{avg}}%. Among justices who sat on at least {{min}} decided cases, the recorded outcomes of their benches vary considerably around it.",
-            { avg: Math.round(courtAvg), min: justiceMinDecisions },
-          )}
-        </Body>
-
-        <Figure
-          title={t(
-            "research.corruption.justice.title",
-            "Conviction rate by justice, full and partial convictions combined",
-          )}
-          subtitle={t(
-            "research.corruption.justice.subtitle",
-            "Each dot is a justice; its size is how many decisions they sat on. Position is the share of those cases upheld in full or in part — the {{avg}}% measure, not the {{full}}% full-only rate used elsewhere on this page.",
-            { avg: Math.round(courtAvg), full: pct1(rates.convictionFullOnlyPct) },
-          )}
-          caption={t(
-            "research.corruption.justice.caption",
-            "Justices who sat on at least {{min}} decided cases — {{n}} of them; below that a rate turns on a handful of verdicts and means very little. Because every member of a panel is credited with the panel's outcome, these {{n}} justices are credited with {{decisions}} decisions between them, far more than the {{cases}} cases those decisions came from.",
+        {/*
+          Without this the chart is a puzzle: two lines that never meet, over the same
+          years, and no stated reason why they should not. They count different events
+          about the same cases, and the lag between the peaks is the delay itself.
+        */}
+        <ReadingNotes
+          label={t("research.corruption.reading", "Reading the chart")}
+          notes={[
             {
-              min: justiceMinDecisions,
-              n: justices.length,
-              decisions: n(justiceDecisions),
-              cases: n(decided),
+              key: "filed",
+              stat: n(filedTotal),
+              title: t("research.corruption.trend.n1Title", "What the filing line counts"),
+              body: t(
+                "research.corruption.trend.n1Body",
+                "Cases placed before the Special Court in the year they were registered. Over the fourteen years it adds up to all {{filed}} prosecutions in the archive.",
+                { filed: n(filedTotal) },
+              ),
             },
+            {
+              key: "decided",
+              stat: n(decidedTotal),
+              title: t("research.corruption.trend.n2Title", "What the decision line counts"),
+              body: t(
+                "research.corruption.trend.n2Body",
+                "Verdicts delivered in that year, whatever year the case arrived. A case filed in one year and decided three years later sits at two different points on the chart, so the lines are not meant to meet.",
+              ),
+            },
+            {
+              key: "lag",
+              stat: t("research.corruption.trend.n3Stat", "{{lag}} years", { lag: n(peakLagYears) }),
+              title: t("research.corruption.trend.n3Title", "The decisions peak well after the filings"),
+              body: t(
+                "research.corruption.trend.n3Body",
+                "Filings peaked at {{filed}} in {{filedYear}}; decisions peaked at {{decided}} in {{decidedYear}}. That distance is the backlog working its way through — the same delay the medians above measure, seen on a calendar.",
+                {
+                  filed: n(peakFiled.value),
+                  filedYear: fyLabel(peakFiled.fy),
+                  decided: n(peakDecided.value),
+                  decidedYear: fyLabel(peakDecided.fy),
+                },
+              ),
+            },
+          ]}
+          footnote={t(
+            "research.corruption.trend.foot",
+            "Filings are keyed on the year of registration, decisions on the year the verdict landed.",
           )}
-        >
-          <JusticeSpread
-            justices={justices}
-            avgPct={courtAvg}
-            bandLabels={{
-              high: t("research.corruption.justice.bandHigh", "Above {{pct}}%", { pct: BAND_HIGH }),
-              mid: t("research.corruption.justice.bandMid", "Near the court average"),
-              low: t("research.corruption.justice.bandLow", "Below {{pct}}%", { pct: BAND_LOW }),
-            }}
-            avgLabel={t("research.corruption.justice.avgLine", "court average {{pct}}%", { pct: Math.round(courtAvg) })}
-          />
-        </Figure>
+        />
 
-        <Caveat>
-          {t(
-            "research.corruption.justice.caveat",
-            "This is a property of benches, not of judges. The court records one verdict per case and no individual vote, so a justice who dissented is credited with the panel's outcome exactly as if they had written it. Almost every case here was heard by a panel of two or three. Read this as the benches a justice sat on — never as that justice's own record, and never as a measure of how they rule.",
-          )}
-        </Caveat>
-
-        <GapCallout
-          label={t("research.corruption.gap.hLabel", "Accountability gap · Court outcomes")}
-          title={t(
-            "research.corruption.gap.hTitle",
-            "A bench's rate says nothing about whether it was right. What the Supreme Court did with its decisions would.",
-          )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t("research.corruption.gap.hQuestion", "How often did each bench's decisions survive appeal?")}
-          shows={t(
-            "research.corruption.gap.hEstablishes",
-            "The chart above can show that benches convict at very different rates. It cannot show which of them the appeal courts went on to agree with. A bench that convicts rarely and is upheld every time, and one that convicts rarely and is overturned every time, look identical here.",
-          )}
-        >
-          {t(
-            "research.corruption.gap.hBody",
-            "This matters because of how the chart above is most likely to be misread. A conviction rate is not a performance score — a bench hearing mostly documentary fake-certificate cases will convict more often than one hearing contested financial cases, whatever either does. The question worth asking is not how often a bench convicted, but how often its reasoning survived review. That comparison is not published anywhere, and until the court system links an appeal to the case it came from, it cannot be built from outside.",
-          )}
-          <p>
-            {t(
-            "research.corruption.gap.hNeeded",
-            "The trial case number on each appeal record. Everything else is already in place: all {{cases}} decided cases carry their bench, and {{appeals}} appeals are established — but the two sets cannot be joined, so no bench can be followed upward.",
-            { cases: n(decided), appeals: n(REPORT.appeals.appeals) },
-          )}
-          </p>
-        </GapCallout>
 
         <GapCallout
           label={t("research.corruption.gap.cLabel", "Accountability gap · Court outcomes")}
           title={t(
             "research.corruption.gap.cTitle",
-            "A charge sheet can allege far more than the court goes on to find",
+            "The amount alleged is not always the amount established in court",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <p>
+              {t(
+                "research.corruption.gap.cEstablishes",
+                "In the Pashupatinath Jalahari case (080-CR-0047), the Commission alleged that 1,491.718 grams of gold were missing. The case illustrates why the amount alleged in a charge sheet must be distinguished from what a court establishes through evidence. An allegation is not a judicial finding, and the amount claimed cannot automatically be treated as an amount proven in court.",
+              )}
+            </p>
+          }
           questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t("research.corruption.gap.cQuestion", "How far do the amounts the Commission claims sit from the amounts courts uphold?")}
-          shows={t(
-            "research.corruption.gap.cEstablishes",
-            "In case 080-CR-0047 the Commission alleged that 1,491.718 grams of gold were missing. After accounting for metal returned, for other metals present and for natural loss, the court found that only a small fraction of that amount remained unexplained. The judgment's own itemisation could not be reconciled from the summary available here, so the intermediate figures are not reproduced; the two end points are what this illustrates.",
+          question={t(
+            "research.corruption.gap.cQuestion",
+            "How often do the amounts alleged by the Commission differ from the amounts upheld by courts?",
           )}
         >
-          {t(
-            "research.corruption.gap.cBody",
-            "This is one judgment, not a measurement of the archive. It shows how far an alleged amount can sit from what a court goes on to find; it cannot show how often that happens. The Commission publishes a yearly total for what it claims — Rs {{bn}} billion in FY2081/82 — and no published source carries the matching upheld figure, so the two are never subtracted on this site.",
-            { bn: ciaa.damagesClaimedYearBn },
-          )}
           <p>
             {t(
-            "research.corruption.gap.cNeeded",
-            "A बिगो field on the case record carrying both the amount claimed and the amount upheld. The register rows carry neither, so no claimed-versus-upheld rate can be computed for any case here.",
-          )}
+              "research.corruption.gap.cBody",
+              "This is one case, not a measurement of the wider archive. It illustrates why the amount alleged and the amount established in court should be tracked separately, but it cannot show how often or by how much they differ across corruption cases.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.cBody2",
+              "The Commission reported Rs {{bn}} billion in claimed बिगो for FY2081/82. The published data examined here does not provide a comparable total for the amounts upheld by courts. Without matching figures for both, the gap cannot be measured across cases or years. Recording both the amount claimed and the amount upheld in each case would make that comparison possible.",
+              { bn: REPORT.ciaa.damagesClaimedYearBn },
+            )}
           </p>
         </GapCallout>
 
@@ -582,36 +473,52 @@ export default function CourtOutcomes() {
           label={t("research.corruption.gap.fLabel", "Accountability gap · Records")}
           title={t(
             "research.corruption.gap.fTitle",
-            "The same person can appear under different names in different files",
+            "The number of defendant records is not the number of people prosecuted",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <p>
+              {t(
+                "research.corruption.gap.fEstablishes",
+                "The archive contains {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} names, about {{pct}}, are linked to a known person or office.",
+                {
+                  rows: n(REPORT.entityResolution.defendantRows),
+                  distinct: n(REPORT.entityResolution.distinctNames),
+                  resolved: n(REPORT.entityResolution.resolved),
+                  pct: pct((REPORT.entityResolution.resolved / REPORT.entityResolution.distinctNames) * 100),
+                },
+              )}
+            </p>
+          }
           questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t("research.corruption.gap.fQuestion", "How many of the people prosecuted are the same people, charged more than once?")}
-          shows={t(
-            "research.corruption.gap.fEstablishes",
-            "The archive holds {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} of those names — about {{pct}} — are matched to a known person or office.",
-            {
-              rows: n(entityResolution.defendantRows),
-              distinct: n(entityResolution.distinctNames),
-              resolved: n(entityResolution.resolved),
-              pct: pct((entityResolution.resolved / entityResolution.distinctNames) * 100),
-            },
+          question={t(
+            "research.corruption.gap.fQuestion",
+            "How many individuals have been prosecuted in more than one case?",
           )}
         >
-          <>
+          <p>
             {t(
               "research.corruption.gap.fBody",
-              "This is what stops the counts above becoming counts of people. Someone charged in two cases appears twice and cannot be merged without guessing from names, which collide heavily in Nepali, so no defendant on this site is identified as a repeat defendant. Matching a name is identification only and is never a statement that the person was convicted.",
+              "The archive counts defendant records, not verified individuals. The same person may appear in several cases, while different people may share the same name. Names may also be spelled differently across charge sheets and judgments. Without reliable identification, merging records could wrongly treat different people as one person, or count the same person more than once.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.fBody2",
+              "For this reason, the archive does not currently identify repeat defendants. A name match alone would not establish identity, and identifying someone in a case does not mean that person was convicted.",
+            )}
+          </p>
+          <p>
+            <strong className="font-semibold text-foreground">
+              {t("research.corruption.gap.fNeededLabel", "What is needed. ")}
+            </strong>
+            {t(
+              "research.corruption.gap.fNeeded",
+              "A reliable, consistent identifier for each person or office, recorded across charge sheets, judgments and annual reports. This would help establish when the same person appears in multiple cases without relying on name similarity alone.",
             )}{" "}
             <Cite href={CITATIONS.dataQuality}>
               {t("research.corruption.gap.fCite", "Coverage and data quality")}
             </Cite>
-          </>
-          <p>
-            {t(
-            "research.corruption.gap.fNeeded",
-            "A stable identifier for each person and office, used across charge sheets, judgments and annual reports.",
-          )}
           </p>
         </GapCallout>
       </Block>

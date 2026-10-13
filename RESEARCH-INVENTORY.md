@@ -196,28 +196,47 @@ on any disagreement other than this one documented correction.
 | **Where** | Prosecution tab |
 | **Confidence** | Established (the ruling, the dispute, the outcome rates) · the per-case link is **not** measurable |
 
-**Source.** The CIAA's own FY2078/79 annual report, which quotes the precedent it is
-arguing against: ने.का.प. २०७२, अंक १२, नि.नं. ९५०५.
+**The ruling.** नेपाल सरकार वि. हरेकृष्ण भगत, नि.नं. ९४३३, २०७२
+([nkp.gov.np/full_detail/8476](https://nkp.gov.np/full_detail/8476)). Para 11 records
+that the case was registered on a Cash Flow basis while the Special Court assessed it
+on a Check Period basis, and declines to reopen the question: *"Check period को
+आधारमा सम्पत्तिको विश्लेषण गरी न्याय निरूपण गर्ने गरिएको हुँदा"*.
 
-**The ruling.** Where the source of the money invested in buying a property cannot be
-proved, only that original investment is illicit acquisition — *"न कि त्यसबाट
-बढेबढाएको हालको मूल्य"*, not the appreciated present value. The Supreme Court
-records this as a principle established (सिद्धान्त प्रतिपादन).
+**The arithmetic, re-checked against the judgment's own text before publication.**
+Para 47: assets over the check period रू.७४,५१,४२६।२५ against lawful income
+रू.६८,४७,५३५।९०. Para 49: *"कूल सम्पत्तिको बिगो र आयमा ८.१० प्रतिशत अर्थात्
+रू.६,०३,८९०।३४ अन्तर"* — the percentage is of **total assets**, not of income (of
+income it would be 8.82%). Para 48 is the threshold: *"सम्पत्तिको बिगो र आयको फरक
+रकम १० प्रतिशतसम्म न्यून हुनुलाई अमिल्दो र अस्वाभाविक भन्न मिल्दैन"*. The acquittal
+stood. **Ten per cent is this court's reasoning in this case and is not in the Act**;
+the site says so in the caption under the figure, and that caveat must survive any
+later edit of the block.
 
-**What the reports show.** Across FY2069/70–2078/79 the appeal-grounds sections
-repeatedly record the Commission appealing illicit-enrichment verdicts on the
-calculation itself: that the court credited income whose source was never shown, that
-it valued property at the wrong date, that it set a lower बिगो than the charge sheet
-claimed.
+**The method is still in use — three dated records, all from the Commission's own
+annual reports.** Before the ruling, the FY2070/71 report (24th) records two files
+placed in Tameli on 2071/3/12 and 2071/3/13 on the ground that income exceeded
+spending and *"क्यासफ्लोको कुनै चरणमा ऋणात्मक अवस्था पनि नदेखिएको"*. Four years
+after it, the FY2076/77 report (30th) reproduces, in the Commission's own grounds for
+appealing the 2076/2/2 acquittal of Ram Babu Adhikari and Malati Sharma Adhikari, the
+charge sheet's *"आय व्ययको प्रवाह विवरण (Cash Flow Chart)"* running 2046/47 →
+2073/12/31 and totalling रू.२,५४,६९,८८७ of property with no source shown — in a case
+the Special Court decided by taking *"समग्र जाँच अवधिको एकीकृत रूपमा"* and finding
+income exceeded expenditure. Same facts, two methods, opposite answers.
+
+**Earlier draft corrected.** An earlier version of this entry sourced the finding to
+नि.नं. ९५०५ via the FY2078/79 report and said the phrase "cash flow method" appears
+in no available source. Both are wrong: a grep across all thirteen converted reports
+finds cash-flow reasoning in **FY2070/71 and FY2076/77 only** — not FY2069/70, which
+an intermediate draft also claimed.
 
 **Outcome.** Illicit enrichment is upheld in full in 19 of 95 decided cases (20.0%)
 against a court average of 45.0%, and ends in outright acquittal 59 times (62.1%).
 
-**What this does NOT establish.** How often any individual charge sheet departed from
-the 2072 ruling. The register carries no amount and no method, only the verdict, so
-the cause can be read in judgments one at a time but not counted across them. The
-phrase "cash flow method" is deliberately not used on the site: the dispute is
-documented, that specific term is not, in any source available here.
+**What this does NOT establish.** That the method caused the outcome, or how many
+charge sheets use it. The register carries no amount and no method, only the verdict,
+so this can be read in judgments and reports one at a time but not counted across
+them. The three fields that would make it countable — method, amount claimed, amount
+upheld — are what the gap on the page asks for.
 
 ---
 
