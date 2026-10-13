@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   Block,
   Body,
+  Cite,
   Eyebrow,
   Figure,
   Lede,
@@ -11,14 +12,26 @@ import {
   StatTile,
 } from "@/components/layout/Prose";
 import { ClosingAnalysis } from "@/components/research/ClosingAnalysis";
+import { GapCallout } from "@/components/research/GapCallout";
 import { TameliTrend } from "@/components/research/TameliTrend";
 import { REPORT, tameliPct } from "@/data/research-corruption";
 import { useFormat } from "@/lib/format";
 
+/** Jawafdehi's own analysis of the sting ruling and what followed it. */
+const STING_ANALYSIS = "https://jawafdehi.org/updates/sting-operation";
+
 export default function Investigation() {
   const { t } = useTranslation();
-  const { n, pct1 } = useFormat();
-  const { disposals } = REPORT;
+  const { n, pct1, fy } = useFormat();
+  const { chargeMixByYear, disposals } = REPORT;
+
+  // Bribery filings around the sting ruling of 2078/01/08, which falls inside
+  // FY2077/78. Taken from the data rather than written down, so the figures cannot
+  // drift from the chart on the Prosecution page that plots the same series.
+  const briberyPeak = chargeMixByYear.reduce((a, b) => (b.bribery > a.bribery ? b : a));
+  const peakIdx = chargeMixByYear.indexOf(briberyPeak);
+  const briberyAfter = chargeMixByYear[peakIdx + 1] ?? briberyPeak;
+  const briberyAfter2 = chargeMixByYear[peakIdx + 2] ?? briberyAfter;
   const cd = REPORT.complaintDisposal[0];
 
   const sentShare = (cd.to_investigation / cd.total_complaints) * 100;
@@ -313,6 +326,70 @@ export default function Investigation() {
             )}
           </p>
         </ClosingAnalysis>
+
+        <GapCallout
+          label={t("research.corruption.gap.sLabel", "Accountability gap · Investigation methods")}
+          title={t(
+            "research.corruption.gap.sTitle",
+            "The Supreme Court struck down the rule behind sting operations. Parliament then wrote it into the Act.",
+          )}
+          stat={t("research.corruption.gap.sStat", "{{a}} → {{b}}", {
+            a: n(briberyPeak.bribery),
+            b: n(briberyAfter.bribery),
+          })}
+          statCaption={t(
+            "research.corruption.gap.sStatCaption",
+            "Bribery cases filed in court, {{peakFy}} compared with {{afterFy}}. The ruling falls inside that window.",
+            { peakFy: fy(briberyPeak.fy), afterFy: fy(briberyAfter.fy) },
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <>
+              <p>
+                {t(
+                  "research.corruption.gap.sEstablishes",
+                  "On 2078/01/08 the Supreme Court's constitutional bench held rule 30 of the CIAA Rules, 2059 — the provision the Commission relied on to run sting operations with its own money — void and invalid. The Commission records the decision in its own annual reports, and attributes a fall in its success rate to it: the share of its cases ending in full or partial conviction had run above 50% every year until FY2078/79.",
+                )}
+              </p>
+              <p>
+                {t(
+                  "research.corruption.gap.sEstablishes2",
+                  "Bribery was the charge stings produced. Filings fell from {{a}} in {{peakFy}} to {{b}} in {{afterFy}} and {{c}} the year after — the steepest fall of any charge in this archive. Section 62(d) has since put sting operations into the Act itself, four years on.",
+                  {
+                    a: n(briberyPeak.bribery),
+                    b: n(briberyAfter.bribery),
+                    c: n(briberyAfter2.bribery),
+                    peakFy: fy(briberyPeak.fy),
+                    afterFy: fy(briberyAfter.fy),
+                  },
+                )}
+              </p>
+              <p className="text-xs">
+                <Cite href={STING_ANALYSIS}>
+                  {t("research.corruption.gap.sCite", "Read the full analysis")}
+                </Cite>
+              </p>
+            </>
+          }
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.sQuestion",
+            "Does putting sting operations in the Act answer what the Supreme Court actually objected to?",
+          )}
+        >
+          <p>
+            {t(
+              "research.corruption.gap.sBody",
+              "The Court did not only find that the provision sat in the wrong instrument. It described investigation as the search for what actually happened, and said an investigator's work is to gather evidence of it — not to create something that did not exist and turn that into evidence. That objection is about the limit on the state manufacturing the circumstances of an offence, not about the word “sting” or the technique.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.sBody2",
+              "Section 62(d) addresses the defect the Court identified in rule 30, which was that a regulation could not carry it. Whether it answers the deeper objection is a separate question, and it is no longer only about whether the Commission may use its own money. It is whether the legislature can authorise the state to supply the funds that create the circumstances of an offence during an investigation. The Court was not asked that, and has not answered it.",
+            )}
+          </p>
+        </GapCallout>
       </Block>
     </>
   );

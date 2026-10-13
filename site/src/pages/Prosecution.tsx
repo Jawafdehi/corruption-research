@@ -26,6 +26,12 @@ import { useFormat } from "@/lib/format";
  *  refreshed dataset cannot silently move the citation to a different report. */
 const CIAA_2078_79 =
   "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf";
+/** नि.नं. ९४३३, नेपाल सरकार वि. हरेकृष्ण भगत — where the Supreme Court applied the
+ *  check-period method and declined to engage with the cash-flow objection. */
+const NKP_9433 = "https://nkp.gov.np/full_detail/8476";
+/** FY2076/77, whose appeal grounds reproduce a charge sheet's own Cash Flow Chart. */
+const CIAA_2076_77 =
+  "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf";
 
 const JALAHARI = {
   analysis: "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution",
@@ -369,7 +375,7 @@ export default function Prosecution() {
           label={t("research.corruption.gap.gLabel", "Accountability gap · Charge calculation")}
           title={t(
             "research.corruption.gap.gTitle",
-            "The Supreme Court drew a line between a property's purchase price and its later value. No record lets anyone check a charge sheet against it.",
+            "The Supreme Court settled how illicit enrichment should be assessed. The Commission still builds cases the other way.",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
           shows={
@@ -377,70 +383,67 @@ export default function Prosecution() {
               <p>
                 {t(
                   "research.corruption.gap.gEstablishes",
-                  "In Nepal Kanoon Patrika 2072, volume 12, decision no. 9505, the Supreme Court set out a principle for illicit-enrichment cases: where the source of the money invested to acquire property cannot be established, the unexplained amount may extend to that original investment, but not automatically to the property's subsequent increase in value.",
+                  "Illicit enrichment can be assessed two ways. The cash-flow method follows income and spending in sequence and treats a shortfall at any point as unexplained. The check-period method takes the whole period of service as one unit, totals lawful income against total assets and spending, and asks whether the difference is disproportionate.",
                 )}
               </p>
               <p>
                 {t(
                   "research.corruption.gap.gEstablishes2",
-                  "The CIAA's FY2078/79 annual report quotes this principle in its grounds for appealing an acquittal, arguing that the Special Court's decision to acquit was contrary to it. The Commission cites the rule in support of its own case, not against it; the dispute in that appeal is over whether the court assessed the defendant's lawful income separately for each date of acquisition, and where the burden of proof lies under section 20(1) of the Prevention of Corruption Act, 2059.",
+                  "In Nepal Government v. Harekrishna Bhagat, decision no. 9433 of 2072, the Supreme Court recorded that the case had been registered on a cash-flow basis while the Special Court had assessed it on a check-period basis. It declined to reopen the question, holding that the method was already settled: property is analysed over the check period, with income and expenditure assessed separately for that period. The appeal was dismissed.",
                 )}{" "}
-                <Cite href={CIAA_2078_79}>
-                  {t("research.corruption.gap.gCite", "Read the CIAA annual report, FY2078/79")}
+                <Cite href={NKP_9433}>
+                  {t("research.corruption.gap.gCite", "Read decision no. 9433")}
                 </Cite>
               </p>
 
               <MethodComparison
                 scenario={t(
                   "research.corruption.method.scenario",
-                  "Suppose a public official buys a plot of land in 2065 for Rs 20 lakh. By the time the case is investigated, the land is worth Rs 1 crore.",
+                  "In decision no. 9433 the court compared a Senior Divisional Engineer's assets over his service with the lawful income he could show for the same period: assets of Rs 74,51,426.25 against income of Rs 68,47,535.90.",
                 )}
                 question={t(
                   "research.corruption.method.question",
-                  "If the official cannot establish the legitimate source of the money used to buy the land, what amount can be treated as illegally acquired?",
+                  "Is that difference evidence of illicit enrichment?",
                 )}
-                outputArrowLabel={t(
-                  "research.corruption.method.arrow",
-                  "would be treated as unexplained",
-                )}
+                outputArrowLabel={t("research.corruption.method.arrow", "gives")}
                 methods={[
                   {
-                    key: "original",
+                    key: "checkperiod",
                     ruling: true,
-                    title: t("research.corruption.method.m1", "Method 1: Original investment"),
+                    title: t("research.corruption.method.m1", "Check period"),
                     kicker: t(
                       "research.corruption.method.m1Kicker",
-                      "What the Supreme Court's principle allows to be treated as unexplained",
+                      "The method the Supreme Court applied and treated as settled",
                     ),
-                    inputLabel: t("research.corruption.method.m1In", "Original purchase price"),
-                    inputValue: t("research.corruption.method.m1InV", "Rs 20 lakh"),
-                    outputLabel: t("research.corruption.method.outLabel", "Amount potentially unexplained"),
-                    outputValue: t("research.corruption.method.m1OutV", "Rs 20 lakh"),
+                    inputLabel: t("research.corruption.method.m1In", "Assets against lawful income, whole period"),
+                    inputValue: t("research.corruption.method.m1InV", "Rs 74,51,426 vs Rs 68,47,536"),
+                    outputLabel: t("research.corruption.method.m1OutLabel", "Difference"),
+                    outputValue: t("research.corruption.method.m1OutV", "8.10%"),
                     body: t(
                       "research.corruption.method.m1Body",
-                      "The calculation focuses on the amount originally invested in acquiring the property. If the source of that investment cannot be established, the unexplained amount is the original investment, not the later increase in the property's value.",
+                      "The whole period of service is taken as one unit. Here the difference fell below the ten per cent the court treated as the threshold, so the gap was not held to be disproportionate and the defendant was not convicted.",
                     ),
                   },
                   {
-                    key: "current",
-                    title: t("research.corruption.method.m2", "Method 2: Current property value"),
+                    key: "cashflow",
+                    title: t("research.corruption.method.m2", "Cash flow"),
                     kicker: t(
                       "research.corruption.method.m2Kicker",
-                      "The calculation the principle rules out, which would include the rise in value since purchase",
+                      "The method the Commission registered the case on",
                     ),
-                    inputLabel: t("research.corruption.method.m2In", "Current market value"),
-                    inputValue: t("research.corruption.method.m2InV", "Rs 1 crore"),
-                    outputLabel: t("research.corruption.method.outLabel", "Amount potentially unexplained"),
-                    outputValue: t("research.corruption.method.m2OutV", "Rs 1 crore"),
+                    inputLabel: t("research.corruption.method.m2In", "Income and spending, in sequence"),
+                    inputValue: t("research.corruption.method.m2InV", "Year by year"),
+                    outputLabel: t("research.corruption.method.m2OutLabel", "Treated as unexplained"),
+                    outputValue: t("research.corruption.method.m2OutV", "Any shortfall"),
                     body: t(
                       "research.corruption.method.m2Body",
-                      "This would count the property's present value, including the Rs 80 lakh increase since purchase. Under the principle quoted in the CIAA's report, that increase should not be treated as illegally acquired merely because the source of the original investment was unproven.",
+                      "Income and spending are followed in order, and a point where spending runs ahead of income counts as unexplained even if the totals balance across the full period. A sequence can dip into deficit and recover; the two methods can therefore reach different answers on the same facts.",
                     ),
                   },
                 ]}
                 illustrativeNote={t(
                   "research.corruption.method.note",
-                  "The figures above are illustrative only, not amounts from an actual case. They also simplify the calculation: the actual legal assessment depends on the property, the evidence and the applicable law.",
+                  "The figures are from the judgment itself. The ten per cent threshold is as the court applied it in this case; it is not a statutory rule, and the assessment in any case depends on the evidence before the court.",
                 )}
               />
             </>
@@ -448,19 +451,28 @@ export default function Prosecution() {
           questionLabel={t("research.corruption.gap.open", "The open question")}
           question={t(
             "research.corruption.gap.gQuestion",
-            "How are the amounts in charge sheets calculated, and how far do they sit from the amounts courts uphold?",
+            "Why does the Commission keep bringing cases on a method the Supreme Court has already set aside?",
           )}
         >
           <p>
             {t(
               "research.corruption.gap.gBody",
-              "The case register does not record, side by side, the amount claimed by the CIAA, the amount upheld by the court, and the basis each was calculated on. Without those fields it is not possible to check how any charge sheet applied the principle, or to measure the distance between what was claimed and what was upheld. Nothing in the published record shows the Commission valuing property at its current worth — where the reports describe its own method, as in FY2069/70, it fixes the amount on the value at the time of acquisition.",
+              "The Commission's own reports show the cash-flow method still in use on both sides of the 2072 ruling. In FY2069/70 and FY2070/71 they record complaints closed as Tameli because \"at no stage of the cash flow was there a negative position\". And the FY2076/77 report, four years after the ruling, reproduces a charge sheet's own \"Cash Flow Chart\" running from 2046/47 to 2073/12/31 — in the Commission's grounds for appealing an acquittal in which the Special Court had examined the whole check period as one.",
             )}
+          </p>
+          <p className="text-xs">
+            <Cite href={CIAA_2076_77}>
+              {t("research.corruption.gap.gCite2", "CIAA annual report, FY2076/77")}
+            </Cite>
+            {" · "}
+            <Cite href={CIAA_2078_79}>
+              {t("research.corruption.gap.gCite3", "CIAA annual report, FY2078/79")}
+            </Cite>
           </p>
           <p>
             {t(
               "research.corruption.gap.gBody2",
-              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences. These figures show a difference in outcomes, but they do not explain it. An acquittal does not by itself establish that the property was valued incorrectly, and a difference between the amount claimed and the amount upheld does not necessarily mean the calculation method was wrong.",
+              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences — one of the lowest rates of any charge. These figures show a difference in outcomes. They do not prove the method caused it: an acquittal can turn on the evidence, the source of funds or any number of things, and this dataset records a verdict but never the method behind the figure.",
               {
                 n: n(ieDecided),
                 acq: n(ie ? ie.acquitted : 0),
@@ -472,7 +484,7 @@ export default function Prosecution() {
           <p>
             {t(
               "research.corruption.gap.gBody3",
-              "The annual reports do document repeated disputes over income, property valuation and the amount alleged, with both sides invoking the valuation rules. What the data cannot show is how those disputes were resolved across cases, how large the differences were, or whether they contributed to the acquittal rate. A case-level record of the original investment, the property's value at the relevant stages, the amount claimed, the amount upheld and the court's reasons for any reduction would make that comparison possible.",
+              "That is the gap. The method used to reach the amount in a charge sheet is not recorded anywhere a reader can reach, so the question of how often the Commission builds on cash flow can only be answered case by case, from reports that happen to reproduce a chart. Recording the method, the amount claimed and the amount upheld on each case would turn a question that currently needs a judgment read in full into one that could be counted.",
             )}
           </p>
         </GapCallout>
