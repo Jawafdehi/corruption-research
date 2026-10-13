@@ -419,88 +419,94 @@ export const ne: Record<string, string> = {
   "research.corruption.trend.foot":
     "दायरी दर्ता भएको वर्षमा, फैसला सुनाइएको वर्षमा आधारित।",
 
-  // --- Charge calculation: the method behind the figure ----------------------
+  // --- Charge calculation: which method the figure came from -----------------
   "research.corruption.gap.shows": "अभिलेखले के देखाउँछ",
   "research.corruption.gap.open": "खुला प्रश्न",
   "research.corruption.gap.gLabel": "जवाफदेहिता ग्याप · बिगो गणना",
-  "research.corruption.gap.gTitle":
-    "गैरकानुनी सम्पत्ति कसरी जाँच्ने भन्ने सर्वोच्चले टुंग्याइसक्यो। आयोगले भने अर्कै विधिमा मुद्दा बनाउँदै छ।",
-  "research.corruption.method.m1": "जाँच अवधि",
-  "research.corruption.method.m1Kicker":
-    "सर्वोच्चले लागू गरेको र स्थापित सिद्धान्त मानेको विधि",
-  "research.corruption.method.m2": "क्यास फ्लो",
-  "research.corruption.method.m2Kicker": "आयोगले मुद्दा दर्ता गरेको विधि",
-  "research.corruption.gap.gLede":
-    "उही तथ्यलाई जोड्ने दुई तरिकाले उही कर्मचारीबारे ठीक उल्टो निष्कर्ष निकाल्न सक्छन्। एउटा फैसलाले त्यो सीमा कति साँघुरो हुन सक्छ भन्ने देखाउँछ।",
-  "research.corruption.ledger.label": "मुद्दा",
-  "research.corruption.ledger.title":
-    "नेपाल सरकार वि. हरेकृष्ण भगत, नि.नं. ९४३३, २०७२",
-  "research.corruption.ledger.assets": "जाँच अवधिभरको कुल सम्पत्ति",
-  "research.corruption.ledger.assetsV": "रू. ७४,५१,४२६",
-  "research.corruption.ledger.income": "सोही अवधिको वैध आय",
-  "research.corruption.ledger.incomeV": "रू. ६८,४७,५३६",
-  "research.corruption.ledger.diff": "अदालतले छुट्याउनुपर्ने फरक",
-  "research.corruption.ledger.diffV": "रू. ६,०३,८९०",
-  "research.corruption.ledger.share":
-    "कुल सम्पत्तिको — प्रतिवादीसँग भएको सबै सम्पत्तिसँग तुलना गर्दाको फरकको आकार",
-  "research.corruption.ledger.threshold": "१०% — यस मुद्दामा अदालतले लिएको बिन्दु",
-  "research.corruption.ledger.outcome":
-    "सम्पत्ति र आयबीचको फरक १० प्रतिशतसम्म भएमा त्यसलाई अमिल्दो वा अस्वाभाविक भन्न मिल्दैन भन्ने अदालतको ठहर रह्यो। सफाइ कायमै रह्यो। १० प्रतिशत यस मुद्दामा अदालतले अपनाएको आधार हो, ऐनमा लेखिएको अंक होइन।",
-  "research.corruption.method.scenario2":
-    "दुवै विधिले तुलना गर्ने कुरा उही हो — आर्जित सम्पत्ति र वैध रूपमा कमाएको आय। फरक एउटै कुरामा छ।",
-  "research.corruption.method.question2": "कति अवधिलाई एकै ठाउँमा राखेर तुलना गर्ने?",
-  "research.corruption.method.arrow": "त्यसैले",
-  "research.corruption.method.inLabel": "तुलना गरिने अवधि",
-  "research.corruption.method.outLabel": "स्रोत नखुलेको मानिने",
-  "research.corruption.method.m1InV2": "पूरै सेवा अवधि, एकमुष्ट",
-  "research.corruption.method.m1OutV2": "अन्त्यको फरक",
-  "research.corruption.method.m1Body2":
-    "सेवा अवधिभरको सबै आय र सबै व्यय एकपटक जोडिन्छ, र बाँकी रहेको रकम अमिल्दो हो कि होइन भन्ने प्रश्न सोधिन्छ। पछि पूर्ति भइसकेको कुनै एक वर्षको घाटा यहाँ देखिँदै देखिँदैन।",
-  "research.corruption.method.m2InV2": "वर्षैपिच्छे, क्रमैसँग",
-  "research.corruption.method.m2OutV2": "ऋणात्मक भएका हरेक वर्ष",
-  "research.corruption.method.m2Body2":
-    "हरेक वर्ष छुट्टै जाँचिन्छ, र आयभन्दा व्यय बढी भएको वर्ष स्रोत नखुलेको सम्पत्तिका रूपमा गनिन्छ — अन्त्यसम्ममा हिसाब मिले पनि। ती घाटा जोडिँदै जान्छन्, त्यसैले अर्को विधिले केही नभेट्ने अवधिबाट पनि यो विधिले ठूलो अंक निकाल्न सक्छ।",
-  "research.corruption.method.note2":
-    "दुवै विधि ऐनमा नामै तोकिएका होइनन्। सर्वोच्चले जाँच अवधि (check period) लागू गरेको छ; आयोगले क्यास फ्लोकै आधारमा मुद्दा दर्ता गर्दै आएको छ, र कुन अभियोगपत्र कुन विधिमा बनेको हो भन्ने कहीँ अभिलेख हुँदैन।",
-  "research.corruption.gap.gTimeline": "फैसला अघि र पछिको विधि",
-  "research.corruption.gap.gT1When": "आ.व. २०७०/७१ — फैसलाअघि",
-  "research.corruption.gap.gT1Kind":
-    "क्यास फ्लो कहिल्यै ऋणात्मक नभएकाले दुई अनुसन्धान तामेलीमा",
-  "research.corruption.gap.gT1Body":
-    "आयोगकै प्रतिवेदनले २०७१।३।१२ र २०७१।३।१३ मा दुई फाइल तामेलीमा राखिएको अभिलेख गर्छ — आय व्ययभन्दा बढी देखिएको र \"क्यासफ्लोको कुनै चरणमा ऋणात्मक अवस्था नदेखिएको\" आधारमा। विधिले नै नतिजा कर्मचारीकै पक्षमा पार्‍यो।",
-  "research.corruption.gap.gT2When": "२०७२ — सर्वोच्च अदालत",
-  "research.corruption.gap.gT2Kind":
-    "नि.नं. ९४३३ ले जाँच अवधिलाई स्थापित सिद्धान्त मान्छ",
-  "research.corruption.gap.gT2Body":
-    "मुद्दा क्यास फ्लोका आधारमा दर्ता भएको तर विशेष अदालतले जाँच अवधिका आधारमा मूल्यांकन गरेको कुरा अदालतले उल्लेख गर्‍यो। त्यो प्रश्न पुनः खोल्न इन्कार गर्दै सम्पत्तिको विश्लेषण जाँच अवधिभित्रै गरिने ठहर गरी पुनरावेदन खारेज गर्‍यो।",
-  "research.corruption.gap.gT3When": "आ.व. २०७६/७७ — चार वर्षपछि",
-  "research.corruption.gap.gT3Kind":
-    "आयोगकै पुनरावेदन आधारमा छापिएको अभियोगपत्रकै Cash Flow Chart",
-  "research.corruption.gap.gT3Body":
-    "रामबाबु अधिकारी र मालती शर्मा अधिकारीको सफाइविरुद्ध पुनरावेदन गर्दा आयोगले अभियोगपत्र जुन तालिकामा बनेको थियो, त्यही छाप्यो — २०४६।४७ देखि २०७३।१२।३१ सम्म वर्षैपिच्छे। विशेष अदालतले पूरै जाँच अवधिलाई एकमुष्ट लिएर व्ययभन्दा आय बढी देखेको थियो। त्यही तालिका वर्षैपिच्छे पढ्दा ठीक उल्टो देखिन्छ।",
-  "research.corruption.gap.gT3Stat": "रू. २,५४,६९,८८७",
-  "research.corruption.gap.gT3StatCap":
-    "अभियोगपत्रकै तालिकाले जोडेको स्रोत नखुलेको सम्पत्ति — अदालतले उल्टो फैसला गरेकै मुद्दामा",
-  "research.corruption.gap.gCite4": "आयोगको वार्षिक प्रतिवेदन, आ.व. २०७०/७१",
   "research.corruption.gap.gCite2": "आयोगको वार्षिक प्रतिवेदन, आ.व. २०७६/७७",
-  "research.corruption.gap.gCite": "नि.नं. ९४३३ पढ्नुहोस्",
-  "research.corruption.gap.gOutcome": "मुद्दाको तथ्यांकले के देखाउँछ",
-  "research.corruption.gap.gO1": "फैसला भएका गैरकानुनी सम्पत्तिका मुद्दा",
-  "research.corruption.gap.gO1Body":
-    "चौध वर्षभरि संग्रहमा गैरकानुनी सम्पत्ति आर्जनको अभियोग लागेका र स्पष्ट फैसलासम्म पुगेका सबै मुद्दा।",
-  "research.corruption.gap.gO2": "सफाइमा टुंगिए",
-  "research.corruption.gap.gO2Body":
-    "तीमध्ये {{share}} — प्रतिवादीहरू अभियोगबाट सफाइ पाएर निस्किए।",
-  "research.corruption.gap.gO3": "पूर्ण ठहर भए",
-  "research.corruption.gap.gO3Body":
-    "सबै कसुर मिलाउँदाको {{avg}} को तुलनामा। यो अभियोग अदालतमा औसत अभियोगभन्दा कमजोर देखिन्छ, तर सबैभन्दा कमजोर भने होइन।",
-  "research.corruption.gap.gOutcomeFoot":
-    "यी अंकले नतिजामा फरक देखाउँछन्। विधिले नै त्यो फरक ल्यायो भन्ने चाहिँ देखाउँदैनन्: सफाइ प्रमाण, स्रोत वा अरू जुनसुकै कुरामा अडिन सक्छ, र संग्रहले फैसला त राख्छ, अंकपछाडिको विधि कहिल्यै राख्दैन।",
-  "research.corruption.gap.gQuestion2":
-    "अदालतले जुन विधिबाट फैसला गर्दैन, त्यही विधिमा कति अभियोगपत्र बनेका छन्?",
-  "research.corruption.gap.gBody5":
-    "कसैले भन्न सक्दैन। अभियोगपत्रको अंक कुन विधिबाट निस्कियो भन्ने कुरा पाठकले पुग्न सक्ने कहीँ पनि लेखिँदैन, त्यसैले पत्ता लगाउने एक मात्र बाटो मुद्दापिच्छे हो — कुनै प्रतिवेदनले संयोगले तालिका छापेको भरमा। हरेक मुद्दामा तीन महल थपिए यो गन्न सकिने कुरा बन्थ्यो:",
-  "research.corruption.gap.gNeed1": "अंक निकाल्न प्रयोग भएको विधि",
-  "research.corruption.gap.gNeed2": "अभियोगपत्रमा दाबी गरिएको रकम",
-  "research.corruption.gap.gNeed3": "अदालतले कायम गरेको रकम",
+  "research.corruption.gap.gTitle2":
+    "सर्वोच्च अदालतले जाँच अवधि विधि लागू गर्‍यो। अख्तियारले गैरकानुनी सम्पत्तिको गणना अझै क्यास फ्लोबाटै किन गर्छ?",
+  "research.corruption.gap.gIntro":
+    "दाबी गरिएको गैरकानुनी सम्पत्ति कुन विधिले गणना गरिन्छ भन्ने कुराले कर्मचारीको आर्थिक अवस्था कसरी आँकलन हुन्छ भन्नेमा असर पार्न सक्छ। जाँच अवधि विधिले पूरै अवधिको आय र व्यय हेर्छ भने क्यास फ्लो विधिले आयले त्यति बेलाको खर्च र सम्पत्ति खरिद धान्यो कि धानेन भनी जाँच्छ। नेपाल सरकार वि. हरेकृष्ण भगत मुद्दामा सर्वोच्च अदालतको फैसलाले अख्तियारले गैरकानुनी सम्पत्तिका मुद्दाको अनुसन्धान र अभियोजन गर्दा अपनाउने विधिबारे प्रश्न उठाउँछ।",
+
+  "research.corruption.calc.step1": "दुई विधि, एउटै आर्थिक विवरण",
+  "research.corruption.calc.hypothetical":
+    "तलको उदाहरण काल्पनिक हो। उही आय, खर्च र सम्पत्ति खरिदलाई पूरै अवधि एकमुष्ट हेर्दा र वर्षैपिच्छे हेर्दा कसरी फरक नतिजा आउन सक्छ भन्ने यसले देखाउँछ।",
+  "research.corruption.calc.factsHeading": "एक कर्मचारीको दुई वर्षको आर्थिक विवरण",
+  "research.corruption.calc.colActivity": "आर्थिक कारोबार",
+  "research.corruption.calc.year1": "वर्ष १",
+  "research.corruption.calc.year2": "वर्ष २",
+  "research.corruption.calc.total": "जम्मा",
+  "research.corruption.calc.lakh": "रू. {{v}} लाख",
+  "research.corruption.calc.income": "वैध आय",
+  "research.corruption.calc.living": "जीवन निर्वाह खर्च",
+  "research.corruption.calc.property": "खरिद गरिएको सम्पत्ति",
+
+  "research.corruption.calc.m1": "जाँच अवधि विधि",
+  "research.corruption.calc.m1Lead": "पूरै अवधिको आर्थिक अवस्था एकमुष्ट आँकलन गर्ने।",
+  "research.corruption.calc.colCalc": "गणना",
+  "research.corruption.calc.colAmount": "रकम",
+  "research.corruption.calc.m1Income": "कुल वैध आय",
+  "research.corruption.calc.m1Living": "घटाउने: जीवन निर्वाह खर्च",
+  "research.corruption.calc.m1Property": "घटाउने: खरिद गरिएको सम्पत्ति",
+  "research.corruption.calc.m1Balance": "समग्र मौज्दात",
+  "research.corruption.calc.m1Body":
+    "दुवै वर्ष जोड्दा कुल आयले अभिलिखित खर्च र सम्पत्ति खरिद धान्छ। यो गणनाले समग्रमा कुनै न्यूनता देखाउँदैन।",
+
+  "research.corruption.calc.m2": "क्यास फ्लो विधि",
+  "research.corruption.calc.m2Lead":
+    "आयलाई त्यति बेलाको खर्च र सम्पत्ति खरिदसँग दाँजेर जाँच्ने।",
+  "research.corruption.calc.m2Outgoings": "खर्च र सम्पत्ति जम्मा",
+  "research.corruption.calc.m2Balance": "वार्षिक मौज्दात",
+
+  "research.corruption.calc.whyHeading": "नतिजा किन फरक देखिन्छ",
+  "research.corruption.calc.whyBody":
+    "वर्ष १ मा खर्च र सम्पत्ति खरिद त्यस वर्षको आयभन्दा {{short}} ले बढी छ। वर्ष २ मा {{surplus}} बचत देखिन्छ। जाँच अवधिको गणनाले समग्रमा {{balance}} मौज्दात निकाल्छ, तर वर्षैपिच्छेको गणनाले अघिल्लो वर्षको त्यो न्यूनता औंल्याउँछ, जसको स्पष्टीकरण चाहिन्छ।",
+  "research.corruption.calc.whyCaveat":
+    "यो उदाहरणले सुरुको बचत, ऋण वा अन्य उपलब्ध रकम केही नभएको मानेको छ। क्यास फ्लो गणनामा न्यूनता देखिनुले आफैंमा गैरकानुनी सम्पत्ति आर्जन भएको प्रमाणित गर्दैन। रकमको स्रोत र उपलब्धता तथा लागू हुने कानुनी सिद्धान्त पनि विचार गर्नुपर्छ।",
+
+  "research.corruption.calc.step2": "सर्वोच्च अदालतले के ठहर गर्‍यो?",
+  "research.corruption.calc.caseLabel": "सर्वोच्च अदालत · नि.नं. ९४३३ · २०७२",
+  "research.corruption.calc.caseName": "नेपाल सरकार वि. हरेकृष्ण भगत",
+  "research.corruption.calc.caseCite": "पूरा फैसला पढ्नुहोस्",
+  "research.corruption.calc.caseBody1":
+    "यस मुद्दाले दुई विधिबीचको भिन्नतालाई सिधै सर्वोच्च अदालतसामु ल्यायो। अख्तियारले मुद्दा क्यास फ्लो विधिबाट दर्ता गरेको थियो भने विशेष अदालतले जाँच अवधिभरको आर्थिक अवस्था आँकलन गरेको थियो।",
+  "research.corruption.calc.caseBody2":
+    "सर्वोच्च अदालतले जाँच अवधि अपनाएका आफ्ना अघिल्ला फैसलालाई आधार मानेर सोहीअनुसार अघि बढ्यो। कुन विधि बढी व्यावहारिक छ भन्ने मात्रै त्यसको आधार थिएन। अदालतले जाँच अवधिलाई आफ्ना अघिल्ला फैसलाबाट स्थापित सिद्धान्त मान्दै सम्बन्धित अवधिभरको आर्थिक अवस्था आँकलन गर्‍यो।",
+  "research.corruption.calc.figuresHeading": "अदालतले विचार गरेका अंक",
+  "research.corruption.calc.colMeasure": "आर्थिक विवरण",
+  "research.corruption.calc.assets": "आर्जित सम्पत्ति",
+  "research.corruption.calc.assetsV": "रू. ७४,५१,४२६",
+  "research.corruption.calc.lawful": "वैध आय",
+  "research.corruption.calc.lawfulV": "रू. ६८,४७,५३६",
+  "research.corruption.calc.diff": "फरक",
+  "research.corruption.calc.diffV": "रू. ६,०३,८९०",
+  "research.corruption.calc.share": "आर्जित सम्पत्तिको तुलनामा फरकको हिस्सा",
+  "research.corruption.calc.caseOutcome":
+    "१० प्रतिशतभित्रको फरकलाई यस मुद्दाको परिस्थितिमा अमिल्दो वा अस्वाभाविक भन्न नमिल्ने आधार लिँदै अदालतले सफाइ कायम राख्यो। यो त्यस फैसलाकै मुद्दागत आधार हो, ऐनमा तोकिएको सामान्य सीमा होइन।",
+
+  "research.corruption.calc.step3": "जवाफदेहिता ग्याप",
+  "research.corruption.calc.gapLabel": "अख्तियारको अनुसन्धान र अभियोजन",
+  "research.corruption.calc.gapQuestion":
+    "सर्वोच्च अदालतले जाँच अवधि अपनायो भने अख्तियारले दाबी गरिएको गैरकानुनी सम्पत्ति सुरुमै क्यास फ्लोबाट किन गणना गर्‍यो?",
+  "research.corruption.calc.gapBody1":
+    "यो प्रश्न मुद्दाको सुरुमै उठ्छ — जति बेला अख्तियारले कर्मचारीको आर्थिक अवस्था अनुसन्धान गर्छ, स्रोत नखुलेको भनिएको सम्पत्ति गणना गर्छ र अभियोगपत्रमा दाबी गर्ने रकम निर्धारण गर्छ।",
+  "research.corruption.calc.gapBody2":
+    "हरेकृष्ण भगत मुद्दामा सर्वोच्च अदालतले अख्तियारले क्यास फ्लो प्रयोग गरी मुद्दा दायर गरेको र विशेष अदालतले जाँच अवधिभरको आर्थिक अवस्था आँकलन गरेको कुरा उल्लेख गर्‍यो। फैसलाले जाँच अवधि अपनाएका सर्वोच्चका अघिल्ला फैसलालाई आधार बनायो।",
+  "research.corruption.calc.chartTotal": "रू. २,५४,६९,८८७",
+  "research.corruption.calc.gapBody3":
+    "यसपछिको एउटा उदाहरण अख्तियारको आ.व. २०७६/७७ को वार्षिक प्रतिवेदनमा देखिन्छ। रामबाबु अधिकारी र मालती शर्मा अधिकारीसम्बन्धी पुनरावेदनमा अख्तियारले २०४६।४७ देखि २०७३।१२।३१ सम्मको क्यास फ्लो तालिका प्रस्तुत गर्‍यो। त्यो तालिकाले {{amount}} स्रोत नखुलेको सम्पत्ति गणना गरेको थियो, जबकि विशेष अदालतले जाँच अवधिलाई समग्रमा आँकलन गरी व्ययभन्दा आय बढी भएको ठहर गरेको थियो।",
+  "research.corruption.calc.gapBody4":
+    "यी अभिलेखले अख्तियारले सुरुमै गैरकानुनी सम्पत्ति गणना गर्दा र अभियोजन गर्दा अपनाउने विधिबारे प्रश्न उठाउँछन्। सबै मुद्दामा क्यास फ्लो गणना कति पटक प्रयोग हुन्छ, वा त्यस्तो हरेक गणना लागू हुने कानुन र नजिरसँग बाझिन्छ भन्ने चाहिँ यिनले स्थापित गर्दैनन्।",
+
+  "research.corruption.calc.step4": "सार्वजनिक अभिलेखमा के छैन?",
+  "research.corruption.calc.missingLead":
+    "यो समस्या कति फैलिएको छ भनी आँकलन गर्न मुद्दाको अभिलेखमा निरन्तर यी कुरा खुल्नुपर्छ:",
+  "research.corruption.calc.missing1": "अनुसन्धानका क्रममा अख्तियारले प्रयोग गरेको गणना विधि।",
+  "research.corruption.calc.missing2": "अभियोगपत्रमा दाबी गरिएको गैरकानुनी सम्पत्तिको रकम।",
+  "research.corruption.calc.missing3":
+    "विशेष अदालतले त्यो गणना स्वीकार गर्‍यो कि आर्थिक अवस्था फरक ढंगले आँकलन गर्‍यो।",
+  "research.corruption.calc.missing4": "गणना स्वीकार वा अस्वीकार गर्नुका अदालतका आधार।",
+  "research.corruption.calc.missingEnd":
+    "मुद्दैपिच्छे यी विवरण नभई अख्तियारको सुरुको गणना अदालतले अपनाएको दृष्टिकोणसँग कति मिल्छ भनी निर्धारण गर्न कठिन हुन्छ।",
 };
