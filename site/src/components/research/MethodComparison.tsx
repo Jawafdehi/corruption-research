@@ -25,16 +25,17 @@ export type MethodCard = {
  * one purchase running through both make the difference arithmetic instead of
  * terminology, and the gap between the output figures is the whole point.
  *
- * The illustrative warning is a required prop, not an optional footnote. These are
- * invented round numbers chosen to show a mechanism, and a reader who takes them for
- * a real case has been actively misled.
+ * The footnote is a required prop, not an optional one. A contrast drawn this cleanly
+ * invites a reader to take one column as the rule and the other as the error, and
+ * whatever qualifies that — invented figures, a threshold that is not statutory — has
+ * to travel with the figure rather than be left to the prose around it.
  */
 export function MethodComparison({
   scenario,
   question,
   methods,
   outputArrowLabel,
-  illustrativeNote,
+  footnote,
 }: {
   /** The shared facts both columns work from. */
   scenario: ReactNode;
@@ -43,7 +44,7 @@ export function MethodComparison({
   methods: readonly MethodCard[];
   /** Label on the line between input and output, e.g. "would be treated as unexplained". */
   outputArrowLabel: string;
-  illustrativeNote: string;
+  footnote: ReactNode;
 }) {
   return (
     <div className="mt-6 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
@@ -114,7 +115,7 @@ export function MethodComparison({
         ))}
       </div>
 
-      <p className="mt-4 text-xs leading-5 text-muted-foreground">{illustrativeNote}</p>
+      <p className="mt-4 text-xs leading-5 text-muted-foreground">{footnote}</p>
     </div>
   );
 }
