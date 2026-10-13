@@ -261,12 +261,11 @@ export const ne: Record<string, string> = {
     "दुई रेखाले फरक घटना गन्छन्, त्यसैले कुनै पनि वर्ष तिनी भेटिनुपर्छ भन्ने अपेक्षा गरिँदैन — एक वर्ष दायर भएको मुद्दाको फैसला प्रायः दुई-तीन वर्षपछि हुन्छ। {{years}} आर्थिक वर्षका दायर जोड्दा पूरा {{corpus}} मुद्दाको संग्रह बन्छ।",
   "research.corruption.trend.filed": "दायर",
   "research.corruption.trend.decided": "फैसला",
-  "research.corruption.month.title": "वर्षको कुन समयमा मुद्दा दायर हुन्छन्",
-  "research.corruption.month.subtitle":
-    "नेपाली महिनाअनुसार औसत दायर मुद्दा, दुवैतिर एक मानक विचलनसहित।",
+  "research.corruption.month.title": "नेपाली महिनाअनुसार औसत दायर मुद्दा",
   "research.corruption.month.caption":
     "पूरा आर्थिक वर्षहरूको औसत। दायरी {{peak}} मा आर्थिक वर्षको अन्त्यतिर उच्च हुन्छ र {{trough}} मा चाडपर्वको समयमा घट्छ। विचलन यति फराकिलो छ कि कुनै एक वर्ष यो स्वरूपभन्दा बिल्कुलै फरक देखिन सक्छ।",
   "research.corruption.month.mean": "औसत दायरी",
+  "research.corruption.month.average": "सबै महिनाको औसत",
   "research.corruption.month.sd": "±१ मा.वि.",
   "research.corruption.overTime.caveat":
     "पछिल्ला आर्थिक वर्ष संरचनागत रूपमै अपूर्ण छन्: भर्खर दायर भएका मुद्दाले फैसलासम्म पुग्न कम समय पाएका छन्, त्यसैले तिनका दर सानो संख्यामा अडेका छन् र पछि बदलिनेछन्। यहाँका हरेक चार्टका अन्तिम पट्टीलाई अस्थायी मान्नुहोस्।",

@@ -286,17 +286,13 @@ export default function Prosecution() {
 
         <Figure
           title={t("research.corruption.month.title", "Average cases filed, by Nepali month")}
-          subtitle={t(
-            "research.corruption.month.subtitle",
-            "Across {{years}} complete fiscal years. The whisker is one standard deviation either side; {{peak}} is highlighted.",
-            { years: corpus.fiscalYears.length, peak: peakMonth.name },
-          )}
         >
           <FiledByMonth
             data={filedByMonth}
             peakMonth={peakMonth.month}
             meanLabel={t("research.corruption.month.mean", "mean filings")}
             sdLabel={t("research.corruption.month.sd", "±1 SD")}
+            averageLabel={t("research.corruption.month.average", "all-month average")}
           />
         </Figure>
 
