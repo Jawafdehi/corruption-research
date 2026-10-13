@@ -172,7 +172,7 @@ export default function CourtOutcomes() {
         <SectionHeading>
           {t(
             "research.corruption.outcomes.title",
-            "One number, two completely different stories inside it",
+            "One conviction rate can hide very different outcomes",
           )}
         </SectionHeading>
         <Lede>
@@ -187,7 +187,7 @@ export default function CourtOutcomes() {
           <StatTile value={n(outcome.convicted)} label={t("research.corruption.tile.full", "Full convictions")} note={ofDecided(convPct)} />
           <StatTile value={n(outcome.partial)} label={t("research.corruption.tile.partial", "Partial convictions")} note={ofDecided(partPct)} />
           <StatTile value={n(outcome.acquitted)} label={t("research.corruption.tile.acquitted", "Acquittals")} note={ofDecided(acqPct)} />
-          <StatTile value={n(outcome.ongoing)} label={t("research.corruption.tile.ongoing", "Still awaiting a verdict")} note={t("research.corruption.tile.ongoingNote", "open cases in the register")} />
+          <StatTile value={n(outcome.ongoing)} label={t("research.corruption.tile.ongoing", "Still awaiting a verdict")} note={t("research.corruption.tile.ongoingNote", "cases the register marks as still running")} />
         </StatRow>
 
         <Figure
@@ -220,7 +220,7 @@ export default function CourtOutcomes() {
         <Figure
           title={t(
             "research.corruption.byCharge.title2",
-            "Conviction depends overwhelmingly on what was charged",
+            "Conviction depends on the charge",
           )}
           subtitle={t(
             "research.corruption.byCharge.subtitle",
@@ -268,8 +268,15 @@ export default function CourtOutcomes() {
         <Caveat>
           {t(
             "research.corruption.outcomes.derived",
-            "Two groups of decided cases sit outside every rate here. {{n}} carry a disposition read out of the court's written judgment rather than published on a cause list. A further {{silent}} are marked decided by the register and carry no outcome at all — no cause-list entry, no hearing row, nothing a reader or a machine could read. Both counts are printed so the exclusions are visible numbers rather than a silent filter.",
-            { n: n(verdictsModelDerivedExcluded), silent: n(verdictsNoDisposition) },
+            "Two groups of decided cases sit outside these rates. In {{n}} cases the outcome was taken from the court's written judgment rather than a published cause-list entry. Another {{silent}} are marked decided in the register but carry no outcome in the available data. Counting them here keeps the exclusions visible. The archive reconciles exactly: {{clean}} with a published verdict, plus {{n}}, plus {{silent}}, plus {{open}} still open and {{nostatus}} carrying no status at all, is the {{filed}} cases filed.",
+            {
+              n: n(verdictsModelDerivedExcluded),
+              silent: n(verdictsNoDisposition),
+              clean: n(decided),
+              open: n(outcome.ongoing),
+              nostatus: n(corpus.ciaaProsecutions - decided - verdictsModelDerivedExcluded - verdictsNoDisposition - outcome.ongoing),
+              filed: n(corpus.ciaaProsecutions),
+            },
           )}
         </Caveat>
       </Block>
@@ -279,7 +286,7 @@ export default function CourtOutcomes() {
         <SectionHeading>
           {t(
             "research.corruption.grain.title",
-            "Most cases end in conviction. Most people charged are not in those cases.",
+            "A case conviction is not the same as a person convicted",
           )}
         </SectionHeading>
         <Body>
@@ -307,7 +314,13 @@ export default function CourtOutcomes() {
           )}
           caption={t(
             "research.corruption.grain.chartCaption",
-            "Both bars use the same cases and the same court-published verdicts, so the only thing that differs is what is being counted. A defendant here is a position on a charge sheet, not a resolved individual: only about one entity row in twenty carries an identity code, so a person charged in two cases counts twice and cannot be merged without guessing from names. One decided case names no defendant at all and sits outside this chart, which is why its case total is one short of the figure above. The middle band is not an outcome — it is the population whose individual outcome the court record does not state.",
+            "Both bars cover the same cases and the same court-published verdicts; the only difference is what is being counted. One decided case names no defendant and sits outside this comparison, which is why its case total is {{grain}} against {{all}} elsewhere, and its acquittals {{ga}} against {{aa}}. The middle band is not an outcome: it is the group whose individual result the court record does not state.",
+            {
+              grain: n(grainTotals.cases),
+              all: n(decided),
+              ga: n(grainRows.find((r) => r.key === "सफाई")?.cases ?? 0),
+              aa: n(outcome.acquitted),
+            },
           )}
         >
           <CasesVersusAccused
@@ -336,7 +349,7 @@ export default function CourtOutcomes() {
           )}
         </Caveat>
 
-        <Unknown title={t("research.corruption.grain.unknownTitle", "What would close this")}>
+        <Unknown title={t("research.corruption.grain.unknownTitle", "What data is missing?")}>
           {t(
             "research.corruption.grain.unknownBody",
             "A per-defendant outcome field on the court record, or identity codes applied across the defendant table. Either would turn {{accused}} accusations into a countable population of people and make a genuine per-person rate possible for the first time.",
@@ -348,7 +361,7 @@ export default function CourtOutcomes() {
       <Block>
         <Eyebrow>{t("research.corruption.overTime.eyebrow", "How the docket moved")}</Eyebrow>
         <SectionHeading>
-          {t("research.corruption.overTime.title", "The conviction rate moved because the charges changed")}
+          {t("research.corruption.overTime.title", "The overall conviction rate changed as the mix of charges changed")}
         </SectionHeading>
 
         <Figure
@@ -399,7 +412,10 @@ export default function CourtOutcomes() {
         </SectionHeading>
 
         <Figure
-          title={t("research.corruption.pipeline.title", "How long a case takes, and what is still waiting")}
+          title={t(
+            "research.corruption.pipeline.title",
+            "Cases still awaiting a verdict, and median time to decision",
+          )}
           subtitle={t(
             "research.corruption.pipeline.subtitle",
             "By the fiscal year a case was filed: bars are cases still awaiting a verdict, the line is the median months to decision.",
@@ -458,21 +474,25 @@ export default function CourtOutcomes() {
       <Block>
         <Eyebrow>{t("research.corruption.benches.eyebrow", "Who decides")}</Eyebrow>
         <SectionHeading>
-          {t("research.corruption.benches.title2", "Which panel you draw is a material fact about your case")}
+          {t("research.corruption.benches.title2", "Conviction rates differ across benches")}
         </SectionHeading>
         <Body>
           {t(
             "research.corruption.benches.lede",
-            "The court's overall rate is {{avg}}%. The benches that make it up range from well above that to well below — a spread wide enough that which panel heard a case is a material fact about its outcome.",
-            { avg: Math.round(courtAvg) },
+            "Counting full and partial convictions together, the court-wide rate is {{avg}}%. Among justices who sat on at least {{min}} decided cases, the recorded outcomes of their benches vary considerably around it.",
+            { avg: Math.round(courtAvg), min: justiceMinDecisions },
           )}
         </Body>
 
         <Figure
-          title={t("research.corruption.justice.title", "Conviction rate by justice")}
+          title={t(
+            "research.corruption.justice.title",
+            "Conviction rate by justice, full and partial convictions combined",
+          )}
           subtitle={t(
             "research.corruption.justice.subtitle",
-            "Each dot is a justice; its size is how many decisions they sat on. Position is the rate across those benches.",
+            "Each dot is a justice; its size is how many decisions they sat on. Position is the share of those cases upheld in full or in part — the {{avg}}% measure, not the {{full}}% full-only rate used elsewhere on this page.",
+            { avg: Math.round(courtAvg), full: pct1(rates.convictionFullOnlyPct) },
           )}
           caption={t(
             "research.corruption.justice.caption",
@@ -489,11 +509,11 @@ export default function CourtOutcomes() {
             justices={justices}
             avgPct={courtAvg}
             bandLabels={{
-              high: t("research.corruption.justice.bandHigh", "Convicts more (>{{pct}}%)", { pct: BAND_HIGH }),
-              mid: t("research.corruption.justice.bandMid", "Near average"),
-              low: t("research.corruption.justice.bandLow", "Acquits more (<{{pct}}%)", { pct: BAND_LOW }),
+              high: t("research.corruption.justice.bandHigh", "Above {{pct}}%", { pct: BAND_HIGH }),
+              mid: t("research.corruption.justice.bandMid", "Near the court average"),
+              low: t("research.corruption.justice.bandLow", "Below {{pct}}%", { pct: BAND_LOW }),
             }}
-            avgLabel={t("research.corruption.justice.avgLine", "court avg {{pct}}%", { pct: Math.round(courtAvg) })}
+            avgLabel={t("research.corruption.justice.avgLine", "court average {{pct}}%", { pct: Math.round(courtAvg) })}
           />
         </Figure>
 
@@ -535,19 +555,19 @@ export default function CourtOutcomes() {
           label={t("research.corruption.gap.cLabel", "Accountability gap · Court outcomes")}
           title={t(
             "research.corruption.gap.cTitle",
-            "The charge said 1,491 grams were missing. The court made it 58.",
+            "A charge sheet can allege far more than the court goes on to find",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
           questionLabel={t("research.corruption.gap.open", "The open question")}
           question={t("research.corruption.gap.cQuestion", "How far do the amounts the Commission claims sit from the amounts courts uphold?")}
           shows={t(
             "research.corruption.gap.cEstablishes",
-            "In 080-CR-0047 the Commission said 1,491.718g of gold was missing, worth Rs 1,17,01,781.85. The court credited 623g returned, 809.33g of other metals and 73.88g of natural loss, and put the unexplained difference at about 58g.",
+            "In case 080-CR-0047 the Commission alleged that 1,491.718 grams of gold were missing. After accounting for metal returned, for other metals present and for natural loss, the court found that only a small fraction of that amount remained unexplained. The judgment's own itemisation could not be reconciled from the summary available here, so the intermediate figures are not reproduced; the two end points are what this illustrates.",
           )}
         >
           {t(
             "research.corruption.gap.cBody",
-            "That case is an illustration, not a measurement — it is one judgment read in full, and it shows how far the two figures can sit apart. Across the archive the comparison cannot be made at all. The Commission publishes a yearly damages total, Rs {{bn}} billion for FY2081/82, and nobody publishes the matching upheld figure, so the two are never subtracted on this site.",
+            "This is one judgment, not a measurement of the archive. It shows how far an alleged amount can sit from what a court goes on to find; it cannot show how often that happens. The Commission publishes a yearly total for what it claims — Rs {{bn}} billion in FY2081/82 — and no published source carries the matching upheld figure, so the two are never subtracted on this site.",
             { bn: ciaa.damagesClaimedYearBn },
           )}
           <p>
@@ -562,7 +582,7 @@ export default function CourtOutcomes() {
           label={t("research.corruption.gap.fLabel", "Accountability gap · Records")}
           title={t(
             "research.corruption.gap.fTitle",
-            "The same person is a different name in every file",
+            "The same person can appear under different names in different files",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
           questionLabel={t("research.corruption.gap.open", "The open question")}

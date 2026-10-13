@@ -520,7 +520,7 @@ export default function Prosecution() {
           <p>
             {t(
               "research.corruption.gap.jBody2",
-              "One judgment examined in full shows why the distinction matters: a claim involving 1,491 grams of gold was reduced to about 58 grams. This illustrates how sharply a court's finding can differ from the original claim in an individual case, but it does not show how common such reductions are.",
+              "One judgment examined in full shows why the distinction matters: the Commission alleged that 1,491.718 grams of gold were missing, and the court found that only a small fraction of that remained unexplained once metal returned, other metals present and natural loss were accounted for. It illustrates how sharply a court's finding can differ from the original claim in a single case, but it does not show how common such differences are.",
             )}
           </p>
           <p>

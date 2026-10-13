@@ -76,7 +76,11 @@ export function ConvictionByCharge({
                           boxShadow: i < segs.length - 1 ? "inset -2px 0 0 hsl(var(--background))" : undefined,
                         }}
                       >
-                        {pct >= 11 && (
+                        {/* The full-conviction share is printed in the column to the
+                            right of every row, so labelling the first segment inside
+                            the bar as well printed the same number twice. The other
+                            two segments have no column of their own and keep theirs. */}
+                        {pct >= 11 && seg.key !== "convicted" && (
                           <span
                             className="font-mono text-[11px] font-semibold tabular-nums"
                             style={{ color: seg.text }}
