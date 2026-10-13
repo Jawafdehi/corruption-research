@@ -66,6 +66,8 @@ export default function Prosecution() {
   // name. Both sides already count the same decided cases on the same
   // court-published-verdict rule, so the two columns share a population even though
   // one is a count of people and the other a share of cases.
+  // The two ends of the table, so the reading beside it cannot drift from what the
+  // rows actually show when the data is refreshed.
   const accusedRows = defendants.byCharge.map((d) => {
     const c = charge(d.en);
     const decidedForCharge = c ? c.convicted + c.partial + c.acquitted : 0;
@@ -76,6 +78,14 @@ export default function Prosecution() {
   });
   // Illicit enrichment, the charge whose arithmetic the courts and the Commission
   // disagree about. Decided here means a clean disposition, as everywhere else.
+  // Both ends of the defendants table, derived rather than written down, so the
+  // reading beside the chart cannot drift from the rows when the data is refreshed.
+  const accusedExtremes = (() => {
+    const withAvg = accusedRows.map((r) => ({ ...r, avg: r.cases ? r.accused / r.cases : 0 }));
+    const sorted = [...withAvg].sort((a, b) => b.avg - a.avg);
+    return { most: sorted[0], fewest: sorted[sorted.length - 1] };
+  })();
+
   const ie = charge("Illicit enrichment");
   const ieDecided = ie ? ie.convicted + ie.partial + ie.acquitted : 0;
   // The site's canonical full-only rate. Recomputing it over the byCharge rows gives
@@ -185,14 +195,19 @@ export default function Prosecution() {
           })}
           statCaption={t(
             "research.corruption.prosecution.mixStatCaption",
-            "Share of cases filed that involved fake credentials, {{firstFy}} compared with {{lastFy}}.",
-            { firstFy: fy(mixFirst.fy), lastFy: fy(mixLast.fy) },
+            "Share of cases filed involving fake credentials, falling from {{first}} in {{firstFy}} to {{last}} in {{lastFy}}.",
+            {
+              first: pct(fakeShare(mixFirst)),
+              last: pct(fakeShare(mixLast)),
+              firstFy: fy(mixFirst.fy),
+              lastFy: fy(mixLast.fy),
+            },
           )}
         >
           <p>
             {t(
               "research.corruption.prosecution.mixBody",
-              "Over the same period, the distribution of cases across the other offence types also changed. The figures show how the composition of cases filed in court varied over time; they do not establish what drove the change.",
+              "The share of cases involving other offences also changed over this period. The figures show how the mix of cases filed in court shifted over time, but do not establish what caused these changes.",
             )}
           </p>
         </DataNote>
@@ -230,17 +245,25 @@ export default function Prosecution() {
           />
         </div>
 
-        <DataNote label={t("research.corruption.note.shows", "What the figures show")}>
+        <DataNote
+          label={t("research.corruption.note.shows", "What the figures show")}
+          stat={t("research.corruption.size.noteStat", "{{top}} → {{bottom}}", {
+            top: pct(accusedExtremes.most.fullPct),
+            bottom: pct(accusedExtremes.fewest.fullPct),
+          })}
+          statCaption={t(
+            "research.corruption.size.noteCaption",
+            "Full-conviction rate, from the offence charged against the most people per case ({{topAvg}}) to the one charged against the fewest ({{bottomAvg}}).",
+            {
+              topAvg: accusedExtremes.most.avg.toFixed(1),
+              bottomAvg: accusedExtremes.fewest.avg.toFixed(1),
+            },
+          )}
+        >
           <p>
             {t(
               "research.corruption.size.note1",
-              "The two columns measure different things. The first is a count of people — the average number of defendants per decided case. The second is a share of cases — how often that charge was upheld in full.",
-            )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.size.note2",
-              "Read down the table, offences charged against fewer people tend to show higher full-conviction rates. The figures establish that the two move together; they do not establish why, and neither column explains the other. A defendant here is a position on a charge sheet rather than a resolved individual, so someone charged in two cases is counted twice.",
+              "Offences involving fewer defendants tend to have higher full-conviction rates. The figures show that these two measures vary together, but do not explain why or establish that one causes the other.",
             )}
           </p>
         </DataNote>
@@ -346,7 +369,7 @@ export default function Prosecution() {
           label={t("research.corruption.gap.gLabel", "Accountability gap · Charge calculation")}
           title={t(
             "research.corruption.gap.gTitle",
-            "The Supreme Court drew a line between a property's purchase price and its later value. Can the CIAA's charge sheets be checked against that rule?",
+            "The Supreme Court drew a line between a property's purchase price and its later value. No record lets anyone check a charge sheet against it.",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
           shows={
@@ -354,13 +377,13 @@ export default function Prosecution() {
               <p>
                 {t(
                   "research.corruption.gap.gEstablishes",
-                  "In Nepal Kanoon Patrika 2072, decision no. 9505, the Supreme Court set out a principle for illicit-enrichment cases: where the source of the money invested to acquire property cannot be established, the unexplained amount may extend to that original investment, but not automatically to the property's subsequent increase in value.",
+                  "In Nepal Kanoon Patrika 2072, volume 12, decision no. 9505, the Supreme Court set out a principle for illicit-enrichment cases: where the source of the money invested to acquire property cannot be established, the unexplained amount may extend to that original investment, but not automatically to the property's subsequent increase in value.",
                 )}
               </p>
               <p>
                 {t(
                   "research.corruption.gap.gEstablishes2",
-                  "The CIAA's FY2078/79 annual report quotes this Supreme Court principle while discussing an appeal against an acquittal. The report documents the legal standard and the Commission's position on its application.",
+                  "The CIAA's FY2078/79 annual report quotes this principle in its grounds for appealing an acquittal, arguing that the Special Court's decision to acquit was contrary to it. The Commission cites the rule in support of its own case, not against it; the dispute in that appeal is over whether the court assessed the defendant's lawful income separately for each date of acquisition, and where the burden of proof lies under section 20(1) of the Prevention of Corruption Act, 2059.",
                 )}{" "}
                 <Cite href={CIAA_2078_79}>
                   {t("research.corruption.gap.gCite", "Read the CIAA annual report, FY2078/79")}
@@ -387,7 +410,7 @@ export default function Prosecution() {
                     title: t("research.corruption.method.m1", "Method 1: Original investment"),
                     kicker: t(
                       "research.corruption.method.m1Kicker",
-                      "The approach described in the Supreme Court ruling cited by the CIAA",
+                      "What the Supreme Court's principle allows to be treated as unexplained",
                     ),
                     inputLabel: t("research.corruption.method.m1In", "Original purchase price"),
                     inputValue: t("research.corruption.method.m1InV", "Rs 20 lakh"),
@@ -403,7 +426,7 @@ export default function Prosecution() {
                     title: t("research.corruption.method.m2", "Method 2: Current property value"),
                     kicker: t(
                       "research.corruption.method.m2Kicker",
-                      "The alternative calculation, which would include appreciation in the property's value",
+                      "The calculation the principle rules out, which would include the rise in value since purchase",
                     ),
                     inputLabel: t("research.corruption.method.m2In", "Current market value"),
                     inputValue: t("research.corruption.method.m2InV", "Rs 1 crore"),
@@ -411,7 +434,7 @@ export default function Prosecution() {
                     outputValue: t("research.corruption.method.m2OutV", "Rs 1 crore"),
                     body: t(
                       "research.corruption.method.m2Body",
-                      "This approach would count the property's present value, including the Rs 80 lakh increase since purchase. Under the principle quoted in the CIAA's report, that increase should not automatically be treated as illegally acquired merely because the original investment's source was unproven.",
+                      "This would count the property's present value, including the Rs 80 lakh increase since purchase. Under the principle quoted in the CIAA's report, that increase should not be treated as illegally acquired merely because the source of the original investment was unproven.",
                     ),
                   },
                 ]}
@@ -425,13 +448,13 @@ export default function Prosecution() {
           questionLabel={t("research.corruption.gap.open", "The open question")}
           question={t(
             "research.corruption.gap.gQuestion",
-            "How often do the CIAA's charge calculations follow the Supreme Court's rule, and how much do those calculations differ from the amounts upheld by the courts?",
+            "How are the amounts in charge sheets calculated, and how far do they sit from the amounts courts uphold?",
           )}
         >
           <p>
             {t(
               "research.corruption.gap.gBody",
-              "The current case register does not record, side by side, the amount claimed by the CIAA, the amount upheld by the court, and the calculation method used for each. Without those fields, it is not possible to systematically check whether charge sheets apply the Supreme Court's principle or to measure the difference between the Commission's claims and the courts' findings.",
+              "The case register does not record, side by side, the amount claimed by the CIAA, the amount upheld by the court, and the basis each was calculated on. Without those fields it is not possible to check how any charge sheet applied the principle, or to measure the distance between what was claimed and what was upheld. Nothing in the published record shows the Commission valuing property at its current worth — where the reports describe its own method, as in FY2069/70, it fixes the amount on the value at the time of acquisition.",
             )}
           </p>
           <p>
@@ -449,7 +472,7 @@ export default function Prosecution() {
           <p>
             {t(
               "research.corruption.gap.gBody3",
-              "The annual reports document disputes over income, property valuation and the amount alleged. But the available data cannot show how often the Commission's calculations departed from the Supreme Court's principle, how large any differences were, or whether calculation disputes contributed to acquittals. A case-level record of the original investment, the property's value at the relevant stages, the amount claimed, the amount upheld and the court's reasons for any reduction would make that comparison possible.",
+              "The annual reports do document repeated disputes over income, property valuation and the amount alleged, with both sides invoking the valuation rules. What the data cannot show is how those disputes were resolved across cases, how large the differences were, or whether they contributed to the acquittal rate. A case-level record of the original investment, the property's value at the relevant stages, the amount claimed, the amount upheld and the court's reasons for any reduction would make that comparison possible.",
             )}
           </p>
         </GapCallout>
