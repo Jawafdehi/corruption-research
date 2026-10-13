@@ -511,21 +511,24 @@ export default function CourtOutcomes() {
             "A bench's rate says nothing about whether it was right. What the Supreme Court did with its decisions would.",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t("research.corruption.gap.hQuestion", "How often did each bench's decisions survive appeal?")}
           shows={t(
             "research.corruption.gap.hEstablishes",
             "The chart above can show that benches convict at very different rates. It cannot show which of them the appeal courts went on to agree with. A bench that convicts rarely and is upheld every time, and one that convicts rarely and is overturned every time, look identical here.",
-          )}
-          fix={t(
-            "research.corruption.gap.hNeeded",
-            "The trial case number on each appeal record. Everything else is already in place: all {{cases}} decided cases carry their bench, and {{appeals}} appeals are established — but the two sets cannot be joined, so no bench can be followed upward.",
-            { cases: n(decided), appeals: n(REPORT.appeals.appeals) },
           )}
         >
           {t(
             "research.corruption.gap.hBody",
             "This matters because of how the chart above is most likely to be misread. A conviction rate is not a performance score — a bench hearing mostly documentary fake-certificate cases will convict more often than one hearing contested financial cases, whatever either does. The question worth asking is not how often a bench convicted, but how often its reasoning survived review. That comparison is not published anywhere, and until the court system links an appeal to the case it came from, it cannot be built from outside.",
           )}
+          <p>
+            {t(
+            "research.corruption.gap.hNeeded",
+            "The trial case number on each appeal record. Everything else is already in place: all {{cases}} decided cases carry their bench, and {{appeals}} appeals are established — but the two sets cannot be joined, so no bench can be followed upward.",
+            { cases: n(decided), appeals: n(REPORT.appeals.appeals) },
+          )}
+          </p>
         </GapCallout>
 
         <GapCallout
@@ -535,14 +538,11 @@ export default function CourtOutcomes() {
             "The charge said 1,491 grams were missing. The court made it 58.",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t("research.corruption.gap.cQuestion", "How far do the amounts the Commission claims sit from the amounts courts uphold?")}
           shows={t(
             "research.corruption.gap.cEstablishes",
             "In 080-CR-0047 the Commission said 1,491.718g of gold was missing, worth Rs 1,17,01,781.85. The court credited 623g returned, 809.33g of other metals and 73.88g of natural loss, and put the unexplained difference at about 58g.",
-          )}
-          fix={t(
-            "research.corruption.gap.cNeeded",
-            "A बिगो field on the case record carrying both the amount claimed and the amount upheld. The register rows carry neither, so no claimed-versus-upheld rate can be computed for any case here.",
           )}
         >
           {t(
@@ -550,6 +550,12 @@ export default function CourtOutcomes() {
             "That case is an illustration, not a measurement — it is one judgment read in full, and it shows how far the two figures can sit apart. Across the archive the comparison cannot be made at all. The Commission publishes a yearly damages total, Rs {{bn}} billion for FY2081/82, and nobody publishes the matching upheld figure, so the two are never subtracted on this site.",
             { bn: ciaa.damagesClaimedYearBn },
           )}
+          <p>
+            {t(
+            "research.corruption.gap.cNeeded",
+            "A बिगो field on the case record carrying both the amount claimed and the amount upheld. The register rows carry neither, so no claimed-versus-upheld rate can be computed for any case here.",
+          )}
+          </p>
         </GapCallout>
 
         <GapCallout
@@ -559,7 +565,8 @@ export default function CourtOutcomes() {
             "The same person is a different name in every file",
           )}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t("research.corruption.gap.fQuestion", "How many of the people prosecuted are the same people, charged more than once?")}
           shows={t(
             "research.corruption.gap.fEstablishes",
             "The archive holds {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} of those names — about {{pct}} — are matched to a known person or office.",
@@ -569,10 +576,6 @@ export default function CourtOutcomes() {
               resolved: n(entityResolution.resolved),
               pct: pct((entityResolution.resolved / entityResolution.distinctNames) * 100),
             },
-          )}
-          fix={t(
-            "research.corruption.gap.fNeeded",
-            "A stable identifier for each person and office, used across charge sheets, judgments and annual reports.",
           )}
         >
           <>
@@ -584,6 +587,12 @@ export default function CourtOutcomes() {
               {t("research.corruption.gap.fCite", "Coverage and data quality")}
             </Cite>
           </>
+          <p>
+            {t(
+            "research.corruption.gap.fNeeded",
+            "A stable identifier for each person and office, used across charge sheets, judgments and annual reports.",
+          )}
+          </p>
         </GapCallout>
       </Block>
     </>

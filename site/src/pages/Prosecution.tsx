@@ -2,7 +2,9 @@ import { useTranslation } from "react-i18next";
 
 import { AccusedPerCase } from "@/components/research/AccusedPerCase";
 import { FiledByMonth } from "@/components/research/FiledByMonth";
+import { DataNote } from "@/components/research/DataNote";
 import { GapCallout } from "@/components/research/GapCallout";
+import { MethodComparison } from "@/components/research/MethodComparison";
 import { ChargeMixByYear } from "@/components/research/ChargeMixByYear";
 import {
   Block,
@@ -26,9 +28,8 @@ const CIAA_2078_79 =
   "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf";
 
 const JALAHARI = {
+  analysis: "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution",
   case: "https://jawafdehi.org/case/jalahari",
-  trial: "https://jawafdehi.org/courtcase/special/080-cr-0047",
-  appeal: "https://jawafdehi.org/courtcase/supreme/081-cr-1635",
 };
 
 export default function Prosecution() {
@@ -92,17 +93,17 @@ export default function Prosecution() {
   return (
     <>
       <Block>
-        <Eyebrow>{t("research.corruption.prosecution.eyebrow", "What gets charged")}</Eyebrow>
+        <Eyebrow>{t("research.corruption.prosecution.eyebrow", "From complaint to court")}</Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.prosecution.title",
-            "Which complaints become court cases, and what the Commission claims they cost",
+            "Which complaints become court cases?",
           )}
         </SectionHeading>
         <Lede>
           {t(
             "research.corruption.prosecution.lede",
-            "Of the {{total}} complaints on the Commission's books in {{fy}}, {{filed}} became cases in court — {{pct}}. This page looks at which complaints make that journey, how the mix has changed, and how much money the Commission says was at stake.",
+            "In fiscal year {{fy}}, the Commission received {{total}} complaints and filed {{filed}} cases in court, equivalent to {{pct}} of the complaints recorded that year. This section examines the types of cases filed, how filing patterns have changed over time, and the amounts claimed by the Commission.",
             {
               total: n(cdz.total_complaints),
               fy: cdz.fy,
@@ -115,20 +116,20 @@ export default function Prosecution() {
         <StatRow>
           <StatTile
             value={n(corpus.ciaaProsecutions - corpus.moneyLaundering)}
-            label={t("research.corruption.prosecution.tileCorpus", "Corruption cases filed in court")}
-            note={t("research.corruption.tile.corpusNote", "over {{years}} fiscal years, money laundering excluded", {
+            label={t("research.corruption.prosecution.tileCorpus", "Corruption cases filed")}
+            note={t("research.corruption.tile.corpusNote", "Over {{years}} fiscal years, excluding money-laundering cases.", {
               years: corpus.fiscalYears.length,
             })}
           />
           <StatTile
             value={n(Math.round(corpus.avgFiledPerYear))}
-            label={t("research.corruption.prosecution.tileRate", "Filed per year, on average")}
-            note={t("research.corruption.prosecution.tileRateNote", "across the whole window")}
+            label={t("research.corruption.prosecution.tileRate", "Cases filed per year, on average")}
+            note={t("research.corruption.prosecution.tileRateNote", "Across the {{years}}-year period.", { years: corpus.fiscalYears.length })}
           />
           <StatTile
-            value={`Rs ${bigoTotalBn.toFixed(1)}bn`}
+            value={`Rs ${bigoTotalBn.toFixed(1)} billion`}
             label={t("research.corruption.prosecution.tileBigo", "Total amount claimed")}
-            note={t("research.corruption.prosecution.tileBigoNote", "across the {{n}} fiscal years the Commission reports a total", {
+            note={t("research.corruption.prosecution.tileBigoNote", "Across the {{n}} fiscal years for which the Commission reported a total.", {
               n: bigoDemanded.length,
             })}
           />
@@ -153,7 +154,7 @@ export default function Prosecution() {
             <>
               {t(
                 "research.corruption.mix.caption",
-                "Cases are grouped by the fiscal year in which they were filed. The chart covers {{n}} cases, including cases that could not be assigned to a specific offence type, which are listed under \u201cOther offences\u201d. Illegal benefit cases appear in some earlier years as well, though in smaller numbers.",
+                "{{n}} cases, grouped by the fiscal year in which they were filed. Cases that could not be assigned to an offence type are counted under \u201cOther offences\u201d.",
                 { n: n(mixTotal) },
               )}{" "}
               <Cite href={CITATIONS.chargeSheets}>
@@ -176,18 +177,25 @@ export default function Prosecution() {
           />
         </Figure>
 
-        <Body>
-          {t(
-            "research.corruption.prosecution.mixBody",
-            "Cases involving fake credentials accounted for {{firstShare}} of cases filed in {{firstFy}}, compared with {{lastShare}} in {{lastFy}}. Over the same period, the distribution of cases across offence types changed. The figures show how the composition of cases filed in court varied over time.",
-            {
-              firstShare: pct(fakeShare(mixFirst)),
-              firstFy: fy(mixFirst.fy),
-              lastFy: fy(mixLast.fy),
-              lastShare: pct(fakeShare(mixLast)),
-            },
+        <DataNote
+          label={t("research.corruption.note.shows", "What the figures show")}
+          stat={t("research.corruption.prosecution.mixStat", "{{first}} \u2192 {{last}}", {
+            first: pct(fakeShare(mixFirst)),
+            last: pct(fakeShare(mixLast)),
+          })}
+          statCaption={t(
+            "research.corruption.prosecution.mixStatCaption",
+            "Share of cases filed that involved fake credentials, {{firstFy}} compared with {{lastFy}}.",
+            { firstFy: fy(mixFirst.fy), lastFy: fy(mixLast.fy) },
           )}
-        </Body>
+        >
+          <p>
+            {t(
+              "research.corruption.prosecution.mixBody",
+              "Over the same period, the distribution of cases across the other offence types also changed. The figures show how the composition of cases filed in court varied over time; they do not establish what drove the change.",
+            )}
+          </p>
+        </DataNote>
       </Block>
 
 
@@ -202,21 +210,11 @@ export default function Prosecution() {
         <Body>
           {t(
             "research.corruption.size.body",
-            "Cases differ in how many people are charged together. This chart shows the average number of defendants in decided cases for each offence type at the Special Court.",
+            "Cases differ in how many people are charged together. This chart compares the average number of defendants per decided case with the share of cases in which the charge was upheld in full.",
           )}
         </Body>
 
-        <Figure
-          title={t("research.corruption.size.howToTitle", "How to read this chart")}
-          subtitle={t(
-            "research.corruption.size.howTo",
-            "Two different measurements, side by side. The first column is a count of people: the average number of defendants per decided case. The second is a share of cases: how often that charge was upheld in full. Offences charged against fewer people tend to show higher full-conviction rates, but these figures do not establish why, and neither column explains the other.",
-          )}
-          caption={t(
-            "research.corruption.size.chartCaption",
-            "Counted from the defendant side of the court's own party list. A defendant is a position on a charge sheet rather than a resolved individual, so someone charged in two cases is counted twice.",
-          )}
-        >
+        <div className="mt-6 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
           <AccusedPerCase
             rows={accusedRows}
             heading={t("research.corruption.size.chartTitle", "Defendants per case, and how often the charge is upheld")}
@@ -230,108 +228,36 @@ export default function Prosecution() {
             defendantsWord={t("research.corruption.size.wordDefendants", "defendants")}
             language={language}
           />
-        </Figure>
+        </div>
+
+        <DataNote label={t("research.corruption.note.shows", "What the figures show")}>
+          <p>
+            {t(
+              "research.corruption.size.note1",
+              "The two columns measure different things. The first is a count of people — the average number of defendants per decided case. The second is a share of cases — how often that charge was upheld in full.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.size.note2",
+              "Read down the table, offences charged against fewer people tend to show higher full-conviction rates. The figures establish that the two move together; they do not establish why, and neither column explains the other. A defendant here is a position on a charge sheet rather than a resolved individual, so someone charged in two cases is counted twice.",
+            )}
+          </p>
+        </DataNote>
 
 
 
-        <GapCallout
-          label={t("research.corruption.gap.bLabel", "Accountability gap · Prosecution decisions")}
-          title={t(
-            "research.corruption.gap.bTitle",
-            "Can an acquittal turn on who was left out of the charge sheet?",
-          )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.unresolved", "What remains unresolved")}
-          shows={
-            <>
-              {t(
-                "research.corruption.gap.bEstablishes",
-                "In case 080-CR-0047, the Special Court acquitted all three defendants on 2081/01/18, holding that charging only some of the people it considered equally responsible was inconsistent with equal justice. The Commission appealed on 2081/11/09, arguing that the court had intervened in a decision constitutionally entrusted to prosecutors. The appeal remains pending.",
-              )}{" "}
-              <Cite href={JALAHARI.case}>
-                {t("research.corruption.gap.bCite", "The case, with sources")}
-              </Cite>
-              {" · "}
-              <Cite href={JALAHARI.trial}>
-                {t("research.corruption.gap.bCiteTrial", "Trial record 080-CR-0047")}
-              </Cite>
-              {" · "}
-              <Cite href={JALAHARI.appeal}>
-                {t("research.corruption.gap.bCiteAppeal", "Appeal 081-CR-1635")}
-              </Cite>
-            </>
-          }
-          fix={t(
-            "research.corruption.gap.bNeeded",
-            "The Supreme Court has yet to settle the issue in this pending appeal. Meanwhile, the available records do not identify people who were similarly placed but not charged, making it impossible to measure how often comparable situations arise.",
-          )}
-        >
-          {t(
-            "research.corruption.gap.bCaveat",
-            "One judgment does not establish a pattern of selective prosecution. An uncharged person, a rejected charge or an allegation of bias is not enough to establish it. This case matters because the Special Court gave reasons for its finding, while the legal question remains unresolved on appeal.",
-          )}
-        </GapCallout>
 
-        <GapCallout
-          label={t("research.corruption.gap.gLabel", "Accountability gap · Charge calculation")}
-          title={t(
-            "research.corruption.gap.gTitle",
-            "The Supreme Court set out how illicit enrichment should be calculated. Can charge sheets be checked against that rule?",
-          )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.unresolved", "What remains unresolved")}
-          shows={
-            <>
-              {t(
-                "research.corruption.gap.gEstablishes",
-                "In 2072, the Supreme Court set out a rule for calculating illicit enrichment: where the source of funds used to acquire property cannot be established, the calculation should be based on the original investment, rather than the property's current value. The Commission's FY2078/79 annual report quotes the ruling and presents a different position on its application.",
-              )}{" "}
-              <Cite href={CIAA_2078_79}>
-                {t("research.corruption.gap.gCite", "CIAA annual report FY2078/79, quoting ने.का.प. २०७२, नि.नं. ९५०५")}
-              </Cite>
-            </>
-          }
-          fix={t(
-            "research.corruption.gap.gNeeded",
-            "The case register does not record both the amount claimed by the Commission and the amount upheld by the court, alongside the method used to calculate each. Without these fields, it is not possible to systematically compare charge sheets with the Supreme Court's ruling.",
-          )}
-        >
-          <>
-            <p>
-              {t(
-                "research.corruption.gap.gBody",
-                "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal and {{conv}} were upheld in full, compared with {{avg}} across all offences.",
-                {
-                  n: n(ieDecided),
-                  acq: n(ie ? ie.acquitted : 0),
-                  conv: pct(ieDecided ? ((ie?.convicted ?? 0) / ieDecided) * 100 : 0),
-                  avg: pct1(fullOnlyAvg),
-                },
-              )}
-            </p>
-            <p className="mt-3">
-              {t(
-                "research.corruption.gap.gBody2",
-                "The annual reports document disputes over income, property valuation and the amount alleged. But the available data cannot establish how often the Commission's calculations departed from the ruling, or whether those disputes explain the acquittal rate.",
-              )}
-            </p>
-          </>
-        </GapCallout>
+
+
+
 
         <Figure
-          title={t(
-            "research.corruption.month.title",
-            "Average cases filed, by Nepali month",
-          )}
+          title={t("research.corruption.month.title", "Average cases filed, by Nepali month")}
           subtitle={t(
             "research.corruption.month.subtitle",
             "Across {{years}} complete fiscal years. The whisker is one standard deviation either side; {{peak}} is highlighted.",
             { years: corpus.fiscalYears.length, peak: peakMonth.name },
-          )}
-          caption={t(
-            "research.corruption.month.caption",
-            "Averaged over {{years}} fiscal years. The spread is wide enough that any single year can look nothing like this shape.",
-            { years: corpus.fiscalYears.length },
           )}
         >
           <FiledByMonth
@@ -342,102 +268,284 @@ export default function Prosecution() {
           />
         </Figure>
 
-        <Body>
-          {t(
-            "research.corruption.month.body",
-            "{{peak}}, the final month of Nepal's fiscal year, sees an average of {{peakMean}} cases filed by the Commission, compared with {{otherMean}} in each of the other eleven months — nearly {{morePct}} more than the monthly average for the rest of the year. The figures establish a clear year-end concentration in filings, but do not explain why it occurs. Whether this reflects investigation timelines, institutional deadlines or other factors cannot be determined from the available data.",
+        <DataNote
+          label={t("research.corruption.note.shows", "What the figures show")}
+          stat={t("research.corruption.month.stat", "{{v}} cases", {
+            v: peakMonth.mean.toFixed(1),
+          })}
+          statCaption={t(
+            "research.corruption.month.statCaption",
+            "Average filed in {{peak}}, the final month of Nepal's fiscal year, against {{otherMean}} per month across the other eleven.",
             {
               peak: peakMonth.name,
-              peakMean: peakMonth.mean.toFixed(1),
               otherMean: otherMonthMean.toFixed(1),
-              morePct: `${Math.round((peakMonth.mean / otherMonthMean - 1) * 100)}%`,
             },
-          )}
-        </Body>
-
-        <GapCallout
-          label={t("research.corruption.gap.kLabel", "Accountability gap · Filing patterns")}
-          title={t(
-            "research.corruption.gap.kTitle",
-            "Court filings rise sharply in {{peak}}. The reason is not reported.",
-            { peak: peakMonth.name },
-          )}
-          intro={t(
-            "research.corruption.gap.kIntro",
-            "The Commission filed an average of {{peakMean}} cases in {{peak}}, the final month of the Nepali fiscal year, compared with {{otherMean}} in each of the other eleven months. The analysis covers {{years}} complete fiscal years. Variation between years is substantial, so the monthly average does not describe every year's pattern.",
-            {
-              peak: peakMonth.name,
-              peakMean: peakMonth.mean.toFixed(1),
-              otherMean: otherMonthMean.toFixed(1),
-              years: corpus.fiscalYears.length,
-            },
-          )}
-          showsLabel={t("research.corruption.gap.figuresShow", "What the figures show")}
-          fixLabel={t("research.corruption.gap.unresolved", "What remains unresolved")}
-          shows={t(
-            "research.corruption.gap.kEstablishes",
-            "Filings are concentrated towards the end of the fiscal year. The data establish when cases are filed, but not why.",
-          )}
-          fix={t(
-            "research.corruption.gap.kNeeded",
-            "The published records do not explain whether the concentration reflects investigation timelines, administrative deadlines, case-readiness or other factors. Without information on when investigations were completed and cases were approved for prosecution, the reasons for the year-end increase cannot be distinguished.",
-          )}
-        />
-
-        <GapCallout
-          label={t("research.corruption.gap.iLabel", "Accountability gap · Investigation timelines")}
-          title={t(
-            "research.corruption.gap.iTitle",
-            "The clock starts at filing. The time before prosecution remains unmeasured.",
-          )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.measurable", "What would make it measurable")}
-          shows={t(
-            "research.corruption.gap.iEstablishes",
-            "The court register records when a case is filed, but the published data do not provide the date each complaint was registered or how long the investigation took. The time between a complaint and the decision to prosecute therefore cannot be calculated. By contrast, the time from filing to verdict at the Special Court can be measured: the median is 15 months.",
-          )}
-          fix={t(
-            "research.corruption.gap.iNeeded",
-            "Recording the complaint registration date and the date of the prosecution decision for each case would allow investigation and decision-making times to be calculated.",
           )}
         >
-          {t(
-            "research.corruption.gap.iBody",
-            "This leaves a significant gap in the accountability record: the duration of court proceedings can be measured, but the time taken before a case reaches court cannot. Without those dates, delays before prosecution cannot be systematically assessed.",
+          <p>
+            {t(
+              "research.corruption.month.body",
+              "{{peak}}, the final month of Nepal's fiscal year, sees an average of {{peakMean}} cases filed by the Commission, compared with {{otherMean}} per month during the other eleven months. That is nearly {{morePct}} more than the monthly average for the rest of the year. The figures show a clear concentration of filings at the fiscal year's end, but the available data do not establish why it occurs or whether it is linked to investigation timelines, institutional deadlines or other factors.",
+              {
+                peak: peakMonth.name,
+                peakMean: peakMonth.mean.toFixed(1),
+                otherMean: otherMonthMean.toFixed(1),
+                morePct: `${Math.round((peakMonth.mean / otherMonthMean - 1) * 100)}%`,
+              },
+            )}
+          </p>
+        </DataNote>
+
+        <GapCallout
+          label={t("research.corruption.gap.bLabel", "Accountability gap · Prosecution decisions")}
+          title={t(
+            "research.corruption.gap.bTitle",
+            "The Pashupati Jalhari case raised a serious question about selective prosecution",
           )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <>
+              <p>
+                {t(
+                  "research.corruption.gap.bEstablishes",
+                  "In the Pashupati Jalhari case, the Special Court raised concerns about selective prosecution, questioning why some individuals were prosecuted while others considered similarly responsible were left out. The court's observations put the consistency of the CIAA's prosecution decisions under scrutiny. The acquittal should not, however, be attributed to selective prosecution alone.",
+                )}
+              </p>
+              <p className="text-xs">
+                <Cite href={JALAHARI.analysis}>
+                  {t("research.corruption.gap.bCite", "Read the full analysis")}
+                </Cite>
+                {" · "}
+                <Cite href={JALAHARI.case}>
+                  {t("research.corruption.gap.bCiteCase", "Read the full case summary")}
+                </Cite>
+              </p>
+            </>
+          }
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.bQuestion",
+            "Why does the CIAA prosecute some individuals while leaving others who may be similarly responsible out of the case?",
+          )}
+        >
+          <p>
+            {t(
+              "research.corruption.gap.bBody",
+              "Is this the result of gaps in investigation, differences in the evidence gathered against each individual, or decisions about whom to prosecute that require closer scrutiny? The available record does not establish which explanation applies.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.bBody2",
+              "But when a court itself raises concerns about selective prosecution, the reasons for including some individuals and excluding others deserve clear scrutiny. Without a record that allows these decisions to be compared, it is difficult to determine whether differences in prosecution reflect differences in evidence or inconsistent treatment of people in similar positions.",
+            )}
+          </p>
+        </GapCallout>
+
+        <GapCallout
+          label={t("research.corruption.gap.gLabel", "Accountability gap · Charge calculation")}
+          title={t(
+            "research.corruption.gap.gTitle",
+            "The Supreme Court drew a line between a property's purchase price and its later value. Can the CIAA's charge sheets be checked against that rule?",
+          )}
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <>
+              <p>
+                {t(
+                  "research.corruption.gap.gEstablishes",
+                  "In Nepal Kanoon Patrika 2072, decision no. 9505, the Supreme Court set out a principle for illicit-enrichment cases: where the source of the money invested to acquire property cannot be established, the unexplained amount may extend to that original investment, but not automatically to the property's subsequent increase in value.",
+                )}
+              </p>
+              <p>
+                {t(
+                  "research.corruption.gap.gEstablishes2",
+                  "The CIAA's FY2078/79 annual report quotes this Supreme Court principle while discussing an appeal against an acquittal. The report documents the legal standard and the Commission's position on its application.",
+                )}{" "}
+                <Cite href={CIAA_2078_79}>
+                  {t("research.corruption.gap.gCite", "Read the CIAA annual report, FY2078/79")}
+                </Cite>
+              </p>
+
+              <MethodComparison
+                scenario={t(
+                  "research.corruption.method.scenario",
+                  "Suppose a public official buys a plot of land in 2065 for Rs 20 lakh. By the time the case is investigated, the land is worth Rs 1 crore.",
+                )}
+                question={t(
+                  "research.corruption.method.question",
+                  "If the official cannot establish the legitimate source of the money used to buy the land, what amount can be treated as illegally acquired?",
+                )}
+                outputArrowLabel={t(
+                  "research.corruption.method.arrow",
+                  "would be treated as unexplained",
+                )}
+                methods={[
+                  {
+                    key: "original",
+                    ruling: true,
+                    title: t("research.corruption.method.m1", "Method 1: Original investment"),
+                    kicker: t(
+                      "research.corruption.method.m1Kicker",
+                      "The approach described in the Supreme Court ruling cited by the CIAA",
+                    ),
+                    inputLabel: t("research.corruption.method.m1In", "Original purchase price"),
+                    inputValue: t("research.corruption.method.m1InV", "Rs 20 lakh"),
+                    outputLabel: t("research.corruption.method.outLabel", "Amount potentially unexplained"),
+                    outputValue: t("research.corruption.method.m1OutV", "Rs 20 lakh"),
+                    body: t(
+                      "research.corruption.method.m1Body",
+                      "The calculation focuses on the amount originally invested in acquiring the property. If the source of that investment cannot be established, the unexplained amount is the original investment, not the later increase in the property's value.",
+                    ),
+                  },
+                  {
+                    key: "current",
+                    title: t("research.corruption.method.m2", "Method 2: Current property value"),
+                    kicker: t(
+                      "research.corruption.method.m2Kicker",
+                      "The alternative calculation, which would include appreciation in the property's value",
+                    ),
+                    inputLabel: t("research.corruption.method.m2In", "Current market value"),
+                    inputValue: t("research.corruption.method.m2InV", "Rs 1 crore"),
+                    outputLabel: t("research.corruption.method.outLabel", "Amount potentially unexplained"),
+                    outputValue: t("research.corruption.method.m2OutV", "Rs 1 crore"),
+                    body: t(
+                      "research.corruption.method.m2Body",
+                      "This approach would count the property's present value, including the Rs 80 lakh increase since purchase. Under the principle quoted in the CIAA's report, that increase should not automatically be treated as illegally acquired merely because the original investment's source was unproven.",
+                    ),
+                  },
+                ]}
+                illustrativeNote={t(
+                  "research.corruption.method.note",
+                  "The figures above are illustrative only, not amounts from an actual case. They also simplify the calculation: the actual legal assessment depends on the property, the evidence and the applicable law.",
+                )}
+              />
+            </>
+          }
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.gQuestion",
+            "How often do the CIAA's charge calculations follow the Supreme Court's rule, and how much do those calculations differ from the amounts upheld by the courts?",
+          )}
+        >
+          <p>
+            {t(
+              "research.corruption.gap.gBody",
+              "The current case register does not record, side by side, the amount claimed by the CIAA, the amount upheld by the court, and the calculation method used for each. Without those fields, it is not possible to systematically check whether charge sheets apply the Supreme Court's principle or to measure the difference between the Commission's claims and the courts' findings.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.gBody2",
+              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences. These figures show a difference in outcomes, but they do not explain it. An acquittal does not by itself establish that the property was valued incorrectly, and a difference between the amount claimed and the amount upheld does not necessarily mean the calculation method was wrong.",
+              {
+                n: n(ieDecided),
+                acq: n(ie ? ie.acquitted : 0),
+                conv: pct(ieDecided ? ((ie?.convicted ?? 0) / ieDecided) * 100 : 0),
+                avg: pct1(fullOnlyAvg),
+              },
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.gBody3",
+              "The annual reports document disputes over income, property valuation and the amount alleged. But the available data cannot show how often the Commission's calculations departed from the Supreme Court's principle, how large any differences were, or whether calculation disputes contributed to acquittals. A case-level record of the original investment, the property's value at the relevant stages, the amount claimed, the amount upheld and the court's reasons for any reduction would make that comparison possible.",
+            )}
+          </p>
         </GapCallout>
 
         <GapCallout
           label={t("research.corruption.gap.jLabel", "Accountability gap · Financial claims")}
           title={t(
             "research.corruption.gap.jTitle",
-            "Rs {{bn}} billion claimed. The amount upheld by courts remains untracked.",
+            "The Commission claimed Rs {{bn}} billion. How much did courts uphold?",
             { bn: bigoTotalBn.toFixed(1) },
           )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.unresolved", "What remains unresolved")}
-          shows={t(
+          stat={`Rs ${bigoTotalBn.toFixed(1)} billion`}
+          statCaption={t(
             "research.corruption.gap.jEstablishes",
-            "Across the {{n}} fiscal years for which the annual reports provide a total, the Commission claimed Rs {{bn}} billion in बिगो — the alleged loss or unlawful gain in its charge sheets. Three other reports in the {{all}}-year period provide no annual total, and the {{lastFy}} report has not yet been published. Annual claims varied from Rs {{lo}} billion to Rs {{hi}} billion; a small number of large cases can substantially affect the yearly total.",
-            {
-              n: bigoDemanded.length,
-              bn: bigoTotalBn.toFixed(1),
-              all: corpus.fiscalYears.length,
-              lastFy: "2082/83",
-              lo: (Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
-              hi: (Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
-            },
+            "Across the {{n}} fiscal years for which annual reports provide totals, the Commission claimed Rs {{bn}} billion in बिगो, the amount it alleged as loss or unlawful gain in its charge sheets.",
+            { n: bigoDemanded.length, bn: bigoTotalBn.toFixed(1) },
           )}
-          fix={t(
-            "research.corruption.gap.jNeeded",
-            "The case register does not systematically record the amount claimed alongside the amount upheld by the court. A verdict alone does not provide a consistent basis for calculating the difference across cases.",
+          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          shows={
+            <p>
+              {t(
+                "research.corruption.gap.jEstablishes2",
+                "Three other reports within the {{all}}-year period provide no annual total, and the report for {{missingFy}} has not yet been published. Annual claims ranged from Rs {{lo}} billion to Rs {{hi}} billion, with a small number of large cases potentially driving much of the yearly variation.",
+                {
+                  all: corpus.fiscalYears.length,
+                  missingFy: "2082/83",
+                  lo: (Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
+                  hi: (Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
+                },
+              )}
+            </p>
+          }
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.jQuestion",
+            "How much of the amount claimed by the Commission is ultimately upheld by the courts?",
           )}
         >
-          {t(
-            "research.corruption.gap.jBody",
-            "In one judgment examined in full, a claim involving 1,491 grams of gold was reduced to about 58 grams. That example illustrates why claimed and upheld amounts need to be recorded separately, but it does not establish how frequently such reductions occur. Without comparable figures for both amounts, the overall difference between the Commission's claims and court outcomes cannot be measured.",
-          )}
+          <p>
+            {t(
+              "research.corruption.gap.jBody",
+              "The case register does not systematically record the amount claimed alongside the amount upheld in court. A judgment alone also does not provide a consistent basis for comparing these amounts across cases.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.jBody2",
+              "One judgment examined in full shows why the distinction matters: a claim involving 1,491 grams of gold was reduced to about 58 grams. This illustrates how sharply a court's finding can differ from the original claim in an individual case, but it does not show how common such reductions are.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.jBody3",
+              "Without comparable case-level figures for the amount claimed and the amount upheld, the overall difference cannot be measured. Recording both would make it possible to assess how much of the Commission's financial claims withstand judicial scrutiny.",
+            )}
+          </p>
         </GapCallout>
+        <GapCallout
+          label={t("research.corruption.gap.kLabel", "Accountability gap · Filing patterns")}
+          title={t(
+            "research.corruption.gap.kTitle",
+            "The Commission files more cases in {{peak}} than in any other month. The reason remains unclear.",
+            { peak: peakMonth.name },
+          )}
+          stat={t("research.corruption.gap.kStat", "{{v}} cases", { v: peakMonth.mean.toFixed(1) })}
+          statCaption={t(
+            "research.corruption.gap.kEstablishes",
+            "The Commission filed an average of {{peakMean}} cases in {{peak}}, the final month of Nepal's fiscal year, compared with {{otherMean}} per month across the other eleven months. That is nearly {{morePct}} more. The pattern is based on {{years}} complete fiscal years, although the number of filings varies considerably from year to year.",
+            {
+              peak: peakMonth.name,
+              peakMean: peakMonth.mean.toFixed(1),
+              otherMean: otherMonthMean.toFixed(1),
+              morePct: `${Math.round((peakMonth.mean / otherMonthMean - 1) * 100)}%`,
+              years: corpus.fiscalYears.length,
+            },
+          )}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.kQuestion",
+            "Why are so many cases filed in the final month of the fiscal year?",
+          )}
+        >
+          <p>
+            {t(
+              "research.corruption.gap.kBody",
+              "The figures show when cases reach the court, but not what drives the timing. The concentration could reflect investigation schedules, administrative deadlines or other factors, but the published records do not establish which, if any, explains the pattern.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.gap.kBody2",
+              "The Commission's annual reports do not explain the year-end increase. Data showing when investigations were completed and prosecution decisions were made would help establish whether the concentration reflects the timing of completed investigations or a pattern in when cases are brought to court.",
+            )}
+          </p>
+        </GapCallout>
+
       </Block>
     </>
   );

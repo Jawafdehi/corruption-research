@@ -334,36 +334,36 @@ export default function Appeals() {
           label={t("research.corruption.gap.dLabel", "Accountability gap · Appeals")}
           title={t("research.corruption.gap.dTitle", "Half the appeals end in silence")}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t("research.corruption.gap.dQuestion", "What happened to the appeals that carry no recorded outcome?")}
           shows={t(
             "research.corruption.gap.dEstablishes",
             "{{no}} of the {{total}} appeals traced — {{pct}} — carry no recorded outcome anywhere.",
             { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: pct1(untracedPct) },
-          )}
-          fix={t(
-            "research.corruption.gap.dNeeded",
-            "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
           )}
         >
           {t(
             "research.corruption.gap.dBody",
             "This is the filing system, not the bench. Trial and appeal cases sit in one table with nothing joining them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and failing both, by matching defendant names. Anything unresolved is counted as unknown — never as a case nobody appealed, and never as a loss.",
           )}
+          <p>
+            {t(
+            "research.corruption.gap.dNeeded",
+            "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
+          )}
+          </p>
         </GapCallout>
 
         <GapCallout
           label={t("research.corruption.gap.eLabel", "Accountability gap · Recovery")}
           title={t("research.corruption.gap.eTitle", "The money is where the record simply stops")}
           showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          fixLabel={t("research.corruption.gap.fix", "What would close it")}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t("research.corruption.gap.eQuestion", "How much of the money a court orders repaid is ever collected?")}
           shows={t(
             "research.corruption.gap.eEstablishes",
             "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
             { bn: ciaa.damagesClaimedYearBn },
-          )}
-          fix={t(
-            "research.corruption.gap.eNeeded",
-            "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
           )}
         >
           <>
@@ -375,6 +375,12 @@ export default function Appeals() {
               {t("research.corruption.gap.eCite", "CIAA annual reports")}
             </Cite>
           </>
+          <p>
+            {t(
+            "research.corruption.gap.eNeeded",
+            "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
+          )}
+          </p>
         </GapCallout>
       </Block>
     </>
