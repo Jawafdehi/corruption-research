@@ -472,7 +472,7 @@ export default function Prosecution() {
           <p>
             {t(
               "research.corruption.gap.gBody2",
-              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences — one of the lowest rates of any charge. These figures show a difference in outcomes. They do not prove the method caused it: an acquittal can turn on the evidence, the source of funds or any number of things, and this dataset records a verdict but never the method behind the figure.",
+              "Of {{n}} decided illicit-enrichment cases in the dataset, {{acq}} ended in acquittal. The charge was upheld in full in {{conv}} of cases, compared with {{avg}} across all offences — well below the court-wide rate, though not the lowest of any charge. These figures show a difference in outcomes. They do not prove the method caused it: an acquittal can turn on the evidence, the source of funds or any number of things, and this dataset records a verdict but never the method behind the figure.",
               {
                 n: n(ieDecided),
                 acq: n(ie ? ie.acquitted : 0),
