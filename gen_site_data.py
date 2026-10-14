@@ -226,6 +226,9 @@ def build() -> dict:
             "bands": _rows(f["duration"]),
             **{k: _num(v) for k, v in f["duration_summary"].iloc[0].items()},
         },
+        # Supreme Court appeal delay. Only the settled-cohort summary crosses into the
+        # site; the censoring rule that produces it lives in corpus_data, not here.
+        "supremeDelay": cd.supreme_appeal_delay(),
         "crossCheck": _cross_check(),
         "assumptions": _rows(f["assumptions"]),
         "leadership": _rows(f["leadership"]),

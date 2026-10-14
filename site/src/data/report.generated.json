@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-12T03:17:15+00:00",
-    "commit": "82dd8c5",
+    "generatedAt": "2026-10-14T05:14:43+00:00",
+    "commit": "4e01733",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1270,6 +1270,19 @@
     "measured": 2738,
     "median_months": 15,
     "pending": 76
+  },
+  "supremeDelay": {
+    "fromYear": 2008,
+    "toYear": 2018,
+    "cohorts": 11,
+    "decided": 1029,
+    "medianYears": 4.53,
+    "p75Years": 6.29,
+    "overSixPct": 34.4,
+    "slowestYear": 2017,
+    "slowestYears": 6.27,
+    "registeredAll": 2976,
+    "withoutVerdict": 1462
   },
   "crossCheck": {
     "sourceAgreement": [

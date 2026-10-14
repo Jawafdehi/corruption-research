@@ -346,6 +346,80 @@ def load_investigation_appeal_decisions():
     """
     return pd.read_csv(DATA / "ciaa_appeal_decisions.csv")
 
+def load_supreme_appeal_duration():
+    """One row per corruption appeal registered at the Supreme Court: when it was
+    registered, when it was decided, and the days between.
+
+    Built from the public court-case API (`/api/courtcases/?court=supreme&type=भ्रष्टाचार`),
+    which carries `registration_date_ad` and `verdict_date_ad` per case. Only `-CR-`
+    numbers are kept: `RV` (review), `CF`/`NF` (writs) and the rest answer a different
+    question than "how long did an appeal against a corruption verdict take".
+
+    `days_to_decision` is blank where no verdict date is recorded. Undecided rows are
+    KEPT rather than dropped, because the share of a cohort still open is the only way
+    to tell whether that cohort's median can be trusted.
+    """
+    return pd.read_csv(DATA / "supreme_appeal_duration.csv")
+
+
+#: A cohort is read as settled once this share of its appeals has been decided...
+SUPREME_SETTLED_MIN = 0.85
+#: ...and once it is big enough that a median means anything.
+SUPREME_SETTLED_MIN_N = 20
+
+
+def supreme_appeal_delay():
+    """Time from appeal registered to appeal decided, over the cohorts complete enough
+    to carry an honest median.
+
+    ⚠️ RIGHT-CENSORED, and the censoring runs one way. Barely half the registered
+    appeals carry a verdict date, and the ones still open are by definition the slow
+    ones, so a median taken over decided cases alone UNDERSTATES the wait. Recent
+    cohorts are worst affected -- 2025 shows a median under 13 months off five decided
+    appeals -- so only years at least SUPREME_SETTLED_MIN decided are used, and the
+    site quotes nothing computed outside this function.
+
+    The median is pooled over the settled cohorts' own cases, not averaged across their
+    medians: a mean of medians is not a median of anything.
+    """
+    df = load_supreme_appeal_duration()
+    per_year = (
+        df.assign(decided=df["days_to_decision"].notna())
+        .groupby("registration_year_ad")
+        .agg(registered=("case_number", "size"), decided=("decided", "sum"))
+        .reset_index()
+    )
+    per_year["share_decided"] = per_year["decided"] / per_year["registered"]
+    settled_years = per_year[
+        (per_year["share_decided"] >= SUPREME_SETTLED_MIN)
+        & (per_year["registered"] >= SUPREME_SETTLED_MIN_N)
+    ]["registration_year_ad"].tolist()
+
+    pool = df[
+        df["registration_year_ad"].isin(settled_years) & df["days_to_decision"].notna()
+    ]["days_to_decision"]
+
+    by_year = df[df["days_to_decision"].notna()].groupby("registration_year_ad")[
+        "days_to_decision"
+    ].median()
+    slowest = by_year.loc[settled_years].idxmax()
+
+    yrs = lambda d: round(float(d) / 365.25, 2)
+    return {
+        "fromYear": int(min(settled_years)),
+        "toYear": int(max(settled_years)),
+        "cohorts": len(settled_years),
+        "decided": int(pool.size),
+        "medianYears": yrs(pool.median()),
+        "p75Years": yrs(pool.quantile(0.75)),
+        "overSixPct": round(float((pool / 365.25 > 6).mean() * 100), 1),
+        "slowestYear": int(slowest),
+        "slowestYears": yrs(by_year.loc[slowest]),
+        "registeredAll": int(len(df)),
+        "withoutVerdict": int(df["days_to_decision"].isna().sum()),
+    }
+
+
 def load_appeals():
     """Trial outcome x who appealed x Supreme Court outcome, as counts of CASES.
 
