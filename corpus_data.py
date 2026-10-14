@@ -253,6 +253,216 @@ def load_dataset(refresh=False):
 def load_assumptions():
     return pd.read_csv(DATA / "assumptions.csv")
 
+def load_complaint_disposal():
+    """What happened to EVERY complaint on the Commission's books in a year.
+
+    The companion to `load_disposals`, one level up: that one covers only
+    complaints that finished a detailed investigation, which is the Commission's
+    second filter. This covers the whole workload, so the first filter is visible
+    too -- and the first filter is where most complaints actually end.
+
+    `total_complaints` is the year's full workload (carried-in + newly registered),
+    which is the denominator the report itself uses for its disposal table. Two
+    columns in here count different events and must never be differenced:
+    `to_investigation` is complaints SENT to detailed investigation during the
+    year; `investigations_completed` is investigations FINISHED during the year,
+    which mostly began earlier.
+    """
+    return pd.read_csv(DATA / "ciaa_complaint_disposal.csv")
+
+def load_disposals():
+    """What the Commission decided to do with complaints that COMPLETED a detailed investigation.
+
+    This is the second of the Commission's two filters and the one its own funnel chart does not
+    isolate: the first closes complaints at प्रारम्भिक छानबिन (preliminary screening), before anyone
+    investigates; this one closes them as तामेली AFTER a full investigation has been carried out.
+    One row per fiscal year, transcribed from the decision table (or reconciled Venn figure) printed
+    in that year's annual report, with the figure number and report URL on the row.
+
+    Built by `extract_ciaa_series.py`, which parses the decision table out of each report's own
+    committed text conversion rather than re-typing it, and refuses to write a series that disagrees
+    with the filing counts the reports state in prose. FY2073/74–2081/82; the four earlier years are
+    skipped because they report the same material as a subject-area cross-tab with a different row
+    vocabulary. `extract_ciaa_series.KNOWN_GAPS` records which year is missing and why.
+
+    `filed` is मुद्दा दायर on the same table. It counts DECISIONS to prosecute in that year, which is
+    not the same unit as the court register's filings, so the two are never differenced here.
+
+    The superseded hand-compiled `ciaa_disposals.csv` is kept as a regression check, not as data.
+    It is reconciled here on every overlapping year, with one documented correction: it recorded
+    2078/79 `filed` as 115, which is the report's "मुद्दा दायर गने मात्र" row. The comparable figure
+    is 130, adding the 9 "दायर and सुझाव both" and 6 "दायर and लेखी पठाउने both" decisions — exactly
+    the treatment its own तामेली figure already used (559 + 68 + 10 = 637).
+    """
+    df = pd.read_csv(DATA / "ciaa_investigation_decisions.csv").rename(columns={"total_actions": "total"})
+    _reconcile_disposals(df)
+    return df
+
+
+#: Years where the superseded compilation differs from the parsed series, and why. Any OTHER
+#: disagreement is a regression and raises.
+_DISPOSAL_CORRECTIONS = {("2078/79", "filed"): "counted the 'prosecute only' row, excluding combined decisions",
+                         ("2078/79", "total"): "totalled all Commission decisions, not post-investigation actions"}
+
+
+def _reconcile_disposals(df):
+    legacy = pd.read_csv(DATA / "ciaa_disposals.csv").set_index("fy")
+    cur = df.set_index("fy")
+    drift = [f"{fy} {col}: {legacy.loc[fy, col]} -> {cur.loc[fy, col]}"
+             for fy in legacy.index if fy in cur.index
+             for col in ("filed", "tameli", "total")
+             if legacy.loc[fy, col] != cur.loc[fy, col] and (fy, col) not in _DISPOSAL_CORRECTIONS]
+    if drift:
+        raise ValueError("parsed disposal series drifted from the committed compilation:\n  " + "\n  ".join(drift))
+
+
+def load_bigo_demanded():
+    """Total बिगो claimed across every case the Commission filed, by fiscal year.
+
+    From "कुल बिगो मागदाबी" in each annual report -- the prose sentence where the
+    report states it, otherwise that table's own जम्मा row.
+
+    ⚠️ CLAIMED, never upheld and never recovered. The court register carries no amount
+    at all, so this figure has no counterpart to be differenced against; it is the
+    opening claim and nothing on this site turns it into a loss.
+
+    Seven of the nine years are cross-checked in `extract_ciaa_series`: the case count
+    on the बिगो table must equal `filed` from the decisions table, which is printed in
+    a different chapter of the same report.
+    """
+    return pd.read_csv(DATA / "ciaa_bigo_demanded.csv")
+
+
+def load_investigation_appeal_decisions():
+    """Whether the Commission decided to APPEAL a Special Court verdict, by fiscal year.
+
+    From the "आयोगका निर्णयहरूको विवरण" table (पुनरावेदन गने / पुनरावेदन नगने). These are the
+    Commission's own decisions, taken at its meetings, so they are the upstream half of the appeal
+    story the Supreme Court register shows downstream.
+
+    ⚠️ A decision is not a filing, and the year a decision is taken is not the year the underlying
+    verdict was handed down. These counts are NOT a denominator for any appeal-success rate, and
+    they are not differenced against the Supreme Court figures anywhere.
+    """
+    return pd.read_csv(DATA / "ciaa_appeal_decisions.csv")
+
+def load_supreme_appeal_duration():
+    """One row per corruption appeal registered at the Supreme Court: when it was
+    registered, when it was decided, and the days between.
+
+    Built from the public court-case API (`/api/courtcases/?court=supreme&type=भ्रष्टाचार`),
+    which carries `registration_date_ad` and `verdict_date_ad` per case. Only `-CR-`
+    numbers are kept: `RV` (review), `CF`/`NF` (writs) and the rest answer a different
+    question than "how long did an appeal against a corruption verdict take".
+
+    `days_to_decision` is blank where no verdict date is recorded. Undecided rows are
+    KEPT rather than dropped, because the share of a cohort still open is the only way
+    to tell whether that cohort's median can be trusted.
+    """
+    return pd.read_csv(DATA / "supreme_appeal_duration.csv")
+
+
+#: A cohort is read as settled once this share of its appeals has been decided...
+SUPREME_SETTLED_MIN = 0.85
+#: ...and once it is big enough that a median means anything.
+SUPREME_SETTLED_MIN_N = 20
+
+
+def supreme_appeal_delay():
+    """Time from appeal registered to appeal decided, over the cohorts complete enough
+    to carry an honest median.
+
+    ⚠️ RIGHT-CENSORED, and the censoring runs one way. Barely half the registered
+    appeals carry a verdict date, and the ones still open are by definition the slow
+    ones, so a median taken over decided cases alone UNDERSTATES the wait. Recent
+    cohorts are worst affected -- 2025 shows a median under 13 months off five decided
+    appeals -- so only years at least SUPREME_SETTLED_MIN decided are used, and the
+    site quotes nothing computed outside this function.
+
+    The median is pooled over the settled cohorts' own cases, not averaged across their
+    medians: a mean of medians is not a median of anything.
+    """
+    df = load_supreme_appeal_duration()
+    per_year = (
+        df.assign(decided=df["days_to_decision"].notna())
+        .groupby("registration_year_ad")
+        .agg(registered=("case_number", "size"), decided=("decided", "sum"))
+        .reset_index()
+    )
+    per_year["share_decided"] = per_year["decided"] / per_year["registered"]
+    settled_years = per_year[
+        (per_year["share_decided"] >= SUPREME_SETTLED_MIN)
+        & (per_year["registered"] >= SUPREME_SETTLED_MIN_N)
+    ]["registration_year_ad"].tolist()
+
+    pool = df[
+        df["registration_year_ad"].isin(settled_years) & df["days_to_decision"].notna()
+    ]["days_to_decision"]
+
+    by_year = df[df["days_to_decision"].notna()].groupby("registration_year_ad")[
+        "days_to_decision"
+    ].median()
+    slowest = by_year.loc[settled_years].idxmax()
+
+    yrs = lambda d: round(float(d) / 365.25, 2)
+
+    # Mean alongside median, because "median" is a word a general reader skips. They
+    # are 0.19 years apart over a near-symmetric distribution (skew 0.31), so the page
+    # can say "about four and a half years whichever way you take it" and drop the
+    # jargon without swapping in a worse statistic.
+    mean_years = yrs(pool.mean())
+
+    # The recent picture, keyed on the year an appeal was DECIDED rather than
+    # registered. That cut is not censored -- every appeal with a decision date has a
+    # known duration -- so it is the only way to say anything about now. It measures
+    # how old the appeals being cleared are, NOT how long one filed today will take,
+    # and the page says so.
+    decided_rows = df[df["days_to_decision"].notna()].copy()
+    decided_rows["decided_year"] = pd.to_datetime(decided_rows["decided_ad"]).dt.year
+
+    def window(lo, hi):
+        g = decided_rows[
+            (decided_rows["decided_year"] >= lo) & (decided_rows["decided_year"] <= hi)
+        ]["days_to_decision"]
+        return {"from": lo, "to": hi, "appeals": int(g.size), "medianYears": yrs(g.median())}
+
+    latest_year = int(decided_rows["decided_year"].max())
+    recent = window(latest_year - 3, latest_year)
+    earlier = window(latest_year - 11, latest_year - 7)
+
+    # The spread, not a trend. Cohort medians bounce around (1.9 years for 2009, 6.3
+    # for 2017) and drawing them as a line would assert a direction the series does
+    # not have. How long the 1,029 decided appeals actually took does not.
+    edges = [(0, 2), (2, 4), (4, 6), (6, 8), (8, 99)]
+    years = pool / 365.25
+    bands = [
+        {
+            "from": lo,
+            "to": hi,
+            "cases": int(((years >= lo) & (years < hi)).sum()),
+        }
+        for lo, hi in edges
+    ]
+
+    return {
+        "bands": bands,
+        "meanYears": mean_years,
+        "recent": recent,
+        "earlier": earlier,
+        "fromYear": int(min(settled_years)),
+        "toYear": int(max(settled_years)),
+        "cohorts": len(settled_years),
+        "decided": int(pool.size),
+        "medianYears": yrs(pool.median()),
+        "p75Years": yrs(pool.quantile(0.75)),
+        "overSixPct": round(float((pool / 365.25 > 6).mean() * 100), 1),
+        "slowestYear": int(slowest),
+        "slowestYears": yrs(by_year.loc[slowest]),
+        "registeredAll": int(len(df)),
+        "withoutVerdict": int(df["days_to_decision"].isna().sum()),
+    }
+
+
 def load_appeals():
     """Trial outcome x who appealed x Supreme Court outcome, as counts of CASES.
 
@@ -436,6 +646,51 @@ def _transform(cases, hearings, entities, assumptions):
     f["outcome_by_charge"] = pd.DataFrame([r for r, _ in sorted(oc, key=lambda x: -x[1])],
         columns=["charge_en", "charge_ne", "convicted", "partial", "acquitted"])
 
+    # ------------------------------------------------------------ defendant grain
+    #
+    # Every rate above counts CASES. A case is not a person: the register carries one
+    # verdict per docket but anywhere from one to 249 accused under it. Counting the
+    # accused as well as the dockets is what makes the case-grain rates interpretable,
+    # because the two grains do not move together -- the charges that convict most
+    # reliably are also the ones tried one defendant at a time.
+    #
+    # These are defendant ROWS (positions on a charge sheet), not resolved people. Only
+    # ~5% of entity rows carry an `nes_id`, so the same individual charged in two cases
+    # counts twice and cannot be deduplicated without guessing from names, which collide
+    # heavily in Nepali. A row is one accusation, which is the honest unit here.
+    INSTITUTIONAL = {"नेपाल सरकार", "अ.दु.अ.आ."}  # the prosecutor, mis-filed on the defence side
+    acc = entities[(entities.side == "defendant") & (~entities.name.isin(INSTITUTIONAL))]
+    per_case = acc.groupby("case_number").size().rename("accused")
+
+    # Inner join on `hc`, so the defendant grain inherits the same exclusions as every
+    # case-grain rate: court-published verdicts only, model-derived ones left out.
+    verdict_of = hc.drop_duplicates("case_number").set_index("case_number").decision_type
+    dgrain = pd.concat([per_case, verdict_of.rename("verdict")], axis=1, join="inner")
+    dgrain = dgrain.join(corpus.set_index("case_number").family)
+
+    by_verdict = dgrain.groupby("verdict").agg(cases=("accused", "size"), accused=("accused", "sum"))
+    f["defendants_by_verdict"] = (
+        by_verdict.reindex(list(DECISIONS)).fillna(0).astype(int)
+        .rename_axis("verdict").reset_index())
+
+    # Accused per case by charge family -- the mechanism behind the charge-rate spread
+    # already on the Prosecution page: fake-credential cases are one-defendant documentary
+    # cases, illegal-benefit cases are large multi-accused ones.
+    dfam = dgrain.groupby("family").agg(cases=("accused", "size"), accused=("accused", "sum"))
+    f["defendants_by_charge"] = pd.DataFrame(
+        [[*FAM[k], int(dfam.loc[k, "cases"]), int(dfam.loc[k, "accused"])]
+         for k in FAM if k not in DROP_FAM and k in dfam.index],
+        columns=["charge_en", "charge_ne", "cases", "accused"])
+
+    f["defendant_summary"] = pd.DataFrame([{
+        "accused_rows": int(len(acc)),
+        "distinct_names": int(acc.name.nunique()),
+        "largest_case": int(per_case.max()),
+        "single_accused_cases_pct": round(100 * (per_case == 1).mean(), 1),
+        "accused_in_decided": int(dgrain.accused.sum()),
+        "decided_cases": int(len(dgrain)),
+    }])
+
     fams = ["bribery", "fake", "embezzlement", "benefit", "loss", "other"]
     ct = corpus.case_type.fillna("")
     cm = corpus[~ct.str.contains("निवेदन") & ~ct.str.contains("सम्पत्ति शुद्धीकरण")].copy()
@@ -485,6 +740,36 @@ def _transform(cases, hearings, entities, assumptions):
         crows.append([fyv, int(grp.is_decided.sum()), int(pend.sum()), med])
     f["cohorts"] = pd.DataFrame(sorted(r for r in crows if r[0] and "/" in str(r[0])),
         columns=["fiscal_year", "decided", "pending", "median_months"])
+
+    # How long a DECIDED case took, filing to verdict, across the whole corpus.
+    #
+    # Decided cases only, and that is a real limitation rather than a tidy-up: a case
+    # still open has no duration yet, so the slowest matters are precisely the ones
+    # missing from this distribution. It therefore describes cases that finished, NOT
+    # how long a case filed today should be expected to take, and the pending count is
+    # carried alongside so the exclusion stays visible.
+    all_months = []
+    for y, m, rm in zip(coh[coh.is_decided & coh.vyear.notna()].vyear,
+                        coh[coh.is_decided & coh.vyear.notna()].vmonth,
+                        coh[coh.is_decided & coh.vyear.notna()].reg_m):
+        d = (int(y) * 12 + int(m)) - rm
+        if d >= 0:                      # a verdict dated before filing is a bad row, not a fast case
+            all_months.append(d)
+    pend_total = int((coh.case_status.notna()
+                      & (coh.case_status.astype(str).str.strip() != "")
+                      & ~coh.is_decided).sum())
+    buckets = [("within 1 year", lambda d: d <= 12),
+               ("1 to 2 years", lambda d: 12 < d <= 24),
+               ("2 to 3 years", lambda d: 24 < d <= 36),
+               ("over 3 years", lambda d: d > 36)]
+    f["duration"] = pd.DataFrame(
+        [[label, sum(1 for d in all_months if test(d))] for label, test in buckets],
+        columns=["band", "cases"])
+    f["duration_summary"] = pd.DataFrame([[
+        len(all_months),
+        round(statistics.median(all_months), 1) if all_months else 0.0,
+        pend_total,
+    ]], columns=["measured", "median_months", "pending"])
 
     hcj = hc[hc.judge_names.fillna("").str.len() > 0]
     pb = hcj.groupby(["judge_names", "decision_type"])["case_number"].nunique().unstack(fill_value=0)
@@ -565,6 +850,12 @@ def _transform(cases, hearings, entities, assumptions):
         # by the court. EXCLUDED from every rate above; surfaced so the exclusion
         # is visible and quantified instead of being a silent filter.
         ["verdicts_model_derived_excluded", int(hc_derived.case_number.nunique())],
+        # Cases the register marks फैसला but for which it publishes no disposition at
+        # all -- not even one a model could read. They carry no hearing row, so they
+        # are invisible to every rate here and, unlike the model-derived ones above,
+        # there is nothing to exclude: the outcome simply is not recorded anywhere.
+        ["verdicts_no_disposition", int(
+            len(set(corpus[corpus.is_decided].case_number) - set(hc.case_number) - set(hc_derived.case_number)))],
         ["corpus_defendant_rows", int(drow["rows"])],
         ["corpus_distinct_defendants", int(drow["distinct"])],
         ["corpus_defendants_resolved", int(drow["resolved"])],

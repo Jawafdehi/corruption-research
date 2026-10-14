@@ -187,3 +187,32 @@ export function verdictYearRates(rows: readonly VerdictYearRow[]): VerdictYearRa
 
 /** Decided cases carrying a clean disposition — the conviction-rate denominator. */
 export const decidedClean = (o: OutcomeCounts): number => o.convicted + o.partial + o.acquitted;
+
+/**
+ * One fiscal year of the Commission's decisions on complaints that COMPLETED a
+ * detailed investigation — its second filter, after preliminary screening.
+ * Transcribed per year from the annual report's own decision table; `figure` and
+ * `source_url` name the table each row came from.
+ */
+export type Disposal = {
+  fy: string;
+  /**
+   * Complaints that finished a detailed investigation that year, where the report
+   * states it. Deliberately NOT the denominator for `tameli`: a single file can draw
+   * more than one decision, which the FY2080/81 report says outright, so the actions
+   * total runs above this. `null` where the report does not print it.
+   */
+  investigated: number | null;
+  /** मुद्दा दायर — decisions to prosecute. A decision count, not a register filing. */
+  filed: number;
+  /** तामेली — closed after a full investigation had been carried out. */
+  tameli: number;
+  /** The table's own total, so every share divides two numbers printed together. */
+  total: number;
+  figure: string;
+  source_url: string;
+  note: string;
+};
+
+/** Share (%) closed as tameli after a completed detailed investigation. */
+export const tameliPct = (d: Disposal): number => (d.total ? (d.tameli / d.total) * 100 : 0);

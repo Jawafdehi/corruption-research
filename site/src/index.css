@@ -36,6 +36,16 @@
     --input: 215 20% 88%;
     --ring: 217 62% 14%;
 
+    /* Card face. Defined at the root as well as in `.theme-editorial`, so a
+       component carrying this token still renders when it is used outside
+       the editorial section. */
+    --surface: 60 10.3% 94.3%;
+    /* Same reasoning as --surface above: the court green was defined only inside
+       .theme-editorial, so a chart using it on Court outcomes or Appeals rendered
+       its court-coloured band as nothing at all. Defined here too; the editorial
+       section is still free to override it. */
+    --court: 152 26% 24%;       /* #2E4E3F deep green */
+
     --radius: 0.5rem;
 
     --alert: 25 95% 53%;
@@ -58,6 +68,27 @@
      and a changing value does not reflow the text around it. */
   .font-mono {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer base {
+  /* Editorial palette, scoped to the Highlights section only.
+     Redefining the tokens here rather than at :root means the charts inside pick
+     up the warmer scheme through the same `hsl(var(--token))` references they
+     already use, while every other section keeps the shared jawafdehi.org theme.
+     Promote these to :root if the whole page should move to this palette. */
+  .theme-editorial {
+    --background: 44 33% 94%;   /* #F4F1E9 warm off-white */
+    --foreground: 0 0% 10%;     /* #191919 ink */
+    --accent: 5 56% 36%;        /* #8E3028 muted crimson */
+    --accent-foreground: 44 33% 97%;
+    --border: 40 16% 82%;       /* #D9D4CA stone */
+    --muted-foreground: 30 8% 38%;
+    --surface: 44 30% 97%;      /* near-white card face */
+    /* Second institutional accent, for the courts, so the judiciary never reads
+       as a department of the Commission. 8.2:1 on paper. */
+    --court: 152 26% 24%;       /* #2E4E3F deep green */
+    --card: 44 30% 97%;
   }
 }
 

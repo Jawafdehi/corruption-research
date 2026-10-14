@@ -1,17 +1,90 @@
 import { useTranslation } from "react-i18next";
 
-import { Block, Body, Caveat, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile } from "@/components/layout/Prose";
-import { REPORT, decidedClean } from "@/data/research-corruption";
+import { useFormat } from "@/lib/format";
 
-const n = (v: number) => v.toLocaleString();
-const pct1 = (v: number) => `${v.toFixed(1)}%`;
+import {
+  AppealAsymmetry,
+  type AppealSide,
+} from "@/components/research/AppealAsymmetry";
+import { AppealDecisions } from "@/components/research/AppealDecisions";
+import { GapCallout } from "@/components/research/GapCallout";
+import {
+  Block,
+  Body,
+  Caveat,
+  Cite,
+  Eyebrow,
+  Figure,
+  Lede,
+  Ref,
+  SectionHeading,
+  StatRow,
+  StatTile,
+  Unknown,
+} from "@/components/layout/Prose";
+import { CITATIONS, REPORT, decidedClean } from "@/data/research-corruption";
 
 export default function Appeals() {
   const { t } = useTranslation();
-  const { appeals, outcome } = REPORT;
+  const { n, pct1 } = useFormat();
+  const { appeals, ciaa, outcome, supremeDelay } = REPORT;
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
+
+  // The Commission's own appeal/decline decisions, from the annual reports. Kept
+  // entirely separate from the Supreme Court figures: a decision has no denominator
+  // here, so these are only ever reported as counts and a share of each other.
+  const ciaaDecisions = appeals.ciaaDecisions;
+  const decisionTotals = ciaaDecisions.reduce(
+    (a, r) => ({
+      appealed: a.appealed + r.appealed,
+      notAppealed: a.notAppealed + r.notAppealed,
+      minAppealed: Math.min(a.minAppealed, r.appealed),
+      maxAppealed: Math.max(a.maxAppealed, r.appealed),
+    }),
+    { appealed: 0, notAppealed: 0, minAppealed: Infinity, maxAppealed: 0 },
+  );
+  const declinedTotal = decisionTotals.appealed + decisionTotals.notAppealed;
+  const declinedPct = declinedTotal
+    ? (decisionTotals.notAppealed / declinedTotal) * 100
+    : 0;
+
+  // Share of established appeals we cannot follow to an end. Surfaced before the
+  // rates, not after, so the 36.6%/1.1% pair is read as the decided minority.
+  const untracedPct = appeals.appeals
+    ? (appeals.no_outcome / appeals.appeals) * 100
+    : 0;
+
+  // Both sides over their FULL established count, so the unresolved share stays
+  // inside the figure rather than becoming a caption nobody reads.
+  const asymSides: AppealSide[] = [
+    {
+      key: "defendant",
+      who: t(
+        "research.corruption.appeals.whoDefendant",
+        "The convicted person",
+      ),
+      stake: t(
+        "research.corruption.appeals.stakeDefendant",
+        "a win clears them",
+      ),
+      appeals: appeals.defendant.appeals,
+      decided: appeals.defendant.decided,
+      reversed: appeals.defendant.reversed,
+    },
+    {
+      key: "commission",
+      who: t("research.corruption.appeals.whoCommission", "The Commission"),
+      stake: t(
+        "research.corruption.appeals.stakeCommission",
+        "a win converts an acquittal into a conviction",
+      ),
+      appeals: appeals.commission.appeals,
+      decided: appeals.commission.decided,
+      reversed: appeals.commission.reversed,
+    },
+  ];
 
   // Only appeals that have actually been decided move a rate. The undecided ones are
   // shown as a gap, never projected into the headline.
@@ -24,7 +97,10 @@ export default function Appeals() {
   const sides = [
     {
       key: "defendant",
-      who: t("research.corruption.appeals.whoDefendant", "The convicted person"),
+      who: t(
+        "research.corruption.appeals.whoDefendant",
+        "The convicted person",
+      ),
       ...appeals.defendant,
     },
     {
@@ -37,9 +113,17 @@ export default function Appeals() {
   return (
     <>
       <Block>
-        <Eyebrow>{t("research.corruption.appeals.eyebrow", "What survives the Supreme Court")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.appeals.eyebrow",
+            "What survives the Supreme Court",
+          )}
+        </Eyebrow>
         <SectionHeading>
-          {t("research.corruption.appeals.title", "The Special Court's acquittals are close to final. Its convictions are not.")}
+          {t(
+            "research.corruption.appeals.title",
+            "The Special Court's acquittals are close to final. Its convictions are not.",
+          )}
         </SectionHeading>
         <Lede>
           {t(
@@ -50,17 +134,114 @@ export default function Appeals() {
         </Lede>
 
         <StatRow>
-          <StatTile value={n(appeals.appeals)} label={t("research.corruption.appeals.tileTotal", "Appeals established")} note={t("research.corruption.appeals.tileTotalNote", "a floor, not a complete count")} />
-          <StatTile value={n(appeals.decided)} label={t("research.corruption.appeals.tileDecided", "Appeals decided")} note={t("research.corruption.appeals.tileDecidedNote", "the only ones that move a rate")} />
-          <StatTile tone="accent" value={pct1(appeals.defendant.pct)} label={t("research.corruption.appeals.tileDefendant", "Defendant appeals won")} note={t("research.corruption.appeals.tileDefendantNote", "full reversals, of decided")} />
-          <StatTile value={pct1(appeals.commission.pct)} label={t("research.corruption.appeals.tileCommission", "Commission appeals won")} note={t("research.corruption.appeals.tileCommissionNote", "full reversals, of decided")} />
+          <StatTile
+            value={n(appeals.appeals)}
+            label={t(
+              "research.corruption.appeals.tileTotal",
+              "Appeals established",
+            )}
+            note={t(
+              "research.corruption.appeals.tileTotalNote",
+              "a floor, not a complete count",
+            )}
+          />
+          <StatTile
+            value={n(appeals.decided)}
+            label={t(
+              "research.corruption.appeals.tileDecided",
+              "Appeals decided",
+            )}
+            note={t(
+              "research.corruption.appeals.tileDecidedNote",
+              "the only ones that move a rate",
+            )}
+          />
+          <StatTile
+            tone="accent"
+            value={pct1(appeals.defendant.pct)}
+            label={t(
+              "research.corruption.appeals.tileDefendant",
+              "Defendant appeals won",
+            )}
+            note={t(
+              "research.corruption.appeals.tileDefendantNote",
+              "full reversals, of decided",
+            )}
+          />
+          <StatTile
+            value={pct1(appeals.commission.pct)}
+            label={t(
+              "research.corruption.appeals.tileCommission",
+              "Commission appeals won",
+            )}
+            note={t(
+              "research.corruption.appeals.tileCommissionNote",
+              "full reversals, of decided",
+            )}
+          />
         </StatRow>
+
+        <Unknown
+          title={t(
+            "research.corruption.appeals.tracingTitle",
+            "Read every rate below against this: {{pct}} of these appeals have no recorded outcome",
+            { pct: pct1(untracedPct) },
+          )}
+        >
+          {t(
+            "research.corruption.appeals.tracingBody",
+            "{{no}} of {{total}} established appeals carry no outcome anywhere in the record, so every rate below is computed over the {{decided}} that do. The missing half is a filing problem rather than a judicial one. And a case with no appeal on record is one we cannot follow, never one that nobody appealed.",
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              decided: n(appeals.decided),
+            },
+          )}
+        </Unknown>
       </Block>
 
       <Block>
         <Figure
-          title={t("research.corruption.appeals.tableTitle", "Who appeals, and who wins")}
-          subtitle={t("research.corruption.appeals.tableSubtitle", "Full reversals as a share of appeals that have been decided.")}
+          id="appeal-asymmetry"
+          title={t(
+            "research.corruption.appeals.asymTitle",
+            "Every appeal each side brought, and how far it got",
+          )}
+          subtitle={t(
+            "research.corruption.appeals.asymSubtitle",
+            "Each bar is one side's full set of established appeals, not just the decided ones. The hatched band is the part of the record that stops.",
+          )}
+          caption={t(
+            "research.corruption.appeals.asymCaption",
+            "A full reversal means opposite things on the two rows, which is the point of splitting them: when the convicted person wins they walk, and when the Commission wins an acquittal becomes a conviction. Rates underneath are computed over decided appeals only. Counts are of cases, never of people.",
+          )}
+        >
+          <AppealAsymmetry
+            sides={asymSides}
+            wonLabel={t("research.corruption.appeals.won", "succeeded of")}
+            ofDecidedLabel={t(
+              "research.corruption.appeals.ofDecided",
+              "{{won}} of {{decided}} decided appeals succeeded",
+            )}
+            untraced={{ missing: appeals.no_outcome, total: appeals.appeals }}
+            untracedLabel={t(
+              "research.corruption.appeals.untraced",
+              "Not counted above: {{missing}} of the {{total}} appeals traced ({{pct}}) have no recorded outcome.",
+            )}
+          />
+        </Figure>
+      </Block>
+
+      <Block>
+        <Figure
+          title={t(
+            "research.corruption.appeals.tableTitle",
+            "Who appeals, and who wins",
+          )}
+          subtitle={t(
+            "research.corruption.appeals.tableSubtitle",
+            "Full reversals as a share of appeals that have been decided.",
+          )}
           caption={t(
             "research.corruption.appeals.tableCaption",
             "Direction matters: a reversal means the opposite thing depending on who brought the appeal. Where the convicted person appeals, a reversal clears them; where the Commission appeals an acquittal, a reversal convicts. Appeals with no recorded outcome are excluded from these rates rather than counted as losses.",
@@ -69,19 +250,37 @@ export default function Appeals() {
           <table className="w-full min-w-[32rem] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th scope="col" className="py-2 pr-4 font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colWho", "Appealed by")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colFiled", "Appeals")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colDecided", "Decided")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
-                  {t("research.corruption.appeals.colReversed", "Full reversals")}
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.colReversed",
+                    "Full reversals",
+                  )}
                 </th>
-                <th scope="col" className="py-2 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colRate", "Rate")}
                 </th>
               </tr>
@@ -89,13 +288,24 @@ export default function Appeals() {
             <tbody className="font-mono">
               {sides.map((s) => (
                 <tr key={s.key} className="border-b border-border/60">
-                  <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
+                  <th
+                    scope="row"
+                    className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                  >
                     {s.who}
                   </th>
-                  <td className="py-3 pr-4 text-right text-muted-foreground">{n(s.appeals)}</td>
-                  <td className="py-3 pr-4 text-right text-muted-foreground">{n(s.decided)}</td>
-                  <td className="py-3 pr-4 text-right text-foreground">{n(s.reversed)}</td>
-                  <td className="py-3 text-right font-semibold text-foreground">{pct1(s.pct)}</td>
+                  <td className="py-3 pr-4 text-right text-muted-foreground">
+                    {n(s.appeals)}
+                  </td>
+                  <td className="py-3 pr-4 text-right text-muted-foreground">
+                    {n(s.decided)}
+                  </td>
+                  <td className="py-3 pr-4 text-right text-foreground">
+                    {n(s.reversed)}
+                  </td>
+                  <td className="py-3 text-right font-semibold text-foreground">
+                    {pct1(s.pct)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -116,9 +326,126 @@ export default function Appeals() {
         </Body>
       </Block>
 
+      {/*
+        How long the appeal itself takes. It sits here rather than with the win rates
+        because it answers a different question — not who prevails, but when anyone
+        finds out. Figures come from corpus_data.supreme_appeal_delay, which keeps only
+        the registration years at least 85% decided; every number here is a floor,
+        since an appeal still open is by definition a slow one.
+      */}
+      <Block id="appeal-duration">
+        <Eyebrow>
+          {t(
+            "research.corruption.delay.eyebrow",
+            "How long the last stage takes",
+          )}
+        </Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.delay.title",
+            "An appeal takes a median of {{median}} years to be decided",
+            { median: supremeDelay.medianYears.toFixed(1) },
+          )}
+        </SectionHeading>
+        <Lede>
+          {t(
+            "research.corruption.delay.lede2",
+            "Measured from the day an appeal is registered at the Supreme Court to the day it is decided — not from the complaint, and not from the trial. Of {{n}} corruption appeals registered between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over}} took more than six. The average is {{mean}} years, so the figure holds whichever way it is taken.",
+            {
+              n: n(supremeDelay.decided),
+              from: supremeDelay.fromYear,
+              to: supremeDelay.toYear,
+              median: supremeDelay.medianYears.toFixed(1),
+              over: pct1(supremeDelay.overSixPct),
+              mean: supremeDelay.meanYears.toFixed(1),
+            },
+          )}
+        </Lede>
+
+        <Body>
+          {t(
+            "research.corruption.delay.trend2",
+            "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. Keyed on the year of decision rather than of registration — the one window that is not cut short by appeals still outstanding, since every appeal with a decision date has a known duration. It measures how old the appeals now being cleared are, not how long one filed today will take. The stage before it has moved the other way: time to a Special Court verdict has been falling.",
+            {
+              eFrom: supremeDelay.earlier.from,
+              eTo: supremeDelay.earlier.to,
+              eMed: supremeDelay.earlier.medianYears.toFixed(1),
+              rFrom: supremeDelay.recent.from,
+              rTo: supremeDelay.recent.to,
+              rMed: supremeDelay.recent.medianYears.toFixed(1),
+            },
+          )}{" "}
+          <Ref to="/court-outcomes#pace-and-backlog">
+            {t(
+              "research.corruption.delay.trendRef",
+              "Pace at the Special Court",
+            )}
+          </Ref>
+        </Body>
+
+        <StatRow>
+          <StatTile
+            value={t("research.corruption.delay.tileMedian", "{{v}} yr", {
+              v: supremeDelay.medianYears.toFixed(1),
+            })}
+            label={t(
+              "research.corruption.delay.tileMedianLabel",
+              "Median wait",
+            )}
+            note={t(
+              "research.corruption.delay.tileMedianNote",
+              "half of appeals took longer",
+            )}
+          />
+          <StatTile
+            value={pct1(supremeDelay.overSixPct)}
+            label={t(
+              "research.corruption.delay.tileOverLabel",
+              "Took more than six years",
+            )}
+            note={t(
+              "research.corruption.delay.tileOverNote",
+              "of the {{n}} decided appeals",
+              {
+                n: n(supremeDelay.decided),
+              },
+            )}
+          />
+          <StatTile
+            value={n(supremeDelay.withoutVerdict)}
+            label={t(
+              "research.corruption.delay.tileOpenLabel",
+              "No recorded decision",
+            )}
+            note={t(
+              "research.corruption.delay.tileOpenNote",
+              "of {{all}} appeals registered",
+              {
+                all: n(supremeDelay.registeredAll),
+              },
+            )}
+          />
+        </StatRow>
+
+        <Caveat>
+          {t(
+            "research.corruption.delay.caveat",
+            "Every figure here is a floor, not an estimate of the true wait. Barely half the appeals registered carry a recorded decision, and an appeal still open is by definition a slow one — so leaving them out pulls the median down. Registration years after {{to}} are excluded for the same reason: too few of their appeals have been decided for a median to mean anything. The slowest intake measured, {{slowest}}, ran to {{slowestYears}} years.",
+            {
+              to: supremeDelay.toYear,
+              slowest: supremeDelay.slowestYear,
+              slowestYears: supremeDelay.slowestYears.toFixed(1),
+            },
+          )}
+        </Caveat>
+      </Block>
+
       <Block>
         <Figure
-          title={t("research.corruption.appeals.effectTitle", "The conviction rate, before and after appeal")}
+          title={t(
+            "research.corruption.appeals.effectTitle",
+            "The conviction rate, before and after appeal",
+          )}
           subtitle={t(
             "research.corruption.appeals.effectSubtitle",
             "Applying only the appeals already decided — nothing is projected onto the ones still outstanding.",
@@ -126,37 +453,73 @@ export default function Appeals() {
           caption={t(
             "research.corruption.appeals.effectCaption",
             "{{lost}} convictions were lost on appeal and {{gained}} acquittals were overturned into convictions, a net change of {{net}} cases. Both rows use the same denominator as the trial-court figures, so they are directly comparable.",
-            { lost: n(appeals.lost), gained: n(appeals.gained), net: n(appeals.net) },
+            {
+              lost: n(appeals.lost),
+              gained: n(appeals.gained),
+              net: n(appeals.net),
+            },
           )}
         >
           <table className="w-full min-w-[28rem] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th scope="col" className="py-2 pr-4 font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colMeasure", "Measure")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colTrial", "At trial")}
                 </th>
-                <th scope="col" className="py-2 text-right font-medium text-muted-foreground">
-                  {t("research.corruption.appeals.colAfter", "After appeals decided")}
+                <th
+                  scope="col"
+                  className="py-2 text-right font-medium text-muted-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.colAfter",
+                    "After appeals decided",
+                  )}
                 </th>
               </tr>
             </thead>
             <tbody className="font-mono">
               <tr className="border-b border-border/60">
-                <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
-                  {t("research.corruption.appeals.rowIncl", "Convicted, in whole or part")}
+                <th
+                  scope="row"
+                  className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.rowIncl",
+                    "Convicted, in whole or part",
+                  )}
                 </th>
-                <td className="py-3 pr-4 text-right text-muted-foreground">{pct1(trialIncl)}</td>
-                <td className="py-3 text-right font-semibold text-foreground">{pct1(afterIncl)}</td>
+                <td className="py-3 pr-4 text-right text-muted-foreground">
+                  {pct1(trialIncl)}
+                </td>
+                <td className="py-3 text-right font-semibold text-foreground">
+                  {pct1(afterIncl)}
+                </td>
               </tr>
               <tr>
-                <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
-                  {t("research.corruption.appeals.rowFull", "Convicted in full")}
+                <th
+                  scope="row"
+                  className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.rowFull",
+                    "Convicted in full",
+                  )}
                 </th>
-                <td className="py-3 pr-4 text-right text-muted-foreground">{pct1(trialFull)}</td>
-                <td className="py-3 text-right font-semibold text-foreground">{pct1(afterFull)}</td>
+                <td className="py-3 pr-4 text-right text-muted-foreground">
+                  {pct1(trialFull)}
+                </td>
+                <td className="py-3 text-right font-semibold text-foreground">
+                  {pct1(afterFull)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -166,16 +529,186 @@ export default function Appeals() {
           {t(
             "research.corruption.appeals.caveat",
             "This is a floor on the eventual effect, not a settled number. {{no}} of the {{total}} mapped appeals — {{pct}}% — carry no recorded outcome yet, and the figures above simply leave them out. A blank is also not a finding: where no appeal is recorded it means none has been established, not that none exists.",
-            { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: Math.round(undecidedShare) },
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              pct: Math.round(undecidedShare),
+            },
           )}
         </Caveat>
+      </Block>
+
+      <Block>
+        <Eyebrow>
+          {t(
+            "research.corruption.appealDecisions.eyebrow",
+            "Before the appeal exists",
+          )}
+        </Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.appealDecisions.title",
+            "The Commission decides whether a loss gets appealed at all, and often decides not to",
+          )}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.appealDecisions.body",
+            "Everything above counts appeals that were filed. But a verdict only reaches the Supreme Court if the Commission's own meeting votes to take it there, and that meeting records both answers. Across the {{years}} fiscal years where the annual reports print the decision table, it voted to appeal {{yes}} times and voted not to appeal {{no}} times — declining in {{noPct}} of the decisions it took.",
+            {
+              years: n(ciaaDecisions.length),
+              yes: n(decisionTotals.appealed),
+              no: n(decisionTotals.notAppealed),
+              noPct: pct1(declinedPct),
+            },
+          )}
+        </Body>
+
+        <Figure
+          title={t(
+            "research.corruption.appealDecisions.chartTitle",
+            "The Commission's own decisions on whether to appeal, by fiscal year",
+          )}
+          subtitle={t(
+            "research.corruption.appealDecisions.chartSubtitle",
+            "Decisions recorded at Commission meetings. Above the line: appeal. Below: do not appeal.",
+          )}
+          caption={
+            <>
+              {t(
+                "research.corruption.appealDecisions.chartCaption",
+                "A decision is not a filing, and the year a decision is taken is not the year the verdict was handed down, so these counts are never divided into the Supreme Court figures above and no success rate is built from them. The reports print no reason for any individual decision not to appeal, and no case number, so a declined appeal cannot be traced to the verdict it concerned.",
+              )}{" "}
+              {ciaaDecisions.map((d, i) => (
+                <span key={d.fy}>
+                  {i > 0 ? " · " : ""}
+                  {d.fy}
+                </span>
+              ))}
+            </>
+          }
+        >
+          <AppealDecisions
+            rows={ciaaDecisions}
+            appealedLabel={t(
+              "research.corruption.appealDecisions.yes",
+              "Decided to appeal",
+            )}
+            declinedLabel={t(
+              "research.corruption.appealDecisions.no",
+              "Decided not to appeal",
+            )}
+          />
+        </Figure>
 
         <Body>
           {t(
-            "research.corruption.appeals.mapping",
-            "Trial and appeal cases are stored without any link between them, so the pairing had to be built — from the Commission's own register where it prints both case numbers, from Supreme Court judgments naming the trial case, and otherwise by matching defendant names. It is a curated first version, audited at roughly 98% precision on a sample, and the direction of every reversal was checked three separate ways before any figure here was published.",
+            "research.corruption.appealDecisions.body2",
+            "The two series move independently. Decisions to appeal swing from {{min}} in one year to {{max}} in another, while decisions to decline stay far steadier. A reader should resist the obvious inference: the reports do not say how many eligible verdicts there were in any year, so a low appeal count may mean the Commission lost less, declined more, or simply met less often.",
+            {
+              min: n(decisionTotals.minAppealed),
+              max: n(decisionTotals.maxAppealed),
+            },
           )}
         </Body>
+
+        <Unknown
+          title={t(
+            "research.corruption.appealDecisions.unknownTitle",
+            "What would make this readable",
+          )}
+        >
+          {t(
+            "research.corruption.appealDecisions.unknownBody",
+            "The number of verdicts eligible for appeal in each year, which would turn these counts into a rate, and a reason recorded against each decision not to appeal. Neither appears in any annual report. Without them, the clearest statement the evidence supports is that declining to appeal is a routine outcome rather than a rare one.",
+          )}
+        </Unknown>
+
+        <GapCallout
+          label={t(
+            "research.corruption.gap.dLabel",
+            "Accountability gap · Appeals",
+          )}
+          title={t(
+            "research.corruption.gap.dTitle",
+            "Half the appeals end in silence",
+          )}
+          showsLabel={t(
+            "research.corruption.gap.shows",
+            "What the record shows",
+          )}
+          questionLabel={t("research.corruption.gap.open", "The open question")}
+          question={t(
+            "research.corruption.gap.dQuestion",
+            "What happened to the appeals that carry no recorded outcome?",
+          )}
+          shows={t(
+            "research.corruption.gap.dEstablishes",
+            "{{no}} of the {{total}} appeals traced — {{pct}} — carry no recorded outcome anywhere.",
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              pct: pct1(untracedPct),
+            },
+          )}
+        >
+          {t(
+            "research.corruption.gap.dBody",
+            "This is the filing system, not the bench. Trial and appeal cases sit in one table with nothing joining them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and failing both, by matching defendant names. Anything unresolved is counted as unknown — never as a case nobody appealed, and never as a loss.",
+          )}
+          <p>
+            {t(
+              "research.corruption.gap.dNeeded",
+              "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
+            )}
+          </p>
+        </GapCallout>
+
+        <div id="recovery-gap" className="scroll-mt-6">
+          <GapCallout
+            label={t(
+              "research.corruption.gap.eLabel",
+              "Accountability gap · Recovery",
+            )}
+            title={t(
+              "research.corruption.gap.eTitle",
+              "The money is where the record simply stops",
+            )}
+            showsLabel={t(
+              "research.corruption.gap.shows",
+              "What the record shows",
+            )}
+            questionLabel={t(
+              "research.corruption.gap.open",
+              "The open question",
+            )}
+            question={t(
+              "research.corruption.gap.eQuestion",
+              "How much of the money a court orders repaid is ever collected?",
+            )}
+            shows={t(
+              "research.corruption.gap.eEstablishes",
+              "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
+              { bn: ciaa.damagesClaimedYearBn },
+            )}
+          >
+            <>
+              {t(
+                "research.corruption.gap.eBody",
+                "Every other stage has an institution that publishes something about it. This one has none, which is why it is the only stage with no number against it anywhere on this site. A finding on बिगो is a legal determination; no published source says whether a rupee followed it. Read the blank as missing, not as zero.",
+              )}{" "}
+              <Cite href={CITATIONS.ciaaReports}>
+                {t("research.corruption.gap.eCite", "CIAA annual reports")}
+              </Cite>
+            </>
+            <p>
+              {t(
+                "research.corruption.gap.eNeeded",
+                "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
+              )}
+            </p>
+          </GapCallout>
+        </div>
       </Block>
     </>
   );

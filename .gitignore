@@ -13,3 +13,6 @@ ciaa-annual-reports/*/figures/pages/
 # `dataset/` before every publish, so the committed copy never decides what ships.
 site/node_modules/
 site/dist/
+
+# Scratch: downloaded source documents and conversions, kept out of the repo.
+work/

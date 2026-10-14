@@ -7,6 +7,7 @@ import {
 } from "recharts";
 
 import { useMounted } from "@/hooks/useMounted";
+import { useFormat } from "@/lib/format";
 
 export interface DonutSegment {
   key: string;
@@ -29,6 +30,7 @@ export function StatusDonut({
   centerValue: string;
   centerLabel: string;
 }) {
+  const { n } = useFormat();
   const total = segments.reduce((sum, s) => sum + s.value, 0);
   const data = segments.filter((s) => s.value > 0);
   const mounted = useMounted();
@@ -38,7 +40,7 @@ export function StatusDonut({
   }
 
   const ariaLabel = `${centerLabel}: ${centerValue}. ${data
-    .map((s) => `${s.label} ${s.value.toLocaleString()}`)
+    .map((s) => `${s.label} ${n(s.value)}`)
     .join(", ")}`;
 
   return (
@@ -67,7 +69,7 @@ export function StatusDonut({
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number, name) => [value.toLocaleString(), name]}
+              formatter={(value: number, name) => [n(value), name]}
               contentStyle={{
                 borderRadius: 8,
                 border: "1px solid hsl(var(--border))",
@@ -96,7 +98,7 @@ export function StatusDonut({
               />
               <span className="text-muted-foreground">{s.label}</span>
               <span className="ml-auto font-mono font-semibold tabular-nums text-foreground">
-                {s.value.toLocaleString()}
+                {n(s.value)}
               </span>
               <span className="w-10 text-right font-mono tabular-nums text-muted-foreground">
                 {pct}%
