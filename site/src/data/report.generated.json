@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-14T05:14:43+00:00",
-    "commit": "4e01733",
+    "generatedAt": "2026-10-14T09:46:52+00:00",
+    "commit": "1fb0f15",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1272,6 +1272,33 @@
     "pending": 76
   },
   "supremeDelay": {
+    "bands": [
+      {
+        "from": 0,
+        "to": 2,
+        "cases": 305
+      },
+      {
+        "from": 2,
+        "to": 4,
+        "cases": 159
+      },
+      {
+        "from": 4,
+        "to": 6,
+        "cases": 211
+      },
+      {
+        "from": 6,
+        "to": 8,
+        "cases": 286
+      },
+      {
+        "from": 8,
+        "to": 99,
+        "cases": 68
+      }
+    ],
     "fromYear": 2008,
     "toYear": 2018,
     "cohorts": 11,
