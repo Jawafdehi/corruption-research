@@ -1,15 +1,15 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-09T02:37:43+00:00",
-    "commit": "c2b75df",
+    "generatedAt": "2026-10-14T12:14:49+00:00",
+    "commit": "c2be6d3",
     "dataset": {
       "cases": {
         "rows": 2949,
-        "modified": "2026-08-04"
+        "modified": "2026-10-09"
       },
       "hearings": {
         "rows": 2824,
-        "modified": "2026-08-04"
+        "modified": "2026-10-09"
       },
       "entities": {
         "rows": 12547,
@@ -56,6 +56,7 @@
     "convictionFullOnlyPct": 45
   },
   "verdictsModelDerivedExcluded": 69,
+  "verdictsNoDisposition": 46,
   "byCharge": [
     {
       "en": "Fake credential",
@@ -912,7 +913,416 @@
         "other_procedural": 2,
         "no_outcome_recorded": 315
       }
+    ],
+    "ciaaDecisions": [
+      {
+        "fy": "2075/76",
+        "appealed": 83,
+        "notAppealed": 10
+      },
+      {
+        "fy": "2076/77",
+        "appealed": 20,
+        "notAppealed": 7
+      },
+      {
+        "fy": "2077/78",
+        "appealed": 58,
+        "notAppealed": 27
+      },
+      {
+        "fy": "2078/79",
+        "appealed": 57,
+        "notAppealed": 63
+      },
+      {
+        "fy": "2079/80",
+        "appealed": 238,
+        "notAppealed": 72
+      },
+      {
+        "fy": "2080/81",
+        "appealed": 91,
+        "notAppealed": 76
+      },
+      {
+        "fy": "2081/82",
+        "appealed": 255,
+        "notAppealed": 72
+      }
     ]
+  },
+  "bigoDemanded": [
+    {
+      "fy": "2071/72",
+      "rs": 1394016071,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/eyIL96.pdf"
+    },
+    {
+      "fy": "2073/74",
+      "rs": 11521132530,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/4Gvb5l.pdf"
+    },
+    {
+      "fy": "2074/75",
+      "rs": 405559262,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/1548567688annual_report_207475.pdf"
+    },
+    {
+      "fy": "2075/76",
+      "rs": 4053763888.65,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf"
+    },
+    {
+      "fy": "2076/77",
+      "rs": 2536698268.5,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf"
+    },
+    {
+      "fy": "2077/78",
+      "rs": 1894735434,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/wbZQvp.pdf"
+    },
+    {
+      "fy": "2078/79",
+      "rs": 2792748100.11,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf"
+    },
+    {
+      "fy": "2079/80",
+      "rs": 1745216634.17,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/0wS8NV.pdf"
+    },
+    {
+      "fy": "2080/81",
+      "rs": 8390649407,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf"
+    },
+    {
+      "fy": "2081/82",
+      "rs": 6018472692,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf"
+    }
+  ],
+  "disposals": [
+    {
+      "fy": "2073/74",
+      "investigated": null,
+      "filed": 154,
+      "advice": 69,
+      "referred": 146,
+      "tameli": 270,
+      "held": 17,
+      "total": 709,
+      "figure": "तालिका २.४",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/4Gvb5l.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2074/75",
+      "investigated": 504,
+      "filed": 194,
+      "advice": 45,
+      "referred": 64,
+      "tameli": 202,
+      "held": 10,
+      "total": 526,
+      "figure": "अनुसूची- १६",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/1548567688annual_report_207475.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2075/76",
+      "investigated": 610,
+      "filed": 351,
+      "advice": 105,
+      "referred": 46,
+      "tameli": 137,
+      "held": 10,
+      "total": 653,
+      "figure": "तालिका २.५",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/vwdQnx.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2076/77",
+      "investigated": 687,
+      "filed": 441,
+      "advice": 150,
+      "referred": 23,
+      "tameli": 124,
+      "held": 9,
+      "total": 757,
+      "figure": "तालिका २.५",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf",
+      "note": "Table prints no जम्मा; the total is the sum of its own rows."
+    },
+    {
+      "fy": "2077/78",
+      "investigated": 478,
+      "filed": 114,
+      "advice": 88,
+      "referred": 11,
+      "tameli": 264,
+      "held": 5,
+      "total": 488,
+      "figure": "तालिका २.९",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/wbZQvp.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा."
+    },
+    {
+      "fy": "2078/79",
+      "investigated": 821,
+      "filed": 130,
+      "advice": 80,
+      "referred": 17,
+      "tameli": 637,
+      "held": 9,
+      "total": 914,
+      "figure": "तालिका २.१०",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/FeK7BV.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा. `filed` is 130 = 115 prosecute-only + 9 prosecute-and-advise + 6 prosecute-and-refer, matching the treatment तामेली already gets."
+    },
+    {
+      "fy": "2079/80",
+      "investigated": 878,
+      "filed": 162,
+      "advice": 58,
+      "referred": 5,
+      "tameli": 656,
+      "held": 27,
+      "total": 937,
+      "figure": "तालिका २.११",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/0wS8NV.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा."
+    },
+    {
+      "fy": "2080/81",
+      "investigated": 1050,
+      "filed": 201,
+      "advice": 131,
+      "referred": 12,
+      "tameli": 825,
+      "held": 18,
+      "total": 1187,
+      "figure": "तालिका २.10",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/Lg2RAw.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा."
+    },
+    {
+      "fy": "2081/82",
+      "investigated": 947,
+      "filed": 137,
+      "advice": 105,
+      "referred": 11,
+      "tameli": 794,
+      "held": 10,
+      "total": 1057,
+      "figure": "तालिका २.1५",
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf",
+      "note": "Row counts reconciled against the table's own printed जम्मा."
+    }
+  ],
+  "defendants": {
+    "accusedRows": 9552,
+    "distinctNames": 8319,
+    "largestCase": 249,
+    "singleAccusedCasesPct": 52.2,
+    "accusedInDecided": 8846,
+    "decidedCases": 2754,
+    "byVerdict": [
+      {
+        "verdict": "ठहर",
+        "cases": 1239,
+        "accused": 1975
+      },
+      {
+        "verdict": "आंशिक ठहर",
+        "cases": 450,
+        "accused": 3038
+      },
+      {
+        "verdict": "सफाई",
+        "cases": 1065,
+        "accused": 3833
+      }
+    ],
+    "byCharge": [
+      {
+        "en": "Bribery",
+        "ne": "रिसवत / घुस",
+        "cases": 915,
+        "accused": 1469
+      },
+      {
+        "en": "Fake credential",
+        "ne": "नक्कली प्रमाण पत्र",
+        "cases": 634,
+        "accused": 642
+      },
+      {
+        "en": "Embezzlement",
+        "ne": "रकम हिनामिना",
+        "cases": 375,
+        "accused": 1368
+      },
+      {
+        "en": "Loss to government",
+        "ne": "हानीनोक्सानी",
+        "cases": 167,
+        "accused": 972
+      },
+      {
+        "en": "Illicit enrichment",
+        "ne": "गैरकानूनी सम्पत्ति",
+        "cases": 95,
+        "accused": 259
+      },
+      {
+        "en": "Illegal benefit",
+        "ne": "गैरकानुनी लाभ",
+        "cases": 135,
+        "accused": 999
+      },
+      {
+        "en": "Money laundering",
+        "ne": "सम्पत्ति शुद्धीकरण",
+        "cases": 84,
+        "accused": 265
+      },
+      {
+        "en": "Irregularity",
+        "ne": "अनियमितता",
+        "cases": 130,
+        "accused": 763
+      },
+      {
+        "en": "Revenue leakage",
+        "ne": "राजश्व चुहावट",
+        "cases": 34,
+        "accused": 264
+      },
+      {
+        "en": "False statement",
+        "ne": "झुठ्ठा विवरण",
+        "cases": 60,
+        "accused": 275
+      },
+      {
+        "en": "Forged document",
+        "ne": "गलत लिखत",
+        "cases": 33,
+        "accused": 211
+      },
+      {
+        "en": "Govt land misregistration",
+        "ne": "सरकारी जग्गा",
+        "cases": 41,
+        "accused": 1098
+      },
+      {
+        "en": "Exam rigging",
+        "ne": "परीक्षा फेरबदल",
+        "cases": 26,
+        "accused": 152
+      }
+    ]
+  },
+  "complaintDisposal": [
+    {
+      "fy": "2081/82",
+      "total_complaints": 37026,
+      "carried_in": 8472,
+      "registered_new": 28554,
+      "to_investigation": 927,
+      "tameli": 17130,
+      "tameli_with_advice": 586,
+      "other_action": 11060,
+      "disposed": 29703,
+      "pending_out": 7323,
+      "investigations_completed": 947,
+      "inv_filed": 137,
+      "inv_tameli": 794,
+      "inv_held": 10,
+      "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf",
+      "note": "35th annual report. Screening/preliminary figures from तालिका २.१४ (जम्मा row): 927+17130+586+11060 = 29703 disposed, leaving 7323 carried forward. The detailed-investigation outcome is from बुँदा १३ of the summary: 947 investigations COMPLETED in the year, of which 137 filed, 794 tameli, 10 held. Note that `to_investigation` (927, sent) and `investigations_completed` (947, finished) are different events in the same year and must not be differenced."
+    }
+  ],
+  "duration": {
+    "bands": [
+      {
+        "band": "within 1 year",
+        "cases": 1140
+      },
+      {
+        "band": "1 to 2 years",
+        "cases": 837
+      },
+      {
+        "band": "2 to 3 years",
+        "cases": 462
+      },
+      {
+        "band": "over 3 years",
+        "cases": 299
+      }
+    ],
+    "measured": 2738,
+    "median_months": 15,
+    "pending": 76
+  },
+  "supremeDelay": {
+    "bands": [
+      {
+        "from": 0,
+        "to": 2,
+        "cases": 305
+      },
+      {
+        "from": 2,
+        "to": 4,
+        "cases": 159
+      },
+      {
+        "from": 4,
+        "to": 6,
+        "cases": 211
+      },
+      {
+        "from": 6,
+        "to": 8,
+        "cases": 286
+      },
+      {
+        "from": 8,
+        "to": 99,
+        "cases": 68
+      }
+    ],
+    "meanYears": 4.35,
+    "recent": {
+      "from": 2023,
+      "to": 2026,
+      "appeals": 804,
+      "medianYears": 5.41
+    },
+    "earlier": {
+      "from": 2015,
+      "to": 2019,
+      "appeals": 481,
+      "medianYears": 1.83
+    },
+    "fromYear": 2008,
+    "toYear": 2018,
+    "cohorts": 11,
+    "decided": 1029,
+    "medianYears": 4.53,
+    "p75Years": 6.29,
+    "overSixPct": 34.4,
+    "slowestYear": 2017,
+    "slowestYears": 6.27,
+    "registeredAll": 2976,
+    "withoutVerdict": 1462
   },
   "crossCheck": {
     "sourceAgreement": [

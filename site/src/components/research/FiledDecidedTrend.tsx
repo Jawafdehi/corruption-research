@@ -11,6 +11,7 @@ import {
 import { fyLabel } from "@/data/research-corruption";
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
+import { useFormat } from "@/lib/format";
 
 /**
  * Cases filed vs. decided, by fiscal year — the one genuinely temporal view.
@@ -30,6 +31,7 @@ export function FiledDecidedTrend({
   filedLabel: string;
   decidedLabel: string;
 }) {
+  const { fy, fyLong } = useFormat();
   const mounted = useMounted();
   const height = 260;
 
@@ -50,7 +52,7 @@ export function FiledDecidedTrend({
             dataKey="year"
             tickLine={false}
             axisLine={false}
-            tickFormatter={(y: number) => fyLabel(y).slice(2)}
+            tickFormatter={(y: number) => fy(y).slice(2)}
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <YAxis
@@ -60,7 +62,7 @@ export function FiledDecidedTrend({
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <Tooltip
-            labelFormatter={(y) => `FY ${fyLabel(Number(y))}`}
+            labelFormatter={(y) => fyLong(Number(y))}
             contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))", fontSize: 13 }}
             itemStyle={{ fontFamily: MONO_STACK }}
           />

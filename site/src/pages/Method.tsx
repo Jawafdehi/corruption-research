@@ -1,12 +1,14 @@
 import { useTranslation } from "react-i18next";
 
-import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
-import { CITATIONS, REPORT, fyLabel } from "@/data/research-corruption";
+import { useFormat } from "@/lib/format";
 
-const n = (v: number) => v.toLocaleString();
+import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading } from "@/components/layout/Prose";
+import { CITATIONS, REPORT, fyLabel, tameliPct } from "@/data/research-corruption";
+
 
 export default function Method() {
   const { t } = useTranslation();
+  const { n, pct1 } = useFormat();
   const { assumptions, corpus, crossCheck, entityResolution, provenance } = REPORT;
 
   const years = corpus.fiscalYears;
@@ -183,6 +185,66 @@ export default function Method() {
             "Money recovered after a conviction is not published by any institution and does not appear in the court record, so the final stage of accountability is absent here rather than measured as zero. Reasons for closing a complaint at intake are likewise unpublished case by case.",
           )}
         </Body>
+      </Block>
+
+      <Block>
+        <SectionHeading>
+          {t("research.corruption.method.disposalsTitle", "The post-investigation closure series")}
+        </SectionHeading>
+        <Body>
+          {t(
+            "research.corruption.method.disposalsBody",
+            "The Investigation section's closure series is parsed from the decision table in each annual report by a script in the data pack, rather than re-typed, so it can be re-derived and audited. One row per fiscal year, each carrying the table number and the report it came from, so any share can be checked against two numbers printed side by side in one table. On the chart itself, each fiscal year links to its own report.",
+          )}
+        </Body>
+        <Body>
+          {t(
+            "research.corruption.method.disposalsLimits",
+            "The series runs from FY2073/74 to FY2081/82. Every row is checked against either that table's own printed total or the filing count the report states in its text, and the script refuses to write a series that disagrees with either. FY2069/70 to FY2071/72 are left out because those reports present the same decisions as a subject-area cross-tab with different row labels, which is not the same measurement; FY2072/73 is absent from its own report, and the annex in the following report that claims to carry it reproduces FY2073/74's totals instead. The 'taken to court' column counts decisions to prosecute, which is a different unit from a case appearing in the court register — the two are never differenced.",
+          )}
+        </Body>
+        <div className="chart-scroll mt-6">
+          <table className="w-full min-w-[34rem] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <th className="py-2 pr-4 font-medium">
+                  {t("research.corruption.method.colFy", "Fiscal year")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colTameli", "Closed (तामेली)")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colTotal", "All decisions")}
+                </th>
+                <th className="py-2 pr-4 text-right font-medium">
+                  {t("research.corruption.method.colShare", "Share")}
+                </th>
+                <th className="py-2 font-medium">
+                  {t("research.corruption.method.colFigure", "Figure")}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {REPORT.disposals.map((d) => (
+                <tr key={d.fy} className="border-b border-border/60 last:border-0">
+                  <td className="py-3 pr-4 font-mono tabular-nums text-foreground">{d.fy}</td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-muted-foreground">
+                    {n(d.tameli)}
+                  </td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-muted-foreground">
+                    {n(d.total)}
+                  </td>
+                  <td className="py-3 pr-4 text-right font-mono tabular-nums text-foreground">
+                    {pct1(tameliPct(d))}
+                  </td>
+                  <td className="py-3 text-muted-foreground">
+                    <Cite href={d.source_url}>{d.figure}</Cite>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Block>
 
       <Block>

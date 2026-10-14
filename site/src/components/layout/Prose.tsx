@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Link } from "react-router-dom";
+
 import { cn } from "@/lib/utils";
 
 /** Small coloured label above a heading. */
@@ -26,8 +28,22 @@ export const Body = ({ children }: { children: ReactNode }) => (
 );
 
 /** A block of page, separated from its neighbours. */
-export const Block = ({ children, className }: { children: ReactNode; className?: string }) => (
-  <section className={cn("mt-12 first:mt-0 md:mt-16", className)}>{children}</section>
+/**
+ * `id` makes a section a link target. `scroll-mt` goes with it: landing with the
+ * heading flush against the viewport edge reads as a cropped page, not an anchor.
+ */
+export const Block = ({
+  children,
+  className,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+}) => (
+  <section id={id} className={cn("mt-12 first:mt-0 md:mt-16", id && "scroll-mt-6", className)}>
+    {children}
+  </section>
 );
 
 /**
@@ -40,13 +56,22 @@ export const Figure = ({
   subtitle,
   caption,
   children,
+  id,
 }: {
   title: string;
   subtitle?: string;
   caption?: ReactNode;
   children: ReactNode;
+  /** Makes this figure a link target. See Block for why scroll-mt travels with it. */
+  id?: string;
 }) => (
-  <figure className="mt-8 rounded-lg border border-border bg-card/40 p-4 md:p-6">
+  <figure
+    id={id}
+    className={cn(
+      "mt-8 rounded-lg border border-border bg-card/40 p-4 md:p-6",
+      id && "scroll-mt-6",
+    )}
+  >
     <figcaption className="mb-4">
       <h3 className="font-display text-lg font-semibold leading-snug text-foreground md:text-xl">
         {title}
@@ -101,13 +126,100 @@ export const Caveat = ({ children }: { children: ReactNode }) => (
 );
 
 /** An outbound link to the record a figure rests on. */
+/**
+ * A source, cited. Dotted underline on purpose: it marks the thing a claim rests on,
+ * and a reader scanning for evidence should be able to tell a citation from a
+ * cross-reference without reading either.
+ */
 export const Cite = ({ href, children }: { href: string; children: ReactNode }) => (
   <a
     href={href}
-    className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+    className="text-accent/90 underline decoration-accent/40 decoration-dotted underline-offset-2 transition-colors hover:text-accent hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     target="_blank"
     rel="noreferrer"
   >
     {children}
   </a>
+);
+
+/**
+ * A cross-reference to another part of this research, in the middle of a sentence.
+ *
+ * Solid underline against Cite's dotted one, so the two kinds of link are
+ * distinguishable at a glance: this one keeps you inside the research, that one takes
+ * you to the document underneath it.
+ */
+export const Ref = ({ to, children }: { to: string; children: ReactNode }) => (
+  <Link
+    to={to}
+    className="font-medium text-accent underline decoration-accent/45 underline-offset-2 transition-colors hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+  >
+    {children}
+  </Link>
+);
+
+/**
+ * One verified finding, built for the ten-second scan: the number first, then the
+ * claim, then the single sentence that says what it means, then the way in to the
+ * evidence. Reading only the stat and the headline should leave you with something
+ * true — if a finding needs its caveat to avoid being misread, the caveat belongs
+ * in `meaning`, not further down the page.
+ */
+export const Finding = ({
+  stat,
+  statNote,
+  headline,
+  meaning,
+  action,
+}: {
+  stat: string;
+  statNote: string;
+  headline: string;
+  meaning: string;
+  action?: ReactNode;
+}) => (
+  <article className="flex flex-col gap-3 border-t border-border py-6 md:flex-row md:gap-8 md:py-7">
+    <div className="md:w-56 md:shrink-0">
+      <p className="font-mono text-3xl font-semibold leading-none text-accent md:text-4xl">
+        {stat}
+      </p>
+      <p className="mt-2 text-xs leading-5 text-muted-foreground">{statNote}</p>
+    </div>
+    <div className="md:flex-1">
+      <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
+        {headline}
+      </h3>
+      <p className="mt-2 max-w-2xl text-sm leading-6 text-foreground/80 md:text-base md:leading-7">
+        {meaning}
+      </p>
+      {action ? <p className="mt-3 text-sm">{action}</p> : null}
+    </div>
+  </article>
+);
+
+/**
+ * The scope line under the title. An MP reading a rate needs to know what it is a
+ * rate *of* before the first chart, not in the methodology section.
+ */
+export const ScopeBar = ({ items }: { items: { label: string; value: string }[] }) => (
+  <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3 border-y border-border py-4">
+    {items.map((it) => (
+      <div key={it.label}>
+        <dt className="text-xs uppercase tracking-wide text-muted-foreground">{it.label}</dt>
+        <dd className="mt-0.5 font-mono text-sm font-medium text-foreground">{it.value}</dd>
+      </div>
+    ))}
+  </dl>
+);
+
+/**
+ * An explicit "the data does not answer this" block. Distinct from `Caveat`, which
+ * qualifies a figure that exists; this marks a question we cannot answer at all, so
+ * a reader does not take its absence for a zero.
+ */
+export const Unknown = ({ title, children }: { title: string; children: ReactNode }) => (
+  <aside className="mt-8 rounded-lg border border-dashed border-border bg-muted/30 p-4">
+    <p className="text-sm font-semibold text-foreground">{title}</p>
+    <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{children}</p>
+  </aside>
 );

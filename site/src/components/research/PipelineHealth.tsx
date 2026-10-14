@@ -12,6 +12,7 @@ import {
 import { fyLabel } from "@/data/research-corruption";
 import { useMounted } from "@/hooks/useMounted";
 import { MONO_STACK } from "@/lib/data-quality";
+import { useFormat } from "@/lib/format";
 
 export type PipelinePoint = {
   year: number;
@@ -44,6 +45,7 @@ export function PipelineHealth({
   provisionalLabel: string;
   height?: number;
 }) {
+  const { fy, fyLong } = useFormat();
   const mounted = useMounted();
   if (!mounted) return <div className="w-full" style={{ height }} />;
 
@@ -60,7 +62,7 @@ export function PipelineHealth({
             dataKey="year"
             tickLine={false}
             axisLine={false}
-            tickFormatter={(y: number) => fyLabel(y).slice(2)}
+            tickFormatter={(y: number) => fy(y).slice(2)}
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <YAxis
@@ -79,7 +81,7 @@ export function PipelineHealth({
             tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
           />
           <Tooltip
-            labelFormatter={(y) => `FY ${fyLabel(Number(y))}`}
+            labelFormatter={(y) => fyLong(Number(y))}
             contentStyle={{ borderRadius: 8, border: "1px solid hsl(var(--border))", fontSize: 13 }}
             itemStyle={{ fontFamily: MONO_STACK }}
           />
