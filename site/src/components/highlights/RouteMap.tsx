@@ -137,7 +137,7 @@ export function RouteMap({
                 />
 
                 <h3
-                  className="flex items-baseline justify-between gap-3 border-b px-4 py-2.5 pl-5 md:px-5 md:pl-6"
+                  className="border-b px-4 py-2.5 pl-5 md:px-5 md:pl-6"
                   style={{
                     borderColor: `color-mix(in srgb, ${colour} 16%, transparent)`,
                     background: `linear-gradient(to right, color-mix(in srgb, ${colour} 9%, transparent), transparent 70%)`,
@@ -148,11 +148,6 @@ export function RouteMap({
                     style={{ color: colour }}
                   >
                     {phase.label}
-                  </span>
-                  <span className="shrink-0 font-mono text-[0.6rem] tabular-nums text-muted-foreground">
-                    {phase.steps.length > 1
-                      ? `${phase.steps[0].n}–${phase.steps[phase.steps.length - 1].n}`
-                      : phase.steps[0].n}
                   </span>
                 </h3>
 
@@ -232,7 +227,9 @@ export function RouteMap({
                                   aria-hidden="true"
                                   className={
                                     "font-mono text-[0.6rem] leading-none transition-transform " +
-                                    (isOpen ? "" : "group-hover:translate-x-0.5")
+                                    (isOpen
+                                      ? ""
+                                      : "group-hover:translate-x-0.5")
                                   }
                                 >
                                   →
@@ -268,12 +265,10 @@ export function RouteMap({
                               hidden={!isOpen}
                               className="mt-2.5 max-w-xl rounded-lg border border-accent/20 border-l-[3px] border-l-accent/60 bg-[hsl(var(--surface))] p-4"
                             >
-                              <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                                {s.insight.kind === "gap"
-                                  ? labels.gap
-                                  : labels.finding}
-                              </p>
-                              <p className="mt-1.5 font-display text-sm font-bold leading-snug text-foreground">
+                              {/* No kicker. The title names the gap itself, so a label
+                                  above it saying a gap follows was announcing what the
+                                  next line already said. */}
+                              <p className="font-display text-sm font-bold leading-snug text-foreground">
                                 {s.insight.title}
                               </p>
                               {/* The data sits inside the panel, not on the face of the
