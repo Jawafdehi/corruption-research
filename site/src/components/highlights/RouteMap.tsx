@@ -2,65 +2,98 @@ import { useId, useState } from "react";
 import { Link } from "react-router-dom";
 
 export type RouteInsight = {
+  /** What the gap is ABOUT, in one or two words. Printed on the indicator chip. */
+  tag: string;
   title: string;
   body: string;
   /** Internal destination. A path routes in-app; an absolute URL opens jawafdehi.org. */
   href: string;
   linkLabel: string;
   /**
-   * What the reader is being shown. "finding" is something the record establishes;
-   * "gap" is something the published record cannot answer. Keeping them visually
-   * apart is the point — a missing number and a measured one are not the same claim.
+   * "finding" is something the record establishes; "gap" is something the published
+   * record cannot answer. Kept visually apart because a missing number and a measured
+   * one are not the same claim.
    */
   kind: "finding" | "gap";
 };
 
-export type RouteExit = { label: string; tone: "tameli" | "stands" };
+/** Where a complaint can leave the route, and the question that sends it there. */
+export type RouteExit = {
+  question: string;
+  label: string;
+  tone: "tameli" | "stands";
+};
 
-export type RouteStep =
-  | {
-      kind: "stage";
-      key: string;
-      n: number;
-      title: string;
-      /** Drawn in the court tone: stages 6–8 are courts, not the Commission. */
-      court?: boolean;
-      /** A stage that is itself a decision, and so can send a complaint out. */
-      exit?: RouteExit;
-      decision?: string;
-      insight?: RouteInsight;
-      /** The one figure big enough to read from across the room. */
-      figure?: { value: string; label: string };
-    }
-  | { kind: "decision"; key: string; label: string; exit: RouteExit };
+/** The one place a count belongs in the figure itself: what screening actually did. */
+export type RouteSplit = {
+  caption: string;
+  parts: readonly { key: string; label: string; value: number; tone: "out" | "on" | "other" }[];
+  total: number;
+  totalLabel: string;
+};
+
+export type RouteStep = {
+  key: string;
+  n: number;
+  title: string;
+  exit?: RouteExit;
+  split?: RouteSplit;
+  insight?: RouteInsight;
+};
+
+export type RoutePhase = {
+  key: string;
+  label: string;
+  tone: "commission" | "court";
+  steps: readonly RouteStep[];
+};
 
 export type RouteLabels = {
-  yes: string;
   no: string;
-  insightOpen: string;
-  insightClose: string;
+  open: string;
+  close: string;
   finding: string;
   gap: string;
   srIntro: string;
 };
 
+const TONE = {
+  commission: "hsl(var(--foreground))",
+  court: "hsl(var(--court))",
+} as const;
+
+const PART_FILL = {
+  out: "hsl(var(--accent))",
+  on: "hsl(var(--court))",
+  other: "hsl(var(--foreground) / 0.3)",
+} as const;
+
 /**
- * The route a complaint takes, as a vertical spine.
+ * The route a complaint takes: three phases, eight stages, and the ways out.
  *
- * Replaces an oval. The ring was handsome and unreadable: a reader had to work out
- * where it started, which way it turned, and it could not grow — adding an eighth
- * stage meant re-solving the geometry for every node. A spine reads top to bottom in
- * the direction people already read, takes a ninth stage without redrawing anything,
- * and is the same layout on a phone as on a desktop rather than a separate fallback.
+ * An earlier version drew the same eight stages as one flat numbered list with a "?"
+ * on the ones that had research behind them. It was accurate and told a reader almost
+ * nothing: eight identical rows have no hierarchy, and a question mark says only that
+ * something exists, never what. Two changes follow from that. The stages are grouped
+ * into the three institutions that actually hold them, so the shape of the system is
+ * visible before any label is read; and every indicator carries its own subject —
+ * "Tracking", "Reasons", "The wait" — so a reader chooses what to open instead of
+ * clicking to find out what they are opening.
  *
- * HTML and CSS rather than SVG. The insight indicators have to be real buttons — focusable,
- * announced, operable by keyboard and touch — and the panels real regions. In SVG all of
- * that has to be rebuilt by hand.
+ * Exits hang off the stage that produces them rather than sitting in their own boxes.
+ * Tameli is not a destination at the bottom of a diagram; it is what most complaints
+ * do at a particular decision, and drawing it anywhere else misstates the process.
  *
- * Progressive disclosure: nothing but the route shows until a reader asks. One panel is
- * open at a time, so the figure cannot unfold into the wall of text it replaced.
+ * HTML and CSS rather than SVG: the indicators have to be real buttons and the panels
+ * real regions, and in SVG all of that is rebuilt by hand.
  */
-export function RouteMap({ steps, labels }: { steps: readonly RouteStep[]; labels: RouteLabels }) {
+export function RouteMap({
+  phases,
+  labels,
+}: {
+  phases: readonly RoutePhase[];
+  labels: RouteLabels;
+}) {
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
 
@@ -68,155 +101,207 @@ export function RouteMap({ steps, labels }: { steps: readonly RouteStep[]; label
     <div>
       <p className="sr-only">{labels.srIntro}</p>
 
-      <ol className="relative">
-        {steps.map((s, i) => {
-          const last = i === steps.length - 1;
-          const isStage = s.kind === "stage";
-          const court = isStage && s.court;
-          const exit = s.kind === "decision" ? s.exit : s.exit;
-          const insight = isStage ? s.insight : undefined;
-          const panelId = `${uid}-${s.key}`;
-          const isOpen = open === s.key;
-
+      <div className="space-y-3">
+        {phases.map((phase) => {
+          const colour = TONE[phase.tone];
           return (
-            <li key={s.key} className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-x-3 md:grid-cols-[2.5rem_minmax(0,1fr)] md:gap-x-4">
-              {/* Rail. The line is drawn behind the marker and stops at the last row,
-                  so the route reads as finished rather than running off the bottom. */}
-              <div className="relative flex justify-center">
-                {!last ? (
-                  <>
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-border"
-                    />
-                    {/* The route has a direction and the rail alone does not show it.
-                        One chevron per gap, low-contrast enough to stay out of the way. */}
-                    <span
-                      aria-hidden="true"
-                      className="absolute bottom-1 left-1/2 -translate-x-1/2 font-mono text-[0.6rem] leading-none text-foreground/35"
+            <section
+              key={phase.key}
+              className="overflow-hidden rounded-xl border border-border bg-background/40"
+            >
+              <h3
+                className="border-b border-border px-4 py-2 font-mono text-[0.62rem] font-bold uppercase tracking-[0.16em] md:px-5"
+                style={{ color: colour }}
+              >
+                {phase.label}
+              </h3>
+
+              <ol className="px-4 py-3 md:px-5 md:py-4">
+                {phase.steps.map((s, i) => {
+                  const last = i === phase.steps.length - 1;
+                  const panelId = `${uid}-${s.key}`;
+                  const isOpen = open === s.key;
+
+                  return (
+                    <li
+                      key={s.key}
+                      className="relative grid grid-cols-[1.4rem_minmax(0,1fr)] gap-x-3 md:grid-cols-[1.6rem_minmax(0,1fr)]"
                     >
-                      ▼
-                    </span>
-                  </>
-                ) : null}
-                <span
-                  aria-hidden="true"
-                  className={
-                    isStage
-                      ? "relative mt-1 flex h-7 w-7 items-center justify-center rounded-full font-mono text-[0.7rem] font-bold tabular-nums ring-4 ring-[hsl(var(--surface))] " +
-                        (court
-                          ? "bg-[hsl(var(--court))] text-background"
-                          : "bg-foreground/85 text-background")
-                      : "relative mt-1.5 h-4 w-4 rotate-45 border-2 border-foreground/45 bg-[hsl(var(--surface))] ring-4 ring-[hsl(var(--surface))]"
-                  }
-                >
-                  {isStage ? s.n : null}
-                </span>
-              </div>
+                      {/* The through-line. It runs between stages inside a phase and
+                          stops at the last one, so the join to the next phase is the
+                          gap between the cards rather than a line crossing a border. */}
+                      <div className="relative flex justify-center">
+                        {!last ? (
+                          <span
+                            aria-hidden="true"
+                            className="absolute left-1/2 top-1 h-full w-[1.5px] -translate-x-1/2"
+                            style={{ background: `color-mix(in srgb, ${colour} 22%, transparent)` }}
+                          />
+                        ) : null}
+                        <span
+                          aria-hidden="true"
+                          className="relative mt-[0.3rem] h-2.5 w-2.5 shrink-0 rounded-full ring-[3px] ring-background"
+                          style={{ background: colour }}
+                        />
+                      </div>
 
-              <div className={last ? "pb-0" : "pb-5"}>
-                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                  <p
-                    className={
-                      isStage
-                        ? "font-display text-[0.95rem] font-bold leading-snug text-foreground md:text-base"
-                        : "text-sm leading-snug text-foreground/70"
-                    }
-                  >
-                    {isStage ? s.title : s.label}
-                  </p>
+                      <div className={last ? "pb-0.5" : "pb-4"}>
+                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
+                          {/* Numbering stays, small: it orders the stages without
+                              becoming the thing the figure is about. */}
+                          <span
+                            aria-hidden="true"
+                            className="font-mono text-[0.62rem] font-bold tabular-nums text-muted-foreground"
+                          >
+                            {s.n}
+                          </span>
+                          <p className="font-display text-[0.95rem] font-bold leading-snug text-foreground">
+                            {s.title}
+                          </p>
 
-                  {/* The branch, inline rather than drawn out to its own terminal: at
-                      this width an arrow across the page costs more room than it earns. */}
-                  {exit ? (
-                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[0.7rem] font-semibold">
-                      <span aria-hidden="true" className="text-muted-foreground">
-                        {labels.no} →
-                      </span>
-                      <span
-                        className={
-                          "rounded-full px-2 py-0.5 " +
-                          (exit.tone === "tameli"
-                            ? "bg-accent/10 text-accent ring-1 ring-accent/30"
-                            : "bg-foreground/[0.07] text-foreground/70 ring-1 ring-border")
-                        }
-                      >
-                        {exit.label}
-                      </span>
-                    </span>
-                  ) : null}
+                          {s.insight ? (
+                            <button
+                              type="button"
+                              onClick={() => setOpen(isOpen ? null : s.key)}
+                              aria-expanded={isOpen}
+                              aria-controls={panelId}
+                              className={
+                                "inline-flex items-center gap-1 rounded-full border px-2 py-[0.1rem] text-[0.65rem] font-semibold transition-colors " +
+                                (isOpen
+                                  ? "border-accent bg-accent text-background"
+                                  : "border-accent/40 bg-accent/[0.08] text-accent hover:bg-accent/[0.16]")
+                              }
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={
+                                  "inline-block h-1.5 w-1.5 rounded-full " +
+                                  (isOpen ? "bg-background" : "bg-accent")
+                                }
+                              />
+                              {s.insight.tag}
+                              <span className="sr-only">
+                                {" — "}
+                                {isOpen ? labels.close : labels.open}
+                              </span>
+                            </button>
+                          ) : null}
+                        </div>
 
-                  {insight ? (
-                    <button
-                      type="button"
-                      onClick={() => setOpen(isOpen ? null : s.key)}
-                      aria-expanded={isOpen}
-                      aria-controls={panelId}
-                      className={
-                        "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[0.7rem] font-bold leading-none transition-colors " +
-                        (isOpen
-                          ? "border-accent bg-accent text-background"
-                          : "border-accent/45 bg-accent/10 text-accent hover:bg-accent/20")
-                      }
-                    >
-                      <span aria-hidden="true">{isOpen ? "×" : "?"}</span>
-                      <span className="sr-only">
-                        {isOpen ? labels.insightClose : labels.insightOpen} — {insight.title}
-                      </span>
-                    </button>
-                  ) : null}
-                </div>
+                        {s.split ? <SplitBar split={s.split} /> : null}
 
-                {/* The one stage that carries a number carries it in the open. */}
-                {isStage && s.figure ? (
-                  <p className="mt-1.5 flex items-baseline gap-2">
-                    <span className="font-mono text-2xl font-bold leading-none tracking-tight text-[hsl(var(--court))] md:text-[1.75rem]">
-                      {s.figure.value}
-                    </span>
-                    <span className="text-xs leading-5 text-muted-foreground">
-                      {s.figure.label}
-                    </span>
-                  </p>
-                ) : null}
+                        {s.exit ? <ExitBranch exit={s.exit} no={labels.no} /> : null}
 
-                {insight ? (
-                  <div
-                    id={panelId}
-                    role="region"
-                    hidden={!isOpen}
-                    className="mt-2.5 max-w-xl rounded-lg border border-border bg-[hsl(var(--surface))] p-3.5"
-                  >
-                    <p className="font-mono text-[0.62rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                      {insight.kind === "gap" ? labels.gap : labels.finding}
-                    </p>
-                    <p className="mt-1.5 font-display text-sm font-bold leading-snug text-foreground">
-                      {insight.title}
-                    </p>
-                    <p className="mt-1 text-[0.8rem] leading-6 text-foreground/80">{insight.body}</p>
-                    {insight.href.startsWith("http") ? (
-                      <a
-                        href={insight.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-2 inline-block text-[0.8rem] font-semibold text-accent underline underline-offset-4"
-                      >
-                        {insight.linkLabel} ↗︎
-                      </a>
-                    ) : (
-                      <Link
-                        to={insight.href}
-                        className="mt-2 inline-block text-[0.8rem] font-semibold text-accent underline underline-offset-4"
-                      >
-                        {insight.linkLabel} →
-                      </Link>
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            </li>
+                        {s.insight ? (
+                          <div
+                            id={panelId}
+                            role="region"
+                            hidden={!isOpen}
+                            className="mt-2.5 max-w-xl rounded-lg border border-border bg-[hsl(var(--surface))] p-3.5"
+                          >
+                            <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                              {s.insight.kind === "gap" ? labels.gap : labels.finding}
+                            </p>
+                            <p className="mt-1.5 font-display text-sm font-bold leading-snug text-foreground">
+                              {s.insight.title}
+                            </p>
+                            <p className="mt-1 text-[0.8rem] leading-6 text-foreground/80">
+                              {s.insight.body}
+                            </p>
+                            {s.insight.href.startsWith("http") ? (
+                              <a
+                                href={s.insight.href}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-2 inline-block text-[0.8rem] font-semibold text-accent underline underline-offset-4"
+                              >
+                                {s.insight.linkLabel} ↗︎
+                              </a>
+                            ) : (
+                              <Link
+                                to={s.insight.href}
+                                className="mt-2 inline-block text-[0.8rem] font-semibold text-accent underline underline-offset-4"
+                              >
+                                {s.insight.linkLabel} →
+                              </Link>
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
           );
         })}
-      </ol>
+      </div>
+    </div>
+  );
+}
+
+/** The branch off the main line, drawn as a branch. */
+function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
+  return (
+    <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.7rem]">
+      <span aria-hidden="true" className="font-mono text-muted-foreground">
+        └
+      </span>
+      <span className="text-muted-foreground">{exit.question}</span>
+      <span aria-hidden="true" className="font-mono text-muted-foreground">
+        {no} →
+      </span>
+      <span
+        className={
+          "rounded-full px-2 py-[0.1rem] font-semibold " +
+          (exit.tone === "tameli"
+            ? "bg-accent/10 text-accent ring-1 ring-accent/30"
+            : "bg-foreground/[0.07] text-foreground/70 ring-1 ring-border")
+        }
+      >
+        {exit.label}
+      </span>
+    </p>
+  );
+}
+
+/**
+ * What one stage actually did, as a proportional bar.
+ *
+ * The figure carries exactly one of these. A count belongs in the diagram only where
+ * the shape of the split *is* the finding — here, that almost everything leaving this
+ * stage leaves the process at it.
+ */
+function SplitBar({ split }: { split: RouteSplit }) {
+  return (
+    <div className="mt-2 max-w-md">
+      <div className="flex h-2.5 overflow-hidden rounded-sm" role="presentation">
+        {split.parts.map((p) => (
+          <span
+            key={p.key}
+            className="block h-full"
+            style={{
+              width: `${(p.value / split.total) * 100}%`,
+              background: PART_FILL[p.tone],
+            }}
+          />
+        ))}
+      </div>
+      <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[0.68rem] text-muted-foreground">
+        {split.parts.map((p) => (
+          <li key={p.key} className="inline-flex items-center gap-1.5">
+            <span
+              aria-hidden="true"
+              className="inline-block h-1.5 w-1.5 rounded-full"
+              style={{ background: PART_FILL[p.tone] }}
+            />
+            <span className="font-mono font-semibold tabular-nums text-foreground/85">
+              {p.label}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-1 text-[0.65rem] leading-5 text-muted-foreground">{split.caption}</p>
     </div>
   );
 }

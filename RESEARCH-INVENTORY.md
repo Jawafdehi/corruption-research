@@ -270,6 +270,12 @@ roughly the **upper quartile**, and it is the median for the 2017 intake specifi
 The site therefore shows 4.5 years as the headline and states the over-six share
 separately. Reporting six as the norm would overstate the record by about 18 months.
 
+**The spread, not a trend.** Cohort medians swing between 1.9 years (2009) and 6.3
+(2017) with no direction, so the site draws the distribution instead: of the 1,029
+decided appeals, 305 took under two years, 159 two to four, 211 four to six, 286 six to
+eight and 68 over eight. The two largest groups are the fastest band and the
+six-to-eight-year band, which is why the median alone reads as more typical than it is.
+
 **What this does NOT establish.** 1,462 of the 2,976 registered appeals carry no
 verdict date at all, and an appeal still open is by definition a slow one, so every
 figure here is a **floor**. Cohorts after 2018 are excluded for the same reason — the
@@ -277,6 +283,34 @@ figure here is a **floor**. Cohorts after 2018 are excluded for the same reason 
 how long the fast ones take and nothing else. The 85% threshold is a judgement call
 and lives in `corpus_data.SUPREME_SETTLED_MIN`. Nothing here says why the wait is what
 it is.
+
+---
+
+## 6c. The screening figure this site used to get wrong
+
+| | |
+|---|---|
+| **Stage** | Screening (stage 2 of the route figure) |
+| **Where** | Highlights tab, the complaint-route figure |
+| **Confidence** | Established for FY2081/82 · one year only |
+
+**The error, recorded.** The route figure's screening stage quoted **75.1% to Tameli**.
+That figure is `794/1057` from **तालिका २.१५** — तामेली as a share of decisions taken
+*after* a detailed investigation finishes. It describes a different stage from the one
+it was attached to, and overstated the screening rate by about fifteen points.
+
+**The right table is तालिका २.१४**, which covers what the Commission disposed of before
+any detailed investigation. For FY2081/82, of **29,703** complaints disposed of:
+**17,130 Tameli + 586 Tameli with advice = 17,716 (59.6%)**, **11,060 other action
+(37.2%)**, **927 on to detailed investigation (3.1%)**. A further 7,323 of the 37,026 on
+the books were carried into the next year.
+
+**What this does NOT establish.** तालिका २.१४ does not separate screening from the
+preliminary inquiry — the two are one column of outcomes — so the figure covers stages
+2 and 3 together and the site says so. Only the 35th report publishes this table in a
+form that parses, so there is no series: one year, no trend. `to_investigation` (927,
+sent) and `investigations_completed` (947, finished) are different events in the same
+year and must never be differenced.
 
 ---
 

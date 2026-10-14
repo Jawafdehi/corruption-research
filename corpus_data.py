@@ -405,7 +405,23 @@ def supreme_appeal_delay():
     slowest = by_year.loc[settled_years].idxmax()
 
     yrs = lambda d: round(float(d) / 365.25, 2)
+
+    # The spread, not a trend. Cohort medians bounce around (1.9 years for 2009, 6.3
+    # for 2017) and drawing them as a line would assert a direction the series does
+    # not have. How long the 1,029 decided appeals actually took does not.
+    edges = [(0, 2), (2, 4), (4, 6), (6, 8), (8, 99)]
+    years = pool / 365.25
+    bands = [
+        {
+            "from": lo,
+            "to": hi,
+            "cases": int(((years >= lo) & (years < hi)).sum()),
+        }
+        for lo, hi in edges
+    ]
+
     return {
+        "bands": bands,
         "fromYear": int(min(settled_years)),
         "toYear": int(max(settled_years)),
         "cohorts": len(settled_years),

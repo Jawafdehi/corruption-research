@@ -26,7 +26,7 @@ import { CITATIONS, REPORT, decidedClean } from "@/data/research-corruption";
 export default function Appeals() {
   const { t } = useTranslation();
   const { n, pct1 } = useFormat();
-  const { appeals, ciaa, outcome } = REPORT;
+  const { appeals, ciaa, outcome, supremeDelay } = REPORT;
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
@@ -323,6 +323,74 @@ export default function Appeals() {
             },
           )}
         </Body>
+      </Block>
+
+      {/*
+        How long the appeal itself takes. It sits here rather than with the win rates
+        because it answers a different question — not who prevails, but when anyone
+        finds out. Figures come from corpus_data.supreme_appeal_delay, which keeps only
+        the registration years at least 85% decided; every number here is a floor,
+        since an appeal still open is by definition a slow one.
+      */}
+      <Block id="appeal-duration">
+        <Eyebrow>
+          {t("research.corruption.delay.eyebrow", "How long the last stage takes")}
+        </Eyebrow>
+        <SectionHeading>
+          {t(
+            "research.corruption.delay.title",
+            "An appeal takes a median of {{median}} years to be decided",
+            { median: supremeDelay.medianYears.toFixed(1) },
+          )}
+        </SectionHeading>
+        <Lede>
+          {t(
+            "research.corruption.delay.lede",
+            "Measured from the day an appeal is registered at the Supreme Court to the day it is decided — not from the complaint, and not from the trial. Across {{n}} corruption appeals registered between {{from}} and {{to}} and since decided, half took longer than {{median}} years.",
+            {
+              n: n(supremeDelay.decided),
+              from: supremeDelay.fromYear,
+              to: supremeDelay.toYear,
+              median: supremeDelay.medianYears.toFixed(1),
+            },
+          )}
+        </Lede>
+
+        <StatRow>
+          <StatTile
+            value={t("research.corruption.delay.tileMedian", "{{v}} yr", {
+              v: supremeDelay.medianYears.toFixed(1),
+            })}
+            label={t("research.corruption.delay.tileMedianLabel", "Median wait")}
+            note={t("research.corruption.delay.tileMedianNote", "half of appeals took longer")}
+          />
+          <StatTile
+            value={pct1(supremeDelay.overSixPct)}
+            label={t("research.corruption.delay.tileOverLabel", "Took more than six years")}
+            note={t("research.corruption.delay.tileOverNote", "of the {{n}} decided appeals", {
+              n: n(supremeDelay.decided),
+            })}
+          />
+          <StatTile
+            value={n(supremeDelay.withoutVerdict)}
+            label={t("research.corruption.delay.tileOpenLabel", "No recorded decision")}
+            note={t("research.corruption.delay.tileOpenNote", "of {{all}} appeals registered", {
+              all: n(supremeDelay.registeredAll),
+            })}
+          />
+        </StatRow>
+
+        <Caveat>
+          {t(
+            "research.corruption.delay.caveat",
+            "Every figure here is a floor, not an estimate of the true wait. Barely half the appeals registered carry a recorded decision, and an appeal still open is by definition a slow one — so leaving them out pulls the median down. Registration years after {{to}} are excluded for the same reason: too few of their appeals have been decided for a median to mean anything. The slowest intake measured, {{slowest}}, ran to {{slowestYears}} years.",
+            {
+              to: supremeDelay.toYear,
+              slowest: supremeDelay.slowestYear,
+              slowestYears: supremeDelay.slowestYears.toFixed(1),
+            },
+          )}
+        </Caveat>
       </Block>
 
       <Block>
