@@ -63,6 +63,10 @@ export type RouteLabels = {
   close: string;
   finding: string;
   gap: string;
+  /** Example chip shown in the hint line. */
+  hintChip: string;
+  /** One line telling a reader the chips open. */
+  hint: string;
   srIntro: string;
 };
 
@@ -109,6 +113,19 @@ export function RouteMap({
   return (
     <div>
       <p className="sr-only">{labels.srIntro}</p>
+
+      {/* Stated plainly. The chips are discoverable once a reader has clicked one;
+          this is for the reader who has not. */}
+      <p className="mb-3 flex items-center gap-2 text-[0.72rem] text-muted-foreground">
+        <span
+          aria-hidden="true"
+          className="inline-flex items-center gap-1 rounded-full border border-accent/45 bg-accent/[0.08] px-2 py-[0.1rem] text-[0.6rem] font-semibold text-accent"
+        >
+          <span className="font-mono text-[0.55rem] leading-none">▸</span>
+          {labels.hintChip}
+        </span>
+        {labels.hint}
+      </p>
 
       <div className="space-y-3">
         {phases.map((phase) => {
@@ -178,6 +195,9 @@ export function RouteMap({
                             {s.title}
                           </p>
 
+                          {/* Reads as a control, not a label. The caret does the work:
+                              a coloured pill on its own was being taken for a tag, so
+                              it carries an affordance a reader already knows. */}
                           {s.insight ? (
                             <button
                               type="button"
@@ -185,19 +205,21 @@ export function RouteMap({
                               aria-expanded={isOpen}
                               aria-controls={panelId}
                               className={
-                                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[0.15rem] text-[0.65rem] font-semibold transition-colors " +
+                                "group inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2.5 py-[0.2rem] text-[0.65rem] font-semibold shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
                                 (isOpen
                                   ? "border-accent bg-accent text-background"
-                                  : "border-accent/25 bg-accent/[0.06] text-accent/90 hover:border-accent/50 hover:bg-accent/[0.14] hover:text-accent")
+                                  : "border-accent/45 bg-accent/[0.08] text-accent hover:border-accent hover:bg-accent/[0.18]")
                               }
                             >
                               <span
                                 aria-hidden="true"
                                 className={
-                                  "inline-block h-1.5 w-1.5 rounded-full " +
-                                  (isOpen ? "bg-background" : "bg-accent/70")
+                                  "inline-block font-mono text-[0.6rem] leading-none transition-transform " +
+                                  (isOpen ? "rotate-90" : "group-hover:translate-x-px")
                                 }
-                              />
+                              >
+                                ▸
+                              </span>
                               {s.insight.tag}
                               <span className="sr-only">
                                 {" — "}
@@ -272,12 +294,16 @@ function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
       <span aria-hidden="true" className="font-mono text-foreground/40">
         {no} →
       </span>
+      {/* Square, flat, no caret: an outcome a complaint reaches, not a control. The
+          indicators above are rounded pills with a border and a caret, and the two
+          must not be mistaken for each other — a reader who taps Tameli expecting it
+          to open has been misled by the styling. */}
       <span
         className={
-          "rounded-full px-2 py-[0.1rem] font-semibold " +
+          "rounded-[3px] px-1.5 py-[0.05rem] font-semibold " +
           (exit.tone === "tameli"
-            ? "bg-accent/10 text-accent ring-1 ring-accent/30"
-            : "bg-foreground/[0.07] text-foreground/70 ring-1 ring-border")
+            ? "bg-accent/[0.12] text-accent/90"
+            : "bg-foreground/[0.07] text-foreground/60")
         }
       >
         {exit.label}
