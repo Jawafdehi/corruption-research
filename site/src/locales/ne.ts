@@ -576,8 +576,6 @@ export const ne: Record<string, string> = {
     "{{from}} देखि {{to}} सम्म सर्वोच्च अदालतमा दर्ता भई फैसला भइसकेका {{n}} भ्रष्टाचार पुनरावेदनमा मध्यक प्रतीक्षा {{median}} वर्ष रह्यो; {{over}} मा छ वर्षभन्दा बढी लाग्यो, र {{slowest}} मा दर्ता भएकाको मध्यक {{slowestYears}} वर्ष पुग्यो। पछिल्ला वर्ष छाडिएका छन् किनभने तिनका थोरै पुनरावेदनमा मात्र फैसला भएको छ — अनि दर्ता भएका {{all}} मध्ये {{open}} मा कुनै फैसला नै अभिलिखित छैन, त्यसैले वास्तविक प्रतीक्षा यसभन्दा लामो मात्र हुन सक्छ।",
   "research.corruption.route.i8Link": "सर्वोच्च अदालतका मुद्दा अभिलेख",
   // --- Route redesign: phases, named indicators, the screening split ---------
-  "research.corruption.route.hintChip": "यस्तो",
-  "research.corruption.route.hint": "कुनै पनि ट्यागमा थिच्नुहोस् — त्यो चरणको अनुसन्धान खुल्छ।",
   "research.corruption.route.pCiaa": "आयोगमा",
   "research.corruption.route.pSpecial": "विशेष अदालत",
   "research.corruption.route.pSupreme": "सर्वोच्च अदालत",

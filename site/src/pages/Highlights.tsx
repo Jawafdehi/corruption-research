@@ -548,11 +548,6 @@ export default function Highlights() {
                     "research.corruption.route.close",
                     "Hide the research on this stage",
                   ),
-                  hintChip: t("research.corruption.route.hintChip", "Like this"),
-                  hint: t(
-                    "research.corruption.route.hint",
-                    "Tap a tag to open the research behind that stage.",
-                  ),
                   finding: t(
                     "research.corruption.route.finding",
                     "What the record shows",
