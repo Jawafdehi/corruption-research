@@ -7,6 +7,7 @@ import {
   Eyebrow,
   Figure,
   Lede,
+  Ref,
   SectionHeading,
   StatRow,
   StatTile,
@@ -431,8 +432,15 @@ export default function Investigation() {
           <p>
             {t(
               "research.corruption.investigation.closeA2",
-              "The reports count these decisions to the last complaint and explain not one of them. Nor do they say how many were ever revived, and Tameli is reversible when new evidence appears — so a count of revivals would show whether these files are being parked or simply cleared. No report has published one.",
+              "The reports count these decisions to the last complaint and explain not one of them. Nor do they say how many were ever revived, and Tameli is reversible when new evidence appears — so a count of revivals would show whether these files are being parked or simply cleared. No report has published one. What reached court instead is ",
             )}
+            <Ref to="/prosecution#charge-mix">
+              {t(
+                "research.corruption.investigation.closeA2Ref",
+                "a shrinking and changing set of charges",
+              )}
+            </Ref>
+            {t("research.corruption.investigation.closeA2End", ".")}
           </p>
         </ClosingAnalysis>
 

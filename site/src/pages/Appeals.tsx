@@ -16,6 +16,7 @@ import {
   Eyebrow,
   Figure,
   Lede,
+  Ref,
   SectionHeading,
   StatRow,
   StatTile,
@@ -334,7 +335,10 @@ export default function Appeals() {
       */}
       <Block id="appeal-duration">
         <Eyebrow>
-          {t("research.corruption.delay.eyebrow", "How long the last stage takes")}
+          {t(
+            "research.corruption.delay.eyebrow",
+            "How long the last stage takes",
+          )}
         </Eyebrow>
         <SectionHeading>
           {t(
@@ -360,8 +364,8 @@ export default function Appeals() {
 
         <Body>
           {t(
-            "research.corruption.delay.trend",
-            "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. Keyed on the year of decision rather than of registration — the one window that is not cut short by appeals still outstanding, since every appeal with a decision date has a known duration. It measures how old the appeals now being cleared are, not how long one filed today will take.",
+            "research.corruption.delay.trend2",
+            "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. Keyed on the year of decision rather than of registration — the one window that is not cut short by appeals still outstanding, since every appeal with a decision date has a known duration. It measures how old the appeals now being cleared are, not how long one filed today will take. The stage before it has moved the other way: time to a Special Court verdict has been falling.",
             {
               eFrom: supremeDelay.earlier.from,
               eTo: supremeDelay.earlier.to,
@@ -370,7 +374,13 @@ export default function Appeals() {
               rTo: supremeDelay.recent.to,
               rMed: supremeDelay.recent.medianYears.toFixed(1),
             },
-          )}
+          )}{" "}
+          <Ref to="/court-outcomes#pace-and-backlog">
+            {t(
+              "research.corruption.delay.trendRef",
+              "Pace at the Special Court",
+            )}
+          </Ref>
         </Body>
 
         <StatRow>
@@ -378,22 +388,42 @@ export default function Appeals() {
             value={t("research.corruption.delay.tileMedian", "{{v}} yr", {
               v: supremeDelay.medianYears.toFixed(1),
             })}
-            label={t("research.corruption.delay.tileMedianLabel", "Median wait")}
-            note={t("research.corruption.delay.tileMedianNote", "half of appeals took longer")}
+            label={t(
+              "research.corruption.delay.tileMedianLabel",
+              "Median wait",
+            )}
+            note={t(
+              "research.corruption.delay.tileMedianNote",
+              "half of appeals took longer",
+            )}
           />
           <StatTile
             value={pct1(supremeDelay.overSixPct)}
-            label={t("research.corruption.delay.tileOverLabel", "Took more than six years")}
-            note={t("research.corruption.delay.tileOverNote", "of the {{n}} decided appeals", {
-              n: n(supremeDelay.decided),
-            })}
+            label={t(
+              "research.corruption.delay.tileOverLabel",
+              "Took more than six years",
+            )}
+            note={t(
+              "research.corruption.delay.tileOverNote",
+              "of the {{n}} decided appeals",
+              {
+                n: n(supremeDelay.decided),
+              },
+            )}
           />
           <StatTile
             value={n(supremeDelay.withoutVerdict)}
-            label={t("research.corruption.delay.tileOpenLabel", "No recorded decision")}
-            note={t("research.corruption.delay.tileOpenNote", "of {{all}} appeals registered", {
-              all: n(supremeDelay.registeredAll),
-            })}
+            label={t(
+              "research.corruption.delay.tileOpenLabel",
+              "No recorded decision",
+            )}
+            note={t(
+              "research.corruption.delay.tileOpenNote",
+              "of {{all}} appeals registered",
+              {
+                all: n(supremeDelay.registeredAll),
+              },
+            )}
           />
         </StatRow>
 

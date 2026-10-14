@@ -216,20 +216,32 @@ export function RouteMap({
                               <span className="font-display text-base font-bold leading-snug text-foreground">
                                 {s.title}
                               </span>
+                              {/* The tag carries the affordance. A coloured word reads
+                                  as a category label; a word with an arrow that moves
+                                  under the cursor reads as somewhere to go. */}
                               <span
                                 className={
-                                  "shrink-0 rounded-full px-2 py-[0.15rem] text-[0.65rem] font-semibold transition-colors " +
+                                  "inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-[0.2rem] text-[0.65rem] font-semibold transition-all " +
                                   (isOpen
-                                    ? "bg-accent text-background"
-                                    : "bg-accent/[0.1] text-accent group-hover:bg-accent/20")
+                                    ? "border-accent bg-accent text-background"
+                                    : "border-accent/40 bg-accent/[0.08] text-accent group-hover:border-accent group-hover:bg-accent/[0.18]")
                                 }
                               >
                                 {s.insight.tag}
+                                <span
+                                  aria-hidden="true"
+                                  className={
+                                    "font-mono text-[0.6rem] leading-none transition-transform " +
+                                    (isOpen ? "" : "group-hover:translate-x-0.5")
+                                  }
+                                >
+                                  →
+                                </span>
                               </span>
                               <span
                                 aria-hidden="true"
                                 className={
-                                  "ml-auto shrink-0 font-mono text-[0.7rem] leading-none text-accent/60 transition-transform group-hover:text-accent " +
+                                  "ml-auto shrink-0 font-mono text-[0.7rem] leading-none text-accent/35 transition-transform group-hover:text-accent/70 " +
                                   (isOpen ? "rotate-180" : "")
                                 }
                               >
