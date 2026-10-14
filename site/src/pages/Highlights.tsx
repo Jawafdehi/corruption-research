@@ -2,12 +2,15 @@ import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
+import { RouteMap, type RouteStep } from "@/components/highlights/RouteMap";
 import {
-  ProcessDiagram,
-  type DiagramNode,
-} from "@/components/highlights/ProcessDiagram";
-import { OutcomeSplit, type OutcomeSegment } from "@/components/highlights/OutcomeSplit";
-import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
+  OutcomeSplit,
+  type OutcomeSegment,
+} from "@/components/highlights/OutcomeSplit";
+import {
+  AppealAsymmetry,
+  type AppealSide,
+} from "@/components/research/AppealAsymmetry";
 import { TameliByYear } from "@/components/highlights/TameliByYear";
 import {
   CITATIONS,
@@ -25,9 +28,31 @@ const MIN_DECIDED = 60;
 export default function Highlights() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
-  const { appeals, byCharge, chargeMixByYear, ciaa, disposals, outcome, overTime, rates } =
-    REPORT;
+  const {
+    appeals,
+    byCharge,
+    chargeMixByYear,
+    ciaa,
+    disposals,
+    outcome,
+    overTime,
+    rates,
+  } = REPORT;
+  /** The 35th annual report's own screening table — the only year it is published. */
+  const cd = REPORT.complaintDisposal[0];
+  const supremeDelay = REPORT.supremeDelay;
 
+  /**
+   * Published Jawafdehi pages behind the route insights. Each was checked to resolve
+   * before being used; a stage links to the page that carries its own evidence, never
+   * to a general index standing in for one.
+   */
+  const JAWAFDEHI = {
+    sting: "https://jawafdehi.org/updates/sting-operation/",
+    jalahari:
+      "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution/",
+    courtcases: "https://jawafdehi.org/courtcases/",
+  } as const;
 
   const decided = decidedClean(outcome);
 
@@ -35,7 +60,6 @@ export default function Highlights() {
   // derived rather than written down so the card cannot drift when a report is added.
   const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
   const lastDisposal = disposals[disposals.length - 1];
-
 
   // 02 — what the court decides, over the cases carrying a clean disposition.
   const outcomeSegments: OutcomeSegment[] = [
@@ -102,13 +126,20 @@ export default function Highlights() {
   }));
   const fakeFirst = chargeMixByYear[0];
   const fakeLast = chargeMixByYear[chargeMixByYear.length - 1];
-  const shareOf = (r: typeof fakeFirst) => (mixTotal(r) ? (r.fake / mixTotal(r)) * 100 : 0);
+  const shareOf = (r: typeof fakeFirst) =>
+    mixTotal(r) ? (r.fake / mixTotal(r)) * 100 : 0;
   // The year the share recovered most after the collapse, derived rather than typed,
   // so the sentence about the rebound cannot outlive the shape of the data.
-  const lowIdx = chargeMixByYear.reduce((lo, r, i) => (shareOf(r) < shareOf(chargeMixByYear[lo]) ? i : lo), 0);
+  const lowIdx = chargeMixByYear.reduce(
+    (lo, r, i) => (shareOf(r) < shareOf(chargeMixByYear[lo]) ? i : lo),
+    0,
+  );
   const rebound = chargeMixByYear
     .slice(lowIdx)
-    .reduce((hi, r) => (shareOf(r) > shareOf(hi) ? r : hi), chargeMixByYear[lowIdx]);
+    .reduce(
+      (hi, r) => (shareOf(r) > shareOf(hi) ? r : hi),
+      chargeMixByYear[lowIdx],
+    );
 
   /*
    * 04 — median months to verdict for each filing cohort.
@@ -123,18 +154,32 @@ export default function Highlights() {
     value: c.medianMonths,
     provisional: c.fy > overTime.completeThroughFy,
   }));
-  const settledCohorts = overTime.cohorts.filter((c) => c.fy <= overTime.completeThroughFy);
-  const slowestCohort = settledCohorts.reduce((a, b) => (b.medianMonths > a.medianMonths ? b : a));
+  const settledCohorts = overTime.cohorts.filter(
+    (c) => c.fy <= overTime.completeThroughFy,
+  );
+  const slowestCohort = settledCohorts.reduce((a, b) =>
+    b.medianMonths > a.medianMonths ? b : a,
+  );
   const latestSettled = settledCohorts[settledCohorts.length - 1];
-  const slowestIdx = overTime.cohorts.findIndex((c) => c.fy === slowestCohort.fy);
-  const latestIdx = overTime.cohorts.findIndex((c) => c.fy === latestSettled.fy);
+  const slowestIdx = overTime.cohorts.findIndex(
+    (c) => c.fy === slowestCohort.fy,
+  );
+  const latestIdx = overTime.cohorts.findIndex(
+    (c) => c.fy === latestSettled.fy,
+  );
 
   // 04 — appeals, drawn over every established appeal so the untraced share shows.
   const appealSides: AppealSide[] = [
     {
       key: "defendant",
-      who: t("research.corruption.appeals.whoDefendant", "The convicted person"),
-      stake: t("research.corruption.appeals.stakeDefendant", "a win clears them"),
+      who: t(
+        "research.corruption.appeals.whoDefendant",
+        "The convicted person",
+      ),
+      stake: t(
+        "research.corruption.appeals.stakeDefendant",
+        "a win clears them",
+      ),
       appeals: appeals.defendant.appeals,
       decided: appeals.defendant.decided,
       reversed: appeals.defendant.reversed,
@@ -151,13 +196,14 @@ export default function Highlights() {
       reversed: appeals.commission.reversed,
     },
   ];
-  const untracedPct = appeals.appeals ? (appeals.no_outcome / appeals.appeals) * 100 : 0;
+  const untracedPct = appeals.appeals
+    ? (appeals.no_outcome / appeals.appeals) * 100
+    : 0;
 
   // D — how the Supreme Court treated the judgment below it, summed across the
 
   // C — duration, over decided cases only.
   const duration = REPORT.duration;
-
 
   // The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान
   // आयोग कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
@@ -166,62 +212,257 @@ export default function Highlights() {
   // दफा २१(३) at screening, दफा २२(३)(छ) after the preliminary inquiry, and
   // दफा २५(ग) when the Commission rules on the investigation report. Stage 4 has
   // none of its own; its report goes to stage 5, which is where it can be closed.
-  const flowStages: DiagramNode[] = [
+  /*
+   * The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान आयोग
+   * कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
+   *
+   * तामेली exits sit after screening (दफा २१(३)), after the preliminary inquiry
+   * (दफा २२(३)(छ)) and on the investigation report (दफा २५(ग)). Stage 4 has no exit
+   * of its own: its report goes to stage 5, which is where it can be closed. The
+   * appeal is conditional, so it too is a branch — a verdict nobody appeals stands.
+   *
+   * Stage 8 is separate from stage 7 on purpose. Lodging an appeal and receiving a
+   * decision on it are different events years apart, and the whole finding at the
+   * bottom of this figure is the distance between them.
+   *
+   * An insight is attached only where the record carries one. Stage 3 has none:
+   * the annual reports publish no figure for preliminary inquiries as a class, so
+   * anything said here would be invented.
+   */
+  const routeSteps: RouteStep[] = [
     {
+      kind: "stage",
       key: "darta",
+      n: 1,
       title: t("research.corruption.flow.s1Title", "Complaint registration"),
-      body: t("research.corruption.flow.s1", "Every complaint the Commission receives is registered."),
+      insight: {
+        kind: "gap",
+        title: t(
+          "research.corruption.route.i1Title",
+          "The totals are published. The individual complaint is not.",
+        ),
+        body: t(
+          "research.corruption.route.i1Body",
+          "The Commission had {{all}} complaints on its books in {{fy}} — {{carried}} carried over and {{fresh}} newly registered. What it publishes is the yearly total: no public record shows where any one complaint has got to.",
+          {
+            all: n(cd.total_complaints),
+            fy: cd.fy,
+            carried: n(cd.carried_in),
+            fresh: n(cd.registered_new),
+          },
+        ),
+        href: CITATIONS.ciaa35,
+        linkLabel: t(
+          "research.corruption.route.i1Link",
+          "CIAA annual report, {{fy}}",
+          {
+            fy: cd.fy,
+          },
+        ),
+      },
     },
     {
+      kind: "stage",
       key: "parikshan",
+      n: 2,
       title: t("research.corruption.flow.s2Title", "Screening"),
-      body: t(
-        "research.corruption.flow.s2",
-        "A screening committee assesses what the complaint is about and recommends what should happen to it. The Commissioner decides.",
-      ),
-      exit: t("research.corruption.flow.exit", "Tameli"),
+      insight: {
+        kind: "gap",
+        title: t(
+          "research.corruption.route.i2Title",
+          "Tameli is where most complaints end",
+        ),
+        body: t(
+          "research.corruption.route.i2Body",
+          "In {{fy}}, {{pct}} of the complaints the Commission dealt with were placed in Tameli. The reports give the yearly count, never the reason in any single case — so how a complaint came to be set aside cannot be checked from outside.",
+          { fy: lastDisposal.fy, pct: pct1(tameliPct(lastDisposal)) },
+        ),
+        href: "/investigation#tameli-by-year",
+        linkLabel: t(
+          "research.corruption.route.i2Link",
+          "Tameli, year by year",
+        ),
+      },
     },
     {
+      kind: "decision",
+      key: "d-screen",
+      label: t("research.corruption.flow.dScreen", "Taken forward?"),
+      exit: {
+        label: t("research.corruption.flow.exit", "Tameli"),
+        tone: "tameli",
+      },
+    },
+    {
+      kind: "stage",
       key: "prarambhik",
+      n: 3,
       title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
-      body: t(
-        "research.corruption.flow.s3",
-        "Documents are called for, the office concerned is asked to respond, and the available facts are checked.",
-      ),
-      exit: t("research.corruption.flow.exit", "Tameli"),
     },
     {
+      kind: "decision",
+      key: "d-grounds",
+      label: t("research.corruption.flow.dGrounds", "Grounds found?"),
+      exit: {
+        label: t("research.corruption.flow.exit", "Tameli"),
+        tone: "tameli",
+      },
+    },
+    {
+      kind: "stage",
       key: "bistrit",
+      n: 4,
       title: t("research.corruption.flow.s4Title", "Detailed investigation"),
-      body: t(
-        "research.corruption.flow.s4",
-        "If grounds for corruption appear, an investigating officer is appointed and a full investigation goes ahead.",
-      ),
+      insight: {
+        kind: "finding",
+        title: t(
+          "research.corruption.route.i4Title",
+          "What counts as investigating, and what does not",
+        ),
+        body: t(
+          "research.corruption.route.i4Body",
+          "Ruling on a sting operation, the Supreme Court described investigation as gathering evidence of what happened — not producing what had not. Four years later the method was written back into the Act.",
+        ),
+        href: JAWAFDEHI.sting,
+        linkLabel: t(
+          "research.corruption.route.i4Link",
+          "The sting operation ruling",
+        ),
+      },
     },
     {
+      kind: "stage",
       key: "abhiyojan",
+      n: 5,
       title: t("research.corruption.flow.s5Title", "Prosecution decision"),
-      body: t(
-        "research.corruption.flow.s5",
-        "On the evidence the investigation produced, the Commission decides whether or not to prosecute.",
-      ),
-      exit: t("research.corruption.flow.exit", "Tameli"),
+      exit: {
+        label: t("research.corruption.flow.exit", "Tameli"),
+        tone: "tameli",
+      },
+      insight: {
+        kind: "finding",
+        title: t(
+          "research.corruption.route.i5Title",
+          "A court asked why some were charged and others were not",
+        ),
+        body: t(
+          "research.corruption.route.i5Body",
+          "In the Pashupatinath Jalahari case the Special Court raised selective prosecution — who the charge sheet named, and who it left out. No published record lets that question be asked across cases.",
+        ),
+        href: JAWAFDEHI.jalahari,
+        linkLabel: t(
+          "research.corruption.route.i5Link",
+          "Selective prosecution in the Jalahari case",
+        ),
+      },
     },
     {
+      kind: "stage",
       key: "adalat",
+      n: 6,
+      court: true,
       title: t("research.corruption.flow.s6Title", "Special Court"),
-      body: t(
-        "research.corruption.flow.s6",
-        "If it decides to prosecute, a charge sheet is filed at the Special Court, which decides the case on the evidence.",
-      ),
+      insight: {
+        kind: "finding",
+        title: t(
+          "research.corruption.route.i6Title",
+          "The charge decides the verdict",
+        ),
+        body: t(
+          "research.corruption.route.i6Body",
+          "Across {{d}} decided cases, {{rate}} ended in conviction in whole or in part. But the rate swings with the offence: fake-certificate charges are upheld in full about {{top}} of the time, and for everything else combined the figure is far lower.",
+          {
+            d: n(decided),
+            rate: pct1(rates.convictionPct),
+            top: pct(topCharge.fullPct),
+          },
+        ),
+        href: "/court-outcomes#how-cases-end",
+        linkLabel: t(
+          "research.corruption.route.i6Link",
+          "What the court decides",
+        ),
+      },
     },
     {
+      kind: "decision",
+      key: "d-appeal",
+      label: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
+      exit: {
+        label: t("research.corruption.flow.stands", "Verdict stands"),
+        tone: "stands",
+      },
+    },
+    {
+      kind: "stage",
       key: "punarabedan",
+      n: 7,
+      court: true,
       title: t("research.corruption.flow.s7Title", "Supreme Court appeal"),
-      body: t(
-        "research.corruption.flow.s7",
-        "A party dissatisfied with the verdict may appeal to the Supreme Court as the law allows.",
+      insight: {
+        kind: "finding",
+        title: t(
+          "research.corruption.route.i7Title",
+          "The two sides do not fare alike",
+        ),
+        body: t(
+          "research.corruption.route.i7Body",
+          "Of the convicted people's appeals that have been decided, {{dp}} succeeded. Of the Commission's, {{cp}}. Set against that, {{untraced}} of all appeals traced carry no recorded outcome at all.",
+          {
+            dp: pct1(appeals.defendant.pct),
+            cp: pct1(appeals.commission.pct),
+            untraced: pct1(untracedPct),
+          },
+        ),
+        href: "/appeals#appeal-asymmetry",
+        linkLabel: t("research.corruption.route.i7Link", "The appeal record"),
+      },
+    },
+    {
+      kind: "stage",
+      key: "sarbochha",
+      n: 8,
+      court: true,
+      title: t(
+        "research.corruption.flow.s8Title",
+        "Decision of the Supreme Court",
       ),
+      figure: {
+        value: t("research.corruption.route.s8Figure", "{{y}} years", {
+          y: supremeDelay.medianYears.toFixed(1),
+        }),
+        label: t(
+          "research.corruption.route.s8FigureLabel",
+          "typical wait from appeal lodged to appeal decided",
+        ),
+      },
+      insight: {
+        kind: "finding",
+        title: t(
+          "research.corruption.route.i8Title",
+          "More than a third of appeals take over six years",
+        ),
+        body: t(
+          "research.corruption.route.i8Body",
+          "Across {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} and since decided, the median wait was {{median}} years; {{over}} took more than six, and the {{slowest}} intake ran to {{slowestYears}} years. Later years are left out because too few of their appeals have been decided to measure — and {{open}} of the {{all}} appeals registered carry no recorded decision at all, so the real wait can only be longer than this.",
+          {
+            n: n(supremeDelay.decided),
+            from: supremeDelay.fromYear,
+            to: supremeDelay.toYear,
+            median: supremeDelay.medianYears.toFixed(1),
+            over: pct1(supremeDelay.overSixPct),
+            slowest: supremeDelay.slowestYear,
+            slowestYears: supremeDelay.slowestYears.toFixed(1),
+            open: n(supremeDelay.withoutVerdict),
+            all: n(supremeDelay.registeredAll),
+          },
+        ),
+        href: JAWAFDEHI.courtcases,
+        linkLabel: t(
+          "research.corruption.route.i8Link",
+          "Supreme Court case records",
+        ),
+      },
     },
   ];
 
@@ -239,33 +480,47 @@ export default function Highlights() {
       </Reveal>
 
       <Reveal>
-        <section className="mt-2 md:mt-4" aria-label={t("research.corruption.flow.title", "How a corruption complaint travels")}>
+        <section
+          className="mt-2 md:mt-4"
+          aria-label={t(
+            "research.corruption.flow.title",
+            "How a corruption complaint travels",
+          )}
+        >
           {/* Same frame as a finding card, minus the link: it is a figure, not a
               click-through, so it does not get the hover or the stretched anchor. */}
           <div className="mt-3 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
-            <ProcessDiagram
-              stages={flowStages}
-              labels={{
-                centreTitle: t("research.corruption.flow.centreTitle", "A complaint's route"),
-                yes: t("research.corruption.flow.yes", "yes"),
-                no: t("research.corruption.flow.no", "no"),
-                dScreen: t("research.corruption.flow.dScreen", "Taken forward?"),
-                dGrounds: t("research.corruption.flow.dGrounds", "Grounds found?"),
-                dProsecute: t("research.corruption.flow.dProsecute", "Prosecute?"),
-                dAppeal: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
-                exitTitle: t("research.corruption.flow.exit", "Tameli"),
-                standsTitle: t("research.corruption.flow.stands", "Verdict stands"),
-                exitHere: t("research.corruption.flow.exitHere", "can go to Tameli here"),
-                srIntro: t(
-                  "research.corruption.flow.srIntro",
-                  "The route a corruption complaint takes, in order. Steps one to five sit with the Commission; steps six and seven are separate courts.",
-                ),
-                srExit: t(
-                  "research.corruption.flow.srExit",
-                  "A complaint may be set aside as Tameli at this stage.",
-                ),
-              }}
-            />
+            {/* Held to the same measure as the note below it: at full width the rail
+                stranded every label on the left of an empty page. */}
+            <div className="mx-auto max-w-2xl">
+              <RouteMap
+                steps={routeSteps}
+                labels={{
+                  yes: t("research.corruption.flow.yes", "yes"),
+                  no: t("research.corruption.flow.no", "no"),
+                  insightOpen: t(
+                    "research.corruption.route.open",
+                    "Show the research on this stage",
+                  ),
+                  insightClose: t(
+                    "research.corruption.route.close",
+                    "Hide the research on this stage",
+                  ),
+                  finding: t(
+                    "research.corruption.route.finding",
+                    "What the record shows",
+                  ),
+                  gap: t(
+                    "research.corruption.route.gap",
+                    "What the record cannot answer",
+                  ),
+                  srIntro: t(
+                    "research.corruption.route.srIntro",
+                    "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six to eight are courts. Not every complaint reaches every stage: it can be set aside as Tameli at screening, after the preliminary inquiry, or when the Commission rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
+                  ),
+                }}
+              />
+            </div>
             {/*
               The meaning of तामेली, stated where there is room for both halves of
               it. अनुसूची-११ of the कार्यविधि puts the complaint aside "हाललाई" —
@@ -290,7 +545,6 @@ export default function Highlights() {
                 )}
               </p>
             </div>
-
           </div>
         </section>
       </Reveal>
@@ -324,7 +578,10 @@ export default function Highlights() {
             <TameliByYear
               rows={disposals}
               yearLabel={t("research.corruption.hl.f1Year", "Fiscal year")}
-              investigatedLabel={t("research.corruption.hl.f1Inv", "Investigated")}
+              investigatedLabel={t(
+                "research.corruption.hl.f1Inv",
+                "Investigated",
+              )}
               courtLabel={t("research.corruption.hl.f1Court", "To court")}
               holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
               shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
@@ -334,7 +591,10 @@ export default function Highlights() {
             source: t("research.corruption.hl.f1Src", "CIAA annual reports"),
             sourceHref: CITATIONS.ciaaReports,
             to: "/investigation#tameli-by-year",
-            toLabel: t("research.corruption.hl.f1Link", "The year-by-year series"),
+            toLabel: t(
+              "research.corruption.hl.f1Link",
+              "The year-by-year series",
+            ),
           }}
         >
           {/*
@@ -361,7 +621,10 @@ export default function Highlights() {
             <OutcomeSplit
               segments={outcomeSegments}
               total={decided}
-              totalLabel={t("research.corruption.hl.decidedTotal", "Decided cases")}
+              totalLabel={t(
+                "research.corruption.hl.decidedTotal",
+                "Decided cases",
+              )}
             />
           }
           meta={{
@@ -416,16 +679,23 @@ export default function Highlights() {
             source: t("research.corruption.hl.f3Src", "Charge sheets"),
             sourceHref: CITATIONS.chargeSheets,
             to: "/prosecution#charge-mix",
-            toLabel: t("research.corruption.hl.f3Link2", "The charge mix, year by year"),
+            toLabel: t(
+              "research.corruption.hl.f3Link2",
+              "The charge mix, year by year",
+            ),
           }}
         />
 
         <Highlight
           index={4}
-          stat={t("research.corruption.hl.f3cStat2", "{{slow}} → {{fast}} months", {
-            slow: n(Math.round(slowestCohort.medianMonths)),
-            fast: n(Math.round(latestSettled.medianMonths)),
-          })}
+          stat={t(
+            "research.corruption.hl.f3cStat2",
+            "{{slow}} → {{fast}} months",
+            {
+              slow: n(Math.round(slowestCohort.medianMonths)),
+              fast: n(Math.round(latestSettled.medianMonths)),
+            },
+          )}
           statCaption={t(
             "research.corruption.hl.f3cCaption2",
             "Median time from filing to verdict for cases filed in {{slowYear}}, the slowest year, against {{fastYear}} — the most recent year whose cases have essentially all been decided.",
@@ -450,13 +720,19 @@ export default function Highlights() {
             <MiniTrend
               points={cohortPoints}
               format={(v) =>
-                t("research.corruption.hl.durMonths", "{{v}} mo", { v: Math.round(v) })
+                t("research.corruption.hl.durMonths", "{{v}} mo", {
+                  v: Math.round(v),
+                })
               }
               reference={{
                 value: duration.median_months,
-                label: t("research.corruption.hl.durMedian", "all-years median {{m}} mo", {
-                  m: n(Math.round(duration.median_months)),
-                }),
+                label: t(
+                  "research.corruption.hl.durMedian",
+                  "all-years median {{m}} mo",
+                  {
+                    m: n(Math.round(duration.median_months)),
+                  },
+                ),
               }}
               highlight={[slowestIdx, latestIdx]}
               ariaLabel={t(
@@ -466,10 +742,16 @@ export default function Highlights() {
             />
           }
           meta={{
-            source: t("research.corruption.hl.f3cSrc", "Special Court register"),
+            source: t(
+              "research.corruption.hl.f3cSrc",
+              "Special Court register",
+            ),
             sourceHref: CITATIONS.courtRecords,
             to: "/court-outcomes#pace-and-backlog",
-            toLabel: t("research.corruption.hl.f3cLink", "Pace and backlog by year"),
+            toLabel: t(
+              "research.corruption.hl.f3cLink",
+              "Pace and backlog by year",
+            ),
           }}
         />
 
@@ -491,10 +773,20 @@ export default function Highlights() {
             {
               c: n(appeals.commission.reversed),
               cd: n(appeals.commission.decided),
-              cpct: pct1(appeals.commission.decided ? (appeals.commission.reversed / appeals.commission.decided) * 100 : 0),
+              cpct: pct1(
+                appeals.commission.decided
+                  ? (appeals.commission.reversed / appeals.commission.decided) *
+                      100
+                  : 0,
+              ),
               d: n(appeals.defendant.reversed),
               dd: n(appeals.defendant.decided),
-              dpct: pct1(appeals.defendant.decided ? (appeals.defendant.reversed / appeals.defendant.decided) * 100 : 0),
+              dpct: pct1(
+                appeals.defendant.decided
+                  ? (appeals.defendant.reversed / appeals.defendant.decided) *
+                      100
+                  : 0,
+              ),
               pct: pct1(untracedPct),
             },
           )}
@@ -507,7 +799,10 @@ export default function Highlights() {
                   "research.corruption.appeals.ofDecided",
                   "{{won}} of {{decided}} decided appeals succeeded",
                 )}
-                untraced={{ missing: appeals.no_outcome, total: appeals.appeals }}
+                untraced={{
+                  missing: appeals.no_outcome,
+                  total: appeals.appeals,
+                }}
                 untracedLabel={t(
                   "research.corruption.appeals.untraced",
                   "Not counted above: {{missing}} of the {{total}} appeals traced ({{pct}}) have no recorded outcome.",
@@ -540,13 +835,15 @@ export default function Highlights() {
             "When the CIAA files a case it names the sum it says was taken, and the court can order it repaid. After that the trail stops: neither the CIAA, nor the courts, nor the treasury publish what was actually collected. The blank means unknown, not zero.",
           )}
           meta={{
-            source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
+            source: t(
+              "research.corruption.hl.f5Src",
+              "CIAA annual report; no recovery source exists",
+            ),
             to: "/appeals#recovery-gap",
             toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),
           }}
         />
       </div>
-
     </div>
   );
 }

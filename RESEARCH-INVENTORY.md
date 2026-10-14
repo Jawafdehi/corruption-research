@@ -240,6 +240,46 @@ upheld — are what the gap on the page asks for.
 
 ---
 
+## 6b. How long the Supreme Court takes to decide a corruption appeal
+
+| | |
+|---|---|
+| **Stage** | Supreme Court decision (stage 8 of the route figure) |
+| **Where** | Highlights tab, the complaint-route figure |
+| **Confidence** | Established for the settled cohorts · **right-censored, and the censoring runs one way** |
+
+**Source.** The public court-case API, `/api/courtcases/?court=supreme&type=भ्रष्टाचार`,
+which carries `registration_date_ad` and `verdict_date_ad` per case. Pulled 2026-10-13;
+the per-case rows are committed as `dataset/supreme_appeal_duration.csv` so the figure
+can be recomputed rather than taken on trust. Only `-CR-` numbers are kept (2,976 of
+3,239): `RV` reviews and `CF`/`NF` writs answer a different question than "how long did
+an appeal against a corruption verdict take".
+
+**What is measured.** Appeal registered at the Supreme Court → that appeal decided.
+Not the trial, and not the whole journey from complaint.
+
+**The finding.** Over the 11 registration years 2008–2018 — the cohorts at least 85%
+decided — **the median wait is 4.53 years** across 1,029 decided appeals. The upper
+quartile is 6.29 years, **34.4% took more than six years**, and the slowest intake,
+2017, ran to a 6.27-year median.
+
+**The six-year figure, tested.** A standing claim that an appealed case takes
+"approximately six years" to be decided is **not supported as a typical wait**: the
+median over settled cohorts is about four and a half years, not six. Six years is
+roughly the **upper quartile**, and it is the median for the 2017 intake specifically.
+The site therefore shows 4.5 years as the headline and states the over-six share
+separately. Reporting six as the norm would overstate the record by about 18 months.
+
+**What this does NOT establish.** 1,462 of the 2,976 registered appeals carry no
+verdict date at all, and an appeal still open is by definition a slow one, so every
+figure here is a **floor**. Cohorts after 2018 are excluded for the same reason — the
+2025 intake shows a median under 13 months off five decided appeals, which measures
+how long the fast ones take and nothing else. The 85% threshold is a judgement call
+and lives in `corpus_data.SUPREME_SETTLED_MIN`. Nothing here says why the wait is what
+it is.
+
+---
+
 ## 7. A bench's conviction rate cannot be checked against review
 
 | | |
