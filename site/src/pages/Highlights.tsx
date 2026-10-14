@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
@@ -52,6 +53,7 @@ export default function Highlights() {
     sting: "https://jawafdehi.org/updates/sting-operation/",
     jalahari:
       "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution/",
+    jalahariCase: "https://jawafdehi.org/case/jalahari/",
     courtcases: "https://jawafdehi.org/courtcases/",
   } as const;
 
@@ -248,10 +250,14 @@ export default function Highlights() {
               "research.corruption.route.i1Title2",
               "Can a complainant find out what happened to their complaint?",
             ),
-            body: t(
-              "research.corruption.route.i1Body2",
-              "The Commission takes complaints online, by phone and by email, and had {{all}} on its books in {{fy}}. Its website carries no page where a complainant can look up what became of one: what is published is the yearly total. The route it offers for asking is a right-to-information request — a general statutory right, not a status check. Whether anything is told to a complainant privately is not something the published record settles.",
-              { all: n(cd.total_complaints), fy: cd.fy },
+            body: (
+              <p>
+                {t(
+                  "research.corruption.route.i1Body4",
+                  "The Commission receives complaints online, by phone and by email. In {{fy}}, it had {{all}} complaints on record. But a person who files a complaint cannot publicly check what happened to it through a complaint-tracking system. The Commission publishes the total number of complaints received each year, not the status of individual complaints. Those seeking information can file a right-to-information request, but this is a general legal process, not a way to track a complaint. Public records do not show whether complainants receive updates through other means.",
+                  { all: n(cd.total_complaints), fy: cd.fy },
+                )}
+              </p>
             ),
             href: CITATIONS.ciaa35,
             linkLabel: t(
@@ -267,16 +273,26 @@ export default function Highlights() {
           key: "parikshan",
           n: 2,
           title: t("research.corruption.flow.s2Title", "Screening"),
+          exit: {
+            question: t("research.corruption.flow.dScreen", "Taken forward?"),
+            label: t("research.corruption.flow.exit", "Tameli"),
+            tone: "tameli",
+          },
+        },
+        {
+          key: "prarambhik",
+          n: 3,
+          title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
           /*
-           * The one count in the figure. From तालिका २.१४ of the 35th report, which
-           * covers everything the Commission disposed of BEFORE a detailed
-           * investigation — screening and preliminary inquiry together. The report
-           * does not split those two, which the insight says.
+           * The split sits HERE, not on screening. तालिका २.१४ of the 35th report
+           * counts what the Commission disposed of before any detailed investigation,
+           * and the column that matters — 927 sent on — is the output of the
+           * preliminary inquiry, not of screening. The table does not separate the two
+           * stages, so one insight covers both and the caption says so. Putting it on
+           * screening implied the 3.1% was decided one stage earlier than it is.
            *
-           * NOT the 75.1% this card used to show. That figure is तालिका २.१५: तामेली
-           * as a share of decisions taken AFTER a detailed investigation finishes, a
-           * different table about a different stage, and using it here overstated the
-           * screening rate by about fifteen points.
+           * NOT the 75.1% this card showed before either: that is तालिका २.१५,
+           * तामेली after a detailed investigation finishes — a third stage again.
            */
           split: {
             total: cd.disposed,
@@ -285,9 +301,14 @@ export default function Highlights() {
                 key: "tameli",
                 tone: "out",
                 value: cd.tameli + cd.tameli_with_advice,
-                share: pct1(((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100),
+                share: pct1(
+                  ((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100,
+                ),
                 count: n(cd.tameli + cd.tameli_with_advice),
-                label: t("research.corruption.route.splitTameli2", "placed in Tameli"),
+                label: t(
+                  "research.corruption.route.splitTameli2",
+                  "placed in Tameli",
+                ),
               },
               {
                 key: "other",
@@ -295,7 +316,10 @@ export default function Highlights() {
                 value: cd.other_action,
                 share: pct1((cd.other_action / cd.disposed) * 100),
                 count: n(cd.other_action),
-                label: t("research.corruption.route.splitOther2", "some other action"),
+                label: t(
+                  "research.corruption.route.splitOther2",
+                  "some other action",
+                ),
               },
               {
                 key: "on",
@@ -303,7 +327,10 @@ export default function Highlights() {
                 value: cd.to_investigation,
                 share: pct1((cd.to_investigation / cd.disposed) * 100),
                 count: n(cd.to_investigation),
-                label: t("research.corruption.route.splitOn2", "on to detailed investigation"),
+                label: t(
+                  "research.corruption.route.splitOn2",
+                  "on to detailed investigation",
+                ),
               },
             ],
             caption: t(
@@ -313,7 +340,7 @@ export default function Highlights() {
             ),
           },
           exit: {
-            question: t("research.corruption.flow.dScreen", "Taken forward?"),
+            question: t("research.corruption.flow.dGrounds", "Grounds found?"),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
           },
@@ -324,25 +351,19 @@ export default function Highlights() {
               "research.corruption.route.i2Title2",
               "On what basis does a complaint go to Tameli rather than on?",
             ),
-            body: t(
-              "research.corruption.route.i2Body3",
-              "Tameli is not a dismissal: the file is kept and the matter can be taken up again if evidence appears. But the reports publish these yearly counts only — never the reason in any one case — so whether the decisions are applied consistently cannot be assessed from outside.",
+            body: (
+              <p>
+                {t(
+                  "research.corruption.route.i2Body3",
+                  "Tameli is not a dismissal: the file is kept and the matter can be taken up again if evidence appears. But the reports publish these yearly counts only — never the reason in any one case — so whether the decisions are applied consistently cannot be assessed from outside.",
+                )}
+              </p>
             ),
             href: "/investigation#tameli-by-year",
             linkLabel: t(
               "research.corruption.route.i2Link",
               "Tameli, year by year",
             ),
-          },
-        },
-        {
-          key: "prarambhik",
-          n: 3,
-          title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
-          exit: {
-            question: t("research.corruption.flow.dGrounds", "Grounds found?"),
-            label: t("research.corruption.flow.exit", "Tameli"),
-            tone: "tameli",
           },
         },
         {
@@ -359,9 +380,27 @@ export default function Highlights() {
               "research.corruption.route.i4Title2",
               "Collecting evidence of an offence, or creating it",
             ),
-            body: t(
-              "research.corruption.route.i4Body2",
-              "An investigation is meant to gather evidence of conduct that happened. In a sting the Commission supplied the bribe money itself, so the offence it recorded was one its own operation had set up. On 2078/01/08 the Supreme Court struck down the rule the Commission relied on, describing investigation as the search for what actually occurred — not the making of something that did not. Section 62(d) has since put sting operations into the Act itself. That answers where the power is written down; whether it answers the Court's objection to the state creating the circumstances of an offence is a separate question.",
+            body: (
+              <>
+                <p>
+                  {t(
+                    "research.corruption.route.i4BodyA",
+                    "An investigation is meant to find out what happened, not to create the circumstances for an offence. In a sting operation, the Commission itself supplied the bribe money. This raised a basic question: was it uncovering an offence that had already taken place, or creating the situation in which the offence was recorded?",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i4BodyB",
+                    "On 2078/01/08, the Supreme Court struck down the rule the Commission had relied on. The Court made clear that an investigation must establish what actually happened, not create an event that would not otherwise have occurred. Section 62(d) has since brought sting operations into the Act itself. But putting the power into law does not, by itself, settle the deeper question the Court's ruling raised: ",
+                  )}
+                  <Link to="/investigation#sting-operation">
+                    {t(
+                      "research.corruption.route.i4Inline",
+                      "can the state create the circumstances of an offence and then prosecute someone for it?",
+                    )}
+                  </Link>
+                </p>
+              </>
             ),
             href: JAWAFDEHI.sting,
             linkLabel: t(
@@ -386,9 +425,27 @@ export default function Highlights() {
               "research.corruption.route.i5Title2",
               "Why are some people charged and others not?",
             ),
-            body: t(
-              "research.corruption.route.i5Body2",
-              "Deciding to prosecute means weighing the evidence against each person and choosing who to name in the charge sheet. Different people ending up with different outcomes is not by itself selective prosecution — the evidence against them may differ. The question is whether the reasoning can be checked, and in the Pashupatinath Jalahari case the Special Court itself raised who the charge sheet named and who it left out. No published record lets that question be asked across cases.",
+            body: (
+              <p>
+                {t(
+                  "research.corruption.route.i5BodyA",
+                  "When the Commission investigates a corruption case, it must decide who to charge based on the evidence against each person. Sometimes, some people are charged while others involved in the same case are not. That alone does not mean selective prosecution, because the evidence against each person may be different. The concern is whether there are clear reasons for charging some people and leaving others out, and whether those reasons can be examined. In the ",
+                )}
+                <a
+                  href={JAWAFDEHI.jalahariCase}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t(
+                    "research.corruption.route.i5Case",
+                    "Pashupatinath Jalahari case",
+                  )}
+                </a>
+                {t(
+                  "research.corruption.route.i5BodyB",
+                  ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
+                )}
+              </p>
             ),
             href: JAWAFDEHI.jalahari,
             linkLabel: t(
@@ -420,15 +477,38 @@ export default function Highlights() {
               "research.corruption.route.i6Title2",
               "Three outcomes, not two",
             ),
-            body: t(
-              "research.corruption.route.i6Body2",
-              "Of {{d}} cases with a clear verdict, {{full}} were upheld in full, {{part}} in part — some accused convicted and others cleared, or conviction on some counts only — and {{acq}} ended in acquittal. Quoting a single conviction rate hides that middle band, and an acquittal is not in itself evidence that the investigation failed.",
-              {
-                d: n(decided),
-                full: pct1((outcome.convicted / decided) * 100),
-                part: pct1((outcome.partial / decided) * 100),
-                acq: pct1((outcome.acquitted / decided) * 100),
-              },
+            body: (
+              <p>
+                {t(
+                  "research.corruption.route.i6Body2",
+                  "Of {{d}} cases with a clear verdict, {{full}} were upheld in full, {{part}} in part — some accused convicted and others cleared, or conviction on some counts only — and {{acq}} ended in acquittal. Quoting a single conviction rate hides that middle band, and an acquittal is not in itself evidence that the investigation failed.",
+                  {
+                    d: n(decided),
+                    full: pct1((outcome.convicted / decided) * 100),
+                    part: pct1((outcome.partial / decided) * 100),
+                    acq: pct1((outcome.acquitted / decided) * 100),
+                  },
+                )}
+              </p>
+            ),
+            /*
+             * The gap at this stage is money, not verdicts. The Commission publishes
+             * what it demanded; the court register carries no amount at all, so there
+             * is nothing to difference the claim against.
+             */
+            gapNote: (
+              <p>
+                {t(
+                  "research.corruption.route.i6Gap",
+                  "The verdict is recorded; the money is not. The Commission names a बिगो when it files, and the court can order it repaid, but no published record says how much of a claim any court upheld — so a charge sheet's figure cannot be compared with what was actually established. ",
+                )}
+                <Link to="/court-outcomes#financial-claims">
+                  {t(
+                    "research.corruption.route.i6GapLink",
+                    "What happens to the amounts claimed",
+                  )}
+                </Link>
+              </p>
             ),
             href: "/court-outcomes#how-cases-end",
             linkLabel: t(
@@ -452,17 +532,21 @@ export default function Highlights() {
             kind: "finding",
             tag: t("research.corruption.route.i7Tag", "Who wins"),
             title: t(
-              "research.corruption.route.i7Title2",
-              "The two sides do not fare alike",
+              "research.corruption.route.i7Title3",
+              "Appeals tell two different stories",
             ),
-            body: t(
-              "research.corruption.route.i7Body2",
-              "Of the convicted people's appeals that have been decided, {{dp}} succeeded; of the Commission's, {{cp}}. Against that, {{untraced}} of every appeal traced carries no recorded outcome at all, so the comparison rests on the half of the record that can be followed.",
-              {
-                dp: pct1(appeals.defendant.pct),
-                cp: pct1(appeals.commission.pct),
-                untraced: pct1(untracedPct),
-              },
+            body: (
+              <p>
+                {t(
+                  "research.corruption.route.i7Body3",
+                  "When convicted people appeal, {{dp}} of their appeals that have been decided have succeeded. When the Commission appeals, the figure is just {{cp}}. But there is an important limitation: {{untraced}} of all appeals traced have no recorded outcome. These figures therefore show what happened in appeals with a known outcome, not the full picture.",
+                  {
+                    dp: pct1(appeals.defendant.pct),
+                    cp: pct1(appeals.commission.pct),
+                    untraced: pct1(untracedPct),
+                  },
+                )}
+              </p>
             ),
             href: "/appeals#appeal-asymmetry",
             linkLabel: t(
@@ -479,24 +563,59 @@ export default function Highlights() {
             kind: "finding",
             tag: t("research.corruption.route.i8Tag", "The wait"),
             title: t(
-              "research.corruption.route.i8Title2",
-              "A median of {{median}} years from appeal lodged to appeal decided",
-              {
-                median: supremeDelay.medianYears.toFixed(1),
-              },
+              "research.corruption.route.i8Title3",
+              "A typical Supreme Court appeal took {{median}} years to decide",
+              { median: supremeDelay.medianYears.toFixed(1) },
             ),
-            body: t(
-              "research.corruption.route.i8Body2",
-              "Across {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} and since decided, half took longer than {{median}} years and {{over}} took more than six. Later years are left out because too few of their appeals have been decided to measure, and {{open}} of the {{all}} appeals registered carry no recorded decision at all — so the real wait can only be longer than this.",
-              {
-                n: n(supremeDelay.decided),
-                from: supremeDelay.fromYear,
-                to: supremeDelay.toYear,
-                median: supremeDelay.medianYears.toFixed(1),
-                over: pct1(supremeDelay.overSixPct),
-                open: n(supremeDelay.withoutVerdict),
-                all: n(supremeDelay.registeredAll),
-              },
+            body: (
+              <>
+                <p>
+                  {t(
+                    "research.corruption.route.i8BodyA",
+                    "Of {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over}} took more than six. The average is {{mean}} years, so the figure holds whichever way it is taken.",
+                    {
+                      n: n(supremeDelay.decided),
+                      from: supremeDelay.fromYear,
+                      to: supremeDelay.toYear,
+                      median: supremeDelay.medianYears.toFixed(1),
+                      over: pct1(supremeDelay.overSixPct),
+                      mean: supremeDelay.meanYears.toFixed(1),
+                    },
+                  )}
+                </p>
+                {/*
+                  The recent cut is keyed on the year an appeal was DECIDED, which is
+                  the only window that is not censored: every appeal with a decision
+                  date has a known duration. It measures how old the appeals being
+                  cleared are, not how long one filed today will take.
+                */}
+                <p>
+                  {t(
+                    "research.corruption.route.i8BodyB",
+                    "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. That measures how old the appeals now being cleared are, rather than how long one filed today will take.",
+                    {
+                      eFrom: supremeDelay.earlier.from,
+                      eTo: supremeDelay.earlier.to,
+                      eMed: supremeDelay.earlier.medianYears.toFixed(1),
+                      rFrom: supremeDelay.recent.from,
+                      rTo: supremeDelay.recent.to,
+                      rMed: supremeDelay.recent.medianYears.toFixed(1),
+                    },
+                  )}
+                </p>
+              </>
+            ),
+            gapNote: (
+              <p>
+                {t(
+                  "research.corruption.route.i8Gap",
+                  "Later registration years are excluded because too few of their appeals have been decided to measure the waiting time reliably. And {{open}} of the {{all}} appeals registered have no recorded decision — so these figures show how long decided appeals took, not the full picture.",
+                  {
+                    open: n(supremeDelay.withoutVerdict),
+                    all: n(supremeDelay.registeredAll),
+                  },
+                )}
+              </p>
             ),
             href: "/appeals#appeal-duration",
             linkLabel: t(
@@ -898,22 +1017,29 @@ export default function Highlights() {
             v: supremeDelay.medianYears.toFixed(1),
           })}
           statCaption={t(
-            "research.corruption.hl.f6Caption",
-            "Median time from the day an appeal is registered at the Supreme Court to the day it is decided — not the length of the whole case.",
+            "research.corruption.hl.f6Caption2",
+            "Half of decided appeals took at least this long, from the day the appeal is registered at the Supreme Court to the day it is decided — not the length of the whole case.",
           )}
           headline={t(
             "research.corruption.hl.f6",
             "Winning at the Special Court is not the end. The appeal takes years.",
           )}
           explain={t(
-            "research.corruption.hl.f6Body",
-            "Across {{n}} corruption appeals registered between {{from}} and {{to}} and since decided, half took longer than {{median}} years and {{over}} took more than six. The figure is a floor: {{open}} of the {{all}} appeals registered carry no recorded decision at all, and an appeal still open is by definition a slow one.",
+            "research.corruption.hl.f6Body2",
+            "Of {{n}} corruption appeals registered between {{from}} and {{to}} that have since been decided, half took at least {{median}} years and {{over}} took more than six; the average is {{mean}} years. And the wait is growing: appeals decided in {{rFrom}}–{{rTo}} had been waiting a median of {{rMed}} years against {{eMed}} for those decided in {{eFrom}}–{{eTo}}. The figures are a floor — {{open}} of the {{all}} appeals registered carry no recorded decision at all.",
             {
               n: n(supremeDelay.decided),
               from: supremeDelay.fromYear,
               to: supremeDelay.toYear,
               median: supremeDelay.medianYears.toFixed(1),
               over: pct1(supremeDelay.overSixPct),
+              mean: supremeDelay.meanYears.toFixed(1),
+              rFrom: supremeDelay.recent.from,
+              rTo: supremeDelay.recent.to,
+              rMed: supremeDelay.recent.medianYears.toFixed(1),
+              eFrom: supremeDelay.earlier.from,
+              eTo: supremeDelay.earlier.to,
+              eMed: supremeDelay.earlier.medianYears.toFixed(1),
               open: n(supremeDelay.withoutVerdict),
               all: n(supremeDelay.registeredAll),
             },
@@ -923,10 +1049,15 @@ export default function Highlights() {
               bands={supremeDelay.bands}
               total={supremeDelay.decided}
               bandLabel={(from, to) =>
-                t("research.corruption.hl.f6Band", "{{from}}–{{to}} yr", { from, to })
+                t("research.corruption.hl.f6Band", "{{from}}–{{to}} yr", {
+                  from,
+                  to,
+                })
               }
               openEndLabel={(from) =>
-                t("research.corruption.hl.f6BandOpen", "{{from}} yr +", { from })
+                t("research.corruption.hl.f6BandOpen", "{{from}} yr +", {
+                  from,
+                })
               }
               caption={t(
                 "research.corruption.hl.f6SpreadCaption",
@@ -936,10 +1067,16 @@ export default function Highlights() {
             />
           }
           meta={{
-            source: t("research.corruption.hl.f6Src", "Supreme Court case records"),
+            source: t(
+              "research.corruption.hl.f6Src",
+              "Supreme Court case records",
+            ),
             sourceHref: CITATIONS.courtRecords,
             to: "/appeals#appeal-duration",
-            toLabel: t("research.corruption.hl.f6Link", "How long an appeal takes"),
+            toLabel: t(
+              "research.corruption.hl.f6Link",
+              "How long an appeal takes",
+            ),
           }}
         />
       </div>

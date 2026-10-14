@@ -1,11 +1,14 @@
-import { useId, useState } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export type RouteInsight = {
   /** What the gap is ABOUT, in one or two words. Printed on the indicator chip. */
   tag: string;
   title: string;
-  body: string;
+  /** ReactNode so a finding can carry its own in-text links to the evidence. */
+  body: ReactNode;
+  /** A finding's own limitation, labelled separately so the two are not blurred. */
+  gapNote?: ReactNode;
   /** Internal destination. A path routes in-app; an absolute URL opens jawafdehi.org. */
   href: string;
   linkLabel: string;
@@ -267,9 +270,23 @@ export function RouteMap({
                                 figure. A bar and three counts under one stage out of
                                 eight reads as clutter until a reader has asked for it. */}
                               {s.split ? <SplitBar split={s.split} /> : null}
-                              <p className="mt-2 text-[0.8rem] leading-6 text-foreground/80">
+                              <div className="mt-2 space-y-2 text-[0.8rem] leading-6 text-foreground/80 [&_a]:font-semibold [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2">
                                 {s.insight.body}
-                              </p>
+                              </div>
+
+                              {/* A finding and the thing it cannot settle, kept apart.
+                                  Run together in one paragraph the limitation reads as
+                                  hedging rather than as its own claim. */}
+                              {s.insight.gapNote ? (
+                                <div className="mt-3 rounded-md bg-accent/[0.06] px-3 py-2.5">
+                                  <p className="font-mono text-[0.58rem] font-bold uppercase tracking-[0.12em] text-accent/80">
+                                    {labels.gap}
+                                  </p>
+                                  <div className="mt-1 text-[0.78rem] leading-6 text-foreground/80 [&_a]:font-semibold [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2">
+                                    {s.insight.gapNote}
+                                  </div>
+                                </div>
+                              ) : null}
                               {s.insight.href.startsWith("http") ? (
                                 <a
                                   href={s.insight.href}
