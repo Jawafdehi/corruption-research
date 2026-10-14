@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
-import { ChargeRateBars, type ChargeRate } from "@/components/highlights/ChargeRateBars";
-import { DurationBands } from "@/components/highlights/DurationBands";
+import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
 import {
   ProcessDiagram,
   type DiagramNode,
@@ -14,6 +13,7 @@ import {
   CITATIONS,
   REPORT,
   decidedClean,
+  fyLabel,
   outcomePct,
   tameliPct,
 } from "@/data/research-corruption";
@@ -25,7 +25,8 @@ const MIN_DECIDED = 60;
 export default function Highlights() {
   const { t } = useTranslation();
   const { n, pct, pct1 } = useFormat();
-  const { appeals, byCharge, ciaa, disposals, outcome, rates } = REPORT;
+  const { appeals, byCharge, chargeMixByYear, ciaa, disposals, outcome, overTime, rates } =
+    REPORT;
 
 
   const decided = decidedClean(outcome);
@@ -73,22 +74,60 @@ export default function Highlights() {
     },
   ];
 
-  // 03 — conviction by charge, volume-filtered so no rate rests on a handful.
-  const chargeRows: ChargeRate[] = byCharge
+  // The strongest charge by full-conviction rate, volume-filtered so the rate the card
+  // quotes cannot rest on a handful of cases. Only the top row is read now; the bars
+  // that used the whole list moved out of this card.
+  const topCharge = byCharge
     .map((c) => ({
-      key: c.en,
       label: c.en,
-      term: c.ne,
       fullPct: outcomePct(c, "convicted"),
-      convicted: c.convicted,
       decided: c.convicted + c.partial + c.acquitted,
     }))
     .filter((r) => r.decided >= MIN_DECIDED)
-    .sort((a, b) => b.fullPct - a.fullPct);
+    .sort((a, b) => b.fullPct - a.fullPct)[0];
 
-  const fullOnlyAvg = decided ? (outcome.convicted / decided) * 100 : 0;
-  const topCharge = chargeRows[0];
-  const bottomCharge = chargeRows[chargeRows.length - 1];
+  /*
+   * 03 — the share of each year's filings that were fake-certificate cases.
+   *
+   * The card used to lead on the 90% conviction rate alone. That rate is real, but
+   * fake-certificate cases were most of the docket in the first year and a small part
+   * of it in the last, so a reader meeting 90% with no dates attached takes a finding
+   * about the early 2070s for a description of the court today.
+   */
+  const mixTotal = (r: (typeof chargeMixByYear)[number]) =>
+    r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other;
+  const fakeShare: TrendPoint[] = chargeMixByYear.map((r) => ({
+    label: fyLabel(r.fy),
+    value: mixTotal(r) ? (r.fake / mixTotal(r)) * 100 : 0,
+  }));
+  const fakeFirst = chargeMixByYear[0];
+  const fakeLast = chargeMixByYear[chargeMixByYear.length - 1];
+  const shareOf = (r: typeof fakeFirst) => (mixTotal(r) ? (r.fake / mixTotal(r)) * 100 : 0);
+  // The year the share recovered most after the collapse, derived rather than typed,
+  // so the sentence about the rebound cannot outlive the shape of the data.
+  const lowIdx = chargeMixByYear.reduce((lo, r, i) => (shareOf(r) < shareOf(chargeMixByYear[lo]) ? i : lo), 0);
+  const rebound = chargeMixByYear
+    .slice(lowIdx)
+    .reduce((hi, r) => (shareOf(r) > shareOf(hi) ? r : hi), chargeMixByYear[lowIdx]);
+
+  /*
+   * 04 — median months to verdict for each filing cohort.
+   *
+   * Cohorts past completeThroughFy are still open, so their medians are drawn only
+   * from the cases that have already finished and will rise as the slow ones land.
+   * They are marked provisional and drawn dashed rather than dropped, because the
+   * reader can see for themselves that the series does not stop at the settled years.
+   */
+  const cohortPoints: TrendPoint[] = overTime.cohorts.map((c) => ({
+    label: fyLabel(c.fy),
+    value: c.medianMonths,
+    provisional: c.fy > overTime.completeThroughFy,
+  }));
+  const settledCohorts = overTime.cohorts.filter((c) => c.fy <= overTime.completeThroughFy);
+  const slowestCohort = settledCohorts.reduce((a, b) => (b.medianMonths > a.medianMonths ? b : a));
+  const latestSettled = settledCohorts[settledCohorts.length - 1];
+  const slowestIdx = overTime.cohorts.findIndex((c) => c.fy === slowestCohort.fy);
+  const latestIdx = overTime.cohorts.findIndex((c) => c.fy === latestSettled.fy);
 
   // 04 — appeals, drawn over every established appeal so the untraced share shows.
   const appealSides: AppealSide[] = [
@@ -118,10 +157,6 @@ export default function Highlights() {
 
   // C — duration, over decided cases only.
   const duration = REPORT.duration;
-  const withinTwo = duration.bands
-    .slice(0, 2)
-    .reduce((acc, b) => acc + b.cases, 0);
-  const withinTwoPct = duration.measured ? (withinTwo / duration.measured) * 100 : 0;
 
 
   // The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान
@@ -298,7 +333,7 @@ export default function Highlights() {
           meta={{
             source: t("research.corruption.hl.f1Src", "CIAA annual reports"),
             sourceHref: CITATIONS.ciaaReports,
-            to: "/investigation",
+            to: "/investigation#tameli-by-year",
             toLabel: t("research.corruption.hl.f1Link", "The year-by-year series"),
           }}
         >
@@ -332,83 +367,108 @@ export default function Highlights() {
           meta={{
             source: t("research.corruption.hl.f2Src", "Special Court register"),
             sourceHref: CITATIONS.courtRecords,
-            to: "/court-outcomes",
+            to: "/court-outcomes#how-cases-end",
             toLabel: t("research.corruption.hl.f2Link", "Outcomes in full"),
           }}
         />
 
         <Highlight
           index={3}
-          stat={pct(topCharge.fullPct)}
+          stat={t("research.corruption.hl.f3Stat2", "{{first}} → {{last}}", {
+            first: pct(shareOf(fakeFirst)),
+            last: pct(shareOf(fakeLast)),
+          })}
           statCaption={t(
-            "research.corruption.hl.f3Stat",
-            "of cases involving fake educational certificates end in full conviction. For cases involving illegal benefit, the figure is just {{bottomPct}}.",
-            { bottomPct: pct(bottomCharge.fullPct) },
+            "research.corruption.hl.f3Caption2",
+            "Share of all cases filed that were fake-certificate cases, in {{firstYear}} and in {{lastYear}}. The count fell too, from {{firstN}} cases to {{lastN}}.",
+            {
+              firstYear: fyLabel(fakeFirst.fy),
+              lastYear: fyLabel(fakeLast.fy),
+              firstN: n(fakeFirst.fake),
+              lastN: n(fakeLast.fake),
+            },
           )}
           headline={t(
-            "research.corruption.hl.f3",
-            "What you are charged with decides the verdict",
+            "research.corruption.hl.f3b",
+            "Fake certificates once filled the docket. They no longer do.",
+          )}
+          explain={t(
+            "research.corruption.hl.f3Body2",
+            "These cases are upheld in full about {{conv}} of the time, the highest rate of any charge, which is why they carry so much of the conviction figure for the early years. The fall is not a straight line — the share rose again in {{bumpYear}} before dropping back — so read {{first}} as the shape of one period, not of the whole record.",
+            {
+              conv: pct(topCharge.fullPct),
+              bumpYear: fyLabel(rebound.fy),
+              first: pct(shareOf(fakeFirst)),
+            },
           )}
           chart={
-            <ChargeRateBars
-              rows={chargeRows}
-              avgPct={fullOnlyAvg}
-              rateLabel={t(
-                "research.corruption.hl.f3Rate",
-                "Percentage of decided cases ending in a full conviction, by type of charge",
+            <MiniTrend
+              points={fakeShare}
+              format={(v) => pct(v)}
+              highlight={[0, fakeShare.length - 1]}
+              ariaLabel={t(
+                "research.corruption.hl.f3Aria",
+                "Fake-certificate cases as a share of all cases filed, by fiscal year",
               )}
             />
           }
           meta={{
             source: t("research.corruption.hl.f3Src", "Charge sheets"),
             sourceHref: CITATIONS.chargeSheets,
-            to: "/prosecution",
-            toLabel: t("research.corruption.hl.f3Link", "What gets charged"),
+            to: "/prosecution#charge-mix",
+            toLabel: t("research.corruption.hl.f3Link2", "The charge mix, year by year"),
           }}
         />
 
         <Highlight
           index={4}
-          stat={t("research.corruption.hl.f3cStat", "{{m}} months", {
-            m: n(Math.round(duration.median_months)),
+          stat={t("research.corruption.hl.f3cStat2", "{{slow}} → {{fast}} months", {
+            slow: n(Math.round(slowestCohort.medianMonths)),
+            fast: n(Math.round(latestSettled.medianMonths)),
           })}
           statCaption={t(
-            "research.corruption.hl.f3cCaption",
-            "Median time from filing to verdict at the Special Court, based on {{m}} decided cases.",
-            { m: n(duration.measured) },
+            "research.corruption.hl.f3cCaption2",
+            "Median time from filing to verdict for cases filed in {{slowYear}}, the slowest year, against {{fastYear}} — the most recent year whose cases have essentially all been decided.",
+            {
+              slowYear: fyLabel(slowestCohort.fy),
+              fastYear: fyLabel(latestSettled.fy),
+            },
           )}
           headline={t(
-            "research.corruption.hl.f3c",
-            "How long does a corruption trial take in the Special Court?",
+            "research.corruption.hl.f3c2",
+            "Cases are reaching a verdict faster than the overall median suggests",
           )}
           explain={t(
-            "research.corruption.hl.f3cBody",
-            "{{within}} of decided cases reached a verdict within two years. But this figure excludes the {{pending}} cases still pending. Since these cases have yet to reach a verdict, the actual time taken across all cases may be longer.",
+            "research.corruption.hl.f3cBody2",
+            "Across all {{m}} decided cases the median is {{med}} months. That number covers fourteen years at once, so it describes the record rather than the Court's recent pace. The last two years are drawn dashed because they are still open: their medians count only the cases that have already finished, and they will rise as the slower ones land.",
             {
-              within: pct1(withinTwoPct),
-              over: n(duration.bands[3].cases),
-              pending: n(duration.pending),
+              m: n(duration.measured),
+              med: n(Math.round(duration.median_months)),
             },
           )}
           chart={
-            <DurationBands
-              bands={duration.bands}
-              measured={duration.measured}
-              labels={{
-                heading: t(
-                  "research.corruption.hl.durHeading",
-                  "Time from filing to verdict, decided cases only",
-                ),
-                band: t("research.corruption.hl.durBand", "Time to verdict"),
-                cases: t("research.corruption.hl.durCases", "Cases"),
-                share: t("research.corruption.hl.durShare", "Share of decided cases"),
+            <MiniTrend
+              points={cohortPoints}
+              format={(v) =>
+                t("research.corruption.hl.durMonths", "{{v}} mo", { v: Math.round(v) })
+              }
+              reference={{
+                value: duration.median_months,
+                label: t("research.corruption.hl.durMedian", "all-years median {{m}} mo", {
+                  m: n(Math.round(duration.median_months)),
+                }),
               }}
+              highlight={[slowestIdx, latestIdx]}
+              ariaLabel={t(
+                "research.corruption.hl.f3cAria",
+                "Median months from filing to verdict, by the fiscal year the case was filed",
+              )}
             />
           }
           meta={{
             source: t("research.corruption.hl.f3cSrc", "Special Court register"),
             sourceHref: CITATIONS.courtRecords,
-            to: "/court-outcomes",
+            to: "/court-outcomes#pace-and-backlog",
             toLabel: t("research.corruption.hl.f3cLink", "Pace and backlog by year"),
           }}
         />
@@ -458,7 +518,7 @@ export default function Highlights() {
           meta={{
             source: t("research.corruption.hl.f4Src", "Supreme Court records"),
             sourceHref: CITATIONS.courtRecords,
-            to: "/appeals",
+            to: "/appeals#appeal-asymmetry",
             toLabel: t("research.corruption.hl.f4Link", "The appeal record"),
           }}
         />
@@ -481,7 +541,7 @@ export default function Highlights() {
           )}
           meta={{
             source: t("research.corruption.hl.f5Src", "CIAA annual report; no recovery source exists"),
-            to: "/appeals",
+            to: "/appeals#recovery-gap",
             toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),
           }}
         />

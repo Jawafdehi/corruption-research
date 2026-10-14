@@ -25,14 +25,48 @@ const SectionFallback = () => {
   );
 };
 
-/** Jump back to the top when the section changes; otherwise a deep scroll carries over. */
-function ScrollToTop() {
-  const { pathname } = useLocation();
+/**
+ * Jump back to the top when the section changes; otherwise a deep scroll carries over.
+ *
+ * A `#fragment` overrides that and scrolls to the named element instead, which is what
+ * the Highlights cards link through. The element is polled rather than read once: the
+ * route is a lazy chunk and the charts mount after their data resolves, so on a cold
+ * navigation the target does not exist yet at the moment this effect first runs.
+ */
+function ScrollToTarget() {
+  const { pathname, hash } = useLocation();
+
   // Block body on purpose: a concise arrow would return whatever `scrollTo`
   // returns, and React treats a non-undefined return as the cleanup function.
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (!hash) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const id = decodeURIComponent(hash.slice(1));
+    let timer = 0;
+    let tries = 0;
+
+    const find = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ block: "start" });
+        return;
+      }
+      // ~2s of waiting, then give up and behave like a plain navigation rather than
+      // leaving the reader wherever the previous page happened to be scrolled to.
+      if (tries++ > 40) {
+        window.scrollTo(0, 0);
+        return;
+      }
+      timer = window.setTimeout(find, 50);
+    };
+
+    find();
+    return () => window.clearTimeout(timer);
+  }, [pathname, hash]);
+
   return null;
 }
 
@@ -75,7 +109,7 @@ export function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <ScrollToTop />
+      <ScrollToTarget />
       <header className="border-b border-border">
         <div className="container px-4 py-6 md:px-6 md:py-8">
           <div className="flex items-start justify-between gap-4">

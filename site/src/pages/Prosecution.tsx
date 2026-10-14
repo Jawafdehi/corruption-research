@@ -164,6 +164,7 @@ export default function Prosecution() {
           filing year — not a court outcome.
         */}
         <Figure
+          id="charge-mix"
           title={t("research.corruption.mix.title2", "Cases filed by offence type, by year")}
           subtitle={t(
             "research.corruption.mix.subtitle",
