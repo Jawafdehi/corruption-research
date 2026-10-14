@@ -32,12 +32,10 @@ export type RouteSplit = {
   caption: string;
   parts: readonly {
     key: string;
-    /** What this slice is, e.g. "placed in Tameli". */
+    /** What this slice is AND how many, e.g. "Placed in Tameli: 17,716 complaints". */
     label: string;
     /** Its share, pre-formatted: "59.6%". */
     share: string;
-    /** Its count, pre-formatted: "17,716". */
-    count: string;
     value: number;
     tone: "out" | "on" | "other";
   }[];
@@ -387,12 +385,7 @@ function SplitBar({ split }: { split: RouteSplit }) {
             <dt className="w-[3.1rem] shrink-0 font-mono font-bold tabular-nums text-foreground">
               {p.share}
             </dt>
-            <dd className="min-w-0 flex-1 text-muted-foreground">
-              {p.label}{" "}
-              <span className="font-mono tabular-nums text-foreground/60">
-                {p.count}
-              </span>
-            </dd>
+            <dd className="min-w-0 flex-1 text-muted-foreground">{p.label}</dd>
           </div>
         ))}
       </dl>
