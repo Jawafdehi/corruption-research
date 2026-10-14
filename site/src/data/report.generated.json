@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-14T09:46:52+00:00",
-    "commit": "1fb0f15",
+    "generatedAt": "2026-10-14T12:14:49+00:00",
+    "commit": "c2be6d3",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1299,6 +1299,19 @@
         "cases": 68
       }
     ],
+    "meanYears": 4.35,
+    "recent": {
+      "from": 2023,
+      "to": 2026,
+      "appeals": 804,
+      "medianYears": 5.41
+    },
+    "earlier": {
+      "from": 2015,
+      "to": 2019,
+      "appeals": 481,
+      "medianYears": 1.83
+    },
     "fromYear": 2008,
     "toYear": 2018,
     "cohorts": 11,

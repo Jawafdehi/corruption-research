@@ -345,16 +345,33 @@ export default function Appeals() {
         </SectionHeading>
         <Lede>
           {t(
-            "research.corruption.delay.lede",
-            "Measured from the day an appeal is registered at the Supreme Court to the day it is decided — not from the complaint, and not from the trial. Across {{n}} corruption appeals registered between {{from}} and {{to}} and since decided, half took longer than {{median}} years.",
+            "research.corruption.delay.lede2",
+            "Measured from the day an appeal is registered at the Supreme Court to the day it is decided — not from the complaint, and not from the trial. Of {{n}} corruption appeals registered between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over}} took more than six. The average is {{mean}} years, so the figure holds whichever way it is taken.",
             {
               n: n(supremeDelay.decided),
               from: supremeDelay.fromYear,
               to: supremeDelay.toYear,
               median: supremeDelay.medianYears.toFixed(1),
+              over: pct1(supremeDelay.overSixPct),
+              mean: supremeDelay.meanYears.toFixed(1),
             },
           )}
         </Lede>
+
+        <Body>
+          {t(
+            "research.corruption.delay.trend",
+            "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. Keyed on the year of decision rather than of registration — the one window that is not cut short by appeals still outstanding, since every appeal with a decision date has a known duration. It measures how old the appeals now being cleared are, not how long one filed today will take.",
+            {
+              eFrom: supremeDelay.earlier.from,
+              eTo: supremeDelay.earlier.to,
+              eMed: supremeDelay.earlier.medianYears.toFixed(1),
+              rFrom: supremeDelay.recent.from,
+              rTo: supremeDelay.recent.to,
+              rMed: supremeDelay.recent.medianYears.toFixed(1),
+            },
+          )}
+        </Body>
 
         <StatRow>
           <StatTile

@@ -28,7 +28,9 @@ export default function Investigation() {
   // Bribery filings around the sting ruling of 2078/01/08, which falls inside
   // FY2077/78. Taken from the data rather than written down, so the figures cannot
   // drift from the chart on the Prosecution page that plots the same series.
-  const briberyPeak = chargeMixByYear.reduce((a, b) => (b.bribery > a.bribery ? b : a));
+  const briberyPeak = chargeMixByYear.reduce((a, b) =>
+    b.bribery > a.bribery ? b : a,
+  );
   const peakIdx = chargeMixByYear.indexOf(briberyPeak);
   const briberyAfter = chargeMixByYear[peakIdx + 1] ?? briberyPeak;
   const briberyAfter2 = chargeMixByYear[peakIdx + 2] ?? briberyAfter;
@@ -56,13 +58,15 @@ export default function Investigation() {
   const peak = disposals.reduce((a, b) => (b.filed > a.filed ? b : a));
   const afterPeak = disposals[disposals.indexOf(peak) + 1] ?? last;
 
-
-
-
   return (
     <>
       <Block>
-        <Eyebrow>{t("research.corruption.investigation.eyebrow", "Complaint to charge")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.investigation.eyebrow",
+            "Complaint to charge",
+          )}
+        </Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.investigation.title",
@@ -73,45 +77,73 @@ export default function Investigation() {
           {t(
             "research.corruption.investigation.lede",
             "In {{fy}} the Commission had {{total}} corruption complaints on its books, and sent {{sent}} of them for a full investigation. This page follows what happened to the rest, and to the ones it did investigate. Complaints are stopped at two separate points — soon after they arrive, and again after a full investigation — and this looks at how many stop at each, and what the published record says about why.",
-            { fy: cd.fy, total: n(cd.total_complaints), sent: n(cd.to_investigation) },
+            {
+              fy: cd.fy,
+              total: n(cd.total_complaints),
+              sent: n(cd.to_investigation),
+            },
           )}
         </Lede>
 
         <StatRow>
           <StatTile
             value={n(cd.total_complaints)}
-            label={t("research.corruption.tile.complaints", "Complaints on the Commission's books")}
-            note={t("research.corruption.tile.complaintsNote", "{{carried}} carried over, {{fresh}} newly registered, {{fy}}", {
-              carried: n(cd.carried_in),
-              fresh: n(cd.registered_new),
-              fy: cd.fy,
-            })}
+            label={t(
+              "research.corruption.tile.complaints",
+              "Complaints on the Commission's books",
+            )}
+            note={t(
+              "research.corruption.tile.complaintsNote",
+              "{{carried}} carried over, {{fresh}} newly registered, {{fy}}",
+              {
+                carried: n(cd.carried_in),
+                fresh: n(cd.registered_new),
+                fy: cd.fy,
+              },
+            )}
           />
           <StatTile
             value={n(cd.to_investigation)}
-            label={t("research.corruption.investigation.tileInvestigated", "Sent for a full investigation")}
-            note={t("research.corruption.investigation.tileInvestigatedNote", "{{pct}} of those complaints", {
-              pct: pct1(sentShare),
-            })}
+            label={t(
+              "research.corruption.investigation.tileInvestigated",
+              "Sent for a full investigation",
+            )}
+            note={t(
+              "research.corruption.investigation.tileInvestigatedNote",
+              "{{pct}} of those complaints",
+              {
+                pct: pct1(sentShare),
+              },
+            )}
           />
           <StatTile
             value={n(cd.inv_filed)}
             label={t("research.corruption.tile.filed", "Taken to court")}
-            note={t("research.corruption.tile.filedNote", "of the {{done}} investigations completed that year", {
-              done: n(cd.investigations_completed),
-            })}
+            note={t(
+              "research.corruption.tile.filedNote",
+              "of the {{done}} investigations completed that year",
+              {
+                done: n(cd.investigations_completed),
+              },
+            )}
           />
           <StatTile
             tone="accent"
             value={n(last.tameli)}
-            label={t("research.corruption.investigation.tileTameli", "Investigated, then kept in Tameli")}
-            note={t("research.corruption.investigation.tileTameliNote", "{{pct}} of the decisions taken after a full investigation, {{fy}}", {
-              pct: pct1(tameliPct(last)),
-              fy: last.fy,
-            })}
+            label={t(
+              "research.corruption.investigation.tileTameli",
+              "Investigated, then kept in Tameli",
+            )}
+            note={t(
+              "research.corruption.investigation.tileTameliNote",
+              "{{pct}} of the decisions taken after a full investigation, {{fy}}",
+              {
+                pct: pct1(tameliPct(last)),
+                fy: last.fy,
+              },
+            )}
           />
         </StatRow>
-
 
         {/* The year's whole workload, divided on the report's own denominators.
             Moved here from Highlights: it is the Investigation story in full, and
@@ -137,7 +169,11 @@ export default function Investigation() {
               {t(
                 "research.corruption.hl.cdTotal",
                 "{{carried}} complaints carried over from the previous year, and {{fresh}} new complaints registered during the year.",
-                { fy: cd.fy, carried: n(cd.carried_in), fresh: n(cd.registered_new) },
+                {
+                  fy: cd.fy,
+                  carried: n(cd.carried_in),
+                  fresh: n(cd.registered_new),
+                },
               )}
             </p>
 
@@ -157,36 +193,78 @@ export default function Investigation() {
                     { alone: n(cd.tameli), advice: n(cd.tameli_with_advice) },
                   ),
                 },
-                { k: "other", v: cd.other_action, l: t("research.corruption.hl.cdOther", "other action") },
-                { k: "inv", v: cd.to_investigation, l: t("research.corruption.hl.cdInv", "sent to detailed investigation") },
-                { k: "pending", v: cd.pending_out, l: t("research.corruption.hl.cdPending", "still pending, carried to the next year") },
-              ].map((r: { k: string; v: number; l: string; hot?: boolean; sub?: string }) => (
-                <li key={r.k}>
-                  <div className="flex items-baseline justify-between gap-3 text-sm">
-                    <span className={r.hot ? "font-medium text-accent" : "text-foreground/80"}>
-                      {r.l}
-                    </span>
-                    <span className="shrink-0 font-mono tabular-nums">
-                      {n(r.v)}
-                      <span className={r.hot ? "ml-2 font-semibold text-accent" : "ml-2 text-muted-foreground"}>
-                        {pct1((r.v / cd.total_complaints) * 100)}
+                {
+                  k: "other",
+                  v: cd.other_action,
+                  l: t("research.corruption.hl.cdOther", "other action"),
+                },
+                {
+                  k: "inv",
+                  v: cd.to_investigation,
+                  l: t(
+                    "research.corruption.hl.cdInv",
+                    "sent to detailed investigation",
+                  ),
+                },
+                {
+                  k: "pending",
+                  v: cd.pending_out,
+                  l: t(
+                    "research.corruption.hl.cdPending",
+                    "still pending, carried to the next year",
+                  ),
+                },
+              ].map(
+                (r: {
+                  k: string;
+                  v: number;
+                  l: string;
+                  hot?: boolean;
+                  sub?: string;
+                }) => (
+                  <li key={r.k}>
+                    <div className="flex items-baseline justify-between gap-3 text-sm">
+                      <span
+                        className={
+                          r.hot
+                            ? "font-medium text-accent"
+                            : "text-foreground/80"
+                        }
+                      >
+                        {r.l}
                       </span>
-                    </span>
-                  </div>
-                  {r.sub ? (
-                    <p className="mt-0.5 text-xs text-muted-foreground">{r.sub}</p>
-                  ) : null}
-                  <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
-                    <div
-                      className="h-full rounded-sm"
-                      style={{
-                        width: `${(r.v / cd.total_complaints) * 100}%`,
-                        backgroundColor: r.hot ? "hsl(var(--accent))" : "hsl(var(--foreground) / 0.35)",
-                      }}
-                    />
-                  </div>
-                </li>
-              ))}
+                      <span className="shrink-0 font-mono tabular-nums">
+                        {n(r.v)}
+                        <span
+                          className={
+                            r.hot
+                              ? "ml-2 font-semibold text-accent"
+                              : "ml-2 text-muted-foreground"
+                          }
+                        >
+                          {pct1((r.v / cd.total_complaints) * 100)}
+                        </span>
+                      </span>
+                    </div>
+                    {r.sub ? (
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {r.sub}
+                      </p>
+                    ) : null}
+                    <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
+                      <div
+                        className="h-full rounded-sm"
+                        style={{
+                          width: `${(r.v / cd.total_complaints) * 100}%`,
+                          backgroundColor: r.hot
+                            ? "hsl(var(--accent))"
+                            : "hsl(var(--foreground) / 0.35)",
+                        }}
+                      />
+                    </div>
+                  </li>
+                ),
+              )}
             </ul>
           </div>
 
@@ -200,9 +278,22 @@ export default function Investigation() {
             </h3>
             <dl className="mt-4 grid grid-cols-3 gap-3">
               {[
-                { k: "filed", v: cd.inv_filed, l: t("research.corruption.hl.cdFiled", "taken to court") },
-                { k: "tameli", v: cd.inv_tameli, l: t("research.corruption.hl.cdInvTameli", "kept in Tameli"), hot: true },
-                { k: "held", v: cd.inv_held, l: t("research.corruption.hl.cdHeld", "held in abeyance") },
+                {
+                  k: "filed",
+                  v: cd.inv_filed,
+                  l: t("research.corruption.hl.cdFiled", "taken to court"),
+                },
+                {
+                  k: "tameli",
+                  v: cd.inv_tameli,
+                  l: t("research.corruption.hl.cdInvTameli", "kept in Tameli"),
+                  hot: true,
+                },
+                {
+                  k: "held",
+                  v: cd.inv_held,
+                  l: t("research.corruption.hl.cdHeld", "held in abeyance"),
+                },
               ].map((r) => (
                 <div key={r.k}>
                   <dt
@@ -214,18 +305,23 @@ export default function Investigation() {
                       {pct1((r.v / cd.investigations_completed) * 100)}
                     </span>
                   </dt>
-                  <dd className="mt-1 text-xs leading-4 text-muted-foreground">{r.l}</dd>
+                  <dd className="mt-1 text-xs leading-4 text-muted-foreground">
+                    {r.l}
+                  </dd>
                 </div>
               ))}
             </dl>
           </div>
-
         </div>
-
       </Block>
 
       <Block>
-        <Eyebrow>{t("research.corruption.investigation.tameliEyebrow", "After the investigation")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.investigation.tameliEyebrow",
+            "After the investigation",
+          )}
+        </Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.investigation.tameliTitle",
@@ -281,9 +377,18 @@ export default function Investigation() {
         >
           <TameliTrend
             rows={disposals}
-            tameliLabel={t("research.corruption.investigation.seriesTameli", "Kept in Tameli")}
-            filedLabel={t("research.corruption.investigation.seriesFiled", "Taken to court")}
-            shareLabel={t("research.corruption.investigation.seriesShare", "Share set aside")}
+            tameliLabel={t(
+              "research.corruption.investigation.seriesTameli",
+              "Kept in Tameli",
+            )}
+            filedLabel={t(
+              "research.corruption.investigation.seriesFiled",
+              "Taken to court",
+            )}
+            shareLabel={t(
+              "research.corruption.investigation.seriesShare",
+              "Share set aside",
+            )}
             linkTitle={t(
               "research.corruption.investigation.chartLinkTitle",
               "Open the {{fy}} annual report",
@@ -308,7 +413,10 @@ export default function Investigation() {
               after: pct1((cd.inv_tameli / cd.investigations_completed) * 100),
             },
           )}
-          questionLabel={t("research.corruption.investigation.closeQLabel", "The open question")}
+          questionLabel={t(
+            "research.corruption.investigation.closeQLabel",
+            "The open question",
+          )}
           question={t(
             "research.corruption.investigation.closeQ",
             "What justified setting aside so many?",
@@ -328,69 +436,83 @@ export default function Investigation() {
           </p>
         </ClosingAnalysis>
 
-        <GapCallout
-          label={t("research.corruption.gap.sLabel", "Accountability gap · Investigation methods")}
-          title={t(
-            "research.corruption.gap.sTitle",
-            "The Supreme Court struck down the rule behind sting operations. Parliament then wrote it into the Act.",
-          )}
-          stat={t("research.corruption.gap.sStat", "{{a}} → {{b}}", {
-            a: n(briberyPeak.bribery),
-            b: n(briberyAfter.bribery),
-          })}
-          statCaption={t(
-            "research.corruption.gap.sStatCaption",
-            "Bribery cases filed in court, {{peakFy}} compared with {{afterFy}}. The ruling falls inside that window.",
-            { peakFy: fy(briberyPeak.fy), afterFy: fy(briberyAfter.fy) },
-          )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          shows={
-            <>
-              <p>
-                {t(
-                  "research.corruption.gap.sEstablishes",
-                  "On 2078/01/08 the Supreme Court's constitutional bench held rule 30 of the CIAA Rules, 2059 — the provision the Commission relied on to run sting operations with its own money — void and invalid. The Commission records the decision in its own annual reports, and attributes a fall in its success rate to it: the share of its cases ending in full or partial conviction had run above 50% every year until FY2078/79.",
-                )}
-              </p>
-              <p>
-                {t(
-                  "research.corruption.gap.sEstablishes2",
-                  "Bribery was the charge stings produced. Filings fell from {{a}} in {{peakFy}} to {{b}} in {{afterFy}} and {{c}} the year after — the steepest fall of any charge in this archive. Section 62(d) has since put sting operations into the Act itself, four years on.",
-                  {
-                    a: n(briberyPeak.bribery),
-                    b: n(briberyAfter.bribery),
-                    c: n(briberyAfter2.bribery),
-                    peakFy: fy(briberyPeak.fy),
-                    afterFy: fy(briberyAfter.fy),
-                  },
-                )}
-              </p>
-              <p className="text-xs">
-                <Cite href={STING_ANALYSIS}>
-                  {t("research.corruption.gap.sCite", "Read the full analysis")}
-                </Cite>
-              </p>
-            </>
-          }
-          questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t(
-            "research.corruption.gap.sQuestion",
-            "Does putting sting operations in the Act answer what the Supreme Court actually objected to?",
-          )}
-        >
-          <p>
-            {t(
-              "research.corruption.gap.sBody",
-              "The Court did not only find that the provision sat in the wrong instrument. It described investigation as the search for what actually happened, and said an investigator's work is to gather evidence of it — not to create something that did not exist and turn that into evidence. That objection is about the limit on the state manufacturing the circumstances of an offence, not about the word “sting” or the technique.",
+        <div id="sting-operation" className="scroll-mt-6">
+          <GapCallout
+            label={t(
+              "research.corruption.gap.sLabel",
+              "Accountability gap · Investigation methods",
             )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.gap.sBody2",
-              "Section 62(d) addresses the defect the Court identified in rule 30, which was that a regulation could not carry it. Whether it answers the deeper objection is a separate question, and it is no longer only about whether the Commission may use its own money. It is whether the legislature can authorise the state to supply the funds that create the circumstances of an offence during an investigation. The Court was not asked that, and has not answered it.",
+            title={t(
+              "research.corruption.gap.sTitle",
+              "The Supreme Court struck down the rule behind sting operations. Parliament then wrote it into the Act.",
             )}
-          </p>
-        </GapCallout>
+            stat={t("research.corruption.gap.sStat", "{{a}} → {{b}}", {
+              a: n(briberyPeak.bribery),
+              b: n(briberyAfter.bribery),
+            })}
+            statCaption={t(
+              "research.corruption.gap.sStatCaption",
+              "Bribery cases filed in court, {{peakFy}} compared with {{afterFy}}. The ruling falls inside that window.",
+              { peakFy: fy(briberyPeak.fy), afterFy: fy(briberyAfter.fy) },
+            )}
+            showsLabel={t(
+              "research.corruption.gap.shows",
+              "What the record shows",
+            )}
+            shows={
+              <>
+                <p>
+                  {t(
+                    "research.corruption.gap.sEstablishes",
+                    "On 2078/01/08 the Supreme Court's constitutional bench held rule 30 of the CIAA Rules, 2059 — the provision the Commission relied on to run sting operations with its own money — void and invalid. The Commission records the decision in its own annual reports, and attributes a fall in its success rate to it: the share of its cases ending in full or partial conviction had run above 50% every year until FY2078/79.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.gap.sEstablishes2",
+                    "Bribery was the charge stings produced. Filings fell from {{a}} in {{peakFy}} to {{b}} in {{afterFy}} and {{c}} the year after — the steepest fall of any charge in this archive. Section 62(d) has since put sting operations into the Act itself, four years on.",
+                    {
+                      a: n(briberyPeak.bribery),
+                      b: n(briberyAfter.bribery),
+                      c: n(briberyAfter2.bribery),
+                      peakFy: fy(briberyPeak.fy),
+                      afterFy: fy(briberyAfter.fy),
+                    },
+                  )}
+                </p>
+                <p className="text-xs">
+                  <Cite href={STING_ANALYSIS}>
+                    {t(
+                      "research.corruption.gap.sCite",
+                      "Read the full analysis",
+                    )}
+                  </Cite>
+                </p>
+              </>
+            }
+            questionLabel={t(
+              "research.corruption.gap.open",
+              "The open question",
+            )}
+            question={t(
+              "research.corruption.gap.sQuestion",
+              "Does putting sting operations in the Act answer what the Supreme Court actually objected to?",
+            )}
+          >
+            <p>
+              {t(
+                "research.corruption.gap.sBody",
+                "The Court did not only find that the provision sat in the wrong instrument. It described investigation as the search for what actually happened, and said an investigator's work is to gather evidence of it — not to create something that did not exist and turn that into evidence. That objection is about the limit on the state manufacturing the circumstances of an offence, not about the word “sting” or the technique.",
+              )}
+            </p>
+            <p>
+              {t(
+                "research.corruption.gap.sBody2",
+                "Section 62(d) addresses the defect the Court identified in rule 30, which was that a regulation could not carry it. Whether it answers the deeper objection is a separate question, and it is no longer only about whether the Commission may use its own money. It is whether the legislature can authorise the state to supply the funds that create the circumstances of an offence during an investigation. The Court was not asked that, and has not answered it.",
+              )}
+            </p>
+          </GapCallout>
+        </div>
       </Block>
     </>
   );

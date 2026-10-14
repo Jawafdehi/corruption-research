@@ -270,6 +270,22 @@ roughly the **upper quartile**, and it is the median for the 2017 intake specifi
 The site therefore shows 4.5 years as the headline and states the over-six share
 separately. Reporting six as the norm would overstate the record by about 18 months.
 
+**Mean and median agree, so the jargon can go.** Over the settled cohorts the mean is
+4.35 years against a median of 4.53 — 0.19 years apart, on a near-symmetric
+distribution (skew 0.31). The site therefore says "half took at least 4.5 years" and
+gives the average alongside, rather than leaning on a word most readers skip.
+
+**The recent trend, and why it is keyed on the decision year.** Registration cohorts
+after 2018 are too censored to carry a trend. Keying on the year an appeal was
+*decided* is not censored at all — every appeal with a decision date has a known
+duration — and it shows the wait growing: appeals decided 2015–2019 had been waiting a
+median of **1.83 years** (n=481); those decided 2023–2026 had been waiting **5.41**
+(n=804). ⚠️ This measures how old the appeals being cleared are, NOT how long an appeal
+filed today will take: a year in which the court works through a backlog of old cases
+shows a long wait by construction. The page states that limit wherever it quotes the
+figure. Year by year the series is noisy (2023: 6.28, 2024: 6.05, 2025: 2.80,
+2026: 5.18), which is why it is reported as two multi-year blocks and not a line.
+
 **The spread, not a trend.** Cohort medians swing between 1.9 years (2009) and 6.3
 (2017) with no direction, so the site draws the distribution instead: of the 1,029
 decided appeals, 305 took under two years, 159 two to four, 211 four to six, 286 six to

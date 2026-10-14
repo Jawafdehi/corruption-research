@@ -406,6 +406,30 @@ def supreme_appeal_delay():
 
     yrs = lambda d: round(float(d) / 365.25, 2)
 
+    # Mean alongside median, because "median" is a word a general reader skips. They
+    # are 0.19 years apart over a near-symmetric distribution (skew 0.31), so the page
+    # can say "about four and a half years whichever way you take it" and drop the
+    # jargon without swapping in a worse statistic.
+    mean_years = yrs(pool.mean())
+
+    # The recent picture, keyed on the year an appeal was DECIDED rather than
+    # registered. That cut is not censored -- every appeal with a decision date has a
+    # known duration -- so it is the only way to say anything about now. It measures
+    # how old the appeals being cleared are, NOT how long one filed today will take,
+    # and the page says so.
+    decided_rows = df[df["days_to_decision"].notna()].copy()
+    decided_rows["decided_year"] = pd.to_datetime(decided_rows["decided_ad"]).dt.year
+
+    def window(lo, hi):
+        g = decided_rows[
+            (decided_rows["decided_year"] >= lo) & (decided_rows["decided_year"] <= hi)
+        ]["days_to_decision"]
+        return {"from": lo, "to": hi, "appeals": int(g.size), "medianYears": yrs(g.median())}
+
+    latest_year = int(decided_rows["decided_year"].max())
+    recent = window(latest_year - 3, latest_year)
+    earlier = window(latest_year - 11, latest_year - 7)
+
     # The spread, not a trend. Cohort medians bounce around (1.9 years for 2009, 6.3
     # for 2017) and drawing them as a line would assert a direction the series does
     # not have. How long the 1,029 decided appeals actually took does not.
@@ -422,6 +446,9 @@ def supreme_appeal_delay():
 
     return {
         "bands": bands,
+        "meanYears": mean_years,
+        "recent": recent,
+        "earlier": earlier,
         "fromYear": int(min(settled_years)),
         "toYear": int(max(settled_years)),
         "cohorts": len(settled_years),
