@@ -304,10 +304,10 @@ export default function Highlights() {
                 share: pct1(
                   ((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100,
                 ),
-                count: n(cd.tameli + cd.tameli_with_advice),
                 label: t(
-                  "research.corruption.route.splitTameli2",
-                  "placed in Tameli",
+                  "research.corruption.route.splitTameli3",
+                  "Placed in Tameli: {{n}} complaints",
+                  { n: n(cd.tameli + cd.tameli_with_advice) },
                 ),
               },
               {
@@ -315,10 +315,10 @@ export default function Highlights() {
                 tone: "other",
                 value: cd.other_action,
                 share: pct1((cd.other_action / cd.disposed) * 100),
-                count: n(cd.other_action),
                 label: t(
-                  "research.corruption.route.splitOther2",
-                  "some other action",
+                  "research.corruption.route.splitOther3",
+                  "Other action taken: {{n}} complaints",
+                  { n: n(cd.other_action) },
                 ),
               },
               {
@@ -326,16 +326,16 @@ export default function Highlights() {
                 tone: "on",
                 value: cd.to_investigation,
                 share: pct1((cd.to_investigation / cd.disposed) * 100),
-                count: n(cd.to_investigation),
                 label: t(
-                  "research.corruption.route.splitOn2",
-                  "on to detailed investigation",
+                  "research.corruption.route.splitOn3",
+                  "Sent for detailed investigation: {{n}} complaints",
+                  { n: n(cd.to_investigation) },
                 ),
               },
             ],
             caption: t(
-              "research.corruption.route.splitCaption2",
-              "Of {{n}} complaints the Commission finished dealing with in {{fy}}, before any detailed investigation. तालिका २.१४ of the 35th report, which does not separate screening from the preliminary inquiry.",
+              "research.corruption.route.splitCaption3",
+              "Of the {{n}} complaints the Commission dealt with in {{fy}} before a detailed investigation, nearly six in ten were placed in Tameli, while only about three in every hundred moved to a detailed investigation. These figures come from Table 2.14 of the Commission's 35th annual report, which does not distinguish between initial screening and preliminary inquiry.",
               { n: n(cd.disposed), fy: cd.fy },
             ),
           },
@@ -348,14 +348,14 @@ export default function Highlights() {
             kind: "gap",
             tag: t("research.corruption.route.i2Tag2", "Where they go"),
             title: t(
-              "research.corruption.route.i2Title2",
-              "On what basis does a complaint go to Tameli rather than on?",
+              "research.corruption.route.i2Title3",
+              "Why does the Commission decide to investigate some complaints but not others?",
             ),
             body: (
               <p>
                 {t(
-                  "research.corruption.route.i2Body3",
-                  "Tameli is not a dismissal: the file is kept and the matter can be taken up again if evidence appears. But the reports publish these yearly counts only — never the reason in any one case — so whether the decisions are applied consistently cannot be assessed from outside.",
+                  "research.corruption.route.i2Body4",
+                  "The report gives the numbers, but not the reasons behind individual decisions. It does not explain why one complaint was sent for detailed investigation while another was not. Without those reasons, it is difficult for anyone outside the Commission to assess whether similar complaints are being treated consistently.",
                 )}
               </p>
             ),
@@ -478,18 +478,26 @@ export default function Highlights() {
               "Three outcomes, not two",
             ),
             body: (
-              <p>
-                {t(
-                  "research.corruption.route.i6Body2",
-                  "Of {{d}} cases with a clear verdict, {{full}} were upheld in full, {{part}} in part — some accused convicted and others cleared, or conviction on some counts only — and {{acq}} ended in acquittal. Quoting a single conviction rate hides that middle band, and an acquittal is not in itself evidence that the investigation failed.",
-                  {
-                    d: n(decided),
-                    full: pct1((outcome.convicted / decided) * 100),
-                    part: pct1((outcome.partial / decided) * 100),
-                    acq: pct1((outcome.acquitted / decided) * 100),
-                  },
-                )}
-              </p>
+              <>
+                <p>
+                  {t(
+                    "research.corruption.route.i6BodyA",
+                    "Of the {{d}} cases with a clear verdict, {{full}} ended in full conviction, {{part}} in partial conviction, and {{acq}} in acquittal. Partial conviction means the court convicted someone on some charges but not others, or convicted some accused while clearing others in the same case.",
+                    {
+                      d: n(decided),
+                      full: pct1((outcome.convicted / decided) * 100),
+                      part: pct1((outcome.partial / decided) * 100),
+                      acq: pct1((outcome.acquitted / decided) * 100),
+                    },
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i6BodyB",
+                    "A single conviction rate misses these differences. It also does not tell the whole story of how an investigation was handled. An acquittal means the court did not find the accused guilty, but it does not automatically mean the investigation itself was flawed.",
+                  )}
+                </p>
+              </>
             ),
             /*
              * The gap at this stage is money, not verdicts. The Commission publishes
@@ -499,15 +507,9 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i6Gap",
-                  "The verdict is recorded; the money is not. The Commission names a बिगो when it files, and the court can order it repaid, but no published record says how much of a claim any court upheld — so a charge sheet's figure cannot be compared with what was actually established. ",
+                  "research.corruption.route.i6Gap2",
+                  "The verdict is recorded; the money is not. The Commission names a बिगो when it files, and the court can order it repaid, but no published record says how much of a claim any court upheld — so a charge sheet's figure cannot be compared with what was actually established.",
                 )}
-                <Link to="/court-outcomes#financial-claims">
-                  {t(
-                    "research.corruption.route.i6GapLink",
-                    "What happens to the amounts claimed",
-                  )}
-                </Link>
               </p>
             ),
             href: "/court-outcomes#how-cases-end",
