@@ -40,7 +40,8 @@ const CIAA_2076_77 =
   "https://ciaa.gov.np/uploads/publicationsAndReports/UOJL53.pdf";
 
 const JALAHARI = {
-  analysis: "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution",
+  analysis:
+    "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution",
   case: "https://jawafdehi.org/case/jalahari",
 };
 
@@ -50,19 +51,19 @@ export default function Prosecution() {
 
   // The worked example's round figures. Written through t() rather than concatenated,
   // because "lakh" is a word and Nepali does not put it where English does.
-  const lakh = (v: number) => t("research.corruption.calc.lakh", "Rs {{v}} lakh", { v });
+  const lakh = (v: number) =>
+    t("research.corruption.calc.lakh", "Rs {{v}} lakh", { v });
   const { byCharge, chargeMixByYear, corpus, defendants } = REPORT;
-
 
   // Denominator preserved exactly as the original chart defined it: the sum of the
   // six mix families across all years. This is deliberately larger than the
   // substantive corpus, because unclassifiable matters stay inside `other` rather
   // than being dropped. Changing it would silently change what the chart means.
   const mixTotal = chargeMixByYear.reduce(
-    (s, r) => s + r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other,
+    (s, r) =>
+      s + r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other,
     0,
   );
-
 
   const cdz = REPORT.complaintDisposal[0];
   const bigoDemanded = REPORT.bigoDemanded;
@@ -73,7 +74,9 @@ export default function Prosecution() {
   const filedByMonth = REPORT.filedByMonth;
   const peakMonth = filedByMonth.reduce((a, b) => (b.mean > a.mean ? b : a));
   const otherMonthMean =
-    filedByMonth.filter((m) => m.name !== peakMonth.name).reduce((a, m) => a + m.mean, 0) /
+    filedByMonth
+      .filter((m) => m.name !== peakMonth.name)
+      .reduce((a, m) => a + m.mean, 0) /
     (filedByMonth.length - 1);
 
   const charge = (en: string) => byCharge.find((c) => c.en === en);
@@ -97,7 +100,10 @@ export default function Prosecution() {
   // Both ends of the defendants table, derived rather than written down, so the
   // reading beside the chart cannot drift from the rows when the data is refreshed.
   const accusedExtremes = (() => {
-    const withAvg = accusedRows.map((r) => ({ ...r, avg: r.cases ? r.accused / r.cases : 0 }));
+    const withAvg = accusedRows.map((r) => ({
+      ...r,
+      avg: r.cases ? r.accused / r.cases : 0,
+    }));
     const sorted = [...withAvg].sort((a, b) => b.avg - a.avg);
     return { most: sorted[0], fewest: sorted[sorted.length - 1] };
   })();
@@ -105,14 +111,20 @@ export default function Prosecution() {
   const mixFirst = chargeMixByYear[0];
   const mixLast = chargeMixByYear[chargeMixByYear.length - 1];
   const fakeShare = (r: typeof mixFirst) => {
-    const total = r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other;
+    const total =
+      r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other;
     return total ? (r.fake / total) * 100 : 0;
   };
 
   return (
     <>
       <Block>
-        <Eyebrow>{t("research.corruption.prosecution.eyebrow", "From complaint to court")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.prosecution.eyebrow",
+            "From complaint to court",
+          )}
+        </Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.prosecution.title",
@@ -135,22 +147,43 @@ export default function Prosecution() {
         <StatRow>
           <StatTile
             value={n(corpus.ciaaProsecutions - corpus.moneyLaundering)}
-            label={t("research.corruption.prosecution.tileCorpus", "Corruption cases filed")}
-            note={t("research.corruption.tile.corpusNote", "Over {{years}} fiscal years, excluding money-laundering cases.", {
-              years: corpus.fiscalYears.length,
-            })}
+            label={t(
+              "research.corruption.prosecution.tileCorpus",
+              "Corruption cases filed",
+            )}
+            note={t(
+              "research.corruption.tile.corpusNote",
+              "Over {{years}} fiscal years, excluding money-laundering cases.",
+              {
+                years: corpus.fiscalYears.length,
+              },
+            )}
           />
           <StatTile
             value={n(Math.round(corpus.avgFiledPerYear))}
-            label={t("research.corruption.prosecution.tileRate", "Cases filed per year, on average")}
-            note={t("research.corruption.prosecution.tileRateNote", "Across the {{years}}-year period.", { years: corpus.fiscalYears.length })}
+            label={t(
+              "research.corruption.prosecution.tileRate",
+              "Cases filed per year, on average",
+            )}
+            note={t(
+              "research.corruption.prosecution.tileRateNote",
+              "Across the {{years}}-year period.",
+              { years: corpus.fiscalYears.length },
+            )}
           />
           <StatTile
             value={`Rs ${bigoTotalBn.toFixed(1)} billion`}
-            label={t("research.corruption.prosecution.tileBigo", "Total amount claimed")}
-            note={t("research.corruption.prosecution.tileBigoNote", "Across the {{n}} fiscal years for which the Commission reported a total.", {
-              n: bigoDemanded.length,
-            })}
+            label={t(
+              "research.corruption.prosecution.tileBigo",
+              "Total amount claimed",
+            )}
+            note={t(
+              "research.corruption.prosecution.tileBigoNote",
+              "Across the {{n}} fiscal years for which the Commission reported a total.",
+              {
+                n: bigoDemanded.length,
+              },
+            )}
           />
         </StatRow>
       </Block>
@@ -165,7 +198,10 @@ export default function Prosecution() {
         */}
         <Figure
           id="charge-mix"
-          title={t("research.corruption.mix.title2", "Cases filed by offence type, by year")}
+          title={t(
+            "research.corruption.mix.title2",
+            "Cases filed by offence type, by year",
+          )}
           subtitle={t(
             "research.corruption.mix.subtitle",
             "Number of cases filed in each fiscal year, by offence type.",
@@ -187,22 +223,35 @@ export default function Prosecution() {
             data={chargeMixByYear}
             labels={{
               bribery: t("research.corruption.mix.bribery", "Bribery"),
-              fake: t("research.corruption.mix.fake", "Use of fake credentials"),
-              embezzlement: t("research.corruption.mix.embezzlement", "Embezzlement"),
+              fake: t(
+                "research.corruption.mix.fake",
+                "Use of fake credentials",
+              ),
+              embezzlement: t(
+                "research.corruption.mix.embezzlement",
+                "Embezzlement",
+              ),
               benefit: t("research.corruption.mix.benefit", "Illegal benefit"),
               loss: t("research.corruption.mix.loss", "Loss to government"),
               other: t("research.corruption.mix.other", "Other offences"),
             }}
-            percentLabel={t("research.corruption.mix.percent", "Show percentages")}
+            percentLabel={t(
+              "research.corruption.mix.percent",
+              "Show percentages",
+            )}
           />
         </Figure>
 
         <DataNote
           label={t("research.corruption.note.shows", "What the figures show")}
-          stat={t("research.corruption.prosecution.mixStat", "{{first}} \u2192 {{last}}", {
-            first: pct(fakeShare(mixFirst)),
-            last: pct(fakeShare(mixLast)),
-          })}
+          stat={t(
+            "research.corruption.prosecution.mixStat",
+            "{{first}} \u2192 {{last}}",
+            {
+              first: pct(fakeShare(mixFirst)),
+              last: pct(fakeShare(mixLast)),
+            },
+          )}
           statCaption={t(
             "research.corruption.prosecution.mixStatCaption",
             "Share of cases filed involving fake credentials, falling from {{first}} in {{firstFy}} to {{last}} in {{lastFy}}.",
@@ -223,9 +272,10 @@ export default function Prosecution() {
         </DataNote>
       </Block>
 
-
       <Block>
-        <Eyebrow>{t("research.corruption.size.eyebrow", "How cases differ")}</Eyebrow>
+        <Eyebrow>
+          {t("research.corruption.size.eyebrow", "How cases differ")}
+        </Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.size.title",
@@ -242,15 +292,36 @@ export default function Prosecution() {
         <div className="mt-6 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
           <AccusedPerCase
             rows={accusedRows}
-            heading={t("research.corruption.size.chartTitle", "Defendants per case, and how often the charge is upheld")}
-            subheading={t("research.corruption.size.chartSubtitle", "Decided cases at the Special Court")}
+            heading={t(
+              "research.corruption.size.chartTitle",
+              "Defendants per case, and how often the charge is upheld",
+            )}
+            subheading={t(
+              "research.corruption.size.chartSubtitle",
+              "Decided cases at the Special Court",
+            )}
             offenceLabel={t("research.corruption.size.colOffence", "Offence")}
-            averageLabel={t("research.corruption.size.colAverage", "Average defendants")}
-            averageUnit={t("research.corruption.size.colAverageUnit", "people per case")}
-            convictionLabel={t("research.corruption.size.colConviction", "Upheld in full")}
-            casesLabel={t("research.corruption.size.colConvictionUnit", "% of decided cases")}
+            averageLabel={t(
+              "research.corruption.size.colAverage",
+              "Average defendants",
+            )}
+            averageUnit={t(
+              "research.corruption.size.colAverageUnit",
+              "people per case",
+            )}
+            convictionLabel={t(
+              "research.corruption.size.colConviction",
+              "Upheld in full",
+            )}
+            casesLabel={t(
+              "research.corruption.size.colConvictionUnit",
+              "% of decided cases",
+            )}
             casesWord={t("research.corruption.size.wordCases", "cases")}
-            defendantsWord={t("research.corruption.size.wordDefendants", "defendants")}
+            defendantsWord={t(
+              "research.corruption.size.wordDefendants",
+              "defendants",
+            )}
             language={language}
           />
         </div>
@@ -278,22 +349,21 @@ export default function Prosecution() {
           </p>
         </DataNote>
 
-
-
-
-
-
-
-
         <Figure
-          title={t("research.corruption.month.title", "Average cases filed, by Nepali month")}
+          title={t(
+            "research.corruption.month.title",
+            "Average cases filed, by Nepali month",
+          )}
         >
           <FiledByMonth
             data={filedByMonth}
             peakMonth={peakMonth.month}
             meanLabel={t("research.corruption.month.mean", "mean filings")}
             sdLabel={t("research.corruption.month.sd", "±1 SD")}
-            averageLabel={t("research.corruption.month.average", "all-month average")}
+            averageLabel={t(
+              "research.corruption.month.average",
+              "all-month average",
+            )}
           />
         </Figure>
 
@@ -326,18 +396,31 @@ export default function Prosecution() {
         </DataNote>
 
         <GapCallout
-          label={t("research.corruption.gap.bLabel", "Accountability gap · Prosecution decisions")}
+          label={t(
+            "research.corruption.gap.bLabel",
+            "Accountability gap · Prosecution decisions",
+          )}
           title={t(
             "research.corruption.gap.bTitle",
             "The Pashupati Jalhari case raised a serious question about selective prosecution",
           )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          showsLabel={t(
+            "research.corruption.gap.shows",
+            "What the record shows",
+          )}
           shows={
             <>
               <p>
+                {t("research.corruption.gap.bEstablishesA", "In the ")}
+                <Cite href={JALAHARI.case}>
+                  {t(
+                    "research.corruption.gap.bCaseName",
+                    "Pashupati Jalhari case",
+                  )}
+                </Cite>
                 {t(
-                  "research.corruption.gap.bEstablishes",
-                  "In the Pashupati Jalhari case, the Special Court raised concerns about selective prosecution, questioning why some individuals were prosecuted while others considered similarly responsible were left out. The court's observations put the consistency of the CIAA's prosecution decisions under scrutiny. The acquittal should not, however, be attributed to selective prosecution alone.",
+                  "research.corruption.gap.bEstablishesB",
+                  ", the Special Court raised concerns about selective prosecution, questioning why some individuals were prosecuted while others considered similarly responsible were left out. The court's observations put the consistency of the CIAA's prosecution decisions under scrutiny. The acquittal should not, however, be attributed to selective prosecution alone.",
                 )}
               </p>
               <p className="text-xs">
@@ -346,7 +429,10 @@ export default function Prosecution() {
                 </Cite>
                 {" · "}
                 <Cite href={JALAHARI.case}>
-                  {t("research.corruption.gap.bCiteCase", "Read the full case summary")}
+                  {t(
+                    "research.corruption.gap.bCiteCase",
+                    "Read the full case summary",
+                  )}
                 </Cite>
               </p>
             </>
@@ -385,7 +471,10 @@ export default function Prosecution() {
           in the Act; the sentence under the table has to keep saying so.
         */}
         <GapSection
-          label={t("research.corruption.gap.gLabel", "Accountability gap · Charge calculation")}
+          label={t(
+            "research.corruption.gap.gLabel",
+            "Accountability gap · Charge calculation",
+          )}
           title={t(
             "research.corruption.gap.gTitle2",
             "The Supreme Court applied the check-period method. Why does the CIAA still calculate illicit enrichment using cash flow?",
@@ -402,7 +491,10 @@ export default function Prosecution() {
 
           <GapStep
             first
-            heading={t("research.corruption.calc.step1", "Two methods, one financial history")}
+            heading={t(
+              "research.corruption.calc.step1",
+              "Two methods, one financial history",
+            )}
           >
             <GapBody>
               <p>
@@ -414,12 +506,27 @@ export default function Prosecution() {
             </GapBody>
 
             <FigureTable
-              heading={t("research.corruption.calc.factsHeading", "An official's finances over two years")}
-              rowHeader={t("research.corruption.calc.colActivity", "Financial activity")}
+              heading={t(
+                "research.corruption.calc.factsHeading",
+                "An official's finances over two years",
+              )}
+              rowHeader={t(
+                "research.corruption.calc.colActivity",
+                "Financial activity",
+              )}
               columns={[
-                { key: "y1", label: t("research.corruption.calc.year1", "Year 1") },
-                { key: "y2", label: t("research.corruption.calc.year2", "Year 2") },
-                { key: "total", label: t("research.corruption.calc.total", "Total") },
+                {
+                  key: "y1",
+                  label: t("research.corruption.calc.year1", "Year 1"),
+                },
+                {
+                  key: "y2",
+                  label: t("research.corruption.calc.year2", "Year 2"),
+                },
+                {
+                  key: "total",
+                  label: t("research.corruption.calc.total", "Total"),
+                },
               ]}
               rows={[
                 {
@@ -429,12 +536,18 @@ export default function Prosecution() {
                 },
                 {
                   key: "living",
-                  label: t("research.corruption.calc.living", "Living expenses"),
+                  label: t(
+                    "research.corruption.calc.living",
+                    "Living expenses",
+                  ),
                   values: [lakh(2), lakh(2), lakh(4)],
                 },
                 {
                   key: "property",
-                  label: t("research.corruption.calc.property", "Property purchased"),
+                  label: t(
+                    "research.corruption.calc.property",
+                    "Property purchased",
+                  ),
                   values: [lakh(5), lakh(3), lakh(8)],
                 },
               ]}
@@ -450,28 +563,48 @@ export default function Prosecution() {
                 )}
               >
                 <FigureTable
-                  rowHeader={t("research.corruption.calc.colCalc", "Calculation")}
-                  columns={[{ key: "amount", label: t("research.corruption.calc.colAmount", "Amount") }]}
+                  rowHeader={t(
+                    "research.corruption.calc.colCalc",
+                    "Calculation",
+                  )}
+                  columns={[
+                    {
+                      key: "amount",
+                      label: t("research.corruption.calc.colAmount", "Amount"),
+                    },
+                  ]}
                   rows={[
                     {
                       key: "income",
-                      label: t("research.corruption.calc.m1Income", "Total lawful income"),
+                      label: t(
+                        "research.corruption.calc.m1Income",
+                        "Total lawful income",
+                      ),
                       values: [lakh(15)],
                     },
                     {
                       key: "living",
-                      label: t("research.corruption.calc.m1Living", "Less: living expenses"),
+                      label: t(
+                        "research.corruption.calc.m1Living",
+                        "Less: living expenses",
+                      ),
                       values: [`− ${lakh(4)}`],
                     },
                     {
                       key: "property",
-                      label: t("research.corruption.calc.m1Property", "Less: property purchased"),
+                      label: t(
+                        "research.corruption.calc.m1Property",
+                        "Less: property purchased",
+                      ),
                       values: [`− ${lakh(8)}`],
                     },
                     {
                       key: "balance",
                       total: true,
-                      label: t("research.corruption.calc.m1Balance", "Overall balance"),
+                      label: t(
+                        "research.corruption.calc.m1Balance",
+                        "Overall balance",
+                      ),
                       values: [lakh(3)],
                     },
                   ]}
@@ -493,37 +626,61 @@ export default function Prosecution() {
                 )}
               >
                 <FigureTable
-                  rowHeader={t("research.corruption.calc.colCalc", "Calculation")}
+                  rowHeader={t(
+                    "research.corruption.calc.colCalc",
+                    "Calculation",
+                  )}
                   columns={[
-                    { key: "y1", label: t("research.corruption.calc.year1", "Year 1") },
-                    { key: "y2", label: t("research.corruption.calc.year2", "Year 2") },
+                    {
+                      key: "y1",
+                      label: t("research.corruption.calc.year1", "Year 1"),
+                    },
+                    {
+                      key: "y2",
+                      label: t("research.corruption.calc.year2", "Year 2"),
+                    },
                   ]}
                   rows={[
                     {
                       key: "income",
-                      label: t("research.corruption.calc.income", "Lawful income"),
+                      label: t(
+                        "research.corruption.calc.income",
+                        "Lawful income",
+                      ),
                       values: [lakh(5), lakh(10)],
                     },
                     {
                       key: "living",
-                      label: t("research.corruption.calc.living", "Living expenses"),
+                      label: t(
+                        "research.corruption.calc.living",
+                        "Living expenses",
+                      ),
                       values: [lakh(2), lakh(2)],
                     },
                     {
                       key: "property",
-                      label: t("research.corruption.calc.property", "Property purchased"),
+                      label: t(
+                        "research.corruption.calc.property",
+                        "Property purchased",
+                      ),
                       values: [lakh(5), lakh(3)],
                     },
                     {
                       key: "outgoings",
                       sub: true,
-                      label: t("research.corruption.calc.m2Outgoings", "Total expenses and property"),
+                      label: t(
+                        "research.corruption.calc.m2Outgoings",
+                        "Total expenses and property",
+                      ),
                       values: [lakh(7), lakh(5)],
                     },
                     {
                       key: "balance",
                       total: true,
-                      label: t("research.corruption.calc.m2Balance", "Annual balance"),
+                      label: t(
+                        "research.corruption.calc.m2Balance",
+                        "Annual balance",
+                      ),
                       values: [`− ${lakh(2)}`, `+ ${lakh(5)}`],
                     },
                   ]}
@@ -532,7 +689,10 @@ export default function Prosecution() {
             </div>
 
             <h5 className="mt-6 font-display text-base font-bold leading-snug text-foreground">
-              {t("research.corruption.calc.whyHeading", "Why the results look different")}
+              {t(
+                "research.corruption.calc.whyHeading",
+                "Why the results look different",
+              )}
             </h5>
             <GapBody>
               <p>
@@ -551,17 +711,33 @@ export default function Prosecution() {
             </GapBody>
           </GapStep>
 
-          <GapStep heading={t("research.corruption.calc.step2", "What did the Supreme Court decide?")}>
+          <GapStep
+            heading={t(
+              "research.corruption.calc.step2",
+              "What did the Supreme Court decide?",
+            )}
+          >
             <div className="mt-4 rounded-lg border border-border bg-[hsl(var(--surface))] px-5 py-4">
               <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                {t("research.corruption.calc.caseLabel", "Supreme Court · Decision no. 9433 · 2072")}
+                {t(
+                  "research.corruption.calc.caseLabel",
+                  "Supreme Court · Decision no. 9433 · 2072",
+                )}
               </p>
-              <p className="mt-1.5 font-display text-base font-bold italic leading-snug text-foreground">
-                {t("research.corruption.calc.caseName", "Nepal Government v. Harekrishna Bhagat")}
+              <p className="mt-1.5 font-display text-base font-bold italic leading-snug">
+                <Cite href={NKP_9433}>
+                  {t(
+                    "research.corruption.calc.caseName",
+                    "Nepal Government v. Harekrishna Bhagat",
+                  )}
+                </Cite>
               </p>
               <p className="mt-1 text-xs leading-5">
                 <Cite href={NKP_9433}>
-                  {t("research.corruption.calc.caseCite", "Read the full judgment")}
+                  {t(
+                    "research.corruption.calc.caseCite",
+                    "Read the full judgment",
+                  )}
                 </Cite>
               </p>
             </div>
@@ -582,19 +758,34 @@ export default function Prosecution() {
             </GapBody>
 
             <FigureTable
-              heading={t("research.corruption.calc.figuresHeading", "The figures considered by the Court")}
-              rowHeader={t("research.corruption.calc.colMeasure", "Financial measure")}
-              columns={[{ key: "amount", label: t("research.corruption.calc.colAmount", "Amount") }]}
+              heading={t(
+                "research.corruption.calc.figuresHeading",
+                "The figures considered by the Court",
+              )}
+              rowHeader={t(
+                "research.corruption.calc.colMeasure",
+                "Financial measure",
+              )}
+              columns={[
+                {
+                  key: "amount",
+                  label: t("research.corruption.calc.colAmount", "Amount"),
+                },
+              ]}
               rows={[
                 {
                   key: "assets",
                   label: t("research.corruption.calc.assets", "Property held"),
-                  values: [t("research.corruption.calc.assetsV", "Rs 74,51,426")],
+                  values: [
+                    t("research.corruption.calc.assetsV", "Rs 74,51,426"),
+                  ],
                 },
                 {
                   key: "income",
                   label: t("research.corruption.calc.lawful", "Lawful income"),
-                  values: [t("research.corruption.calc.lawfulV", "Rs 68,47,536")],
+                  values: [
+                    t("research.corruption.calc.lawfulV", "Rs 68,47,536"),
+                  ],
                 },
                 {
                   key: "diff",
@@ -604,7 +795,10 @@ export default function Prosecution() {
                 },
                 {
                   key: "share",
-                  label: t("research.corruption.calc.share", "Difference as a share of property held"),
+                  label: t(
+                    "research.corruption.calc.share",
+                    "Difference as a share of property held",
+                  ),
                   values: [pct2(8.1)],
                 },
               ]}
@@ -620,9 +814,17 @@ export default function Prosecution() {
             </GapBody>
           </GapStep>
 
-          <GapStep heading={t("research.corruption.calc.step3", "The accountability gap")}>
+          <GapStep
+            heading={t(
+              "research.corruption.calc.step3",
+              "The accountability gap",
+            )}
+          >
             <GapQuestion
-              label={t("research.corruption.calc.gapLabel", "CIAA investigation and prosecution")}
+              label={t(
+                "research.corruption.calc.gapLabel",
+                "CIAA investigation and prosecution",
+              )}
               question={t(
                 "research.corruption.calc.gapQuestion",
                 "If the Supreme Court applied the check-period approach, why did the CIAA calculate the alleged illicit wealth using cash flow in the first place?",
@@ -646,12 +848,20 @@ export default function Prosecution() {
                 {t(
                   "research.corruption.calc.gapBody3",
                   "A later example appears in the CIAA's FY2076/77 annual report. In its appeal concerning Ram Babu Adhikari and Malati Sharma Adhikari, the CIAA reproduced a cash-flow chart covering 2046/47 to 2073/12/31. The chart calculated {{amount}} as property without an established source, while the Special Court had assessed the check period as a whole and found that income exceeded expenditure.",
-                  { amount: t("research.corruption.calc.chartTotal", "Rs 2,54,69,887") },
+                  {
+                    amount: t(
+                      "research.corruption.calc.chartTotal",
+                      "Rs 2,54,69,887",
+                    ),
+                  },
                 )}
               </p>
               <p className="text-xs">
                 <Cite href={CIAA_2076_77}>
-                  {t("research.corruption.gap.gCite2", "CIAA annual report, FY2076/77")}
+                  {t(
+                    "research.corruption.gap.gCite2",
+                    "CIAA annual report, FY2076/77",
+                  )}
                 </Cite>
               </p>
               <p>
@@ -663,7 +873,12 @@ export default function Prosecution() {
             </GapBody>
           </GapStep>
 
-          <GapStep heading={t("research.corruption.calc.step4", "What is missing from the public record?")}>
+          <GapStep
+            heading={t(
+              "research.corruption.calc.step4",
+              "What is missing from the public record?",
+            )}
+          >
             <GapBody>
               <p>
                 {t(
@@ -673,10 +888,30 @@ export default function Prosecution() {
               </p>
             </GapBody>
             <ul className="ml-4 mt-3 max-w-3xl list-disc space-y-1.5 text-sm leading-6 text-foreground/85 marker:text-accent">
-              <li>{t("research.corruption.calc.missing1", "The calculation method used by the CIAA during investigation.")}</li>
-              <li>{t("research.corruption.calc.missing2", "The amount of alleged illicit wealth claimed in the charge sheet.")}</li>
-              <li>{t("research.corruption.calc.missing3", "Whether the Special Court accepted that calculation or assessed the finances differently.")}</li>
-              <li>{t("research.corruption.calc.missing4", "The court's reasons for accepting or rejecting the calculation.")}</li>
+              <li>
+                {t(
+                  "research.corruption.calc.missing1",
+                  "The calculation method used by the CIAA during investigation.",
+                )}
+              </li>
+              <li>
+                {t(
+                  "research.corruption.calc.missing2",
+                  "The amount of alleged illicit wealth claimed in the charge sheet.",
+                )}
+              </li>
+              <li>
+                {t(
+                  "research.corruption.calc.missing3",
+                  "Whether the Special Court accepted that calculation or assessed the finances differently.",
+                )}
+              </li>
+              <li>
+                {t(
+                  "research.corruption.calc.missing4",
+                  "The court's reasons for accepting or rejecting the calculation.",
+                )}
+              </li>
             </ul>
             <GapBody>
               <p>
@@ -690,7 +925,10 @@ export default function Prosecution() {
         </GapSection>
 
         <GapCallout
-          label={t("research.corruption.gap.jLabel", "Accountability gap · Financial claims")}
+          label={t(
+            "research.corruption.gap.jLabel",
+            "Accountability gap · Financial claims",
+          )}
           title={t(
             "research.corruption.gap.jTitle",
             "The Commission claimed Rs {{bn}} billion. How much did courts uphold?",
@@ -702,7 +940,10 @@ export default function Prosecution() {
             "Across the {{n}} fiscal years for which annual reports provide totals, the Commission claimed Rs {{bn}} billion in बिगो, the amount it alleged as loss or unlawful gain in its charge sheets.",
             { n: bigoDemanded.length, bn: bigoTotalBn.toFixed(1) },
           )}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          showsLabel={t(
+            "research.corruption.gap.shows",
+            "What the record shows",
+          )}
           shows={
             <p>
               {t(
@@ -711,8 +952,12 @@ export default function Prosecution() {
                 {
                   all: corpus.fiscalYears.length,
                   missingFy: "2082/83",
-                  lo: (Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
-                  hi: (Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9).toFixed(1),
+                  lo: (
+                    Math.min(...bigoDemanded.map((r) => r.rs)) / 1e9
+                  ).toFixed(1),
+                  hi: (
+                    Math.max(...bigoDemanded.map((r) => r.rs)) / 1e9
+                  ).toFixed(1),
                 },
               )}
             </p>
@@ -743,13 +988,18 @@ export default function Prosecution() {
           </p>
         </GapCallout>
         <GapCallout
-          label={t("research.corruption.gap.kLabel", "Accountability gap · Filing patterns")}
+          label={t(
+            "research.corruption.gap.kLabel",
+            "Accountability gap · Filing patterns",
+          )}
           title={t(
             "research.corruption.gap.kTitle",
             "The Commission files more cases in {{peak}} than in any other month. The reason remains unclear.",
             { peak: peakMonth.name },
           )}
-          stat={t("research.corruption.gap.kStat", "{{v}} cases", { v: peakMonth.mean.toFixed(1) })}
+          stat={t("research.corruption.gap.kStat", "{{v}} cases", {
+            v: peakMonth.mean.toFixed(1),
+          })}
           statCaption={t(
             "research.corruption.gap.kEstablishes",
             "The Commission filed an average of {{peakMean}} cases in {{peak}}, the final month of Nepal's fiscal year, compared with {{otherMean}} per month across the other eleven months. That is nearly {{morePct}} more. The pattern is based on {{years}} complete fiscal years, although the number of filings varies considerably from year to year.",
@@ -780,7 +1030,6 @@ export default function Prosecution() {
             )}
           </p>
         </GapCallout>
-
       </Block>
     </>
   );

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Link } from "react-router-dom";
+
 import { cn } from "@/lib/utils";
 
 /** Small coloured label above a heading. */
@@ -124,15 +126,36 @@ export const Caveat = ({ children }: { children: ReactNode }) => (
 );
 
 /** An outbound link to the record a figure rests on. */
+/**
+ * A source, cited. Dotted underline on purpose: it marks the thing a claim rests on,
+ * and a reader scanning for evidence should be able to tell a citation from a
+ * cross-reference without reading either.
+ */
 export const Cite = ({ href, children }: { href: string; children: ReactNode }) => (
   <a
     href={href}
-    className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+    className="text-accent/90 underline decoration-accent/40 decoration-dotted underline-offset-2 transition-colors hover:text-accent hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     target="_blank"
     rel="noreferrer"
   >
     {children}
   </a>
+);
+
+/**
+ * A cross-reference to another part of this research, in the middle of a sentence.
+ *
+ * Solid underline against Cite's dotted one, so the two kinds of link are
+ * distinguishable at a glance: this one keeps you inside the research, that one takes
+ * you to the document underneath it.
+ */
+export const Ref = ({ to, children }: { to: string; children: ReactNode }) => (
+  <Link
+    to={to}
+    className="font-medium text-accent underline decoration-accent/45 underline-offset-2 transition-colors hover:decoration-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+  >
+    {children}
+  </Link>
 );
 
 /**

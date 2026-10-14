@@ -22,6 +22,7 @@ import {
   Caveat,
   Cite,
   Eyebrow,
+  Ref,
   Figure,
   Lede,
   SectionHeading,
@@ -330,10 +331,14 @@ export default function CourtOutcomes() {
         >
           <p>
             {t(
-              "research.corruption.byCharge.body2",
-              "Fake-credential cases also account for about {{fakeShare}} of all full convictions in the dataset. For all other offences combined — including embezzlement, loss to the state, illicit enrichment and irregularities — the full-conviction rate drops to {{restPct}}.",
+              "research.corruption.byCharge.body3",
+              "Fake-credential cases also account for about {{fakeShare}} of all full convictions in the dataset. For all other offences combined — including embezzlement, loss to the state, illicit enrichment and irregularities — the full-conviction rate drops to {{restPct}}. How large a share of filings those cases were ",
               { fakeShare: pct(fake.share), restPct: pct(restPct) },
             )}
+            <Ref to="/prosecution#charge-mix">
+              {t("research.corruption.byCharge.body3Ref", "changed sharply over the period")}
+            </Ref>
+            {t("research.corruption.byCharge.body3End", ".")}
           </p>
         </KeyFinding>
       </Block>
