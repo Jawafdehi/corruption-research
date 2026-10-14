@@ -138,7 +138,7 @@ export default function CourtOutcomes() {
 
   return (
     <>
-      <Block>
+      <Block id="how-cases-end">
         <Eyebrow>{t("research.corruption.outcomes.eyebrow", "What the court decides")}</Eyebrow>
         <SectionHeading>
           {t(
@@ -289,7 +289,7 @@ export default function CourtOutcomes() {
         </Caveat>
       </Block>
 
-      <Block>
+      <Block id="pace-and-backlog">
         <Eyebrow>{t("research.corruption.pace.eyebrow", "Pace and backlog")}</Eyebrow>
         <SectionHeading>
           {t("research.corruption.pace.title", "How long a case takes, and what is still waiting")}

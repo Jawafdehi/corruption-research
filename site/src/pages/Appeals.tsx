@@ -2,12 +2,26 @@ import { useTranslation } from "react-i18next";
 
 import { useFormat } from "@/lib/format";
 
-import { AppealAsymmetry, type AppealSide } from "@/components/research/AppealAsymmetry";
+import {
+  AppealAsymmetry,
+  type AppealSide,
+} from "@/components/research/AppealAsymmetry";
 import { AppealDecisions } from "@/components/research/AppealDecisions";
 import { GapCallout } from "@/components/research/GapCallout";
-import { Block, Body, Caveat, Cite, Eyebrow, Figure, Lede, SectionHeading, StatRow, StatTile, Unknown } from "@/components/layout/Prose";
+import {
+  Block,
+  Body,
+  Caveat,
+  Cite,
+  Eyebrow,
+  Figure,
+  Lede,
+  SectionHeading,
+  StatRow,
+  StatTile,
+  Unknown,
+} from "@/components/layout/Prose";
 import { CITATIONS, REPORT, decidedClean } from "@/data/research-corruption";
-
 
 export default function Appeals() {
   const { t } = useTranslation();
@@ -31,19 +45,29 @@ export default function Appeals() {
     { appealed: 0, notAppealed: 0, minAppealed: Infinity, maxAppealed: 0 },
   );
   const declinedTotal = decisionTotals.appealed + decisionTotals.notAppealed;
-  const declinedPct = declinedTotal ? (decisionTotals.notAppealed / declinedTotal) * 100 : 0;
+  const declinedPct = declinedTotal
+    ? (decisionTotals.notAppealed / declinedTotal) * 100
+    : 0;
 
   // Share of established appeals we cannot follow to an end. Surfaced before the
   // rates, not after, so the 36.6%/1.1% pair is read as the decided minority.
-  const untracedPct = appeals.appeals ? (appeals.no_outcome / appeals.appeals) * 100 : 0;
+  const untracedPct = appeals.appeals
+    ? (appeals.no_outcome / appeals.appeals) * 100
+    : 0;
 
   // Both sides over their FULL established count, so the unresolved share stays
   // inside the figure rather than becoming a caption nobody reads.
   const asymSides: AppealSide[] = [
     {
       key: "defendant",
-      who: t("research.corruption.appeals.whoDefendant", "The convicted person"),
-      stake: t("research.corruption.appeals.stakeDefendant", "a win clears them"),
+      who: t(
+        "research.corruption.appeals.whoDefendant",
+        "The convicted person",
+      ),
+      stake: t(
+        "research.corruption.appeals.stakeDefendant",
+        "a win clears them",
+      ),
       appeals: appeals.defendant.appeals,
       decided: appeals.defendant.decided,
       reversed: appeals.defendant.reversed,
@@ -51,7 +75,10 @@ export default function Appeals() {
     {
       key: "commission",
       who: t("research.corruption.appeals.whoCommission", "The Commission"),
-      stake: t("research.corruption.appeals.stakeCommission", "a win converts an acquittal into a conviction"),
+      stake: t(
+        "research.corruption.appeals.stakeCommission",
+        "a win converts an acquittal into a conviction",
+      ),
       appeals: appeals.commission.appeals,
       decided: appeals.commission.decided,
       reversed: appeals.commission.reversed,
@@ -69,7 +96,10 @@ export default function Appeals() {
   const sides = [
     {
       key: "defendant",
-      who: t("research.corruption.appeals.whoDefendant", "The convicted person"),
+      who: t(
+        "research.corruption.appeals.whoDefendant",
+        "The convicted person",
+      ),
       ...appeals.defendant,
     },
     {
@@ -82,9 +112,17 @@ export default function Appeals() {
   return (
     <>
       <Block>
-        <Eyebrow>{t("research.corruption.appeals.eyebrow", "What survives the Supreme Court")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.appeals.eyebrow",
+            "What survives the Supreme Court",
+          )}
+        </Eyebrow>
         <SectionHeading>
-          {t("research.corruption.appeals.title", "The Special Court's acquittals are close to final. Its convictions are not.")}
+          {t(
+            "research.corruption.appeals.title",
+            "The Special Court's acquittals are close to final. Its convictions are not.",
+          )}
         </SectionHeading>
         <Lede>
           {t(
@@ -95,10 +133,51 @@ export default function Appeals() {
         </Lede>
 
         <StatRow>
-          <StatTile value={n(appeals.appeals)} label={t("research.corruption.appeals.tileTotal", "Appeals established")} note={t("research.corruption.appeals.tileTotalNote", "a floor, not a complete count")} />
-          <StatTile value={n(appeals.decided)} label={t("research.corruption.appeals.tileDecided", "Appeals decided")} note={t("research.corruption.appeals.tileDecidedNote", "the only ones that move a rate")} />
-          <StatTile tone="accent" value={pct1(appeals.defendant.pct)} label={t("research.corruption.appeals.tileDefendant", "Defendant appeals won")} note={t("research.corruption.appeals.tileDefendantNote", "full reversals, of decided")} />
-          <StatTile value={pct1(appeals.commission.pct)} label={t("research.corruption.appeals.tileCommission", "Commission appeals won")} note={t("research.corruption.appeals.tileCommissionNote", "full reversals, of decided")} />
+          <StatTile
+            value={n(appeals.appeals)}
+            label={t(
+              "research.corruption.appeals.tileTotal",
+              "Appeals established",
+            )}
+            note={t(
+              "research.corruption.appeals.tileTotalNote",
+              "a floor, not a complete count",
+            )}
+          />
+          <StatTile
+            value={n(appeals.decided)}
+            label={t(
+              "research.corruption.appeals.tileDecided",
+              "Appeals decided",
+            )}
+            note={t(
+              "research.corruption.appeals.tileDecidedNote",
+              "the only ones that move a rate",
+            )}
+          />
+          <StatTile
+            tone="accent"
+            value={pct1(appeals.defendant.pct)}
+            label={t(
+              "research.corruption.appeals.tileDefendant",
+              "Defendant appeals won",
+            )}
+            note={t(
+              "research.corruption.appeals.tileDefendantNote",
+              "full reversals, of decided",
+            )}
+          />
+          <StatTile
+            value={pct1(appeals.commission.pct)}
+            label={t(
+              "research.corruption.appeals.tileCommission",
+              "Commission appeals won",
+            )}
+            note={t(
+              "research.corruption.appeals.tileCommissionNote",
+              "full reversals, of decided",
+            )}
+          />
         </StatRow>
 
         <Unknown
@@ -111,13 +190,18 @@ export default function Appeals() {
           {t(
             "research.corruption.appeals.tracingBody",
             "{{no}} of {{total}} established appeals carry no outcome anywhere in the record, so every rate below is computed over the {{decided}} that do. The missing half is a filing problem rather than a judicial one. And a case with no appeal on record is one we cannot follow, never one that nobody appealed.",
-            { no: n(appeals.no_outcome), total: n(appeals.appeals), decided: n(appeals.decided) },
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              decided: n(appeals.decided),
+            },
           )}
         </Unknown>
       </Block>
 
       <Block>
         <Figure
+          id="appeal-asymmetry"
           title={t(
             "research.corruption.appeals.asymTitle",
             "Every appeal each side brought, and how far it got",
@@ -149,8 +233,14 @@ export default function Appeals() {
 
       <Block>
         <Figure
-          title={t("research.corruption.appeals.tableTitle", "Who appeals, and who wins")}
-          subtitle={t("research.corruption.appeals.tableSubtitle", "Full reversals as a share of appeals that have been decided.")}
+          title={t(
+            "research.corruption.appeals.tableTitle",
+            "Who appeals, and who wins",
+          )}
+          subtitle={t(
+            "research.corruption.appeals.tableSubtitle",
+            "Full reversals as a share of appeals that have been decided.",
+          )}
           caption={t(
             "research.corruption.appeals.tableCaption",
             "Direction matters: a reversal means the opposite thing depending on who brought the appeal. Where the convicted person appeals, a reversal clears them; where the Commission appeals an acquittal, a reversal convicts. Appeals with no recorded outcome are excluded from these rates rather than counted as losses.",
@@ -159,19 +249,37 @@ export default function Appeals() {
           <table className="w-full min-w-[32rem] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th scope="col" className="py-2 pr-4 font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colWho", "Appealed by")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colFiled", "Appeals")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colDecided", "Decided")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
-                  {t("research.corruption.appeals.colReversed", "Full reversals")}
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.colReversed",
+                    "Full reversals",
+                  )}
                 </th>
-                <th scope="col" className="py-2 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colRate", "Rate")}
                 </th>
               </tr>
@@ -179,13 +287,24 @@ export default function Appeals() {
             <tbody className="font-mono">
               {sides.map((s) => (
                 <tr key={s.key} className="border-b border-border/60">
-                  <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
+                  <th
+                    scope="row"
+                    className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                  >
                     {s.who}
                   </th>
-                  <td className="py-3 pr-4 text-right text-muted-foreground">{n(s.appeals)}</td>
-                  <td className="py-3 pr-4 text-right text-muted-foreground">{n(s.decided)}</td>
-                  <td className="py-3 pr-4 text-right text-foreground">{n(s.reversed)}</td>
-                  <td className="py-3 text-right font-semibold text-foreground">{pct1(s.pct)}</td>
+                  <td className="py-3 pr-4 text-right text-muted-foreground">
+                    {n(s.appeals)}
+                  </td>
+                  <td className="py-3 pr-4 text-right text-muted-foreground">
+                    {n(s.decided)}
+                  </td>
+                  <td className="py-3 pr-4 text-right text-foreground">
+                    {n(s.reversed)}
+                  </td>
+                  <td className="py-3 text-right font-semibold text-foreground">
+                    {pct1(s.pct)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -208,7 +327,10 @@ export default function Appeals() {
 
       <Block>
         <Figure
-          title={t("research.corruption.appeals.effectTitle", "The conviction rate, before and after appeal")}
+          title={t(
+            "research.corruption.appeals.effectTitle",
+            "The conviction rate, before and after appeal",
+          )}
           subtitle={t(
             "research.corruption.appeals.effectSubtitle",
             "Applying only the appeals already decided — nothing is projected onto the ones still outstanding.",
@@ -216,37 +338,73 @@ export default function Appeals() {
           caption={t(
             "research.corruption.appeals.effectCaption",
             "{{lost}} convictions were lost on appeal and {{gained}} acquittals were overturned into convictions, a net change of {{net}} cases. Both rows use the same denominator as the trial-court figures, so they are directly comparable.",
-            { lost: n(appeals.lost), gained: n(appeals.gained), net: n(appeals.net) },
+            {
+              lost: n(appeals.lost),
+              gained: n(appeals.gained),
+              net: n(appeals.net),
+            },
           )}
         >
           <table className="w-full min-w-[28rem] border-collapse text-sm">
             <thead>
               <tr className="border-b border-border text-left">
-                <th scope="col" className="py-2 pr-4 font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colMeasure", "Measure")}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-medium text-muted-foreground">
+                <th
+                  scope="col"
+                  className="py-2 pr-4 text-right font-medium text-muted-foreground"
+                >
                   {t("research.corruption.appeals.colTrial", "At trial")}
                 </th>
-                <th scope="col" className="py-2 text-right font-medium text-muted-foreground">
-                  {t("research.corruption.appeals.colAfter", "After appeals decided")}
+                <th
+                  scope="col"
+                  className="py-2 text-right font-medium text-muted-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.colAfter",
+                    "After appeals decided",
+                  )}
                 </th>
               </tr>
             </thead>
             <tbody className="font-mono">
               <tr className="border-b border-border/60">
-                <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
-                  {t("research.corruption.appeals.rowIncl", "Convicted, in whole or part")}
+                <th
+                  scope="row"
+                  className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.rowIncl",
+                    "Convicted, in whole or part",
+                  )}
                 </th>
-                <td className="py-3 pr-4 text-right text-muted-foreground">{pct1(trialIncl)}</td>
-                <td className="py-3 text-right font-semibold text-foreground">{pct1(afterIncl)}</td>
+                <td className="py-3 pr-4 text-right text-muted-foreground">
+                  {pct1(trialIncl)}
+                </td>
+                <td className="py-3 text-right font-semibold text-foreground">
+                  {pct1(afterIncl)}
+                </td>
               </tr>
               <tr>
-                <th scope="row" className="py-3 pr-4 text-left font-sans font-medium text-foreground">
-                  {t("research.corruption.appeals.rowFull", "Convicted in full")}
+                <th
+                  scope="row"
+                  className="py-3 pr-4 text-left font-sans font-medium text-foreground"
+                >
+                  {t(
+                    "research.corruption.appeals.rowFull",
+                    "Convicted in full",
+                  )}
                 </th>
-                <td className="py-3 pr-4 text-right text-muted-foreground">{pct1(trialFull)}</td>
-                <td className="py-3 text-right font-semibold text-foreground">{pct1(afterFull)}</td>
+                <td className="py-3 pr-4 text-right text-muted-foreground">
+                  {pct1(trialFull)}
+                </td>
+                <td className="py-3 text-right font-semibold text-foreground">
+                  {pct1(afterFull)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -256,13 +414,22 @@ export default function Appeals() {
           {t(
             "research.corruption.appeals.caveat",
             "This is a floor on the eventual effect, not a settled number. {{no}} of the {{total}} mapped appeals — {{pct}}% — carry no recorded outcome yet, and the figures above simply leave them out. A blank is also not a finding: where no appeal is recorded it means none has been established, not that none exists.",
-            { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: Math.round(undecidedShare) },
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              pct: Math.round(undecidedShare),
+            },
           )}
         </Caveat>
       </Block>
 
       <Block>
-        <Eyebrow>{t("research.corruption.appealDecisions.eyebrow", "Before the appeal exists")}</Eyebrow>
+        <Eyebrow>
+          {t(
+            "research.corruption.appealDecisions.eyebrow",
+            "Before the appeal exists",
+          )}
+        </Eyebrow>
         <SectionHeading>
           {t(
             "research.corruption.appealDecisions.title",
@@ -308,8 +475,14 @@ export default function Appeals() {
         >
           <AppealDecisions
             rows={ciaaDecisions}
-            appealedLabel={t("research.corruption.appealDecisions.yes", "Decided to appeal")}
-            declinedLabel={t("research.corruption.appealDecisions.no", "Decided not to appeal")}
+            appealedLabel={t(
+              "research.corruption.appealDecisions.yes",
+              "Decided to appeal",
+            )}
+            declinedLabel={t(
+              "research.corruption.appealDecisions.no",
+              "Decided not to appeal",
+            )}
           />
         </Figure>
 
@@ -317,12 +490,18 @@ export default function Appeals() {
           {t(
             "research.corruption.appealDecisions.body2",
             "The two series move independently. Decisions to appeal swing from {{min}} in one year to {{max}} in another, while decisions to decline stay far steadier. A reader should resist the obvious inference: the reports do not say how many eligible verdicts there were in any year, so a low appeal count may mean the Commission lost less, declined more, or simply met less often.",
-            { min: n(decisionTotals.minAppealed), max: n(decisionTotals.maxAppealed) },
+            {
+              min: n(decisionTotals.minAppealed),
+              max: n(decisionTotals.maxAppealed),
+            },
           )}
         </Body>
 
         <Unknown
-          title={t("research.corruption.appealDecisions.unknownTitle", "What would make this readable")}
+          title={t(
+            "research.corruption.appealDecisions.unknownTitle",
+            "What would make this readable",
+          )}
         >
           {t(
             "research.corruption.appealDecisions.unknownBody",
@@ -331,15 +510,31 @@ export default function Appeals() {
         </Unknown>
 
         <GapCallout
-          label={t("research.corruption.gap.dLabel", "Accountability gap · Appeals")}
-          title={t("research.corruption.gap.dTitle", "Half the appeals end in silence")}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
+          label={t(
+            "research.corruption.gap.dLabel",
+            "Accountability gap · Appeals",
+          )}
+          title={t(
+            "research.corruption.gap.dTitle",
+            "Half the appeals end in silence",
+          )}
+          showsLabel={t(
+            "research.corruption.gap.shows",
+            "What the record shows",
+          )}
           questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t("research.corruption.gap.dQuestion", "What happened to the appeals that carry no recorded outcome?")}
+          question={t(
+            "research.corruption.gap.dQuestion",
+            "What happened to the appeals that carry no recorded outcome?",
+          )}
           shows={t(
             "research.corruption.gap.dEstablishes",
             "{{no}} of the {{total}} appeals traced — {{pct}} — carry no recorded outcome anywhere.",
-            { no: n(appeals.no_outcome), total: n(appeals.appeals), pct: pct1(untracedPct) },
+            {
+              no: n(appeals.no_outcome),
+              total: n(appeals.appeals),
+              pct: pct1(untracedPct),
+            },
           )}
         >
           {t(
@@ -348,40 +543,57 @@ export default function Appeals() {
           )}
           <p>
             {t(
-            "research.corruption.gap.dNeeded",
-            "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
-          )}
+              "research.corruption.gap.dNeeded",
+              "A link between a trial case and its appeal in the court system. Without one, every pairing has to be rebuilt by hand and coverage can never be proved complete.",
+            )}
           </p>
         </GapCallout>
 
-        <GapCallout
-          label={t("research.corruption.gap.eLabel", "Accountability gap · Recovery")}
-          title={t("research.corruption.gap.eTitle", "The money is where the record simply stops")}
-          showsLabel={t("research.corruption.gap.shows", "What the record shows")}
-          questionLabel={t("research.corruption.gap.open", "The open question")}
-          question={t("research.corruption.gap.eQuestion", "How much of the money a court orders repaid is ever collected?")}
-          shows={t(
-            "research.corruption.gap.eEstablishes",
-            "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
-            { bn: ciaa.damagesClaimedYearBn },
-          )}
-        >
-          <>
-            {t(
-              "research.corruption.gap.eBody",
-              "Every other stage has an institution that publishes something about it. This one has none, which is why it is the only stage with no number against it anywhere on this site. A finding on बिगो is a legal determination; no published source says whether a rupee followed it. Read the blank as missing, not as zero.",
-            )}{" "}
-            <Cite href={CITATIONS.ciaaReports}>
-              {t("research.corruption.gap.eCite", "CIAA annual reports")}
-            </Cite>
-          </>
-          <p>
-            {t(
-            "research.corruption.gap.eNeeded",
-            "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
-          )}
-          </p>
-        </GapCallout>
+        <div id="recovery-gap" className="scroll-mt-6">
+          <GapCallout
+            label={t(
+              "research.corruption.gap.eLabel",
+              "Accountability gap · Recovery",
+            )}
+            title={t(
+              "research.corruption.gap.eTitle",
+              "The money is where the record simply stops",
+            )}
+            showsLabel={t(
+              "research.corruption.gap.shows",
+              "What the record shows",
+            )}
+            questionLabel={t(
+              "research.corruption.gap.open",
+              "The open question",
+            )}
+            question={t(
+              "research.corruption.gap.eQuestion",
+              "How much of the money a court orders repaid is ever collected?",
+            )}
+            shows={t(
+              "research.corruption.gap.eEstablishes",
+              "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
+              { bn: ciaa.damagesClaimedYearBn },
+            )}
+          >
+            <>
+              {t(
+                "research.corruption.gap.eBody",
+                "Every other stage has an institution that publishes something about it. This one has none, which is why it is the only stage with no number against it anywhere on this site. A finding on बिगो is a legal determination; no published source says whether a rupee followed it. Read the blank as missing, not as zero.",
+              )}{" "}
+              <Cite href={CITATIONS.ciaaReports}>
+                {t("research.corruption.gap.eCite", "CIAA annual reports")}
+              </Cite>
+            </>
+            <p>
+              {t(
+                "research.corruption.gap.eNeeded",
+                "A published recovery ledger keyed to case numbers. Until one exists the last stage of accountability cannot be measured at all.",
+              )}
+            </p>
+          </GapCallout>
+        </div>
       </Block>
     </>
   );

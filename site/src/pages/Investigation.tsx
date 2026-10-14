@@ -273,6 +273,7 @@ export default function Investigation() {
         </Body>
 
         <Figure
+          id="tameli-by-year"
           title={t(
             "research.corruption.investigation.chartTitle",
             "What the Commission decided to do with each investigated complaint, by year",

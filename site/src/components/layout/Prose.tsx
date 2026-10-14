@@ -26,8 +26,22 @@ export const Body = ({ children }: { children: ReactNode }) => (
 );
 
 /** A block of page, separated from its neighbours. */
-export const Block = ({ children, className }: { children: ReactNode; className?: string }) => (
-  <section className={cn("mt-12 first:mt-0 md:mt-16", className)}>{children}</section>
+/**
+ * `id` makes a section a link target. `scroll-mt` goes with it: landing with the
+ * heading flush against the viewport edge reads as a cropped page, not an anchor.
+ */
+export const Block = ({
+  children,
+  className,
+  id,
+}: {
+  children: ReactNode;
+  className?: string;
+  id?: string;
+}) => (
+  <section id={id} className={cn("mt-12 first:mt-0 md:mt-16", id && "scroll-mt-6", className)}>
+    {children}
+  </section>
 );
 
 /**
@@ -40,13 +54,22 @@ export const Figure = ({
   subtitle,
   caption,
   children,
+  id,
 }: {
   title: string;
   subtitle?: string;
   caption?: ReactNode;
   children: ReactNode;
+  /** Makes this figure a link target. See Block for why scroll-mt travels with it. */
+  id?: string;
 }) => (
-  <figure className="mt-8 rounded-lg border border-border bg-card/40 p-4 md:p-6">
+  <figure
+    id={id}
+    className={cn(
+      "mt-8 rounded-lg border border-border bg-card/40 p-4 md:p-6",
+      id && "scroll-mt-6",
+    )}
+  >
     <figcaption className="mb-4">
       <h3 className="font-display text-lg font-semibold leading-snug text-foreground md:text-xl">
         {title}
