@@ -36,8 +36,13 @@ const SectionFallback = () => {
 function ScrollToTarget() {
   const { pathname, hash } = useLocation();
 
-  // Block body on purpose: a concise arrow would return whatever `scrollTo`
-  // returns, and React treats a non-undefined return as the cleanup function.
+  // The braces are load-bearing: an effect's return value IS its cleanup function, so a
+  // concise arrow body here would hand React whatever window.scrollTo returns. Browsers
+  // return undefined, but extensions and smooth-scroll polyfills override scrollTo and
+  // some return a value — React then calls it as cleanup on the next navigation and the
+  // whole app unmounts into a blank page. Never return a value from an effect you do not
+  // mean as cleanup. This version does return one, deliberately: clearTimeout for the
+  // polling below, which is what a cleanup is actually for.
   useEffect(() => {
     if (!hash) {
       window.scrollTo(0, 0);
