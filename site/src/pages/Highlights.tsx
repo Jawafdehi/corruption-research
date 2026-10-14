@@ -280,57 +280,36 @@ export default function Highlights() {
            */
           split: {
             total: cd.disposed,
-            totalLabel: n(cd.disposed),
             parts: [
               {
                 key: "tameli",
                 tone: "out",
-                label: t(
-                  "research.corruption.route.splitTameli",
-                  "{{pct}} Tameli",
-                  {
-                    pct: pct1(
-                      ((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100,
-                    ),
-                  },
-                ),
                 value: cd.tameli + cd.tameli_with_advice,
+                share: pct1(((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100),
+                count: n(cd.tameli + cd.tameli_with_advice),
+                label: t("research.corruption.route.splitTameli2", "placed in Tameli"),
               },
               {
                 key: "other",
                 tone: "other",
-                label: t(
-                  "research.corruption.route.splitOther",
-                  "{{pct}} other action",
-                  {
-                    pct: pct1((cd.other_action / cd.disposed) * 100),
-                  },
-                ),
                 value: cd.other_action,
+                share: pct1((cd.other_action / cd.disposed) * 100),
+                count: n(cd.other_action),
+                label: t("research.corruption.route.splitOther2", "some other action"),
               },
               {
                 key: "on",
                 tone: "on",
-                label: t(
-                  "research.corruption.route.splitOn",
-                  "{{pct}} to investigation",
-                  {
-                    pct: pct1((cd.to_investigation / cd.disposed) * 100),
-                  },
-                ),
                 value: cd.to_investigation,
+                share: pct1((cd.to_investigation / cd.disposed) * 100),
+                count: n(cd.to_investigation),
+                label: t("research.corruption.route.splitOn2", "on to detailed investigation"),
               },
             ],
             caption: t(
-              "research.corruption.route.splitCaption",
-              "Of {{n}} complaints the Commission finished dealing with in {{fy}} before any detailed investigation — {{tameli}} to Tameli, {{other}} to other action, {{on}} on to investigation.",
-              {
-                n: n(cd.disposed),
-                fy: cd.fy,
-                tameli: n(cd.tameli + cd.tameli_with_advice),
-                other: n(cd.other_action),
-                on: n(cd.to_investigation),
-              },
+              "research.corruption.route.splitCaption2",
+              "Of {{n}} complaints the Commission finished dealing with in {{fy}}, before any detailed investigation. तालिका २.१४ of the 35th report, which does not separate screening from the preliminary inquiry.",
+              { n: n(cd.disposed), fy: cd.fy },
             ),
           },
           exit: {
@@ -340,22 +319,14 @@ export default function Highlights() {
           },
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i2Tag", "Reasons"),
+            tag: t("research.corruption.route.i2Tag2", "Where they go"),
             title: t(
               "research.corruption.route.i2Title2",
               "On what basis does a complaint go to Tameli rather than on?",
             ),
             body: t(
-              "research.corruption.route.i2Body2",
-              "About {{pct}} of the {{n}} complaints disposed of in {{fy}} went to Tameli and {{on}} went on to detailed investigation. Tameli is not a dismissal: the file is kept and can be taken up again if evidence appears. But the reports publish the yearly counts only — never the reason in a single case — so whether these decisions are consistent cannot be assessed from outside. The same table also does not separate screening from the preliminary inquiry.",
-              {
-                pct: pct1(
-                  ((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100,
-                ),
-                n: n(cd.disposed),
-                fy: cd.fy,
-                on: n(cd.to_investigation),
-              },
+              "research.corruption.route.i2Body3",
+              "Tameli is not a dismissal: the file is kept and the matter can be taken up again if evidence appears. But the reports publish these yearly counts only — never the reason in any one case — so whether the decisions are applied consistently cannot be assessed from outside.",
             ),
             href: "/investigation#tameli-by-year",
             linkLabel: t(

@@ -27,9 +27,18 @@ export type RouteExit = {
 /** The one place a count belongs in the figure itself: what screening actually did. */
 export type RouteSplit = {
   caption: string;
-  parts: readonly { key: string; label: string; value: number; tone: "out" | "on" | "other" }[];
+  parts: readonly {
+    key: string;
+    /** What this slice is, e.g. "placed in Tameli". */
+    label: string;
+    /** Its share, pre-formatted: "59.6%". */
+    share: string;
+    /** Its count, pre-formatted: "17,716". */
+    count: string;
+    value: number;
+    tone: "out" | "on" | "other";
+  }[];
   total: number;
-  totalLabel: string;
 };
 
 export type RouteStep = {
@@ -107,16 +116,26 @@ export function RouteMap({
           return (
             <section
               key={phase.key}
-              className="overflow-hidden rounded-xl border border-border bg-background/40"
+              className="overflow-hidden rounded-xl border border-border/80 bg-background/50"
             >
+              {/* A tinted strip rather than a ruled line: it names the institution and
+                  carries its colour, so the three cards read as three places. */}
               <h3
-                className="border-b border-border px-4 py-2 font-mono text-[0.62rem] font-bold uppercase tracking-[0.16em] md:px-5"
-                style={{ color: colour }}
+                className="flex items-center gap-2 px-4 py-2 font-mono text-[0.62rem] font-bold uppercase tracking-[0.16em] md:px-5"
+                style={{
+                  color: colour,
+                  background: `color-mix(in srgb, ${colour} 7%, transparent)`,
+                }}
               >
+                <span
+                  aria-hidden="true"
+                  className="inline-block h-2.5 w-[3px] rounded-full"
+                  style={{ background: colour }}
+                />
                 {phase.label}
               </h3>
 
-              <ol className="px-4 py-3 md:px-5 md:py-4">
+              <ol className="px-4 py-3.5 md:px-5 md:py-4">
                 {phase.steps.map((s, i) => {
                   const last = i === phase.steps.length - 1;
                   const panelId = `${uid}-${s.key}`;
@@ -145,7 +164,7 @@ export function RouteMap({
                         />
                       </div>
 
-                      <div className={last ? "pb-0.5" : "pb-4"}>
+                      <div className={last ? "pb-0.5" : "pb-3.5"}>
                         <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
                           {/* Numbering stays, small: it orders the stages without
                               becoming the thing the figure is about. */}
@@ -166,17 +185,17 @@ export function RouteMap({
                               aria-expanded={isOpen}
                               aria-controls={panelId}
                               className={
-                                "inline-flex items-center gap-1 rounded-full border px-2 py-[0.1rem] text-[0.65rem] font-semibold transition-colors " +
+                                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-[0.15rem] text-[0.65rem] font-semibold transition-colors " +
                                 (isOpen
                                   ? "border-accent bg-accent text-background"
-                                  : "border-accent/40 bg-accent/[0.08] text-accent hover:bg-accent/[0.16]")
+                                  : "border-accent/25 bg-accent/[0.06] text-accent/90 hover:border-accent/50 hover:bg-accent/[0.14] hover:text-accent")
                               }
                             >
                               <span
                                 aria-hidden="true"
                                 className={
                                   "inline-block h-1.5 w-1.5 rounded-full " +
-                                  (isOpen ? "bg-background" : "bg-accent")
+                                  (isOpen ? "bg-background" : "bg-accent/70")
                                 }
                               />
                               {s.insight.tag}
@@ -188,8 +207,6 @@ export function RouteMap({
                           ) : null}
                         </div>
 
-                        {s.split ? <SplitBar split={s.split} /> : null}
-
                         {s.exit ? <ExitBranch exit={s.exit} no={labels.no} /> : null}
 
                         {s.insight ? (
@@ -197,7 +214,7 @@ export function RouteMap({
                             id={panelId}
                             role="region"
                             hidden={!isOpen}
-                            className="mt-2.5 max-w-xl rounded-lg border border-border bg-[hsl(var(--surface))] p-3.5"
+                            className="mt-2.5 max-w-xl rounded-lg border border-accent/20 border-l-[3px] border-l-accent/60 bg-[hsl(var(--surface))] p-4"
                           >
                             <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
                               {s.insight.kind === "gap" ? labels.gap : labels.finding}
@@ -205,7 +222,11 @@ export function RouteMap({
                             <p className="mt-1.5 font-display text-sm font-bold leading-snug text-foreground">
                               {s.insight.title}
                             </p>
-                            <p className="mt-1 text-[0.8rem] leading-6 text-foreground/80">
+                            {/* The data sits inside the panel, not on the face of the
+                                figure. A bar and three counts under one stage out of
+                                eight reads as clutter until a reader has asked for it. */}
+                            {s.split ? <SplitBar split={s.split} /> : null}
+                            <p className="mt-2 text-[0.8rem] leading-6 text-foreground/80">
                               {s.insight.body}
                             </p>
                             {s.insight.href.startsWith("http") ? (
@@ -243,12 +264,12 @@ export function RouteMap({
 /** The branch off the main line, drawn as a branch. */
 function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
   return (
-    <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.7rem]">
-      <span aria-hidden="true" className="font-mono text-muted-foreground">
-        └
+    <p className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 pl-0.5 text-[0.68rem]">
+      <span aria-hidden="true" className="font-mono text-foreground/25">
+        ↳
       </span>
       <span className="text-muted-foreground">{exit.question}</span>
-      <span aria-hidden="true" className="font-mono text-muted-foreground">
+      <span aria-hidden="true" className="font-mono text-foreground/40">
         {no} →
       </span>
       <span
@@ -274,8 +295,8 @@ function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
  */
 function SplitBar({ split }: { split: RouteSplit }) {
   return (
-    <div className="mt-2 max-w-md">
-      <div className="flex h-2.5 overflow-hidden rounded-sm" role="presentation">
+    <figure className="mt-2.5">
+      <div className="flex h-3 overflow-hidden rounded-full" role="presentation">
         {split.parts.map((p) => (
           <span
             key={p.key}
@@ -287,21 +308,29 @@ function SplitBar({ split }: { split: RouteSplit }) {
           />
         ))}
       </div>
-      <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[0.68rem] text-muted-foreground">
+      {/* Figure and label on one line per row: a legend that makes the reader hop
+          back to the bar to find out which colour it meant is not a legend. */}
+      <dl className="mt-2.5 space-y-1">
         {split.parts.map((p) => (
-          <li key={p.key} className="inline-flex items-center gap-1.5">
+          <div key={p.key} className="flex items-baseline gap-2 text-[0.72rem]">
             <span
               aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full"
+              className="mt-[0.3rem] inline-block h-2 w-2 shrink-0 rounded-full"
               style={{ background: PART_FILL[p.tone] }}
             />
-            <span className="font-mono font-semibold tabular-nums text-foreground/85">
-              {p.label}
-            </span>
-          </li>
+            <dt className="w-[3.1rem] shrink-0 font-mono font-bold tabular-nums text-foreground">
+              {p.share}
+            </dt>
+            <dd className="min-w-0 flex-1 text-muted-foreground">
+              {p.label}{" "}
+              <span className="font-mono tabular-nums text-foreground/60">{p.count}</span>
+            </dd>
+          </div>
         ))}
-      </ul>
-      <p className="mt-1 text-[0.65rem] leading-5 text-muted-foreground">{split.caption}</p>
-    </div>
+      </dl>
+      <figcaption className="mt-2 border-t border-border pt-2 text-[0.68rem] leading-5 text-muted-foreground">
+        {split.caption}
+      </figcaption>
+    </figure>
   );
 }
