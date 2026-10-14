@@ -117,19 +117,33 @@ export function Layout() {
       <ScrollToTarget />
       <header className="border-b border-border">
         <div className="container px-4 py-6 md:px-6 md:py-8">
-          <div className="flex items-start justify-between gap-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-              {t("research.corruption.site.eyebrow", "Jawafdehi Research")}
-            </p>
+          <div className="flex items-center justify-between gap-4">
+            <a
+              href="https://jawafdehi.org"
+              className="inline-flex items-center gap-2.5 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+            >
+              {/* The wordmark as published, not a re-drawing of it. */}
+              <img
+                src="/assets/logo.svg"
+                alt={t("research.corruption.site.logoAlt", "Jawafdehi")}
+                className="h-7 w-auto md:h-8"
+              />
+              <span className="border-l border-border pl-2.5 text-xs font-semibold uppercase tracking-wide text-accent">
+                {t("research.corruption.site.eyebrow2", "Research")}
+              </span>
+            </a>
             <LanguageToggle />
           </div>
-          <h1 className="mt-1 font-display text-2xl font-bold leading-tight tracking-tight md:text-3xl">
-            {t("research.corruption.site.title", "Where Nepal's corruption accountability actually leaks")}
-          </h1>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
+          <h1 className="mt-4 max-w-4xl font-display text-2xl font-bold leading-tight tracking-tight md:text-3xl">
             {t(
-              "research.corruption.site.lede",
-              "Thousands of complaints. Hundreds of prosecutions. Years of court proceedings. But how many cases actually lead to convictions, how many end in acquittals, and how many remain unresolved? Following cases from the CIAA to the Special Court and Supreme Court, this research identifies where the gaps lie at each stage of Nepal's corruption accountability system.",
+              "research.corruption.site.title2",
+              "How Nepal's accountability system works, and where it leaks",
+            )}
+          </h1>
+          <p className="mt-2.5 max-w-3xl text-sm leading-6 text-muted-foreground">
+            {t(
+              "research.corruption.site.lede2",
+              "A complaint about corruption passes through the Commission for the Investigation of Abuse of Authority, the Special Court and the Supreme Court before anything is settled. At each handover something is recorded and something is not. This work follows fourteen years of that record to find the points where a case, or the reason for a decision about it, stops being traceable.",
             )}
           </p>
         </div>

@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
+import { Cite } from "@/components/layout/Prose";
 import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
+import { AboutResearch } from "@/components/highlights/AboutResearch";
 import { DurationSpread } from "@/components/highlights/DurationSpread";
 import { RouteMap, type RoutePhase } from "@/components/highlights/RouteMap";
 import {
@@ -35,6 +37,7 @@ export default function Highlights() {
     byCharge,
     chargeMixByYear,
     ciaa,
+    corpus,
     disposals,
     outcome,
     overTime,
@@ -203,6 +206,24 @@ export default function Highlights() {
     ? (appeals.no_outcome / appeals.appeals) * 100
     : 0;
 
+  /*
+   * What the Commission did about the cases it lost outright, and what came of it.
+   * From the acquittal row of byTrialOutcome rather than the all-appeals totals,
+   * because the question is specifically about appealing a loss.
+   */
+  const acqRow = appeals.byTrialOutcome.find(
+    (r) => r.trial_outcome === "सफाई" && r.appealed_by === "CIAA_GOVERNMENT",
+  );
+  const ciaaAcqAppeals = acqRow?.appeals ?? 0;
+  const ciaaAcqWon =
+    (acqRow?.reversed ?? 0) + (acqRow?.partially_reversed ?? 0);
+  const ciaaAcqDecided = acqRow
+    ? acqRow.appeals - acqRow.no_outcome_recorded
+    : 0;
+  const ciaaAcqShare = outcome.acquitted
+    ? (ciaaAcqAppeals / outcome.acquitted) * 100
+    : 0;
+
   // D — how the Supreme Court treated the judgment below it, summed across the
 
   // C — duration, over decided cases only.
@@ -234,7 +255,7 @@ export default function Highlights() {
     {
       key: "ciaa",
       tone: "commission",
-      label: t("research.corruption.route.pCiaa", "With the Commission"),
+      label: t("research.corruption.route.pCiaa2", "CIAA"),
       steps: [
         {
           key: "darta",
@@ -245,10 +266,10 @@ export default function Highlights() {
           ),
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i1Tag", "Tracking"),
+            tag: t("research.corruption.route.i1Tag2", "No one can track it"),
             title: t(
-              "research.corruption.route.i1Title2",
-              "Can a complainant find out what happened to their complaint?",
+              "research.corruption.route.i1Title3",
+              "A complaint goes in, and nothing comes back out",
             ),
             body: (
               <p>
@@ -259,13 +280,10 @@ export default function Highlights() {
                 )}
               </p>
             ),
-            href: CITATIONS.ciaa35,
+            href: "/investigation#tameli-by-year",
             linkLabel: t(
-              "research.corruption.route.i1Link",
-              "CIAA annual report, {{fy}}",
-              {
-                fy: cd.fy,
-              },
+              "research.corruption.route.i1Link2",
+              "What happens to complaints after they are filed",
             ),
           },
         },
@@ -348,8 +366,8 @@ export default function Highlights() {
             kind: "gap",
             tag: t("research.corruption.route.i2Tag2", "Where they go"),
             title: t(
-              "research.corruption.route.i2Title3",
-              "Why does the Commission decide to investigate some complaints but not others?",
+              "research.corruption.route.i2Title4",
+              "Six in ten complaints end in Tameli, and no reason is published for any of them",
             ),
             body: (
               <p>
@@ -377,8 +395,8 @@ export default function Highlights() {
             kind: "finding",
             tag: t("research.corruption.route.i4Tag", "Limits on evidence"),
             title: t(
-              "research.corruption.route.i4Title2",
-              "Collecting evidence of an offence, or creating it",
+              "research.corruption.route.i4Title3",
+              "The Commission paid for the bribe it then prosecuted",
             ),
             body: (
               <>
@@ -420,10 +438,13 @@ export default function Highlights() {
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i5Tag", "Who is charged"),
+            tag: t(
+              "research.corruption.route.i5Tag2",
+              "Who is charged, and how few",
+            ),
             title: t(
-              "research.corruption.route.i5Title2",
-              "Why are some people charged and others not?",
+              "research.corruption.route.i5Title3",
+              "A court asked why some were charged and others were not, and the record cannot answer",
             ),
             body: (
               <p>
@@ -444,6 +465,27 @@ export default function Highlights() {
                 {t(
                   "research.corruption.route.i5BodyB",
                   ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
+                )}
+              </p>
+            ),
+            gapNote: (
+              <p>
+                {t(
+                  "research.corruption.route.i5Gap",
+                  "Very little survives this far. Of the {{all}} complaints on the Commission's books in {{fy}}, {{filed}} were filed in court — {{pct}}. Even counting only the investigations it finished that year, {{share}} ended in a charge sheet. The rest stop earlier, and for most of them no reason is published.",
+                  {
+                    all: n(cd.total_complaints),
+                    fy: cd.fy,
+                    filed: n(cd.inv_filed),
+                    pct: t("research.corruption.route.i5GapPct", "{{v}}%", {
+                      v: ((cd.inv_filed / cd.total_complaints) * 100).toFixed(
+                        2,
+                      ),
+                    }),
+                    share: pct1(
+                      (cd.inv_filed / cd.investigations_completed) * 100,
+                    ),
+                  },
                 )}
               </p>
             ),
@@ -507,8 +549,14 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i6Gap2",
-                  "The verdict is recorded; the money is not. The Commission names a बिगो when it files, and the court can order it repaid, but no published record says how much of a claim any court upheld — so a charge sheet's figure cannot be compared with what was actually established.",
+                  "research.corruption.route.i6Gap3",
+                  "The Commission does not win most of what it files. {{acq}} of decided cases end in acquittal, and {{less}} end in something short of a full conviction — this from the body that chose the charge, gathered the evidence and had the powers of a constitutional commission behind it. No published record says why a case failed, so the pattern cannot be read back into the decisions that produced it. The money is missing too: a बिगो is named when the case is filed, but nothing records how much of it a court upheld.",
+                  {
+                    acq: pct1((outcome.acquitted / decided) * 100),
+                    less: pct1(
+                      ((outcome.partial + outcome.acquitted) / decided) * 100,
+                    ),
+                  },
                 )}
               </p>
             ),
@@ -540,11 +588,14 @@ export default function Highlights() {
             body: (
               <p>
                 {t(
-                  "research.corruption.route.i7Body3",
-                  "When convicted people appeal, {{dp}} of their appeals that have been decided have succeeded. When the Commission appeals, the figure is just {{cp}}. But there is an important limitation: {{untraced}} of all appeals traced have no recorded outcome. These figures therefore show what happened in appeals with a known outcome, not the full picture.",
+                  "research.corruption.route.i7Body4",
+                  "The Commission does not accept a loss quietly: it appealed {{share}} of the acquittals against it, {{n}} in all. Of the {{decided}} of those appeals that have been decided, {{won}} changed the outcome. Convicted people appealing the other way succeed in {{dp}} of their decided appeals. Against both figures, {{untraced}} of every appeal traced carries no recorded outcome, so this rests on the half of the record that can be followed.",
                   {
+                    share: pct1(ciaaAcqShare),
+                    n: n(ciaaAcqAppeals),
+                    decided: n(ciaaAcqDecided),
+                    won: n(ciaaAcqWon),
                     dp: pct1(appeals.defendant.pct),
-                    cp: pct1(appeals.commission.pct),
                     untraced: pct1(untracedPct),
                   },
                 )}
@@ -643,6 +694,94 @@ export default function Highlights() {
         </header>
       </Reveal>
 
+      <Reveal>
+        <AboutResearch
+          label={t("research.corruption.about.label", "About this research")}
+          heading={t(
+            "research.corruption.about.heading",
+            "An open record of how corruption cases are handled, and where the handling stops being visible",
+          )}
+          facts={[
+            {
+              key: "years",
+              value: t("research.corruption.about.fYears", "{{n}} years", {
+                n: n(corpus.fiscalYears.length),
+              }),
+              label: t(
+                "research.corruption.about.fYearsLabel",
+                "of CIAA and court records, {{from}} to {{to}}",
+                {
+                  from: fyLabel(corpus.fiscalYears[0]),
+                  to: fyLabel(
+                    corpus.fiscalYears[corpus.fiscalYears.length - 1],
+                  ),
+                },
+              ),
+            },
+            {
+              key: "cases",
+              value: n(corpus.ciaaProsecutions),
+              label: t(
+                "research.corruption.about.fCases",
+                "prosecutions followed from filing to final appeal",
+              ),
+            },
+            {
+              key: "appeals",
+              value: n(supremeDelay.registeredAll),
+              label: t(
+                "research.corruption.about.fAppeals",
+                "Supreme Court corruption appeals measured",
+              ),
+            },
+            {
+              key: "open",
+              value: t("research.corruption.about.fOpen", "Open"),
+              label: t(
+                "research.corruption.about.fOpenLabel",
+                "every figure traced to a public source you can check",
+              ),
+            },
+          ]}
+        >
+          <p>
+            {t(
+              "research.corruption.about.p1",
+              "Jawafdehi keeps a public, open database of corruption and accountability cases in Nepal. This research is the part of that work which looks at the system rather than at any one case: what happens to a complaint after it is filed, how far it gets, and which of those steps leave a record anyone outside the institutions can read.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.p2",
+              "The movement of 2082 put accountability back at the centre of public argument. Argument needs evidence to work on, so the aim here is narrow and practical: take the records the state already publishes — the Commission's annual reports, the Special Court register, Supreme Court case files — and read them together, year by year, until the places where accountability fails become countable rather than assumed.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.p3",
+              "That reading turns up two kinds of thing. Some are findings: a conviction rate that depends almost entirely on what was charged, an appeal wait that has grown from under two years to over five. Others are absences — a complaint that cannot be tracked, a Tameli decision with no published reason, an amount claimed in court that no record ever matches against what the court upheld. The absences matter as much as the findings, and they are marked as absences rather than filled in.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.p4",
+              "The work was put together by people from several fields: lawyers and others who work inside the legal system, researchers, people from the technology industry, and people who work in non-governmental organisations. None of it is a finished verdict on any institution. It is a starting point, meant to be put in front of the Commission, the courts and anyone else placed to close the gaps it describes, and to be rechecked as new reports are published.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.p5",
+              "Everything here can be recomputed. The datasets, the code that derives every figure and the notes on what each source can and cannot support are published, so a reader who doubts a number does not have to take it on trust.",
+            )}{" "}
+            <Cite href={CITATIONS.researchPack}>
+              {t(
+                "research.corruption.about.pack",
+                "The data and code behind this page",
+              )}
+            </Cite>
+          </p>
+        </AboutResearch>
+      </Reveal>
       <Reveal>
         <section
           className="mt-2 md:mt-4"
