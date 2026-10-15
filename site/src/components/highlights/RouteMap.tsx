@@ -25,9 +25,17 @@ export type RouteInsight = {
 
 /** Where a complaint can leave the route, and the question that sends it there. */
 export type RouteExit = {
-  question: string;
+  /**
+   * The condition in full — "If the complaint is not taken forward". A bare "no"
+   * standing on its own read as a step of its own rather than as the other arm of a
+   * decision, which is the opposite of what a branch label is for.
+   */
+  condition: string;
   label: string;
   tone: "tameli" | "stands";
+  /** Opens in the panel when the chip is clicked, for a term that needs defining. */
+  note?: ReactNode;
+  noteTitle?: string;
 };
 
 /** The one place a count belongs in the figure itself: what screening actually did. */
@@ -107,18 +115,10 @@ const PART_FILL = {
 export function RouteMap({
   phases,
   labels,
-  tameliNote,
 }: {
   phases: readonly RoutePhase[];
   labels: RouteLabels;
-  /** Rendered at the first exit that is a Tameli, not under the whole figure. */
-  tameliNote: ReactNode;
 }) {
-  // The first Tameli in reading order. The word needs explaining the first time a
-  // reader meets it, not in a box below eight stages they have already read past.
-  const firstTameli = phases
-    .flatMap((p) => p.steps)
-    .find((st) => st.exit?.tone === "tameli")?.key;
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
 
@@ -270,13 +270,17 @@ export function RouteMap({
                           )}
 
                           {s.exit ? (
-                            <ExitBranch exit={s.exit} no={labels.no} />
-                          ) : null}
-
-                          {s.key === firstTameli ? (
-                            <div className="mt-2 max-w-xl rounded-lg border border-accent/30 bg-accent/[0.04] px-3.5 py-3 text-[0.78rem] leading-6 text-foreground/85">
-                              {tameliNote}
-                            </div>
+                            <ExitBranch
+                              exit={s.exit}
+                              isOpen={open === `${s.key}-exit`}
+                              onToggle={() =>
+                                setOpen(
+                                  open === `${s.key}-exit`
+                                    ? null
+                                    : `${s.key}-exit`,
+                                )
+                              }
+                            />
                           ) : null}
 
                           {s.insight ? (
@@ -347,31 +351,56 @@ export function RouteMap({
 }
 
 /** The branch off the main line, drawn as a branch. */
-function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
+function ExitBranch({
+  exit,
+  isOpen,
+  onToggle,
+}: {
+  exit: RouteExit;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const chip =
+    "rounded-[3px] px-1.5 py-[0.05rem] font-semibold " +
+    (exit.tone === "tameli"
+      ? "bg-accent/[0.12] text-accent/90"
+      : "bg-foreground/[0.07] text-foreground/60");
+
   return (
-    <p className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 pl-0.5 text-[0.68rem]">
-      <span aria-hidden="true" className="font-mono text-foreground/25">
-        ↳
-      </span>
-      <span className="text-muted-foreground">{exit.question}</span>
-      <span aria-hidden="true" className="font-mono text-foreground/40">
-        {no} →
-      </span>
-      {/* Square, flat, no caret: an outcome a complaint reaches, not a control. The
-          indicators above are rounded pills with a border and a caret, and the two
-          must not be mistaken for each other — a reader who taps Tameli expecting it
-          to open has been misled by the styling. */}
-      <span
-        className={
-          "rounded-[3px] px-1.5 py-[0.05rem] font-semibold " +
-          (exit.tone === "tameli"
-            ? "bg-accent/[0.12] text-accent/90"
-            : "bg-foreground/[0.07] text-foreground/60")
-        }
-      >
-        {exit.label}
-      </span>
-    </p>
+    <div className="mt-1 pl-0.5">
+      <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.68rem]">
+        <span aria-hidden="true" className="font-mono text-foreground/25">
+          ↳
+        </span>
+        {/* The condition in full. A bare "no" beside the outcome read as a step of
+            its own rather than as the other arm of a decision. */}
+        <span className="text-muted-foreground">{exit.condition}</span>
+        <span aria-hidden="true" className="font-mono text-foreground/40">
+          →
+        </span>
+        {exit.note ? (
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-expanded={isOpen}
+            className={
+              chip +
+              " cursor-pointer underline decoration-accent/40 underline-offset-2 transition-colors hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            }
+          >
+            {exit.label}
+          </button>
+        ) : (
+          <span className={chip}>{exit.label}</span>
+        )}
+      </p>
+
+      {exit.note && isOpen ? (
+        <div className="mt-2 max-w-xl rounded-lg border border-accent/30 bg-accent/[0.05] px-3.5 py-3 text-[0.78rem] leading-6 text-foreground/85">
+          {exit.note}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
