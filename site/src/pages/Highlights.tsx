@@ -685,10 +685,10 @@ export default function Highlights() {
     <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
       <Reveal>
         <AboutResearch
-          label={t("research.corruption.about.label", "About this research")}
+          label={t("research.corruption.about.label2", "About Jawafdehi")}
           heading={t(
-            "research.corruption.about.heading",
-            "An open record of how corruption cases are handled, and where the handling stops being visible",
+            "research.corruption.about.heading2",
+            "An open record of Nepal's corruption cases, and of how the system handling them actually works",
           )}
           facts={[
             {
@@ -735,32 +735,26 @@ export default function Highlights() {
         >
           <p>
             {t(
-              "research.corruption.about.p1",
-              "Jawafdehi keeps a public, open database of corruption and accountability cases in Nepal. This research is the part of that work which looks at the system rather than at any one case: what happens to a complaint after it is filed, how far it gets, and which of those steps leave a record anyone outside the institutions can read.",
+              "research.corruption.about.a1",
+              "Jawafdehi is an open data portal that makes Nepal's corruption cases easier for everyone to find and understand. It brings scattered information into one place, with simple case summaries that help people understand what happened without having to go through hundreds of pages of court documents. Built around the spirit of Nepal's 2082 Gen Z movement, Jawafdehi aims to make accountability more accessible to the public.",
             )}
           </p>
           <p>
             {t(
-              "research.corruption.about.p2",
-              "The movement of 2082 put accountability back at the centre of public argument. Argument needs evidence to work on, so the aim here is narrow and practical: take the records the state already publishes — the Commission's annual reports, the Special Court register, Supreme Court case files — and read them together, year by year, until the places where accountability fails become countable rather than assumed.",
+              "research.corruption.about.a2",
+              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of records from the CIAA, the Supreme Court and other sources. We look at how corruption complaints move through the system, how long cases take to resolve, and what the available records reveal about the strengths and gaps in the accountability process. Where information is missing, we highlight those gaps rather than make assumptions.",
             )}
           </p>
           <p>
             {t(
-              "research.corruption.about.p3",
-              "That reading turns up two kinds of thing. Some are findings: a conviction rate that depends almost entirely on what was charged, an appeal wait that has grown from under two years to over five. Others are absences — a complaint that cannot be tracked, a Tameli decision with no published reason, an amount claimed in court that no record ever matches against what the court upheld. The absences matter as much as the findings, and they are marked as absences rather than filled in.",
+              "research.corruption.about.a3",
+              "This work brings together people from different fields, including legal experts, law students, technology professionals, software engineers, retired bureaucrats and journalists. Our aim is to make public records easier to access, understand and examine, so that anyone can explore the evidence and draw their own conclusions.",
             )}
           </p>
           <p>
             {t(
-              "research.corruption.about.p4",
-              "The work was put together by people from several fields: lawyers and others who work inside the legal system, researchers, people from the technology industry, and people who work in non-governmental organisations. None of it is a finished verdict on any institution. It is a starting point, meant to be put in front of the Commission, the courts and anyone else placed to close the gaps it describes, and to be rechecked as new reports are published.",
-            )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.about.p5",
-              "Everything here can be recomputed. The datasets, the code that derives every figure and the notes on what each source can and cannot support are published, so a reader who doubts a number does not have to take it on trust.",
+              "research.corruption.about.a4",
+              "Every figure on this page can be recomputed. The datasets, the code that derives each one and the notes on what each source can and cannot support are published, so a reader who doubts a number does not have to take it on trust.",
             )}{" "}
             <Cite href={CITATIONS.researchPack}>
               {t(
