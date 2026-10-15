@@ -762,17 +762,11 @@ export const ne: Record<string, string> = {
   "research.corruption.about.b2d": "।",
 
   "research.corruption.route.pCiaa2": "अख्तियार",
-  "research.corruption.route.ovalCentre": "उजुरीको बाटो",
-  "research.corruption.route.ovalHint":
-    "कुनै चरण छान्नुहोस् — अभिलेखले के देखाउँछ र के देखाउँदैन, त्यो खुल्छ।",
-
   "research.corruption.flow.s1Title2": "कसैले उजुरी दिन्छ",
   "research.corruption.flow.tameliCite": "अख्तियार ऐन २०४८, दफा १९(१३)।",
 
   "research.corruption.route.i1Title3": "उजुरी भित्र जान्छ, र केही बाहिर आउँदैन",
   "research.corruption.route.i1Link2": "उजुरी दर्ता भएपछि के हुन्छ",
-  "research.corruption.route.i2Title4":
-    "दस मा छ उजुरी तामेलीमा टुंगिन्छन्, र कुनैको पनि कारण प्रकाशित हुँदैन",
   "research.corruption.route.i4Title3":
     "आयोगले आफैं घुसको रकम दियो, अनि त्यसैमा अभियोग लगायो",
   "research.corruption.route.i5Title3":
@@ -813,9 +807,6 @@ export const ne: Record<string, string> = {
   "research.corruption.route.i7Title5":
     "अख्तियारका पुनरावेदनले सफाइ विरलै उल्ट्याउँछन्, व्यक्तिले भने ठहर बढी उल्ट्याउँछन्",
   // --- The intro, the branch conditions, and Tameli where the word appears ---
-  "research.corruption.hl.intro":
-    "नेपालको भ्रष्टाचार जवाफदेहिता प्रणाली धेरै चरणबाट गुज्रन्छ — अख्तियार दुरुपयोग अनुसन्धान आयोगले आरोपको अनुसन्धान गर्नेदेखि अदालतले मुद्दा र पुनरावेदनको फैसला गर्नेसम्म। यस अनुसन्धानले ती सबै चरणका अभिलेख एकै ठाउँमा ल्याएर भ्रष्टाचारका मुद्दाको समयक्रममा के हुन्छ, प्रक्रिया कहाँ अड्किन्छ, फैसला कस्तो आउँछ र उपलब्ध तथ्यांकले प्रणालीका बलिया पक्ष र ग्याप के देखाउँछन् भन्ने जाँच्छ।",
-
   "research.corruption.flow.cScreen": "अगाडि नबढाइएमा",
   "research.corruption.flow.cGrounds": "आधार नभेटिएमा",
   "research.corruption.flow.cProsecute": "अख्तियारले अभियोजन नगर्ने निर्णय गरेमा",
@@ -825,4 +816,12 @@ export const ne: Record<string, string> = {
     "भनेको उजुरीलाई हाललाई थाती राख्नु हो। फाइल राखिन्छ, र नयाँ प्रमाण आएमा उजुरी फेरि हेर्न सकिन्छ। त्यसैले तामेलीको अर्थ विषय सदाका लागि बन्द भयो भन्ने होइन।",
   "research.corruption.flow.tameliLost2":
     "समस्या के भने त्यसपछि के हुन्छ भन्ने मानिसले देख्न पाउँदैनन्। अख्तियारले छुट्टाछुट्टै तामेली निर्णयका कारण पनि प्रकाशित गर्दैन, कति उजुरी पछि पुनः खोलिए भन्ने पनि गर्दैन। उजुरी तामेलीमा गएपछि त्यो फेरि हेरियो कि हेरिएन, वा त्यसको के भयो भन्ने आयोगबाहिरका मानिसले थाहा पाउने स्पष्ट बाटो हुँदैन।",
+  // --- Reworded intro, Tameli headline and the ring's centre -----------------
+  "research.corruption.hl.intro2":
+    "यस अनुसन्धानले भ्रष्टाचारका मुद्दालाई नेपालको जवाफदेहिता प्रणालीभरि पछ्याउँछ — अख्तियारको अनुसन्धानदेखि विशेष अदालतको फैसला र सर्वोच्च अदालतमा हुने पुनरावेदनसम्म। हरेक चरणका अभिलेख एकै ठाउँमा ल्याएर मुद्दा कसरी हेरिन्छन्, कसरी टुंगिन्छन्, कति समय लाग्छ र सार्वजनिक अभिलेखमा कहाँ महत्त्वपूर्ण ग्याप बाँकी छन् भन्ने यसले जाँच्छ।",
+  "research.corruption.route.i2Title5":
+    "दस मा छ उजुरी तामेलीमा राखिन्छन्, तर ती निर्णयका कारण दिइँदैनन्",
+  "research.corruption.route.ovalCentre2": "उजुरीको यात्रा",
+  "research.corruption.route.ovalHint2":
+    "कुनै चरण छान्नुहोस् — अभिलेखले के देखाउँछन् र के देखाउँदैनन्, त्यो खुल्छ।",
 };
