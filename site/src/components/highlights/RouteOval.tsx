@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from "react";
+import { useId, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 import type { RouteLabels, RoutePhase, RouteStep } from "./RouteMap";
@@ -23,12 +23,14 @@ import type { RouteLabels, RoutePhase, RouteStep } from "./RouteMap";
  */
 
 const GEO = {
-  w: 1100,
-  h: 580,
-  cx: 550,
-  cy: 285,
-  rx: 330,
-  ry: 218,
+  w: 1240,
+  h: 820,
+  cx: 620,
+  cy: 400,
+  rx: 318,
+  ry: 250,
+  /** How far outside the ring a stage box sits, so no box crosses an arc. */
+  out: 112,
   /** Degrees swept from the first node to the last; the remainder is the open gap. */
   sweep: 315,
   start: -90,
@@ -59,6 +61,22 @@ export function RouteOval({
 }) {
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Open, then bring the panel to the reader. Without this the detail appears below
+  // a figure 800px tall and nothing on screen changes.
+  const onToggle = (key: string) => {
+    const next = open === key ? null : key;
+    setOpen(next);
+    if (next) {
+      window.requestAnimationFrame(() =>
+        panelRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        }),
+      );
+    }
+  };
 
   const flat: { step: RouteStep; tone: "commission" | "court" }[] =
     phases.flatMap((p) => p.steps.map((step) => ({ step, tone: p.tone })));
@@ -126,65 +144,58 @@ export function RouteOval({
             );
           })}
 
+          {/* A stub from each node out to its box. */}
+          {placed.map((p) => {
+            const len = Math.hypot(p.x - GEO.cx, p.y - GEO.cy);
+            const ux = (p.x - GEO.cx) / len;
+            const uy = (p.y - GEO.cy) / len;
+            return (
+              <line
+                key={`stub-${p.step.key}`}
+                x1={p.x + ux * 11}
+                y1={p.y + uy * 11}
+                x2={p.x + ux * (GEO.out - 42)}
+                y2={p.y + uy * (GEO.out - 42)}
+                stroke="hsl(var(--foreground) / 0.18)"
+                strokeWidth={1.5}
+              />
+            );
+          })}
+
           {/* No exit arrows. They were drawn outward from the node, into exactly the
             space the stage label occupies, and collided with it at four of the eight
             positions. The branch is carried in words under each label instead. */}
         </svg>
 
-        {/* Stage labels, as HTML over the ring, so each is a real control. */}
+        {/* Stage boxes, HTML over the ring so each is a real control. Each is centred
+          on a point pushed GEO.out beyond its node along the radius, which is what
+          keeps a box from ever sitting on an arc. */}
         {placed.map((p) => {
-          const left = (p.x / GEO.w) * 100;
-          const top = (p.y / GEO.h) * 100;
-          const right = Math.cos(rad(p.deg)) >= 0;
+          const len = Math.hypot(p.x - GEO.cx, p.y - GEO.cy);
+          const bx = p.x + ((p.x - GEO.cx) / len) * GEO.out;
+          const by = p.y + ((p.y - GEO.cy) / len) * GEO.out;
           const isOpen = open === p.step.key;
           const colour =
             p.tone === "court" ? "hsl(var(--court))" : "hsl(var(--foreground))";
-          const panelId = `${uid}-${p.step.key}`;
+          const panelId = `${uid}-panel`;
 
           return (
             <div
               key={p.step.key}
-              className="absolute flex max-w-[15rem] -translate-y-1/2 items-center gap-2"
+              className="absolute w-[13.5rem] -translate-x-1/2 -translate-y-1/2"
               style={{
-                left: `${left}%`,
-                top: `${top}%`,
-                transform: `translate(${right ? "0" : "-100%"}, -50%)`,
-                paddingLeft: right ? "1.9rem" : 0,
-                paddingRight: right ? 0 : "1.9rem",
+                left: `${(bx / GEO.w) * 100}%`,
+                top: `${(by / GEO.h) * 100}%`,
               }}
             >
-              {!right ? (
-                <StageBody
-                  p={p}
-                  right={right}
-                  isOpen={isOpen}
-                  labels={labels}
-                  panelId={panelId}
-                  setOpen={setOpen}
-                />
-              ) : null}
-              <span
-                aria-hidden="true"
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-mono text-[0.66rem] font-bold tabular-nums text-background ring-4 ring-background"
-                style={{
-                  background: colour,
-                  position: "absolute",
-                  left: right ? 0 : "auto",
-                  right: right ? "auto" : 0,
-                }}
-              >
-                {p.step.n}
-              </span>
-              {right ? (
-                <StageBody
-                  p={p}
-                  right={right}
-                  isOpen={isOpen}
-                  labels={labels}
-                  panelId={panelId}
-                  setOpen={setOpen}
-                />
-              ) : null}
+              <StageBox
+                step={p.step}
+                colour={colour}
+                isOpen={isOpen}
+                labels={labels}
+                panelId={panelId}
+                onToggle={() => onToggle(p.step.key)}
+              />
             </div>
           );
         })}
@@ -208,10 +219,10 @@ export function RouteOval({
       </div>
 
       {/* Opened findings land under the ring, where length costs nothing. */}
-      <div aria-live="polite">
+      <div ref={panelRef} aria-live="polite" className="scroll-mt-6">
         {openStep?.step.insight ? (
           <div
-            id={`${uid}-${openStep.step.key}`}
+            id={`${uid}-panel`}
             role="region"
             className="mx-auto mt-2 max-w-2xl rounded-xl border border-accent/25 border-l-[3px] border-l-accent/60 bg-[hsl(var(--surface))] p-4"
           >
@@ -304,65 +315,94 @@ function OvalSplit({ split }: { split: NonNullable<RouteStep["split"]> }) {
   );
 }
 
-function StageBody({
-  p,
-  right,
+/**
+ * One stage, as a box.
+ *
+ * The box is the point: eight labels floating against a ring read as annotations on a
+ * drawing, and the reader has to work out which words belong to which node. A card
+ * with its own number, edge and background reads as a step.
+ */
+function StageBox({
+  step,
+  colour,
   isOpen,
   labels,
   panelId,
-  setOpen,
+  onToggle,
 }: {
-  p: Placed;
-  right: boolean;
+  step: RouteStep;
+  colour: string;
   isOpen: boolean;
   labels: RouteLabels;
   panelId: string;
-  setOpen: (k: string | null) => void;
+  onToggle: () => void;
 }) {
-  const exit = p.step.exit;
-  return (
-    <div className={right ? "text-left" : "text-right"}>
-      {p.step.insight ? (
-        <button
-          type="button"
-          onClick={() => setOpen(isOpen ? null : p.step.key)}
-          aria-expanded={isOpen}
-          aria-controls={panelId}
+  const body = (
+    <>
+      <div className="flex items-start gap-2">
+        <span
+          aria-hidden="true"
+          className="mt-[0.1rem] flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[0.6rem] font-bold tabular-nums text-background"
+          style={{ background: colour }}
+        >
+          {step.n}
+        </span>
+        <span className="font-display text-[0.86rem] font-bold leading-[1.3] text-foreground">
+          {step.title}
+        </span>
+      </div>
+
+      {step.exit ? (
+        <span className="mt-1.5 block pl-7 text-[0.64rem] font-semibold text-accent/90">
+          {labels.no} → {step.exit.label}
+        </span>
+      ) : null}
+
+      {step.insight ? (
+        <span
           className={
-            "group inline-flex max-w-[11.5rem] cursor-pointer items-center gap-1.5 rounded-lg px-1.5 py-0.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent " +
-            (isOpen ? "bg-accent/10" : "hover:bg-accent/[0.06]")
+            "mt-1.5 flex items-center gap-1 pl-7 text-[0.64rem] font-semibold transition-colors " +
+            (isOpen ? "text-accent" : "text-accent/70 group-hover:text-accent")
           }
         >
-          <span className="font-display text-[0.82rem] font-bold leading-tight text-foreground">
-            {p.step.title}
-          </span>
+          {step.insight.tag}
           <span
             aria-hidden="true"
             className={
-              "shrink-0 font-mono text-[0.6rem] leading-none transition-transform " +
-              (isOpen
-                ? "text-accent"
-                : "text-accent/50 group-hover:translate-x-0.5 group-hover:text-accent")
+              "font-mono transition-transform " +
+              (isOpen ? "" : "group-hover:translate-x-0.5")
             }
           >
             →
           </span>
-          <span className="sr-only">
-            {" — "}
-            {isOpen ? labels.close : labels.open}
-          </span>
-        </button>
-      ) : (
-        <span className="block max-w-[11.5rem] px-1.5 font-display text-[0.82rem] font-bold leading-tight text-foreground/70">
-          {p.step.title}
-        </span>
-      )}
-
-      {exit ? (
-        <span className="mt-0.5 block px-1.5 text-[0.62rem] font-semibold text-accent/85">
-          {labels.no} → {exit.label}
         </span>
       ) : null}
-    </div>
+    </>
+  );
+
+  const shell =
+    "block w-full rounded-lg border bg-[hsl(var(--surface))] px-3 py-2.5 text-left shadow-sm transition-all ";
+
+  if (!step.insight) {
+    return <div className={shell + "border-border/70 opacity-90"}>{body}</div>;
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={isOpen}
+      aria-controls={panelId}
+      className={
+        "group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 " +
+        shell +
+        (isOpen
+          ? "border-accent bg-accent/[0.07] shadow-md"
+          : "border-border hover:border-accent/60 hover:shadow-md")
+      }
+    >
+      {body}
+      <span className="sr-only">{isOpen ? labels.close : labels.open}</span>
+    </button>
   );
 }

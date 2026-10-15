@@ -267,8 +267,8 @@ export default function Highlights() {
           key: "darta",
           n: 1,
           title: t(
-            "research.corruption.flow.s1Title2",
-            "Someone files a complaint",
+            "research.corruption.flow.s1Title3",
+            "A corruption complaint is filed",
           ),
           insight: {
             kind: "gap",
@@ -296,7 +296,10 @@ export default function Highlights() {
         {
           key: "parikshan",
           n: 2,
-          title: t("research.corruption.flow.s2Title", "Screening"),
+          title: t(
+            "research.corruption.flow.s2Title2",
+            "The CIAA screens the complaint",
+          ),
           exit: {
             question: t("research.corruption.flow.dScreen", "Taken forward?"),
             label: t("research.corruption.flow.exit", "Tameli"),
@@ -306,7 +309,10 @@ export default function Highlights() {
         {
           key: "prarambhik",
           n: 3,
-          title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
+          title: t(
+            "research.corruption.flow.s3Title2",
+            "The CIAA conducts a preliminary inquiry",
+          ),
           /*
            * The split sits HERE, not on screening. तालिका २.१४ of the 35th report
            * counts what the Commission disposed of before any detailed investigation,
@@ -394,8 +400,8 @@ export default function Highlights() {
           key: "bistrit",
           n: 4,
           title: t(
-            "research.corruption.flow.s4Title",
-            "Detailed investigation",
+            "research.corruption.flow.s4Title2",
+            "The CIAA carries out a detailed investigation",
           ),
           insight: {
             kind: "finding",
@@ -436,7 +442,10 @@ export default function Highlights() {
         {
           key: "abhiyojan",
           n: 5,
-          title: t("research.corruption.flow.s5Title", "Prosecution decision"),
+          title: t(
+            "research.corruption.flow.s5Title2",
+            "The CIAA decides whether to prosecute",
+          ),
           exit: {
             question: t("research.corruption.flow.dProsecute", "Prosecute?"),
             label: t("research.corruption.flow.exit", "Tameli"),
@@ -512,7 +521,10 @@ export default function Highlights() {
         {
           key: "adalat",
           n: 6,
-          title: t("research.corruption.flow.s6Title2", "Trial and verdict"),
+          title: t(
+            "research.corruption.flow.s6Title3",
+            "The Special Court hears the case and delivers a verdict",
+          ),
           exit: {
             question: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
             label: t("research.corruption.flow.stands", "Verdict stands"),
@@ -583,7 +595,10 @@ export default function Highlights() {
         {
           key: "punarabedan",
           n: 7,
-          title: t("research.corruption.flow.s7Title2", "Appeal lodged"),
+          title: t(
+            "research.corruption.flow.s7Title3",
+            "Either party appeals to the Supreme Court",
+          ),
           insight: {
             kind: "finding",
             tag: t("research.corruption.route.i7Tag", "Who wins"),
@@ -617,7 +632,10 @@ export default function Highlights() {
         {
           key: "sarbochha",
           n: 8,
-          title: t("research.corruption.flow.s8Title", "Appeal decided"),
+          title: t(
+            "research.corruption.flow.s8Title2",
+            "The Supreme Court decides the appeal",
+          ),
           insight: {
             kind: "finding",
             tag: t("research.corruption.route.i8Tag", "The wait"),
@@ -848,7 +866,7 @@ export default function Highlights() {
       </Reveal>
 
       <Reveal>
-        <header className="mt-10 max-w-3xl md:mt-14">
+        <header className="mx-auto mt-10 max-w-3xl text-center md:mt-14">
           <h2 className="font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
             {t(
               "research.corruption.hl.title2",
