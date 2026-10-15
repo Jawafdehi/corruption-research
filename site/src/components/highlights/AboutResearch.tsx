@@ -21,7 +21,7 @@ export function AboutResearch({
   facts: readonly { key: string; value: string; label: string }[];
 }) {
   return (
-    <section className="mt-8 overflow-hidden rounded-xl border border-border bg-[hsl(var(--surface))] md:mt-10">
+    <section className="overflow-hidden rounded-xl border border-border bg-[hsl(var(--surface))]">
       <div className="border-b border-border px-5 py-5 md:px-8 md:py-6">
         <p className="font-mono text-[0.64rem] font-bold uppercase tracking-[0.16em] text-accent">
           {label}
