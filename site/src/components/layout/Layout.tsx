@@ -144,12 +144,12 @@ export function Layout() {
               "How Nepal's accountability system works, and where it leaks",
             )}
           </h1>
-          {/* One line on what Jawafdehi is. The rest of the introduction lives in
-              the About section below, so this does not try to carry it. */}
+          {/* What is in the research, not what Jawafdehi is — that is the section
+              below. A reader arriving here wants to know what they can find out. */}
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
             {t(
-              "research.corruption.site.lede3",
-              "Jawafdehi is an open data portal that makes Nepal's corruption cases easier for everyone to find and understand. This research is the part of that work which looks at the system rather than at any one case.",
+              "research.corruption.site.lede4",
+              "Fourteen years of CIAA and court records, read together: how far a corruption complaint gets, how long each stage takes, what the courts do with the cases that reach them, and which decisions along the way are made without a published reason.",
             )}
           </p>
         </div>
