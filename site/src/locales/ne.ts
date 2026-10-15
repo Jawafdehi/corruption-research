@@ -734,9 +734,6 @@ export const ne: Record<string, string> = {
   "research.corruption.site.eyebrow2": "रिसर्च",
   "research.corruption.site.title2":
     "नेपालको जवाफदेहिता प्रणाली कसरी चल्छ, र कहाँ चुहिन्छ",
-  "research.corruption.site.lede3":
-    "जवाफदेही एउटा खुला डेटा पोर्टल हो, जसले नेपालका भ्रष्टाचार मुद्दा सबैका लागि खोज्न र बुझ्न सजिलो बनाउँछ। यो अनुसन्धान त्यही कामको त्यो भाग हो जसले कुनै एक मुद्दालाई होइन, प्रणालीलाई हेर्छ।",
-
   "research.corruption.about.label2": "जवाफदेहीबारे",
   "research.corruption.about.heading2":
     "नेपालका भ्रष्टाचार मुद्दाको खुला अभिलेख, र तिनलाई हेर्ने प्रणाली वास्तवमा कसरी चल्छ भन्ने",
@@ -756,8 +753,6 @@ export const ne: Record<string, string> = {
   "research.corruption.about.fOpen": "खुला",
   "research.corruption.about.fOpenLabel": "हरेक अंक तपाईं जाँच्न सक्ने सार्वजनिक स्रोतसम्म पुग्छ",
   // --- Masthead, About links, the oval, and Tameli at first use --------------
-  "research.corruption.site.lede4":
-    "अख्तियार र अदालतका चौध वर्षका अभिलेख सँगै पढ्दा: भ्रष्टाचारको उजुरी कति टाढासम्म पुग्छ, हरेक चरणमा कति समय लाग्छ, अदालतसम्म पुगेका मुद्दाको के हुन्छ, र बाटोमा कुन-कुन निर्णय कारण नखुलाई गरिन्छन्।",
   "research.corruption.hl.title2": "भ्रष्टाचारको उजुरी कसरी अघि बढ्छ, र कहाँ रोकिन्छ",
 
   "research.corruption.about.b1a": "जवाफदेही एउटा ",

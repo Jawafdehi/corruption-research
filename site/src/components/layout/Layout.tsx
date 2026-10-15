@@ -144,12 +144,10 @@ export function Layout() {
               "How Nepal's accountability system works, and where it leaks",
             )}
           </h1>
-          {/* What is in the research, not what Jawafdehi is — that is the section
-              below. A reader arriving here wants to know what they can find out. */}
           <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
             {t(
-              "research.corruption.site.lede4",
-              "Fourteen years of CIAA and court records, read together: how far a corruption complaint gets, how long each stage takes, what the courts do with the cases that reach them, and which decisions along the way are made without a published reason.",
+              "research.corruption.site.lede",
+              "Thousands of complaints. Hundreds of prosecutions. Years of court proceedings. But how many cases actually lead to convictions, how many end in acquittals, and how many remain unresolved? Following cases from the CIAA to the Special Court and Supreme Court, this research identifies where the gaps lie at each stage of Nepal's corruption accountability system.",
             )}
           </p>
         </div>
