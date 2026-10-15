@@ -64,6 +64,10 @@ export type RouteLabels = {
   close: string;
   finding: string;
   gap: string;
+  /** Names the figure, in the middle of the ring. */
+  ovalCentre: string;
+  /** Shown under it while nothing is open. */
+  ovalHint: string;
   srIntro: string;
 };
 
@@ -100,10 +104,18 @@ const PART_FILL = {
 export function RouteMap({
   phases,
   labels,
+  tameliNote,
 }: {
   phases: readonly RoutePhase[];
   labels: RouteLabels;
+  /** Rendered at the first exit that is a Tameli, not under the whole figure. */
+  tameliNote: ReactNode;
 }) {
+  // The first Tameli in reading order. The word needs explaining the first time a
+  // reader meets it, not in a box below eight stages they have already read past.
+  const firstTameli = phases
+    .flatMap((p) => p.steps)
+    .find((st) => st.exit?.tone === "tameli")?.key;
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
 
@@ -256,6 +268,12 @@ export function RouteMap({
 
                           {s.exit ? (
                             <ExitBranch exit={s.exit} no={labels.no} />
+                          ) : null}
+
+                          {s.key === firstTameli ? (
+                            <div className="mt-2 max-w-xl rounded-lg border border-accent/30 bg-accent/[0.04] px-3.5 py-3 text-[0.78rem] leading-6 text-foreground/85">
+                              {tameliNote}
+                            </div>
                           ) : null}
 
                           {s.insight ? (

@@ -2,11 +2,15 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
-import { Cite } from "@/components/layout/Prose";
 import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
 import { AboutResearch } from "@/components/highlights/AboutResearch";
 import { DurationSpread } from "@/components/highlights/DurationSpread";
-import { RouteMap, type RoutePhase } from "@/components/highlights/RouteMap";
+import {
+  RouteMap,
+  type RouteLabels,
+  type RoutePhase,
+} from "@/components/highlights/RouteMap";
+import { RouteOval } from "@/components/highlights/RouteOval";
 import {
   OutcomeSplit,
   type OutcomeSegment,
@@ -56,6 +60,8 @@ export default function Highlights() {
     sting: "https://jawafdehi.org/updates/sting-operation/",
     jalahari:
       "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution/",
+    home: "https://jawafdehi.org",
+    cases: "https://jawafdehi.org/cases",
     jalahariCase: "https://jawafdehi.org/case/jalahari/",
     courtcases: "https://jawafdehi.org/courtcases/",
   } as const;
@@ -261,8 +267,8 @@ export default function Highlights() {
           key: "darta",
           n: 1,
           title: t(
-            "research.corruption.flow.s1Title",
-            "Complaint registration",
+            "research.corruption.flow.s1Title2",
+            "Someone files a complaint",
           ),
           insight: {
             kind: "gap",
@@ -681,15 +687,70 @@ export default function Highlights() {
     },
   ];
 
+  /*
+   * What Tameli is, stated the first time the figure uses the word. अनुसूची-११ of the
+   * कार्यविधि puts the complaint aside "हाललाई" — for the time being — expressly so it
+   * can be taken up again, so calling it "closed" overstates how final it is. The
+   * second half is what the record then shows: nothing.
+   */
+  const tameliNote = (
+    <>
+      <p>
+        <strong className="font-display font-bold text-accent">
+          {t("research.corruption.flow.exit", "Tameli")}
+        </strong>{" "}
+        {t(
+          "research.corruption.flow.tameliDef",
+          "means the complaint is set aside for the time being. The file and its record are kept, and if further evidence comes to light the matter is dealt with under the law at that time, so Tameli does not mean the case is settled permanently.",
+        )}
+      </p>
+      <p className="mt-2">
+        {t(
+          "research.corruption.flow.tameliLost",
+          "In practice it is where the public trail ends. No reason is published for any individual Tameli decision, and no report records how many files were ever taken up again — so once a complaint goes to Tameli, there is no way from outside to follow what became of it.",
+        )}
+      </p>
+      <p className="mt-1.5 text-[0.68rem] text-muted-foreground">
+        {t(
+          "research.corruption.flow.tameliCite",
+          "CIAA Act 2048, section 19(13).",
+        )}
+      </p>
+    </>
+  );
+
+  /** One label set, shared by the oval and the vertical view. */
+  const routeLabels: RouteLabels = {
+    no: t("research.corruption.flow.no", "no"),
+    open: t(
+      "research.corruption.route.open",
+      "Show the research on this stage",
+    ),
+    close: t(
+      "research.corruption.route.close",
+      "Hide the research on this stage",
+    ),
+    ovalCentre: t(
+      "research.corruption.route.ovalCentre",
+      "A complaint's route",
+    ),
+    ovalHint: t(
+      "research.corruption.route.ovalHint",
+      "Pick a stage to see what the record shows, and what it does not.",
+    ),
+    finding: t("research.corruption.route.finding", "What the record shows"),
+    gap: t("research.corruption.route.gap", "What the record cannot answer"),
+    srIntro: t(
+      "research.corruption.route.srIntro",
+      "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six to eight are courts. Not every complaint reaches every stage: it can be set aside as Tameli at screening, after the preliminary inquiry, or when the Commission rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
+    ),
+  };
+
   return (
     <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
       <Reveal>
         <AboutResearch
           label={t("research.corruption.about.label2", "About Jawafdehi")}
-          heading={t(
-            "research.corruption.about.heading2",
-            "An open record of Nepal's corruption cases, and of how the system handling them actually works",
-          )}
           facts={[
             {
               key: "years",
@@ -734,34 +795,54 @@ export default function Highlights() {
           ]}
         >
           <p>
+            {t("research.corruption.about.b1a", "Jawafdehi is an ")}
+            <a href={JAWAFDEHI.home} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b1Portal", "open data portal")}
+            </a>
             {t(
-              "research.corruption.about.a1",
-              "Jawafdehi is an open data portal that makes Nepal's corruption cases easier for everyone to find and understand. It brings scattered information into one place, with simple case summaries that help people understand what happened without having to go through hundreds of pages of court documents. Built around the spirit of Nepal's 2082 Gen Z movement, Jawafdehi aims to make accountability more accessible to the public.",
+              "research.corruption.about.b1b",
+              " that makes Nepal's corruption cases easier for everyone to find and understand. It brings scattered information into one place, with ",
+            )}
+            <a href={JAWAFDEHI.cases} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b1Cases", "simple case summaries")}
+            </a>
+            {t(
+              "research.corruption.about.b1c",
+              " that help people understand what happened without having to go through hundreds of pages of court documents. Built around the spirit of Nepal's 2082 Gen Z movement, Jawafdehi aims to make accountability more accessible to the public.",
             )}
           </p>
           <p>
             {t(
-              "research.corruption.about.a2",
-              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of records from the CIAA, the Supreme Court and other sources. We look at how corruption complaints move through the system, how long cases take to resolve, and what the available records reveal about the strengths and gaps in the accountability process. Where information is missing, we highlight those gaps rather than make assumptions.",
+              "research.corruption.about.b2a",
+              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of records from the ",
             )}
+            <a href={CITATIONS.ciaaReports} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b2Ciaa", "CIAA's annual reports")}
+            </a>
+            {t("research.corruption.about.b2b", ", the ")}
+            <a href={CITATIONS.courtRecords} target="_blank" rel="noreferrer">
+              {t(
+                "research.corruption.about.b2Court",
+                "Supreme Court and Special Court registers",
+              )}
+            </a>
+            {t(
+              "research.corruption.about.b2c",
+              " and other sources. We look at how corruption complaints move through the system, how long cases take to resolve, and what the available records reveal about the strengths and gaps in the accountability process. Where information is missing, we highlight those gaps rather than make assumptions — and every figure on this page can be ",
+            )}
+            <a href={CITATIONS.researchPack} target="_blank" rel="noreferrer">
+              {t(
+                "research.corruption.about.b2Pack",
+                "recomputed from the published data and code",
+              )}
+            </a>
+            {t("research.corruption.about.b2d", ".")}
           </p>
           <p>
             {t(
               "research.corruption.about.a3",
               "This work brings together people from different fields, including legal experts, law students, technology professionals, software engineers, retired bureaucrats and journalists. Our aim is to make public records easier to access, understand and examine, so that anyone can explore the evidence and draw their own conclusions.",
             )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.about.a4",
-              "Every figure on this page can be recomputed. The datasets, the code that derives each one and the notes on what each source can and cannot support are published, so a reader who doubts a number does not have to take it on trust.",
-            )}{" "}
-            <Cite href={CITATIONS.researchPack}>
-              {t(
-                "research.corruption.about.pack",
-                "The data and code behind this page",
-              )}
-            </Cite>
           </p>
         </AboutResearch>
       </Reveal>
@@ -770,8 +851,8 @@ export default function Highlights() {
         <header className="mt-10 max-w-3xl md:mt-14">
           <h2 className="font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
             {t(
-              "research.corruption.hl.title",
-              "How a corruption case moves, and where it stops",
+              "research.corruption.hl.title2",
+              "How a corruption complaint moves, and where it stops",
             )}
           </h2>
         </header>
@@ -789,57 +870,21 @@ export default function Highlights() {
           <div className="mt-3 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
             {/* Held to the same measure as the note below it: at full width the rail
                 stranded every label on the left of an empty page. */}
-            <div className="mx-auto max-w-2xl">
-              <RouteMap
+            {/* An ellipse cannot be read on a phone, so the vertical version is not
+                a fallback: it is the better layout at that width. */}
+            <div className="hidden md:block">
+              <RouteOval
                 phases={routePhases}
-                labels={{
-                  no: t("research.corruption.flow.no", "no"),
-                  open: t(
-                    "research.corruption.route.open",
-                    "Show the research on this stage",
-                  ),
-                  close: t(
-                    "research.corruption.route.close",
-                    "Hide the research on this stage",
-                  ),
-                  finding: t(
-                    "research.corruption.route.finding",
-                    "What the record shows",
-                  ),
-                  gap: t(
-                    "research.corruption.route.gap",
-                    "What the record cannot answer",
-                  ),
-                  srIntro: t(
-                    "research.corruption.route.srIntro",
-                    "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six to eight are courts. Not every complaint reaches every stage: it can be set aside as Tameli at screening, after the preliminary inquiry, or when the Commission rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
-                  ),
-                }}
+                labels={routeLabels}
+                tameliNote={tameliNote}
               />
             </div>
-            {/*
-              The meaning of तामेली, stated where there is room for both halves of
-              it. अनुसूची-११ of the कार्यविधि puts the complaint aside "हाललाई" —
-              for the time being — expressly on the footing that it is taken up
-              again if further evidence appears. Calling it simply "closed" drops
-              the second half and overstates how final it is.
-            */}
-            <div className="mx-auto mt-4 max-w-2xl rounded-md border border-accent/40 bg-accent/[0.04] px-5 py-4 text-center">
-              <p className="text-sm leading-6 text-foreground/85">
-                <strong className="font-display font-bold text-accent">
-                  {t("research.corruption.flow.exit", "Tameli")}
-                </strong>{" "}
-                {t(
-                  "research.corruption.flow.exitMeaning",
-                  "means the complaint is set aside for the time being. The file and its record are kept, and if further evidence comes to light the matter is dealt with under the law at that time. Hence, Tameli does not mean the case is settled permanently.",
-                )}
-              </p>
-              <p className="mt-1.5 text-xs text-muted-foreground">
-                {t(
-                  "research.corruption.flow.exitCite",
-                  "CIAA Act 2048, section 19(13).",
-                )}
-              </p>
+            <div className="mx-auto max-w-2xl md:hidden">
+              <RouteMap
+                phases={routePhases}
+                labels={routeLabels}
+                tameliNote={tameliNote}
+              />
             </div>
           </div>
         </section>
