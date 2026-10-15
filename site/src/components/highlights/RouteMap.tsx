@@ -2,8 +2,11 @@ import { useId, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export type RouteInsight = {
-  /** What the gap is ABOUT, in one or two words. Printed on the indicator chip. */
-  tag: string;
+  /**
+   * The finding, stated. Printed on the stage box AND at the head of the panel: a
+   * short subject tag made a reader click to find out what the subject was about,
+   * which is the one thing the label should have told them already.
+   */
   title: string;
   /** ReactNode so a finding can carry its own in-text links to the evidence. */
   body: ReactNode;
@@ -234,7 +237,7 @@ export function RouteMap({
                                     : "border-accent/40 bg-accent/[0.08] text-accent group-hover:border-accent group-hover:bg-accent/[0.18]")
                                 }
                               >
-                                {s.insight.tag}
+                                {s.insight.title}
                                 <span
                                   aria-hidden="true"
                                   className={

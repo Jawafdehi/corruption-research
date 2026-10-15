@@ -272,7 +272,6 @@ export default function Highlights() {
           ),
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i1Tag3", "Complaint tracking"),
             title: t(
               "research.corruption.route.i1Title4",
               "Complainants cannot track the status of their complaints",
@@ -376,7 +375,6 @@ export default function Highlights() {
           },
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i2Tag3", "Tameli decisions"),
             title: t(
               "research.corruption.route.i2Title4",
               "Six in ten complaints end in Tameli, and no reason is published for any of them",
@@ -405,7 +403,6 @@ export default function Highlights() {
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i4Tag2", "Sting operations"),
             title: t(
               "research.corruption.route.i4Title4",
               "The continuing controversy over CIAA sting operations",
@@ -453,7 +450,6 @@ export default function Highlights() {
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i5Tag3", "Selective prosecution"),
             title: t(
               "research.corruption.route.i5Title4",
               "Selective prosecution: why some are charged and others are left out",
@@ -529,7 +525,6 @@ export default function Highlights() {
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i6Tag2", "Case strength"),
             title: t(
               "research.corruption.route.i6Title4",
               "Extensive state powers, but how strong are the cases?",
@@ -599,7 +594,6 @@ export default function Highlights() {
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i7Tag2", "Appeal outcomes"),
             title: t(
               "research.corruption.route.i7Title5",
               "CIAA appeals rarely overturn acquittals, while individuals more often overturn convictions",
@@ -636,7 +630,6 @@ export default function Highlights() {
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i8Tag", "The wait"),
             title: t(
               "research.corruption.route.i8Title3",
               "A typical Supreme Court appeal took {{median}} years to decide",
