@@ -417,8 +417,8 @@ export default function Highlights() {
           insight: {
             kind: "gap",
             title: t(
-              "research.corruption.route.i2Title4",
-              "Six in ten complaints end in Tameli, and no reason is published for any of them",
+              "research.corruption.route.i2Title5",
+              "Six in ten complaints are placed in Tameli, but no reasons are given for these decisions",
             ),
             body: (
               <p>
@@ -755,12 +755,12 @@ export default function Highlights() {
       "Hide the research on this stage",
     ),
     ovalCentre: t(
-      "research.corruption.route.ovalCentre",
-      "A complaint's route",
+      "research.corruption.route.ovalCentre2",
+      "A complaint's journey",
     ),
     ovalHint: t(
-      "research.corruption.route.ovalHint",
-      "Pick a stage to see what the record shows, and what it does not.",
+      "research.corruption.route.ovalHint2",
+      "Select a stage to see what the records show and what they don't.",
     ),
     finding: t("research.corruption.route.finding", "What the record shows"),
     gap: t("research.corruption.route.gap", "What the record cannot answer"),
@@ -881,8 +881,8 @@ export default function Highlights() {
           </h2>
           <p className="mt-4 text-left text-sm leading-7 text-muted-foreground md:text-center">
             {t(
-              "research.corruption.hl.intro",
-              "Nepal's corruption accountability system involves several stages, from the Commission for the Investigation of Abuse of Authority (CIAA) investigating allegations to courts deciding cases and appeals. This research brings together records from across these stages to examine what happens to corruption cases over time, where proceedings stall, how verdicts turn out, and what the available data reveals about the system's strengths and gaps.",
+              "research.corruption.hl.intro2",
+              "This research follows corruption cases through Nepal's accountability system, from the CIAA's investigations to Special Court verdicts and appeals at the Supreme Court. By bringing together records from each stage, it examines how cases are handled, how they end, how long they take, and where important gaps remain in the public record.",
             )}
           </p>
         </header>
