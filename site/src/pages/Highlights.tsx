@@ -684,17 +684,6 @@ export default function Highlights() {
   return (
     <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
       <Reveal>
-        <header className="max-w-3xl">
-          <h2 className="mt-3 font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
-            {t(
-              "research.corruption.hl.title",
-              "How a corruption case moves, and where it stops",
-            )}
-          </h2>
-        </header>
-      </Reveal>
-
-      <Reveal>
         <AboutResearch
           label={t("research.corruption.about.label", "About this research")}
           heading={t(
@@ -781,6 +770,17 @@ export default function Highlights() {
             </Cite>
           </p>
         </AboutResearch>
+      </Reveal>
+
+      <Reveal>
+        <header className="mt-10 max-w-3xl md:mt-14">
+          <h2 className="font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
+            {t(
+              "research.corruption.hl.title",
+              "How a corruption case moves, and where it stops",
+            )}
+          </h2>
+        </header>
       </Reveal>
       <Reveal>
         <section
