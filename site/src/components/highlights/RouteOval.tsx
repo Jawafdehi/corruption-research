@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { RouteLabels, RoutePhase, RouteStep } from "./RouteMap";
@@ -53,11 +53,9 @@ type Placed = {
 export function RouteOval({
   phases,
   labels,
-  tameliNote,
 }: {
   phases: readonly RoutePhase[];
   labels: RouteLabels;
-  tameliNote: ReactNode;
 }) {
   const [open, setOpen] = useState<string | null>(null);
   const uid = useId();
@@ -89,6 +87,9 @@ export function RouteOval({
   const ink = "hsl(var(--foreground) / 0.45)";
   const court = "hsl(var(--court))";
   const openStep = placed.find((p) => p.step.key === open);
+  // A chip that defines a term opens into the same panel as a finding does, keyed on
+  // the step plus a suffix so the two can never collide.
+  const openExit = placed.find((p) => `${p.step.key}-exit` === open);
 
   return (
     <>
@@ -174,7 +175,14 @@ export function RouteOval({
           const len = Math.hypot(p.x - GEO.cx, p.y - GEO.cy);
           const bx = p.x + ((p.x - GEO.cx) / len) * GEO.out;
           const by = p.y + ((p.y - GEO.cy) / len) * GEO.out;
-          const isOpen = open === p.step.key;
+          // A stage opens its finding; a stage with no finding but a term that needs
+          // defining opens that instead. Never both, so one key per box.
+          const key = p.step.insight
+            ? p.step.key
+            : p.step.exit?.note
+              ? `${p.step.key}-exit`
+              : null;
+          const isOpen = key !== null && open === key;
           const colour =
             p.tone === "court" ? "hsl(var(--court))" : "hsl(var(--foreground))";
           const panelId = `${uid}-panel`;
@@ -194,7 +202,8 @@ export function RouteOval({
                 isOpen={isOpen}
                 labels={labels}
                 panelId={panelId}
-                onToggle={() => onToggle(p.step.key)}
+                openKey={key}
+                onToggle={() => key && onToggle(key)}
               />
             </div>
           );
@@ -213,14 +222,17 @@ export function RouteOval({
         </div>
       </div>
 
-      {/* The word is explained once, under the ring that first uses it. */}
-      <div className="mx-auto mt-2 max-w-2xl rounded-lg border border-accent/30 bg-accent/[0.04] px-4 py-3 text-[0.78rem] leading-6 text-foreground/85">
-        {tameliNote}
-      </div>
-
       {/* Opened findings land under the ring, where length costs nothing. */}
       <div ref={panelRef} aria-live="polite" className="scroll-mt-6">
-        {openStep?.step.insight ? (
+        {openExit?.step.exit?.note ? (
+          <div
+            id={`${uid}-panel`}
+            role="region"
+            className="mx-auto mt-2 max-w-2xl rounded-xl border border-accent/25 border-l-[3px] border-l-accent/60 bg-[hsl(var(--surface))] p-4 text-[0.8rem] leading-6 text-foreground/85"
+          >
+            {openExit.step.exit.note}
+          </div>
+        ) : openStep?.step.insight ? (
           <div
             id={`${uid}-panel`}
             role="region"
@@ -328,6 +340,7 @@ function StageBox({
   isOpen,
   labels,
   panelId,
+  openKey,
   onToggle,
 }: {
   step: RouteStep;
@@ -335,6 +348,8 @@ function StageBox({
   isOpen: boolean;
   labels: RouteLabels;
   panelId: string;
+  /** null when this box has nothing to open. */
+  openKey: string | null;
   onToggle: () => void;
 }) {
   const body = (
@@ -353,8 +368,11 @@ function StageBox({
       </div>
 
       {step.exit ? (
-        <span className="mt-1.5 block pl-7 text-[0.64rem] font-semibold text-accent/90">
-          {labels.no} → {step.exit.label}
+        <span className="mt-1.5 block pl-7 text-[0.64rem] leading-snug text-accent/85">
+          {step.exit.condition} <span aria-hidden="true">→</span>{" "}
+          <span className="font-semibold underline decoration-accent/40 underline-offset-2">
+            {step.exit.label}
+          </span>
         </span>
       ) : null}
 
@@ -383,7 +401,7 @@ function StageBox({
   const shell =
     "block w-full rounded-lg border bg-[hsl(var(--surface))] px-3 py-2.5 text-left shadow-sm transition-all ";
 
-  if (!step.insight) {
+  if (!openKey) {
     return <div className={shell + "border-border/70 opacity-90"}>{body}</div>;
   }
 

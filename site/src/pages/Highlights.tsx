@@ -257,6 +257,39 @@ export default function Highlights() {
    * An insight is attached only where the record carries one. Stage 3 has none: the
    * annual reports publish no figure for preliminary inquiries as a class.
    */
+  /*
+   * What Tameli is, attached to the first chip that says the word rather than printed
+   * under the whole figure. अनुसूची-११ of the कार्यविधि puts the complaint aside
+   * "हाललाई" — for the time being — expressly so it can be taken up again, so calling
+   * it "closed" overstates how final it is. The second half is what the record then
+   * shows about that promise: nothing.
+   */
+  const tameliNote = (
+    <>
+      <p>
+        <strong className="font-display font-bold text-accent">
+          {t("research.corruption.flow.exit", "Tameli")}
+        </strong>{" "}
+        {t(
+          "research.corruption.flow.tameliDef2",
+          "means putting a complaint aside for now. The file is kept, and the complaint can be looked at again if new evidence comes up. So, Tameli does not mean the matter is permanently closed.",
+        )}
+      </p>
+      <p className="mt-2">
+        {t(
+          "research.corruption.flow.tameliLost2",
+          "The problem is that people cannot see what happens after that. The CIAA does not publish the reasons for individual Tameli decisions or how many complaints are later reopened. Once a complaint goes to Tameli, people outside the Commission have no clear way to find out whether it was looked at again or what happened to it.",
+        )}
+      </p>
+      <p className="mt-1.5 text-[0.68rem] text-muted-foreground">
+        {t(
+          "research.corruption.flow.tameliCite",
+          "CIAA Act 2048, section 19(13).",
+        )}
+      </p>
+    </>
+  );
+
   const routePhases: RoutePhase[] = [
     {
       key: "ciaa",
@@ -300,9 +333,14 @@ export default function Highlights() {
             "The CIAA screens the complaint",
           ),
           exit: {
-            question: t("research.corruption.flow.dScreen", "Taken forward?"),
+            condition: t(
+              "research.corruption.flow.cScreen",
+              "If it is not taken forward",
+            ),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
+            noteTitle: t("research.corruption.flow.exit", "Tameli"),
+            note: tameliNote,
           },
         },
         {
@@ -369,7 +407,10 @@ export default function Highlights() {
             ),
           },
           exit: {
-            question: t("research.corruption.flow.dGrounds", "Grounds found?"),
+            condition: t(
+              "research.corruption.flow.cGrounds",
+              "If no grounds are found",
+            ),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
           },
@@ -444,7 +485,10 @@ export default function Highlights() {
             "The CIAA decides whether to prosecute",
           ),
           exit: {
-            question: t("research.corruption.flow.dProsecute", "Prosecute?"),
+            condition: t(
+              "research.corruption.flow.cProsecute",
+              "If the CIAA decides not to prosecute",
+            ),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
           },
@@ -519,7 +563,10 @@ export default function Highlights() {
             "The Special Court hears the case and delivers a verdict",
           ),
           exit: {
-            question: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
+            condition: t(
+              "research.corruption.flow.cAppeal",
+              "If neither party appeals",
+            ),
             label: t("research.corruption.flow.stands", "Verdict stands"),
             tone: "stands",
           },
@@ -696,38 +743,6 @@ export default function Highlights() {
     },
   ];
 
-  /*
-   * What Tameli is, stated the first time the figure uses the word. अनुसूची-११ of the
-   * कार्यविधि puts the complaint aside "हाललाई" — for the time being — expressly so it
-   * can be taken up again, so calling it "closed" overstates how final it is. The
-   * second half is what the record then shows: nothing.
-   */
-  const tameliNote = (
-    <>
-      <p>
-        <strong className="font-display font-bold text-accent">
-          {t("research.corruption.flow.exit", "Tameli")}
-        </strong>{" "}
-        {t(
-          "research.corruption.flow.tameliDef",
-          "means the complaint is set aside for the time being. The file and its record are kept, and if further evidence comes to light the matter is dealt with under the law at that time, so Tameli does not mean the case is settled permanently.",
-        )}
-      </p>
-      <p className="mt-2">
-        {t(
-          "research.corruption.flow.tameliLost",
-          "In practice it is where the public trail ends. No reason is published for any individual Tameli decision, and no report records how many files were ever taken up again — so once a complaint goes to Tameli, there is no way from outside to follow what became of it.",
-        )}
-      </p>
-      <p className="mt-1.5 text-[0.68rem] text-muted-foreground">
-        {t(
-          "research.corruption.flow.tameliCite",
-          "CIAA Act 2048, section 19(13).",
-        )}
-      </p>
-    </>
-  );
-
   /** One label set, shared by the oval and the vertical view. */
   const routeLabels: RouteLabels = {
     no: t("research.corruption.flow.no", "no"),
@@ -864,6 +879,12 @@ export default function Highlights() {
               "How a corruption complaint moves, and where it stops",
             )}
           </h2>
+          <p className="mt-4 text-left text-sm leading-7 text-muted-foreground md:text-center">
+            {t(
+              "research.corruption.hl.intro",
+              "Nepal's corruption accountability system involves several stages, from the Commission for the Investigation of Abuse of Authority (CIAA) investigating allegations to courts deciding cases and appeals. This research brings together records from across these stages to examine what happens to corruption cases over time, where proceedings stall, how verdicts turn out, and what the available data reveals about the system's strengths and gaps.",
+            )}
+          </p>
         </header>
       </Reveal>
       <Reveal>
@@ -882,18 +903,10 @@ export default function Highlights() {
             {/* An ellipse cannot be read on a phone, so the vertical version is not
                 a fallback: it is the better layout at that width. */}
             <div className="hidden md:block">
-              <RouteOval
-                phases={routePhases}
-                labels={routeLabels}
-                tameliNote={tameliNote}
-              />
+              <RouteOval phases={routePhases} labels={routeLabels} />
             </div>
             <div className="mx-auto max-w-2xl md:hidden">
-              <RouteMap
-                phases={routePhases}
-                labels={routeLabels}
-                tameliNote={tameliNote}
-              />
+              <RouteMap phases={routePhases} labels={routeLabels} />
             </div>
           </div>
         </section>
