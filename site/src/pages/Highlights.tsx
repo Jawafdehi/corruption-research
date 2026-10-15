@@ -272,10 +272,10 @@ export default function Highlights() {
           ),
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i1Tag2", "No one can track it"),
+            tag: t("research.corruption.route.i1Tag3", "Complaint tracking"),
             title: t(
-              "research.corruption.route.i1Title3",
-              "A complaint goes in, and nothing comes back out",
+              "research.corruption.route.i1Title4",
+              "Complainants cannot track the status of their complaints",
             ),
             body: (
               <p>
@@ -376,7 +376,7 @@ export default function Highlights() {
           },
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i2Tag2", "Where they go"),
+            tag: t("research.corruption.route.i2Tag3", "Tameli decisions"),
             title: t(
               "research.corruption.route.i2Title4",
               "Six in ten complaints end in Tameli, and no reason is published for any of them",
@@ -405,10 +405,10 @@ export default function Highlights() {
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i4Tag", "Limits on evidence"),
+            tag: t("research.corruption.route.i4Tag2", "Sting operations"),
             title: t(
-              "research.corruption.route.i4Title3",
-              "The Commission paid for the bribe it then prosecuted",
+              "research.corruption.route.i4Title4",
+              "The continuing controversy over CIAA sting operations",
             ),
             body: (
               <>
@@ -453,13 +453,10 @@ export default function Highlights() {
           },
           insight: {
             kind: "finding",
-            tag: t(
-              "research.corruption.route.i5Tag2",
-              "Who is charged, and how few",
-            ),
+            tag: t("research.corruption.route.i5Tag3", "Selective prosecution"),
             title: t(
-              "research.corruption.route.i5Title3",
-              "A court asked why some were charged and others were not, and the record cannot answer",
+              "research.corruption.route.i5Title4",
+              "Selective prosecution: why some are charged and others are left out",
             ),
             body: (
               <p>
@@ -532,17 +529,17 @@ export default function Highlights() {
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i6Tag", "Outcomes"),
+            tag: t("research.corruption.route.i6Tag2", "Case strength"),
             title: t(
-              "research.corruption.route.i6Title2",
-              "Three outcomes, not two",
+              "research.corruption.route.i6Title4",
+              "Extensive state powers, but how strong are the cases?",
             ),
             body: (
               <>
                 <p>
                   {t(
-                    "research.corruption.route.i6BodyA",
-                    "Of the {{d}} cases with a clear verdict, {{full}} ended in full conviction, {{part}} in partial conviction, and {{acq}} in acquittal. Partial conviction means the court convicted someone on some charges but not others, or convicted some accused while clearing others in the same case.",
+                    "research.corruption.route.i6BodyC",
+                    "The CIAA has constitutional authority, investigative powers and state resources behind it. Yet, of the {{d}} cases with a clear verdict, only {{full}} ended in full conviction. Another {{part}} ended in partial conviction, while {{acq}} ended in acquittal. More than half, therefore, did not result in full conviction.",
                     {
                       d: n(decided),
                       full: pct1((outcome.convicted / decided) * 100),
@@ -553,17 +550,18 @@ export default function Highlights() {
                 </p>
                 <p>
                   {t(
-                    "research.corruption.route.i6BodyB",
-                    "A single conviction rate misses these differences. It also does not tell the whole story of how an investigation was handled. An acquittal means the court did not find the accused guilty, but it does not automatically mean the investigation itself was flawed.",
+                    "research.corruption.route.i6BodyD",
+                    "These figures raise an important question about the strength of the cases the Commission brings to court. When a constitutional body has the power to investigate, gather evidence and prosecute, its cases should be built on solid evidence. The figures do not prove that every acquittal resulted from a weak investigation. But when more than half of decided cases fall short of full conviction, the reasons deserve serious scrutiny. Without records explaining why cases end in acquittal or partial conviction, the public cannot tell whether the problem lies in the investigation, the charges filed or other factors.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i6BodyE",
+                    "The consequences are not limited to the courtroom. A person accused of corruption may spend years facing legal proceedings, financial strain and damage to their reputation. Even after acquittal, the social stigma of being accused may remain. The state must be able to investigate and prosecute corruption, but that power also carries a responsibility to bring well-founded cases. The public should be able to examine whether that responsibility is being met.",
                   )}
                 </p>
               </>
             ),
-            /*
-             * The gap at this stage is money, not verdicts. The Commission publishes
-             * what it demanded; the court register carries no amount at all, so there
-             * is nothing to difference the claim against.
-             */
             gapNote: (
               <p>
                 {t(
@@ -601,10 +599,10 @@ export default function Highlights() {
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i7Tag", "Who wins"),
+            tag: t("research.corruption.route.i7Tag2", "Appeal outcomes"),
             title: t(
-              "research.corruption.route.i7Title3",
-              "Appeals tell two different stories",
+              "research.corruption.route.i7Title5",
+              "CIAA appeals rarely overturn acquittals, while individuals more often overturn convictions",
             ),
             body: (
               <p>
