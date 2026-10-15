@@ -23,14 +23,14 @@ import type { RouteLabels, RoutePhase, RouteStep } from "./RouteMap";
  */
 
 const GEO = {
-  w: 1240,
-  h: 820,
-  cx: 620,
-  cy: 400,
-  rx: 318,
-  ry: 250,
+  w: 1360,
+  h: 980,
+  cx: 680,
+  cy: 480,
+  rx: 330,
+  ry: 280,
   /** How far outside the ring a stage box sits, so no box crosses an arc. */
-  out: 112,
+  out: 150,
   /** Degrees swept from the first node to the last; the remainder is the open gap. */
   sweep: 315,
   start: -90,
@@ -154,8 +154,8 @@ export function RouteOval({
                 key={`stub-${p.step.key}`}
                 x1={p.x + ux * 11}
                 y1={p.y + uy * 11}
-                x2={p.x + ux * (GEO.out - 42)}
-                y2={p.y + uy * (GEO.out - 42)}
+                x2={p.x + ux * (GEO.out - 62)}
+                y2={p.y + uy * (GEO.out - 62)}
                 stroke="hsl(var(--foreground) / 0.18)"
                 strokeWidth={1.5}
               />
@@ -182,7 +182,7 @@ export function RouteOval({
           return (
             <div
               key={p.step.key}
-              className="absolute w-[13.5rem] -translate-x-1/2 -translate-y-1/2"
+              className="absolute w-[15.5rem] -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${(bx / GEO.w) * 100}%`,
                 top: `${(by / GEO.h) * 100}%`,
@@ -361,11 +361,11 @@ function StageBox({
       {step.insight ? (
         <span
           className={
-            "mt-1.5 flex items-center gap-1 pl-7 text-[0.64rem] font-semibold transition-colors " +
+            "mt-2 flex items-start gap-1 border-t border-border/70 pt-2 text-[0.68rem] font-semibold leading-snug transition-colors " +
             (isOpen ? "text-accent" : "text-accent/70 group-hover:text-accent")
           }
         >
-          {step.insight.tag}
+          {step.insight.title}
           <span
             aria-hidden="true"
             className={
