@@ -31,8 +31,6 @@ export const ne: Record<string, string> = {
   // --- chrome ---------------------------------------------------------------
   "research.corruption.site.eyebrow": "जवाफदेही अनुसन्धान",
   "research.corruption.site.title": "भ्रष्टाचारमा जवाफदेही",
-  "research.corruption.site.lede":
-    "नेपालमा भ्रष्टाचारको उजुरीको के हुन्छ — आयोगको दर्ता डेस्कदेखि विशेष अदालतको फैसला हुँदै सर्वोच्च अदालतसम्म। यहाँका हरेक अंक अदालतकै आफ्नै फौजदारी दर्ता किताब र आयोगका प्रकाशित वार्षिक प्रतिवेदनबाट गणना गरिएका हुन्।",
 
   "research.corruption.nav.overview": "सारांश",
   "research.corruption.nav.overviewBlurb": "जवाफदेही कहाँ हराउँछ",
