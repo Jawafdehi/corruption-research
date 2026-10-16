@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
@@ -35,7 +34,7 @@ const MIN_DECIDED = 60;
 
 export default function Highlights() {
   const { t } = useTranslation();
-  const { n, pct, pct1 } = useFormat();
+  const { n, pct, pct1, pct2 } = useFormat();
   const {
     appeals,
     byCharge,
@@ -423,15 +422,15 @@ export default function Highlights() {
             body: (
               <p>
                 {t(
-                  "research.corruption.route.i2Body4",
-                  "The report gives the numbers, but not the reasons behind individual decisions. It does not explain why one complaint was sent for detailed investigation while another was not. Without those reasons, it is difficult for anyone outside the Commission to assess whether similar complaints are being treated consistently.",
+                  "research.corruption.route.i2Body5",
+                  "The CIAA report shows how many complaints were closed without further investigation, but not why each complaint was closed. Some complaints may lack evidence, fall outside the CIAA's legal authority, or have no clear basis. But the public cannot see which reasons applied to which complaints. This makes it difficult to know whether the CIAA followed the law and treated similar complaints in the same way.",
                 )}
               </p>
             ),
             href: "/investigation#tameli-by-year",
             linkLabel: t(
-              "research.corruption.route.i2Link",
-              "Tameli, year by year",
+              "research.corruption.route.i2Link2",
+              "See how many complaints were placed in Tameli each year",
             ),
           },
         },
@@ -457,23 +456,24 @@ export default function Highlights() {
                   )}
                 </p>
                 <p>
-                  {t(
-                    "research.corruption.route.i4BodyB",
-                    "On 2078/01/08, the Supreme Court struck down the rule the Commission had relied on. The Court made clear that an investigation must establish what actually happened, not create an event that would not otherwise have occurred. Section 62(d) has since brought sting operations into the Act itself. But putting the power into law does not, by itself, settle the deeper question the Court's ruling raised: ",
-                  )}
-                  <Link to="/investigation#sting-operation">
+                  {t("research.corruption.route.i4BodyB1", "On 2078/01/08, ")}
+                  <a href={JAWAFDEHI.sting} target="_blank" rel="noreferrer">
                     {t(
-                      "research.corruption.route.i4Inline",
-                      "can the state create the circumstances of an offence and then prosecute someone for it?",
+                      "research.corruption.route.i4Ruling",
+                      "the Supreme Court struck down the rule the Commission had relied on",
                     )}
-                  </Link>
+                  </a>
+                  {t(
+                    "research.corruption.route.i4BodyB2",
+                    ". The Court made clear that an investigation must establish what actually happened, not create an event that would not otherwise have occurred. Section 62(d) has since brought sting operations into the Act itself. But putting the power into law does not, by itself, settle the deeper question the Court's ruling raised: can the state create the circumstances of an offence and then prosecute someone for it?",
+                  )}
                 </p>
               </>
             ),
-            href: JAWAFDEHI.sting,
+            href: "/investigation#sting-operation",
             linkLabel: t(
-              "research.corruption.route.i4Link",
-              "The sting operation ruling",
+              "research.corruption.route.i4Link2",
+              "See what happened to bribery cases after the ruling",
             ),
           },
         },
@@ -515,36 +515,25 @@ export default function Highlights() {
                   )}
                 </a>
                 {t(
-                  "research.corruption.route.i5BodyB",
-                  ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
+                  "research.corruption.route.i5BodyB2",
+                  ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. ",
                 )}
-              </p>
-            ),
-            gapNote: (
-              <p>
+                <a href={JAWAFDEHI.jalahari} target="_blank" rel="noreferrer">
+                  {t(
+                    "research.corruption.route.i5Analysis",
+                    "Our analysis of that judgment",
+                  )}
+                </a>
                 {t(
-                  "research.corruption.route.i5Gap",
-                  "Very little survives this far. Of the {{all}} complaints on the Commission's books in {{fy}}, {{filed}} were filed in court — {{pct}}. Even counting only the investigations it finished that year, {{share}} ended in a charge sheet. The rest stop earlier, and for most of them no reason is published.",
-                  {
-                    all: n(cd.total_complaints),
-                    fy: cd.fy,
-                    filed: n(cd.inv_filed),
-                    pct: t("research.corruption.route.i5GapPct", "{{v}}%", {
-                      v: ((cd.inv_filed / cd.total_complaints) * 100).toFixed(
-                        2,
-                      ),
-                    }),
-                    share: pct1(
-                      (cd.inv_filed / cd.investigations_completed) * 100,
-                    ),
-                  },
+                  "research.corruption.route.i5BodyC",
+                  " sets out who was charged and who was not. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
                 )}
               </p>
             ),
-            href: JAWAFDEHI.jalahari,
+            href: "/prosecution#charge-mix",
             linkLabel: t(
-              "research.corruption.route.i5Link",
-              "Selective prosecution in the Jalahari case",
+              "research.corruption.route.i5Link2",
+              "See which charges the CIAA brings",
             ),
           },
         },
@@ -607,10 +596,13 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i6Gap3",
-                  "The Commission does not win most of what it files. {{acq}} of decided cases end in acquittal, and {{less}} end in something short of a full conviction — this from the body that chose the charge, gathered the evidence and had the powers of a constitutional commission behind it. No published record says why a case failed, so the pattern cannot be read back into the decisions that produced it. The money is missing too: a बिगो is named when the case is filed, but nothing records how much of it a court upheld.",
+                  "research.corruption.route.i6Gap4",
+                  "Of the {{all}} complaints on the Commission's books in {{fy}}, {{filed}} were filed in court — {{pct}}. Of the cases a court has decided, {{less}} did not end in full conviction. Not every complaint should lead to a prosecution, and an acquittal does not prove the Commission was wrong to bring the case. But very few complaints become cases, and more than half of the cases that do fall short of a full conviction. The published record gives no reason for either — not why a complaint was dropped, and not why a case failed — so there is no way to tell where corruption prosecution is breaking down.",
                   {
-                    acq: pct1((outcome.acquitted / decided) * 100),
+                    all: n(cd.total_complaints),
+                    fy: cd.fy,
+                    filed: n(cd.inv_filed),
+                    pct: pct2((cd.inv_filed / cd.total_complaints) * 100),
                     less: pct1(
                       ((outcome.partial + outcome.acquitted) / decided) * 100,
                     ),
@@ -620,8 +612,8 @@ export default function Highlights() {
             ),
             href: "/court-outcomes#how-cases-end",
             linkLabel: t(
-              "research.corruption.route.i6Link",
-              "What the court decides",
+              "research.corruption.route.i6Link2",
+              "Explore the court's verdicts and conviction rates",
             ),
           },
         },
@@ -642,29 +634,47 @@ export default function Highlights() {
           insight: {
             kind: "finding",
             title: t(
-              "research.corruption.route.i7Title5",
-              "CIAA appeals rarely overturn acquittals, while individuals more often overturn convictions",
+              "research.corruption.route.i7Title6",
+              "The CIAA appeals most acquittals, but rarely changes the outcome",
             ),
             body: (
+              <>
+                <p>
+                  {t(
+                    "research.corruption.route.i7BodyA",
+                    "The CIAA appealed {{share}} of the acquittals against it, filing {{n}} appeals. But of the {{decided}} appeals that have been decided, only {{won}} resulted in a different verdict — {{pctWon}} of them. By contrast, {{dp}} of decided appeals filed by convicted people resulted in a change to their convictions.",
+                    {
+                      share: pct1(ciaaAcqShare),
+                      n: n(ciaaAcqAppeals),
+                      decided: n(ciaaAcqDecided),
+                      won: n(ciaaAcqWon),
+                      pctWon: pct2((ciaaAcqWon / ciaaAcqDecided) * 100),
+                      dp: pct1(appeals.defendant.pct),
+                    },
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i7BodyB",
+                    "An appeal is not without cost. It takes time and public money for the CIAA to pursue a case, and time for the Supreme Court to hear it. The people involved may also have to wait longer for the case to end. The CIAA must be able to challenge acquittals when it believes a court has made a mistake. But when only {{won}} out of {{decided}} decided appeals have changed the verdict, it is reasonable to ask whether these appeals are being pursued on strong enough grounds, and whether public resources are being used effectively.",
+                    { won: n(ciaaAcqWon), decided: n(ciaaAcqDecided) },
+                  )}
+                </p>
+              </>
+            ),
+            gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i7Body4",
-                  "The Commission does not accept a loss quietly: it appealed {{share}} of the acquittals against it, {{n}} in all. Of the {{decided}} of those appeals that have been decided, {{won}} changed the outcome. Convicted people appealing the other way succeed in {{dp}} of their decided appeals. Against both figures, {{untraced}} of every appeal traced carries no recorded outcome, so this rests on the half of the record that can be followed.",
-                  {
-                    share: pct1(ciaaAcqShare),
-                    n: n(ciaaAcqAppeals),
-                    decided: n(ciaaAcqDecided),
-                    won: n(ciaaAcqWon),
-                    dp: pct1(appeals.defendant.pct),
-                    untraced: pct1(untracedPct),
-                  },
+                  "research.corruption.route.i7Gap",
+                  "There is an important limit to these figures: {{untraced}} of appeals have no outcome we could trace in the available records. The findings therefore cover only appeals with known outcomes.",
+                  { untraced: pct1(untracedPct) },
                 )}
               </p>
             ),
             href: "/appeals#appeal-asymmetry",
             linkLabel: t(
-              "research.corruption.route.i7Link",
-              "The appeal record",
+              "research.corruption.route.i7Link2",
+              "See what happens when the CIAA challenges an acquittal",
             ),
           },
         },
@@ -678,22 +688,20 @@ export default function Highlights() {
           insight: {
             kind: "finding",
             title: t(
-              "research.corruption.route.i8Title3",
-              "A typical Supreme Court appeal took {{median}} years to decide",
-              { median: supremeDelay.medianYears.toFixed(1) },
+              "research.corruption.route.i8Title4",
+              "Corruption appeals can take years to resolve",
             ),
             body: (
               <>
                 <p>
                   {t(
-                    "research.corruption.route.i8BodyA",
-                    "Of {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over}} took more than six. The average is {{mean}} years, so the figure holds whichever way it is taken.",
+                    "research.corruption.route.i8BodyA2",
+                    "Of the {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve. More than one in three took over six years. The average waiting time was {{mean}} years.",
                     {
                       n: n(supremeDelay.decided),
                       from: supremeDelay.fromYear,
                       to: supremeDelay.toYear,
                       median: supremeDelay.medianYears.toFixed(1),
-                      over: pct1(supremeDelay.overSixPct),
                       mean: supremeDelay.meanYears.toFixed(1),
                     },
                   )}
@@ -706,8 +714,8 @@ export default function Highlights() {
                 */}
                 <p>
                   {t(
-                    "research.corruption.route.i8BodyB",
-                    "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. That measures how old the appeals now being cleared are, rather than how long one filed today will take.",
+                    "research.corruption.route.i8BodyB2",
+                    "The wait has also grown longer in recent years. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years, while those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}} years. This means the appeals being decided more recently had already spent much longer waiting for a decision. It does not mean every new appeal will take that long.",
                     {
                       eFrom: supremeDelay.earlier.from,
                       eTo: supremeDelay.earlier.to,
@@ -723,8 +731,8 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i8Gap",
-                  "Later registration years are excluded because too few of their appeals have been decided to measure the waiting time reliably. And {{open}} of the {{all}} appeals registered have no recorded decision — so these figures show how long decided appeals took, not the full picture.",
+                  "research.corruption.route.i8Gap2",
+                  "These figures cover only appeals that have been decided. Of the {{all}} appeals registered, {{open}} have no recorded decision. More recent registration years are also excluded from the waiting-time comparison because too few appeals from those years have been decided to give a reliable picture. The actual waiting time for all appeals, including those still pending, may therefore be different.",
                   {
                     open: n(supremeDelay.withoutVerdict),
                     all: n(supremeDelay.registeredAll),
@@ -734,8 +742,8 @@ export default function Highlights() {
             ),
             href: "/appeals#appeal-duration",
             linkLabel: t(
-              "research.corruption.route.i8Link",
-              "How long an appeal takes",
+              "research.corruption.route.i8Link2",
+              "See how long Supreme Court appeals take to resolve",
             ),
           },
         },
