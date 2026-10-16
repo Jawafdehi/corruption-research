@@ -212,11 +212,12 @@ export function RouteOval({
         {/* The centre names the figure. The finding does NOT go here: panels run to
           five or six sentences and a hole 24rem wide clipped them mid-word and
           covered two of the nodes doing it. */}
-        <div className="pointer-events-none absolute left-1/2 top-[46%] w-[min(40%,22rem)] -translate-x-1/2 -translate-y-1/2 text-center">
-          <p className="font-display text-base font-bold leading-snug text-foreground/70">
+        <div className="pointer-events-none absolute left-1/2 top-[46%] w-[min(42%,24rem)] -translate-x-1/2 -translate-y-1/2 text-center">
+          <p className="font-display text-[1.75rem] font-bold leading-tight tracking-tight text-foreground">
             {labels.ovalCentre}
           </p>
-          <p className="mt-1.5 text-[0.74rem] leading-5 text-muted-foreground">
+          <span className="mx-auto mt-3 block h-[3px] w-14 rounded-full bg-accent" />
+          <p className="mt-3 text-[0.82rem] font-medium leading-5 text-muted-foreground">
             {labels.ovalHint}
           </p>
         </div>
