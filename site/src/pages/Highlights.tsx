@@ -237,58 +237,26 @@ export default function Highlights() {
   // The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान
   // आयोग कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
   //
-  // तामेली exits sit on stages 2, 3 and 5 because the कार्यविधि gives one at each:
-  // दफा २१(३) at screening, दफा २२(३)(छ) after the preliminary inquiry, and
-  // दफा २५(ग) when the Commission rules on the investigation report. Stage 4 has
-  // none of its own; its report goes to stage 5, which is where it can be closed.
   /*
    * The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान आयोग
    * कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
    *
-   * तामेली exits sit after screening (दफा २१(३)), after the preliminary inquiry
-   * (दफा २२(३)(छ)) and on the investigation report (दफा २५(ग)). Stage 4 has no exit of
-   * its own: its report goes to stage 5, which is where it can be closed. The appeal is
-   * conditional, so a verdict nobody appeals stands.
+   * SEVEN stages, not eight. The कार्यविधि does give screening (दफा २१(३)) and the
+   * preliminary inquiry (दफा २२(३)(छ)) their own तामेली exits, so an earlier version
+   * drew them as stages 2 and 3. But the only figures that exist for either — तालिका
+   * २.१४ of the 35th report — count the two together and cannot be split, and the
+   * reports publish nothing for preliminary inquiries as a class. Drawing two boxes
+   * where the record keeps one implied a distinction a reader cannot follow up, so
+   * they are merged and the caption says the report does not separate them.
    *
-   * Stages 7 and 8 are separate because lodging an appeal and getting a decision on it
+   * तामेली can also end a complaint at stage 4, when the Commission rules on the
+   * investigation report (दफा २५(ग)). Stage 3 has no exit of its own: its report goes
+   * to stage 4, which is where it can be closed. The appeal is conditional, so a
+   * verdict nobody appeals stands.
+   *
+   * Stages 6 and 7 are separate because lodging an appeal and getting a decision on it
    * are different events years apart, and that distance is itself a finding.
-   *
-   * An insight is attached only where the record carries one. Stage 3 has none: the
-   * annual reports publish no figure for preliminary inquiries as a class.
    */
-  /*
-   * What Tameli is, attached to the first chip that says the word rather than printed
-   * under the whole figure. अनुसूची-११ of the कार्यविधि puts the complaint aside
-   * "हाललाई" — for the time being — expressly so it can be taken up again, so calling
-   * it "closed" overstates how final it is. The second half is what the record then
-   * shows about that promise: nothing.
-   */
-  const tameliNote = (
-    <>
-      <p>
-        <strong className="font-display font-bold text-accent">
-          {t("research.corruption.flow.exit", "Tameli")}
-        </strong>{" "}
-        {t(
-          "research.corruption.flow.tameliDef2",
-          "means putting a complaint aside for now. The file is kept, and the complaint can be looked at again if new evidence comes up. So, Tameli does not mean the matter is permanently closed.",
-        )}
-      </p>
-      <p className="mt-2">
-        {t(
-          "research.corruption.flow.tameliLost2",
-          "The problem is that people cannot see what happens after that. The CIAA does not publish the reasons for individual Tameli decisions or how many complaints are later reopened. Once a complaint goes to Tameli, people outside the Commission have no clear way to find out whether it was looked at again or what happened to it.",
-        )}
-      </p>
-      <p className="mt-1.5 text-[0.68rem] text-muted-foreground">
-        {t(
-          "research.corruption.flow.tameliCite",
-          "CIAA Act 2048, section 19(13).",
-        )}
-      </p>
-    </>
-  );
-
   const routePhases: RoutePhase[] = [
     {
       key: "ciaa",
@@ -328,26 +296,8 @@ export default function Highlights() {
           key: "parikshan",
           n: 2,
           title: t(
-            "research.corruption.flow.s2Title2",
-            "The CIAA screens the complaint",
-          ),
-          exit: {
-            condition: t(
-              "research.corruption.flow.cScreen",
-              "If it is not taken forward",
-            ),
-            label: t("research.corruption.flow.exit", "Tameli"),
-            tone: "tameli",
-            noteTitle: t("research.corruption.flow.exit", "Tameli"),
-            note: tameliNote,
-          },
-        },
-        {
-          key: "prarambhik",
-          n: 3,
-          title: t(
-            "research.corruption.flow.s3Title2",
-            "The CIAA conducts a preliminary inquiry",
+            "research.corruption.flow.s23Title",
+            "The CIAA screens the complaint and makes a preliminary inquiry",
           ),
           /*
            * The split sits HERE, not on screening. तालिका २.१४ of the 35th report
@@ -400,8 +350,8 @@ export default function Highlights() {
               },
             ],
             caption: t(
-              "research.corruption.route.splitCaption3",
-              "Of the {{n}} complaints the Commission dealt with in {{fy}} before a detailed investigation, nearly six in ten were placed in Tameli, while only about three in every hundred moved to a detailed investigation. These figures come from Table 2.14 of the Commission's 35th annual report, which does not distinguish between initial screening and preliminary inquiry.",
+              "research.corruption.route.splitCaption4",
+              "Screening and the preliminary inquiry are drawn here as one stage because the Commission reports them as one. Table 2.14 of its 35th annual report counts everything disposed of before a detailed investigation together, and does not say which complaints were closed at screening and which after an inquiry. Of the {{n}} complaints it dealt with that way in {{fy}}, nearly six in ten were placed in Tameli, while only about three in every hundred moved to a detailed investigation.",
               { n: n(cd.disposed), fy: cd.fy },
             ),
           },
@@ -420,12 +370,35 @@ export default function Highlights() {
               "Six in ten complaints are placed in Tameli, but no reasons are given for these decisions",
             ),
             body: (
-              <p>
-                {t(
-                  "research.corruption.route.i2Body5",
-                  "The CIAA report shows how many complaints were closed without further investigation, but not why each complaint was closed. Some complaints may lack evidence, fall outside the CIAA's legal authority, or have no clear basis. But the public cannot see which reasons applied to which complaints. This makes it difficult to know whether the CIAA followed the law and treated similar complaints in the same way.",
-                )}
-              </p>
+              <>
+                <p>
+                  <strong className="font-display font-bold text-accent">
+                    {t("research.corruption.flow.exit", "Tameli")}
+                  </strong>{" "}
+                  {t(
+                    "research.corruption.flow.tameliDef2",
+                    "means putting a complaint aside for now. The file is kept, and the complaint can be looked at again if new evidence comes up. So, Tameli does not mean the matter is permanently closed.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i2Body5",
+                    "The CIAA report shows how many complaints were closed without further investigation, but not why each complaint was closed. Some complaints may lack evidence, fall outside the CIAA's legal authority, or have no clear basis. But the public cannot see which reasons applied to which complaints. This makes it difficult to know whether the CIAA followed the law and treated similar complaints in the same way.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i2Reopen",
+                    "Nor does the Commission publish how many complaints placed in Tameli are later taken up again. Once a complaint goes to Tameli, people outside the Commission have no clear way to find out whether it was ever looked at a second time.",
+                  )}
+                </p>
+                <p className="text-[0.68rem] text-muted-foreground">
+                  {t(
+                    "research.corruption.flow.tameliCite",
+                    "CIAA Act 2048, section 19(13).",
+                  )}
+                </p>
+              </>
             ),
             href: "/investigation#tameli-by-year",
             linkLabel: t(
@@ -436,7 +409,7 @@ export default function Highlights() {
         },
         {
           key: "bistrit",
-          n: 4,
+          n: 3,
           title: t(
             "research.corruption.flow.s4Title2",
             "The CIAA carries out a detailed investigation",
@@ -479,7 +452,7 @@ export default function Highlights() {
         },
         {
           key: "abhiyojan",
-          n: 5,
+          n: 4,
           title: t(
             "research.corruption.flow.s5Title2",
             "The CIAA decides whether to prosecute",
@@ -546,7 +519,7 @@ export default function Highlights() {
       steps: [
         {
           key: "adalat",
-          n: 6,
+          n: 5,
           title: t(
             "research.corruption.flow.s6Title3",
             "The Special Court hears the case and delivers a verdict",
@@ -626,7 +599,7 @@ export default function Highlights() {
       steps: [
         {
           key: "punarabedan",
-          n: 7,
+          n: 6,
           title: t(
             "research.corruption.flow.s7Title3",
             "Either party appeals to the Supreme Court",
@@ -680,7 +653,7 @@ export default function Highlights() {
         },
         {
           key: "sarbochha",
-          n: 8,
+          n: 7,
           title: t(
             "research.corruption.flow.s8Title2",
             "The Supreme Court decides the appeal",
@@ -774,7 +747,7 @@ export default function Highlights() {
     gap: t("research.corruption.route.gap", "What the record cannot answer"),
     srIntro: t(
       "research.corruption.route.srIntro",
-      "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six to eight are courts. Not every complaint reaches every stage: it can be set aside as Tameli at screening, after the preliminary inquiry, or when the Commission rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
+      "The route a corruption complaint takes, in order. Stages one to four sit with the Commission; stages five to seven are courts. Not every complaint reaches every stage: it can be set aside as Tameli when the Commission screens it or makes its preliminary inquiry, or when it rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
     ),
   };
 
@@ -887,7 +860,7 @@ export default function Highlights() {
               "How a corruption complaint moves, and where it stops",
             )}
           </h2>
-          <p className="mt-4 text-left text-sm leading-7 text-muted-foreground md:text-center">
+          <p className="mt-4 text-left text-sm leading-7 text-muted-foreground">
             {t(
               "research.corruption.hl.intro2",
               "This research follows corruption cases through Nepal's accountability system, from the CIAA's investigations to Special Court verdicts and appeals at the Supreme Court. By bringing together records from each stage, it examines how cases are handled, how they end, how long they take, and where important gaps remain in the public record.",
