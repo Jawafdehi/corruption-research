@@ -7,7 +7,7 @@ rests on lives there and is scoped to the corpus up front; the notebook then
     dataset/
       cases.csv        the corpus — Special Court `-CR-` cases filed in FY2069/70–2082/83
       hearings.csv     deciding hearings for those cases only
-      entities.csv     parties for those cases only
+      entities.csv     parties for those cases only — names redacted to opaque ids (`redact_parties`)
       assumptions.csv  external constants (CIAA funnel + 5-yr figures) with sources
 
 These committed files ARE the cache: a normal run reads them instantly with no
@@ -222,6 +222,43 @@ def _paginate(spec):
         off += PAGE
     return pd.DataFrame(rows, columns=names)
 
+# ---------------------------------------------------------------- party-name redaction
+# The court register names every accused and petitioner. This repo is public, so it does
+# not republish them: `dataset/entities.csv` carries an opaque id per distinct name instead
+# (P00001, ... in order of first appearance, not derived from the name), and `nes_id` is
+# reduced to a "resolved" marker (an NES id links straight back to a named profile). Every
+# figure the analysis uses -- rows, distinct names per side, accused per case, resolved
+# count -- is unchanged, because the mapping is one-to-one on exact strings. The strings the
+# analysis filters on as institutions are kept literally. The name -> id map is not written
+# anywhere. (The repo history was rewritten to the same form on 2026-11-02.)
+KEEP_NAMES = {"नेपाल सरकार", "अ.दु.अ.आ."}   # must cover INSTITUTIONAL in _transform
+REDACTED_PLAINTIFF = "नाम हटाइएको"
+
+
+def redact_parties(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    ids: dict[str, str] = {}
+
+    def _id(name) -> str:
+        name = "" if pd.isna(name) else str(name)
+        if name == "" or name in KEEP_NAMES:
+            return name
+        return ids.setdefault(name, "P%05d" % (len(ids) + 1))
+
+    df["name"] = [_id(n) for n in df["name"]]
+    nes = df["nes_id"].fillna("").astype(str).str.strip()
+    df["nes_id"] = nes.where(nes == "", "resolved")
+    return df
+
+
+def redact_plaintiffs(df: pd.DataFrame) -> pd.DataFrame:
+    """Individual / private petitioners (the `-CR-` `निर्णय वदर` petitions) -> placeholder."""
+    df = df.copy()
+    p = df["plaintiff"].fillna("").astype(str)
+    df["plaintiff"] = p.where((p.str.strip() == "") | p.str.startswith("नेपाल सरकार"), REDACTED_PLAINTIFF)
+    return df
+
+
 def load_dataset(refresh=False):
     """Return the corpus source tables {cases, hearings, entities}.
     The committed dataset/*.csv ARE the cache: a normal run reads them instantly with no API.
@@ -245,6 +282,9 @@ def load_dataset(refresh=False):
            "hearings": raw["hearings"][raw["hearings"].case_number.isin(cn)].copy(),
            "entities": raw["entities"][raw["entities"].case_number.isin(cn)].copy()}
     DATA.mkdir(exist_ok=True)
+    # Party names never reach the public repo: redact BEFORE anything is written to disk.
+    out["entities"] = redact_parties(out["entities"])
+    out["cases"] = redact_plaintiffs(out["cases"])
     for n, df in out.items():
         df.to_csv(DATA / f"{n}.csv", index=False)
     # re-read the committed files so a refresh returns frames typed identically to a normal read
