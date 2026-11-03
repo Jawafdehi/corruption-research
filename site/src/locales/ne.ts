@@ -59,6 +59,8 @@ export const ne: Record<string, string> = {
     "© जवाफदेही इनिसिएटिभ। डेटा र पाठ CC BY-NC 4.0 अन्तर्गत। गणना गरिएको",
   "research.corruption.footer.casesNotPeople": "मुद्दाको हो, व्यक्तिको कहिल्यै होइन",
   "research.corruption.footer.licenceEnd": "— अदालतले मुद्दापिच्छे एउटा फैसला राख्छ।",
+  "research.corruption.footer.privacy": "गोपनीयता नीति",
+  "research.corruption.footer.terms": "सेवाका सर्तहरू",
 
   "research.corruption.lang.aria": "भाषा",
   "research.corruption.lang.unreviewed": "अस्वीकृत अनुवाद",
