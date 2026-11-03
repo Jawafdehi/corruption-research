@@ -26,7 +26,7 @@ Everything the analysis rests on lives in one folder. The three court tables are
 dataset/
   cases.csv        2,949 rows — the corpus: Special Court `-CR-` cases filed FY2069/70–2082/83
   hearings.csv     2,824 rows — deciding hearings (ठहर/आंशिक ठहर/सफाई) for those cases only, + a `verdict_derived` provenance flag (2,755 court-published + 69 model-derived)
-  entities.csv    12,547 rows — parties (defendants/plaintiffs) for those cases only
+  entities.csv    12,547 rows — parties (defendants/plaintiffs) for those cases only; names are replaced by opaque ids (`P00001`…) and `nes_id` by a `resolved` marker, so the counts survive but no party is named
   assumptions.csv  7 rows    — external CIAA constants (funnel + 5-yr figures) with a source_url each
   leadership.csv   15 rows   — reference: heads of government + CIAA chief commissioners; tenures in AD (BS derived via nepali-datetime)
 ```
@@ -121,7 +121,7 @@ The court tables come from Jawafdehi's internal read-only query API — a guarde
 
 The 2026-10-08 snapshot was therefore pulled out-of-band: one predicate per derived-table level instead of `AND`, and `extra_data` selected raw with `verdict_derived` computed in pandas from key presence (`->` yields SQL `NULL` only when the key is *absent*, so key presence is the faithful equivalent). That reproduced the previous snapshot's flag on all 2,797 shared rows with zero mismatches. **Restore `gen_dataset.py` by fixing the API guard**, not by baking the workaround in here.
 
-`corpus_data.load_dataset()` paginates these into memory, applies the fiscal window, and writes `dataset/{cases,hearings,entities}.csv` (which then serve as the cache — no separate raw copy is kept). `corpus_data._transform()` then derives every result table in pandas — case-grain outcomes use `count(distinct case_number)`, so any duplicate hearing row can never bias a metric.
+`corpus_data.load_dataset()` paginates these into memory, applies the fiscal window, redacts party names (`redact_parties` / `redact_plaintiffs` — this repo is public and does not republish the people named in the register), and writes `dataset/{cases,hearings,entities}.csv` (which then serve as the cache — no separate raw copy is kept). `corpus_data._transform()` then derives every result table in pandas — case-grain outcomes use `count(distinct case_number)`, so any duplicate hearing row can never bias a metric.
 
 ### Signing in — only to refresh, never to read
 
