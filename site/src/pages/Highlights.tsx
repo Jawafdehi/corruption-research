@@ -1,10 +1,15 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
+import { AboutResearch } from "@/components/highlights/AboutResearch";
 import { DurationSpread } from "@/components/highlights/DurationSpread";
-import { RouteMap, type RoutePhase } from "@/components/highlights/RouteMap";
+import {
+  RouteMap,
+  type RouteLabels,
+  type RoutePhase,
+} from "@/components/highlights/RouteMap";
+import { RouteOval } from "@/components/highlights/RouteOval";
 import {
   OutcomeSplit,
   type OutcomeSegment,
@@ -29,12 +34,13 @@ const MIN_DECIDED = 60;
 
 export default function Highlights() {
   const { t } = useTranslation();
-  const { n, pct, pct1 } = useFormat();
+  const { n, pct, pct1, pct2 } = useFormat();
   const {
     appeals,
     byCharge,
     chargeMixByYear,
     ciaa,
+    corpus,
     disposals,
     outcome,
     overTime,
@@ -53,6 +59,8 @@ export default function Highlights() {
     sting: "https://jawafdehi.org/updates/sting-operation/",
     jalahari:
       "https://jawafdehi.org/updates/pashupati-jalahari-selective-prosecution/",
+    home: "https://jawafdehi.org",
+    cases: "https://jawafdehi.org/cases",
     jalahariCase: "https://jawafdehi.org/case/jalahari/",
     courtcases: "https://jawafdehi.org/courtcases/",
   } as const;
@@ -203,6 +211,24 @@ export default function Highlights() {
     ? (appeals.no_outcome / appeals.appeals) * 100
     : 0;
 
+  /*
+   * What the Commission did about the cases it lost outright, and what came of it.
+   * From the acquittal row of byTrialOutcome rather than the all-appeals totals,
+   * because the question is specifically about appealing a loss.
+   */
+  const acqRow = appeals.byTrialOutcome.find(
+    (r) => r.trial_outcome === "सफाई" && r.appealed_by === "CIAA_GOVERNMENT",
+  );
+  const ciaaAcqAppeals = acqRow?.appeals ?? 0;
+  const ciaaAcqWon =
+    (acqRow?.reversed ?? 0) + (acqRow?.partially_reversed ?? 0);
+  const ciaaAcqDecided = acqRow
+    ? acqRow.appeals - acqRow.no_outcome_recorded
+    : 0;
+  const ciaaAcqShare = outcome.acquitted
+    ? (ciaaAcqAppeals / outcome.acquitted) * 100
+    : 0;
+
   // D — how the Supreme Court treated the judgment below it, summed across the
 
   // C — duration, over decided cases only.
@@ -211,44 +237,44 @@ export default function Highlights() {
   // The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान
   // आयोग कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
   //
-  // तामेली exits sit on stages 2, 3 and 5 because the कार्यविधि gives one at each:
-  // दफा २१(३) at screening, दफा २२(३)(छ) after the preliminary inquiry, and
-  // दफा २५(ग) when the Commission rules on the investigation report. Stage 4 has
-  // none of its own; its report goes to stage 5, which is where it can be closed.
   /*
    * The route a complaint takes, checked against the अख्तियार दुरुपयोग अनुसन्धान आयोग
    * कार्यविधि, २०७८ and the विशेष अदालत ऐन, २०५९ दफा १७.
    *
-   * तामेली exits sit after screening (दफा २१(३)), after the preliminary inquiry
-   * (दफा २२(३)(छ)) and on the investigation report (दफा २५(ग)). Stage 4 has no exit of
-   * its own: its report goes to stage 5, which is where it can be closed. The appeal is
-   * conditional, so a verdict nobody appeals stands.
+   * SEVEN stages, not eight. The कार्यविधि does give screening (दफा २१(३)) and the
+   * preliminary inquiry (दफा २२(३)(छ)) their own तामेली exits, so an earlier version
+   * drew them as stages 2 and 3. But the only figures that exist for either — तालिका
+   * २.१४ of the 35th report — count the two together and cannot be split, and the
+   * reports publish nothing for preliminary inquiries as a class. Drawing two boxes
+   * where the record keeps one implied a distinction a reader cannot follow up, so
+   * they are merged and the caption says the report does not separate them.
    *
-   * Stages 7 and 8 are separate because lodging an appeal and getting a decision on it
+   * तामेली can also end a complaint at stage 4, when the Commission rules on the
+   * investigation report (दफा २५(ग)). Stage 3 has no exit of its own: its report goes
+   * to stage 4, which is where it can be closed. The appeal is conditional, so a
+   * verdict nobody appeals stands.
+   *
+   * Stages 6 and 7 are separate because lodging an appeal and getting a decision on it
    * are different events years apart, and that distance is itself a finding.
-   *
-   * An insight is attached only where the record carries one. Stage 3 has none: the
-   * annual reports publish no figure for preliminary inquiries as a class.
    */
   const routePhases: RoutePhase[] = [
     {
       key: "ciaa",
       tone: "commission",
-      label: t("research.corruption.route.pCiaa", "With the Commission"),
+      label: t("research.corruption.route.pCiaa2", "CIAA"),
       steps: [
         {
           key: "darta",
           n: 1,
           title: t(
-            "research.corruption.flow.s1Title",
-            "Complaint registration",
+            "research.corruption.flow.s1Title3",
+            "A corruption complaint is filed",
           ),
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i1Tag", "Tracking"),
             title: t(
-              "research.corruption.route.i1Title2",
-              "Can a complainant find out what happened to their complaint?",
+              "research.corruption.route.i1Title4",
+              "Complainants cannot track the status of their complaints",
             ),
             body: (
               <p>
@@ -259,30 +285,20 @@ export default function Highlights() {
                 )}
               </p>
             ),
-            href: CITATIONS.ciaa35,
+            href: "/investigation#tameli-by-year",
             linkLabel: t(
-              "research.corruption.route.i1Link",
-              "CIAA annual report, {{fy}}",
-              {
-                fy: cd.fy,
-              },
+              "research.corruption.route.i1Link2",
+              "What happens to complaints after they are filed",
             ),
           },
         },
         {
           key: "parikshan",
           n: 2,
-          title: t("research.corruption.flow.s2Title", "Screening"),
-          exit: {
-            question: t("research.corruption.flow.dScreen", "Taken forward?"),
-            label: t("research.corruption.flow.exit", "Tameli"),
-            tone: "tameli",
-          },
-        },
-        {
-          key: "prarambhik",
-          n: 3,
-          title: t("research.corruption.flow.s3Title", "Preliminary inquiry"),
+          title: t(
+            "research.corruption.flow.s23Title",
+            "The CIAA screens the complaint and makes a preliminary inquiry",
+          ),
           /*
            * The split sits HERE, not on screening. तालिका २.१४ of the 35th report
            * counts what the Commission disposed of before any detailed investigation,
@@ -334,51 +350,75 @@ export default function Highlights() {
               },
             ],
             caption: t(
-              "research.corruption.route.splitCaption3",
-              "Of the {{n}} complaints the Commission dealt with in {{fy}} before a detailed investigation, nearly six in ten were placed in Tameli, while only about three in every hundred moved to a detailed investigation. These figures come from Table 2.14 of the Commission's 35th annual report, which does not distinguish between initial screening and preliminary inquiry.",
+              "research.corruption.route.splitCaption4",
+              "Screening and the preliminary inquiry are drawn here as one stage because the Commission reports them as one. Table 2.14 of its 35th annual report counts everything disposed of before a detailed investigation together, and does not say which complaints were closed at screening and which after an inquiry. Of the {{n}} complaints it dealt with that way in {{fy}}, nearly six in ten were placed in Tameli, while only about three in every hundred moved to a detailed investigation.",
               { n: n(cd.disposed), fy: cd.fy },
             ),
           },
           exit: {
-            question: t("research.corruption.flow.dGrounds", "Grounds found?"),
+            condition: t(
+              "research.corruption.flow.cGrounds",
+              "If no grounds are found",
+            ),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
           },
           insight: {
             kind: "gap",
-            tag: t("research.corruption.route.i2Tag2", "Where they go"),
             title: t(
-              "research.corruption.route.i2Title3",
-              "Why does the Commission decide to investigate some complaints but not others?",
+              "research.corruption.route.i2Title5",
+              "Six in ten complaints are placed in Tameli, but no reasons are given for these decisions",
             ),
             body: (
-              <p>
-                {t(
-                  "research.corruption.route.i2Body4",
-                  "The report gives the numbers, but not the reasons behind individual decisions. It does not explain why one complaint was sent for detailed investigation while another was not. Without those reasons, it is difficult for anyone outside the Commission to assess whether similar complaints are being treated consistently.",
-                )}
-              </p>
+              <>
+                <p>
+                  <strong className="font-display font-bold text-accent">
+                    {t("research.corruption.flow.exit", "Tameli")}
+                  </strong>{" "}
+                  {t(
+                    "research.corruption.flow.tameliDef2",
+                    "means putting a complaint aside for now. The file is kept, and the complaint can be looked at again if new evidence comes up. So, Tameli does not mean the matter is permanently closed.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i2Body5",
+                    "The CIAA report shows how many complaints were closed without further investigation, but not why each complaint was closed. Some complaints may lack evidence, fall outside the CIAA's legal authority, or have no clear basis. But the public cannot see which reasons applied to which complaints. This makes it difficult to know whether the CIAA followed the law and treated similar complaints in the same way.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i2Reopen",
+                    "Nor does the Commission publish how many complaints placed in Tameli are later taken up again. Once a complaint goes to Tameli, people outside the Commission have no clear way to find out whether it was ever looked at a second time.",
+                  )}
+                </p>
+                <p className="text-[0.68rem] text-muted-foreground">
+                  {t(
+                    "research.corruption.flow.tameliCite",
+                    "CIAA Act 2048, section 19(13).",
+                  )}
+                </p>
+              </>
             ),
             href: "/investigation#tameli-by-year",
             linkLabel: t(
-              "research.corruption.route.i2Link",
-              "Tameli, year by year",
+              "research.corruption.route.i2Link2",
+              "See how many complaints were placed in Tameli each year",
             ),
           },
         },
         {
           key: "bistrit",
-          n: 4,
+          n: 3,
           title: t(
-            "research.corruption.flow.s4Title",
-            "Detailed investigation",
+            "research.corruption.flow.s4Title2",
+            "The CIAA carries out a detailed investigation",
           ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i4Tag", "Limits on evidence"),
             title: t(
-              "research.corruption.route.i4Title2",
-              "Collecting evidence of an offence, or creating it",
+              "research.corruption.route.i4Title4",
+              "The continuing controversy over CIAA sting operations",
             ),
             body: (
               <>
@@ -389,41 +429,47 @@ export default function Highlights() {
                   )}
                 </p>
                 <p>
-                  {t(
-                    "research.corruption.route.i4BodyB",
-                    "On 2078/01/08, the Supreme Court struck down the rule the Commission had relied on. The Court made clear that an investigation must establish what actually happened, not create an event that would not otherwise have occurred. Section 62(d) has since brought sting operations into the Act itself. But putting the power into law does not, by itself, settle the deeper question the Court's ruling raised: ",
-                  )}
-                  <Link to="/investigation#sting-operation">
+                  {t("research.corruption.route.i4BodyB1", "On 2078/01/08, ")}
+                  <a href={JAWAFDEHI.sting} target="_blank" rel="noreferrer">
                     {t(
-                      "research.corruption.route.i4Inline",
-                      "can the state create the circumstances of an offence and then prosecute someone for it?",
+                      "research.corruption.route.i4Ruling",
+                      "the Supreme Court struck down the rule the Commission had relied on",
                     )}
-                  </Link>
+                  </a>
+                  {t(
+                    "research.corruption.route.i4BodyB2",
+                    ". The Court made clear that an investigation must establish what actually happened, not create an event that would not otherwise have occurred. Section 62(d) has since brought sting operations into the Act itself. But putting the power into law does not, by itself, settle the deeper question the Court's ruling raised: can the state create the circumstances of an offence and then prosecute someone for it?",
+                  )}
                 </p>
               </>
             ),
-            href: JAWAFDEHI.sting,
+            href: "/investigation#sting-operation",
             linkLabel: t(
-              "research.corruption.route.i4Link",
-              "The sting operation ruling",
+              "research.corruption.route.i4Link2",
+              "See what happened to bribery cases after the ruling",
             ),
           },
         },
         {
           key: "abhiyojan",
-          n: 5,
-          title: t("research.corruption.flow.s5Title", "Prosecution decision"),
+          n: 4,
+          title: t(
+            "research.corruption.flow.s5Title2",
+            "The CIAA decides whether to prosecute",
+          ),
           exit: {
-            question: t("research.corruption.flow.dProsecute", "Prosecute?"),
+            condition: t(
+              "research.corruption.flow.cProsecute",
+              "If the CIAA decides not to prosecute",
+            ),
             label: t("research.corruption.flow.exit", "Tameli"),
             tone: "tameli",
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i5Tag", "Who is charged"),
             title: t(
-              "research.corruption.route.i5Title2",
-              "Why are some people charged and others not?",
+              "research.corruption.route.i5Title4",
+              "Selective prosecution: why some are charged and others are left out",
             ),
             body: (
               <p>
@@ -442,15 +488,25 @@ export default function Highlights() {
                   )}
                 </a>
                 {t(
-                  "research.corruption.route.i5BodyB",
-                  ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
+                  "research.corruption.route.i5BodyB2",
+                  ", the Special Court itself questioned why some people were named in the charge sheet while others were left out. ",
+                )}
+                <a href={JAWAFDEHI.jalahari} target="_blank" rel="noreferrer">
+                  {t(
+                    "research.corruption.route.i5Analysis",
+                    "Our analysis of that judgment",
+                  )}
+                </a>
+                {t(
+                  "research.corruption.route.i5BodyC",
+                  " sets out who was charged and who was not. Yet there is no publicly available record that allows people to examine this pattern across corruption cases and see whether similar decisions are being made consistently.",
                 )}
               </p>
             ),
-            href: JAWAFDEHI.jalahari,
+            href: "/prosecution#charge-mix",
             linkLabel: t(
-              "research.corruption.route.i5Link",
-              "Selective prosecution in the Jalahari case",
+              "research.corruption.route.i5Link2",
+              "See which charges the CIAA brings",
             ),
           },
         },
@@ -463,26 +519,31 @@ export default function Highlights() {
       steps: [
         {
           key: "adalat",
-          n: 6,
-          title: t("research.corruption.flow.s6Title2", "Trial and verdict"),
+          n: 5,
+          title: t(
+            "research.corruption.flow.s6Title3",
+            "The Special Court hears the case and delivers a verdict",
+          ),
           exit: {
-            question: t("research.corruption.flow.dAppeal", "Appeal lodged?"),
+            condition: t(
+              "research.corruption.flow.cAppeal",
+              "If neither party appeals",
+            ),
             label: t("research.corruption.flow.stands", "Verdict stands"),
             tone: "stands",
           },
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i6Tag", "Outcomes"),
             title: t(
-              "research.corruption.route.i6Title2",
-              "Three outcomes, not two",
+              "research.corruption.route.i6Title4",
+              "Extensive state powers, but how strong are the cases?",
             ),
             body: (
               <>
                 <p>
                   {t(
-                    "research.corruption.route.i6BodyA",
-                    "Of the {{d}} cases with a clear verdict, {{full}} ended in full conviction, {{part}} in partial conviction, and {{acq}} in acquittal. Partial conviction means the court convicted someone on some charges but not others, or convicted some accused while clearing others in the same case.",
+                    "research.corruption.route.i6BodyC",
+                    "The CIAA has constitutional authority, investigative powers and state resources behind it. Yet, of the {{d}} cases with a clear verdict, only {{full}} ended in full conviction. Another {{part}} ended in partial conviction, while {{acq}} ended in acquittal. More than half, therefore, did not result in full conviction.",
                     {
                       d: n(decided),
                       full: pct1((outcome.convicted / decided) * 100),
@@ -493,29 +554,39 @@ export default function Highlights() {
                 </p>
                 <p>
                   {t(
-                    "research.corruption.route.i6BodyB",
-                    "A single conviction rate misses these differences. It also does not tell the whole story of how an investigation was handled. An acquittal means the court did not find the accused guilty, but it does not automatically mean the investigation itself was flawed.",
+                    "research.corruption.route.i6BodyD",
+                    "These figures raise an important question about the strength of the cases the Commission brings to court. When a constitutional body has the power to investigate, gather evidence and prosecute, its cases should be built on solid evidence. The figures do not prove that every acquittal resulted from a weak investigation. But when more than half of decided cases fall short of full conviction, the reasons deserve serious scrutiny. Without records explaining why cases end in acquittal or partial conviction, the public cannot tell whether the problem lies in the investigation, the charges filed or other factors.",
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i6BodyE",
+                    "The consequences are not limited to the courtroom. A person accused of corruption may spend years facing legal proceedings, financial strain and damage to their reputation. Even after acquittal, the social stigma of being accused may remain. The state must be able to investigate and prosecute corruption, but that power also carries a responsibility to bring well-founded cases. The public should be able to examine whether that responsibility is being met.",
                   )}
                 </p>
               </>
             ),
-            /*
-             * The gap at this stage is money, not verdicts. The Commission publishes
-             * what it demanded; the court register carries no amount at all, so there
-             * is nothing to difference the claim against.
-             */
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i6Gap2",
-                  "The verdict is recorded; the money is not. The Commission names a बिगो when it files, and the court can order it repaid, but no published record says how much of a claim any court upheld — so a charge sheet's figure cannot be compared with what was actually established.",
+                  "research.corruption.route.i6Gap4",
+                  "Of the {{all}} complaints on the Commission's books in {{fy}}, {{filed}} were filed in court — {{pct}}. Of the cases a court has decided, {{less}} did not end in full conviction. Not every complaint should lead to a prosecution, and an acquittal does not prove the Commission was wrong to bring the case. But very few complaints become cases, and more than half of the cases that do fall short of a full conviction. The published record gives no reason for either — not why a complaint was dropped, and not why a case failed — so there is no way to tell where corruption prosecution is breaking down.",
+                  {
+                    all: n(cd.total_complaints),
+                    fy: cd.fy,
+                    filed: n(cd.inv_filed),
+                    pct: pct2((cd.inv_filed / cd.total_complaints) * 100),
+                    less: pct1(
+                      ((outcome.partial + outcome.acquitted) / decided) * 100,
+                    ),
+                  },
                 )}
               </p>
             ),
             href: "/court-outcomes#how-cases-end",
             linkLabel: t(
-              "research.corruption.route.i6Link",
-              "What the court decides",
+              "research.corruption.route.i6Link2",
+              "Explore the court's verdicts and conviction rates",
             ),
           },
         },
@@ -528,59 +599,82 @@ export default function Highlights() {
       steps: [
         {
           key: "punarabedan",
-          n: 7,
-          title: t("research.corruption.flow.s7Title2", "Appeal lodged"),
+          n: 6,
+          title: t(
+            "research.corruption.flow.s7Title3",
+            "Either party appeals to the Supreme Court",
+          ),
           insight: {
             kind: "finding",
-            tag: t("research.corruption.route.i7Tag", "Who wins"),
             title: t(
-              "research.corruption.route.i7Title3",
-              "Appeals tell two different stories",
-            ),
-            body: (
-              <p>
-                {t(
-                  "research.corruption.route.i7Body3",
-                  "When convicted people appeal, {{dp}} of their appeals that have been decided have succeeded. When the Commission appeals, the figure is just {{cp}}. But there is an important limitation: {{untraced}} of all appeals traced have no recorded outcome. These figures therefore show what happened in appeals with a known outcome, not the full picture.",
-                  {
-                    dp: pct1(appeals.defendant.pct),
-                    cp: pct1(appeals.commission.pct),
-                    untraced: pct1(untracedPct),
-                  },
-                )}
-              </p>
-            ),
-            href: "/appeals#appeal-asymmetry",
-            linkLabel: t(
-              "research.corruption.route.i7Link",
-              "The appeal record",
-            ),
-          },
-        },
-        {
-          key: "sarbochha",
-          n: 8,
-          title: t("research.corruption.flow.s8Title", "Appeal decided"),
-          insight: {
-            kind: "finding",
-            tag: t("research.corruption.route.i8Tag", "The wait"),
-            title: t(
-              "research.corruption.route.i8Title3",
-              "A typical Supreme Court appeal took {{median}} years to decide",
-              { median: supremeDelay.medianYears.toFixed(1) },
+              "research.corruption.route.i7Title6",
+              "The CIAA appeals most acquittals, but rarely changes the outcome",
             ),
             body: (
               <>
                 <p>
                   {t(
-                    "research.corruption.route.i8BodyA",
-                    "Of {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over}} took more than six. The average is {{mean}} years, so the figure holds whichever way it is taken.",
+                    "research.corruption.route.i7BodyA",
+                    "The CIAA appealed {{share}} of the acquittals against it, filing {{n}} appeals. But of the {{decided}} appeals that have been decided, only {{won}} resulted in a different verdict — {{pctWon}} of them. By contrast, {{dp}} of decided appeals filed by convicted people resulted in a change to their convictions.",
+                    {
+                      share: pct1(ciaaAcqShare),
+                      n: n(ciaaAcqAppeals),
+                      decided: n(ciaaAcqDecided),
+                      won: n(ciaaAcqWon),
+                      pctWon: pct2((ciaaAcqWon / ciaaAcqDecided) * 100),
+                      dp: pct1(appeals.defendant.pct),
+                    },
+                  )}
+                </p>
+                <p>
+                  {t(
+                    "research.corruption.route.i7BodyB",
+                    "An appeal is not without cost. It takes time and public money for the CIAA to pursue a case, and time for the Supreme Court to hear it. The people involved may also have to wait longer for the case to end. The CIAA must be able to challenge acquittals when it believes a court has made a mistake. But when only {{won}} out of {{decided}} decided appeals have changed the verdict, it is reasonable to ask whether these appeals are being pursued on strong enough grounds, and whether public resources are being used effectively.",
+                    { won: n(ciaaAcqWon), decided: n(ciaaAcqDecided) },
+                  )}
+                </p>
+              </>
+            ),
+            gapNote: (
+              <p>
+                {t(
+                  "research.corruption.route.i7Gap",
+                  "There is an important limit to these figures: {{untraced}} of appeals have no outcome we could trace in the available records. The findings therefore cover only appeals with known outcomes.",
+                  { untraced: pct1(untracedPct) },
+                )}
+              </p>
+            ),
+            href: "/appeals#appeal-asymmetry",
+            linkLabel: t(
+              "research.corruption.route.i7Link2",
+              "See what happens when the CIAA challenges an acquittal",
+            ),
+          },
+        },
+        {
+          key: "sarbochha",
+          n: 7,
+          title: t(
+            "research.corruption.flow.s8Title2",
+            "The Supreme Court decides the appeal",
+          ),
+          insight: {
+            kind: "finding",
+            title: t(
+              "research.corruption.route.i8Title4",
+              "Corruption appeals can take years to resolve",
+            ),
+            body: (
+              <>
+                <p>
+                  {t(
+                    "research.corruption.route.i8BodyA2",
+                    "Of the {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve. More than one in three took over six years. The average waiting time was {{mean}} years.",
                     {
                       n: n(supremeDelay.decided),
                       from: supremeDelay.fromYear,
                       to: supremeDelay.toYear,
                       median: supremeDelay.medianYears.toFixed(1),
-                      over: pct1(supremeDelay.overSixPct),
                       mean: supremeDelay.meanYears.toFixed(1),
                     },
                   )}
@@ -593,8 +687,8 @@ export default function Highlights() {
                 */}
                 <p>
                   {t(
-                    "research.corruption.route.i8BodyB",
-                    "The wait has been getting longer, not shorter. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years; those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}}. That measures how old the appeals now being cleared are, rather than how long one filed today will take.",
+                    "research.corruption.route.i8BodyB2",
+                    "The wait has also grown longer in recent years. Appeals decided between {{eFrom}} and {{eTo}} had been waiting a median of {{eMed}} years, while those decided between {{rFrom}} and {{rTo}} had been waiting {{rMed}} years. This means the appeals being decided more recently had already spent much longer waiting for a decision. It does not mean every new appeal will take that long.",
                     {
                       eFrom: supremeDelay.earlier.from,
                       eTo: supremeDelay.earlier.to,
@@ -610,8 +704,8 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i8Gap",
-                  "Later registration years are excluded because too few of their appeals have been decided to measure the waiting time reliably. And {{open}} of the {{all}} appeals registered have no recorded decision — so these figures show how long decided appeals took, not the full picture.",
+                  "research.corruption.route.i8Gap2",
+                  "These figures cover only appeals that have been decided. Of the {{all}} appeals registered, {{open}} have no recorded decision. More recent registration years are also excluded from the waiting-time comparison because too few appeals from those years have been decided to give a reliable picture. The actual waiting time for all appeals, including those still pending, may therefore be different.",
                   {
                     open: n(supremeDelay.withoutVerdict),
                     all: n(supremeDelay.registeredAll),
@@ -621,8 +715,8 @@ export default function Highlights() {
             ),
             href: "/appeals#appeal-duration",
             linkLabel: t(
-              "research.corruption.route.i8Link",
-              "How long an appeal takes",
+              "research.corruption.route.i8Link2",
+              "See how long Supreme Court appeals take to resolve",
             ),
           },
         },
@@ -630,19 +724,150 @@ export default function Highlights() {
     },
   ];
 
+  /** One label set, shared by the oval and the vertical view. */
+  const routeLabels: RouteLabels = {
+    no: t("research.corruption.flow.no", "no"),
+    open: t(
+      "research.corruption.route.open",
+      "Show the research on this stage",
+    ),
+    close: t(
+      "research.corruption.route.close",
+      "Hide the research on this stage",
+    ),
+    ovalCentre: t(
+      "research.corruption.route.ovalCentre2",
+      "A complaint's journey",
+    ),
+    ovalHint: t(
+      "research.corruption.route.ovalHint2",
+      "Select a stage to see what the records show and what they don't.",
+    ),
+    finding: t("research.corruption.route.finding", "What the record shows"),
+    gap: t("research.corruption.route.gap", "What the record cannot answer"),
+    srIntro: t(
+      "research.corruption.route.srIntro",
+      "The route a corruption complaint takes, in order. Stages one to four sit with the Commission; stages five to seven are courts. Not every complaint reaches every stage: it can be set aside as Tameli when the Commission screens it or makes its preliminary inquiry, or when it rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
+    ),
+  };
+
   return (
     <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
       <Reveal>
-        <header className="max-w-3xl">
-          <h2 className="mt-3 font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
+        <AboutResearch
+          label={t("research.corruption.about.label2", "About Jawafdehi")}
+          facts={[
+            {
+              key: "years",
+              value: t("research.corruption.about.fYears", "{{n}} years", {
+                n: n(corpus.fiscalYears.length),
+              }),
+              label: t(
+                "research.corruption.about.fYearsLabel",
+                "of CIAA and court records, {{from}} to {{to}}",
+                {
+                  from: fyLabel(corpus.fiscalYears[0]),
+                  to: fyLabel(
+                    corpus.fiscalYears[corpus.fiscalYears.length - 1],
+                  ),
+                },
+              ),
+            },
+            {
+              key: "cases",
+              value: n(corpus.ciaaProsecutions),
+              label: t(
+                "research.corruption.about.fCases",
+                "prosecutions followed from filing to final appeal",
+              ),
+            },
+            {
+              key: "appeals",
+              value: n(supremeDelay.registeredAll),
+              label: t(
+                "research.corruption.about.fAppeals",
+                "Supreme Court corruption appeals measured",
+              ),
+            },
+            {
+              key: "open",
+              value: t("research.corruption.about.fOpen", "Open"),
+              label: t(
+                "research.corruption.about.fOpenLabel",
+                "every figure traced to a public source you can check",
+              ),
+            },
+          ]}
+        >
+          <p>
+            {t("research.corruption.about.b1a", "Jawafdehi is an ")}
+            <a href={JAWAFDEHI.home} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b1Portal", "open data portal")}
+            </a>
             {t(
-              "research.corruption.hl.title",
-              "How a corruption case moves, and where it stops",
+              "research.corruption.about.b1b",
+              " that makes Nepal's corruption cases easier for everyone to find and understand. It brings scattered information into one place, with ",
             )}
-          </h2>
-        </header>
+            <a href={JAWAFDEHI.cases} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b1Cases", "simple case summaries")}
+            </a>
+            {t(
+              "research.corruption.about.b1c",
+              " that help people understand what happened without having to go through hundreds of pages of court documents. Built around the spirit of Nepal's 2082 Gen Z movement, Jawafdehi aims to make accountability more accessible to the public.",
+            )}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.b2a",
+              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of records from the ",
+            )}
+            <a href={CITATIONS.ciaaReports} target="_blank" rel="noreferrer">
+              {t("research.corruption.about.b2Ciaa", "CIAA's annual reports")}
+            </a>
+            {t("research.corruption.about.b2b", ", the ")}
+            <a href={CITATIONS.courtRecords} target="_blank" rel="noreferrer">
+              {t(
+                "research.corruption.about.b2Court",
+                "Supreme Court and Special Court registers",
+              )}
+            </a>
+            {t(
+              "research.corruption.about.b2c",
+              " and other sources. We look at how corruption complaints move through the system, how long cases take to resolve, and what the available records reveal about the strengths and gaps in the accountability process. Where information is missing, we highlight those gaps rather than make assumptions — and every figure on this page can be ",
+            )}
+            <a href={CITATIONS.researchPack} target="_blank" rel="noreferrer">
+              {t(
+                "research.corruption.about.b2Pack",
+                "recomputed from the published data and code",
+              )}
+            </a>
+            {t("research.corruption.about.b2d", ".")}
+          </p>
+          <p>
+            {t(
+              "research.corruption.about.a3",
+              "This work brings together people from different fields, including legal experts, law students, technology professionals, software engineers, retired bureaucrats and journalists. Our aim is to make public records easier to access, understand and examine, so that anyone can explore the evidence and draw their own conclusions.",
+            )}
+          </p>
+        </AboutResearch>
       </Reveal>
 
+      <Reveal>
+        <header className="mx-auto mt-10 max-w-3xl text-center md:mt-14">
+          <h2 className="font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
+            {t(
+              "research.corruption.hl.title2",
+              "How a corruption complaint moves, and where it stops",
+            )}
+          </h2>
+          <p className="mt-4 text-left text-sm leading-7 text-muted-foreground">
+            {t(
+              "research.corruption.hl.intro2",
+              "This research follows corruption cases through Nepal's accountability system, from the CIAA's investigations to Special Court verdicts and appeals at the Supreme Court. By bringing together records from each stage, it examines how cases are handled, how they end, how long they take, and where important gaps remain in the public record.",
+            )}
+          </p>
+        </header>
+      </Reveal>
       <Reveal>
         <section
           className="mt-2 md:mt-4"
@@ -656,57 +881,13 @@ export default function Highlights() {
           <div className="mt-3 rounded-lg border border-border bg-[hsl(var(--surface))] p-5 md:p-6">
             {/* Held to the same measure as the note below it: at full width the rail
                 stranded every label on the left of an empty page. */}
-            <div className="mx-auto max-w-2xl">
-              <RouteMap
-                phases={routePhases}
-                labels={{
-                  no: t("research.corruption.flow.no", "no"),
-                  open: t(
-                    "research.corruption.route.open",
-                    "Show the research on this stage",
-                  ),
-                  close: t(
-                    "research.corruption.route.close",
-                    "Hide the research on this stage",
-                  ),
-                  finding: t(
-                    "research.corruption.route.finding",
-                    "What the record shows",
-                  ),
-                  gap: t(
-                    "research.corruption.route.gap",
-                    "What the record cannot answer",
-                  ),
-                  srIntro: t(
-                    "research.corruption.route.srIntro",
-                    "The route a corruption complaint takes, in order. Stages one to five sit with the Commission; stages six to eight are courts. Not every complaint reaches every stage: it can be set aside as Tameli at screening, after the preliminary inquiry, or when the Commission rules on the investigation report, and a verdict nobody appeals stands. Stages with research behind them carry a button that opens it.",
-                  ),
-                }}
-              />
+            {/* An ellipse cannot be read on a phone, so the vertical version is not
+                a fallback: it is the better layout at that width. */}
+            <div className="hidden md:block">
+              <RouteOval phases={routePhases} labels={routeLabels} />
             </div>
-            {/*
-              The meaning of तामेली, stated where there is room for both halves of
-              it. अनुसूची-११ of the कार्यविधि puts the complaint aside "हाललाई" —
-              for the time being — expressly on the footing that it is taken up
-              again if further evidence appears. Calling it simply "closed" drops
-              the second half and overstates how final it is.
-            */}
-            <div className="mx-auto mt-4 max-w-2xl rounded-md border border-accent/40 bg-accent/[0.04] px-5 py-4 text-center">
-              <p className="text-sm leading-6 text-foreground/85">
-                <strong className="font-display font-bold text-accent">
-                  {t("research.corruption.flow.exit", "Tameli")}
-                </strong>{" "}
-                {t(
-                  "research.corruption.flow.exitMeaning",
-                  "means the complaint is set aside for the time being. The file and its record are kept, and if further evidence comes to light the matter is dealt with under the law at that time. Hence, Tameli does not mean the case is settled permanently.",
-                )}
-              </p>
-              <p className="mt-1.5 text-xs text-muted-foreground">
-                {t(
-                  "research.corruption.flow.exitCite",
-                  "CIAA Act 2048, section 19(13).",
-                )}
-              </p>
+            <div className="mx-auto max-w-2xl md:hidden">
+              <RouteMap phases={routePhases} labels={routeLabels} />
             </div>
           </div>
         </section>

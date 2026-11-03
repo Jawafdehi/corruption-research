@@ -115,23 +115,35 @@ export function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
       <ScrollToTarget />
+      {/* The wordmark gets its own band. Sharing a line with the title made the
+          logo read as part of the headline rather than as whose publication this is. */}
+      <div className="border-b border-border bg-[hsl(var(--surface))]">
+        <div className="container flex items-center justify-between gap-4 px-4 py-3 md:px-6">
+          <a
+            href="https://jawafdehi.org"
+            className="inline-flex items-center gap-3 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+          >
+            <img
+              src="/assets/logo.svg"
+              alt={t("research.corruption.site.logoAlt", "Jawafdehi")}
+              className="h-7 w-auto md:h-8"
+            />
+            <span className="border-l border-border pl-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              {t("research.corruption.site.eyebrow2", "Research")}
+            </span>
+          </a>
+          <LanguageToggle />
+        </div>
+      </div>
+
       <header className="border-b border-border">
-        <div className="container px-4 py-6 md:px-6 md:py-8">
-          <div className="flex items-start justify-between gap-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-              {t("research.corruption.site.eyebrow", "Jawafdehi Research")}
-            </p>
-            <LanguageToggle />
-          </div>
-          <h1 className="mt-1 font-display text-2xl font-bold leading-tight tracking-tight md:text-3xl">
-            {t("research.corruption.site.title", "Where Nepal's corruption accountability actually leaks")}
-          </h1>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
+        <div className="container px-4 py-7 md:px-6 md:py-9">
+          <h1 className="max-w-4xl font-display text-2xl font-bold leading-tight tracking-tight md:text-[2rem]">
             {t(
-              "research.corruption.site.lede",
-              "Thousands of complaints. Hundreds of prosecutions. Years of court proceedings. But how many cases actually lead to convictions, how many end in acquittals, and how many remain unresolved? Following cases from the CIAA to the Special Court and Supreme Court, this research identifies where the gaps lie at each stage of Nepal's corruption accountability system.",
+              "research.corruption.site.title2",
+              "How Nepal's accountability system works, and where it leaks",
             )}
-          </p>
+          </h1>
         </div>
       </header>
 
@@ -149,16 +161,28 @@ export function Layout() {
             {t(
               "research.corruption.footer.snapshot",
               "Court register snapshot {{snapshot}} · page generated {{generated}}. Every number on this site is derived from the published dataset rather than entered by hand.",
-              { snapshot: snapshot ?? "—", generated: generatedAt.slice(0, 10) },
+              {
+                snapshot: snapshot ?? "—",
+                generated: generatedAt.slice(0, 10),
+              },
             )}
           </p>
           <p>
-            {t("research.corruption.footer.pack", "Reproducible data pack and notebook:")}{" "}
-            <a className="underline hover:text-foreground" href={CITATIONS.researchPack}>
+            {t(
+              "research.corruption.footer.pack",
+              "Reproducible data pack and notebook:",
+            )}{" "}
+            <a
+              className="underline hover:text-foreground"
+              href={CITATIONS.researchPack}
+            >
               github.com/Jawafdehi/corruption-research
             </a>{" "}
             · {t("research.corruption.footer.records", "Source records:")}{" "}
-            <a className="underline hover:text-foreground" href={CITATIONS.courtRecords}>
+            <a
+              className="underline hover:text-foreground"
+              href={CITATIONS.courtRecords}
+            >
               jawafdehi.org
             </a>
           </p>
@@ -169,7 +193,10 @@ export function Layout() {
               "© Jawafdehi Initiative. Data and text licensed CC BY-NC 4.0. Counts are of",
             )}{" "}
             <strong className="font-semibold text-foreground">
-              {t("research.corruption.footer.casesNotPeople", "cases, never of people")}
+              {t(
+                "research.corruption.footer.casesNotPeople",
+                "cases, never of people",
+              )}
             </strong>{" "}
             {t(
               "research.corruption.footer.licenceEnd",

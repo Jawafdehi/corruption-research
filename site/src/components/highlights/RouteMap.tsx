@@ -2,8 +2,11 @@ import { useId, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export type RouteInsight = {
-  /** What the gap is ABOUT, in one or two words. Printed on the indicator chip. */
-  tag: string;
+  /**
+   * The finding, stated. Printed on the stage box AND at the head of the panel: a
+   * short subject tag made a reader click to find out what the subject was about,
+   * which is the one thing the label should have told them already.
+   */
   title: string;
   /** ReactNode so a finding can carry its own in-text links to the evidence. */
   body: ReactNode;
@@ -22,9 +25,17 @@ export type RouteInsight = {
 
 /** Where a complaint can leave the route, and the question that sends it there. */
 export type RouteExit = {
-  question: string;
+  /**
+   * The condition in full — "If the complaint is not taken forward". A bare "no"
+   * standing on its own read as a step of its own rather than as the other arm of a
+   * decision, which is the opposite of what a branch label is for.
+   */
+  condition: string;
   label: string;
   tone: "tameli" | "stands";
+  /** Opens in the panel when the chip is clicked, for a term that needs defining. */
+  note?: ReactNode;
+  noteTitle?: string;
 };
 
 /** The one place a count belongs in the figure itself: what screening actually did. */
@@ -64,6 +75,10 @@ export type RouteLabels = {
   close: string;
   finding: string;
   gap: string;
+  /** Names the figure, in the middle of the ring. */
+  ovalCentre: string;
+  /** Shown under it while nothing is open. */
+  ovalHint: string;
   srIntro: string;
 };
 
@@ -137,7 +152,7 @@ export function RouteMap({
                 />
 
                 <h3
-                  className="flex items-baseline justify-between gap-3 border-b px-4 py-2.5 pl-5 md:px-5 md:pl-6"
+                  className="border-b px-4 py-2.5 pl-5 md:px-5 md:pl-6"
                   style={{
                     borderColor: `color-mix(in srgb, ${colour} 16%, transparent)`,
                     background: `linear-gradient(to right, color-mix(in srgb, ${colour} 9%, transparent), transparent 70%)`,
@@ -148,11 +163,6 @@ export function RouteMap({
                     style={{ color: colour }}
                   >
                     {phase.label}
-                  </span>
-                  <span className="shrink-0 font-mono text-[0.6rem] tabular-nums text-muted-foreground">
-                    {phase.steps.length > 1
-                      ? `${phase.steps[0].n}–${phase.steps[phase.steps.length - 1].n}`
-                      : phase.steps[0].n}
                   </span>
                 </h3>
 
@@ -227,12 +237,14 @@ export function RouteMap({
                                     : "border-accent/40 bg-accent/[0.08] text-accent group-hover:border-accent group-hover:bg-accent/[0.18]")
                                 }
                               >
-                                {s.insight.tag}
+                                {s.insight.title}
                                 <span
                                   aria-hidden="true"
                                   className={
                                     "font-mono text-[0.6rem] leading-none transition-transform " +
-                                    (isOpen ? "" : "group-hover:translate-x-0.5")
+                                    (isOpen
+                                      ? ""
+                                      : "group-hover:translate-x-0.5")
                                   }
                                 >
                                   →
@@ -258,7 +270,17 @@ export function RouteMap({
                           )}
 
                           {s.exit ? (
-                            <ExitBranch exit={s.exit} no={labels.no} />
+                            <ExitBranch
+                              exit={s.exit}
+                              isOpen={open === `${s.key}-exit`}
+                              onToggle={() =>
+                                setOpen(
+                                  open === `${s.key}-exit`
+                                    ? null
+                                    : `${s.key}-exit`,
+                                )
+                              }
+                            />
                           ) : null}
 
                           {s.insight ? (
@@ -268,12 +290,10 @@ export function RouteMap({
                               hidden={!isOpen}
                               className="mt-2.5 max-w-xl rounded-lg border border-accent/20 border-l-[3px] border-l-accent/60 bg-[hsl(var(--surface))] p-4"
                             >
-                              <p className="font-mono text-[0.6rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                                {s.insight.kind === "gap"
-                                  ? labels.gap
-                                  : labels.finding}
-                              </p>
-                              <p className="mt-1.5 font-display text-sm font-bold leading-snug text-foreground">
+                              {/* No kicker. The title names the gap itself, so a label
+                                  above it saying a gap follows was announcing what the
+                                  next line already said. */}
+                              <p className="font-display text-sm font-bold leading-snug text-foreground">
                                 {s.insight.title}
                               </p>
                               {/* The data sits inside the panel, not on the face of the
@@ -331,31 +351,56 @@ export function RouteMap({
 }
 
 /** The branch off the main line, drawn as a branch. */
-function ExitBranch({ exit, no }: { exit: RouteExit; no: string }) {
+function ExitBranch({
+  exit,
+  isOpen,
+  onToggle,
+}: {
+  exit: RouteExit;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const chip =
+    "rounded-[3px] px-1.5 py-[0.05rem] font-semibold " +
+    (exit.tone === "tameli"
+      ? "bg-accent/[0.12] text-accent/90"
+      : "bg-foreground/[0.07] text-foreground/60");
+
   return (
-    <p className="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 pl-0.5 text-[0.68rem]">
-      <span aria-hidden="true" className="font-mono text-foreground/25">
-        ↳
-      </span>
-      <span className="text-muted-foreground">{exit.question}</span>
-      <span aria-hidden="true" className="font-mono text-foreground/40">
-        {no} →
-      </span>
-      {/* Square, flat, no caret: an outcome a complaint reaches, not a control. The
-          indicators above are rounded pills with a border and a caret, and the two
-          must not be mistaken for each other — a reader who taps Tameli expecting it
-          to open has been misled by the styling. */}
-      <span
-        className={
-          "rounded-[3px] px-1.5 py-[0.05rem] font-semibold " +
-          (exit.tone === "tameli"
-            ? "bg-accent/[0.12] text-accent/90"
-            : "bg-foreground/[0.07] text-foreground/60")
-        }
-      >
-        {exit.label}
-      </span>
-    </p>
+    <div className="mt-1 pl-0.5">
+      <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[0.68rem]">
+        <span aria-hidden="true" className="font-mono text-foreground/25">
+          ↳
+        </span>
+        {/* The condition in full. A bare "no" beside the outcome read as a step of
+            its own rather than as the other arm of a decision. */}
+        <span className="text-muted-foreground">{exit.condition}</span>
+        <span aria-hidden="true" className="font-mono text-foreground/40">
+          →
+        </span>
+        {exit.note ? (
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-expanded={isOpen}
+            className={
+              chip +
+              " cursor-pointer underline decoration-accent/40 underline-offset-2 transition-colors hover:bg-accent/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            }
+          >
+            {exit.label}
+          </button>
+        ) : (
+          <span className={chip}>{exit.label}</span>
+        )}
+      </p>
+
+      {exit.note && isOpen ? (
+        <div className="mt-2 max-w-xl rounded-lg border border-accent/30 bg-accent/[0.05] px-3.5 py-3 text-[0.78rem] leading-6 text-foreground/85">
+          {exit.note}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
