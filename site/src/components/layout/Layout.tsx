@@ -176,6 +176,15 @@ export function Layout() {
               "— the court records one verdict per case.",
             )}
           </p>
+          <p>
+            <a className="underline hover:text-foreground" href="https://jawafdehi.org/privacy">
+              {t("research.corruption.footer.privacy", "Privacy Policy")}
+            </a>{" "}
+            ·{" "}
+            <a className="underline hover:text-foreground" href="https://jawafdehi.org/terms">
+              {t("research.corruption.footer.terms", "Terms of Service")}
+            </a>
+          </p>
         </div>
       </footer>
     </div>
