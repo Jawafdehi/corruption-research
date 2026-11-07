@@ -586,6 +586,8 @@ export default function Appeals() {
           caption={
             <>
               {t(
+                // TODO(claims): M121 unverified — 'no reason ... and no case number' is an absence claim
+                // across seven reports, not checked report by report.
                 "research.corruption.appealDecisions.chartCaption",
                 "A decision is not a filing, and the year a decision is taken is not the year the verdict was handed down, so these counts are never divided into the Supreme Court figures above and no success rate is built from them. The reports print no reason for any individual decision not to appeal, and no case number, so a declined appeal cannot be traced to the verdict it concerned.",
               )}{" "}

@@ -410,7 +410,7 @@ export default function Prosecution() {
           )}
           title={t(
             "research.corruption.gap.bTitle",
-            "The Pashupati Jalhari case raised a serious question about selective prosecution",
+            "The Pashupatinath Jalahari case raised a serious question about selective prosecution",
           )}
           showsLabel={t(
             "research.corruption.gap.shows",
@@ -423,7 +423,7 @@ export default function Prosecution() {
                 <Cite href={JALAHARI.case}>
                   {t(
                     "research.corruption.gap.bCaseName",
-                    "Pashupati Jalhari case",
+                    "Pashupatinath Jalahari case",
                   )}
                 </Cite>
                 {t(
@@ -728,6 +728,8 @@ export default function Prosecution() {
             <div className="mt-4 rounded-lg border border-border bg-[hsl(var(--surface))] px-5 py-4">
               <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 {t(
+                  // TODO(claims): M077 unverified — check decision no. 9433 and year 2072 against NKP or
+                  // R/supreme-judgments/.
                   "research.corruption.calc.caseLabel",
                   "Supreme Court · Decision no. 9433 · 2072",
                 )}
@@ -984,6 +986,8 @@ export default function Prosecution() {
           </p>
           <p>
             {t(
+              // TODO(claims): M082 unverified — 1,491.718 g not re-read from the judgment in
+              // R/special-judgments/.
               "research.corruption.gap.jBody2",
               "One judgment examined in full shows why the distinction matters: the Commission alleged that 1,491.718 grams of gold were missing, and the court found that only a small fraction of that remained unexplained once metal returned, other metals present and natural loss were accounted for. It illustrates how sharply a court's finding can differ from the original claim in a single case, but it does not show how common such differences are.",
             )}

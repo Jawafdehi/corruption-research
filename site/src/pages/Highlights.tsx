@@ -296,6 +296,8 @@ export default function Highlights() {
           insight: {
             kind: "gap",
             title: t(
+              // TODO(claims): R006 unverified — 'cannot track' is an absence claim; check whether the
+              // ciaa.gov.np online complaint portal issues a tracking number before publishing.
               "research.corruption.route.i1Title4",
               "Complainants cannot track the status of their complaints",
             ),
@@ -417,6 +419,8 @@ export default function Highlights() {
                 </p>
                 <p className="text-[0.68rem] text-muted-foreground">
                   {t(
+                    // TODO(claims): M009 unverified — the copy cites the CIAA Act 2048 s.19(13); code comments
+                    // cite the कार्यविधि अनुसूची-११. Check the statute text before relying on the citation.
                     "research.corruption.flow.tameliCite",
                     "CIAA Act 2048, section 19(13).",
                   )}

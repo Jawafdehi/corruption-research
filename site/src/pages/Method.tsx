@@ -42,6 +42,8 @@ export default function Method() {
         <SectionHeading>{t("research.corruption.method.corpusTitle", "What counts as a case here")}</SectionHeading>
         <Body>
           {t(
+            // TODO(claims): M128 unverified — 'switched numbering schemes exactly at the start of this
+            // window' cannot be checked from the snapshot (pre-window cases are excluded).
             "research.corruption.method.corpusBody",
             "The archive is the Special Court's criminal register across {{n}} complete fiscal years, {{first}} through {{last}} — {{corpus}} cases. The register itself is the definition: there is no filter on who brought the case, because the court switched numbering schemes exactly at the start of this window, which makes the register and the fiscal years share one clean boundary.",
             {
@@ -125,6 +127,8 @@ export default function Method() {
         <SectionHeading>{t("research.corruption.method.assumptionsTitle", "Figures taken from the Commission's reports")}</SectionHeading>
         <Body>
           {t(
+            // TODO(claims): M134 unverified — ciaa_complaints_5yr (107,050 = 148,235 - 41,185) in
+            // dataset/assumptions.csv; locate the report page (probably a chart image).
             "research.corruption.method.assumptionsBody",
             "The court's records cannot tell us how many complaints were received or investigated — only the Commission publishes that. Those figures are listed here as explicit inputs, each with the report it came from, and are kept separate from anything measured in the court record.",
           )}
@@ -215,6 +219,8 @@ export default function Method() {
         </Body>
         <Body>
           {t(
+            // TODO(claims): M142 unverified — FY2072/73 absent from its own report and the next
+            // annex reproducing FY2073/74 totals were not re-checked.
             "research.corruption.method.disposalsLimits",
             "The series runs from FY2073/74 to FY2081/82. Every row is checked against either that table's own printed total or the filing count the report states in its text, and the script refuses to write a series that disagrees with either. FY2069/70 to FY2071/72 are left out because those reports present the same decisions as a subject-area cross-tab with different row labels, which is not the same measurement; FY2072/73 is absent from its own report, and the annex in the following report that claims to carry it reproduces FY2073/74's totals instead. The 'taken to court' column counts decisions to prosecute, which is a different unit from a case appearing in the court register — the two are never differenced.",
           )}

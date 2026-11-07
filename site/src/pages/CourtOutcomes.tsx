@@ -618,6 +618,7 @@ export default function CourtOutcomes() {
             shows={
               <p>
                 {t(
+                  // TODO(claims): M105 unverified — 080-CR-0047 and 1,491.718 g not re-read from the judgment.
                   "research.corruption.gap.cEstablishes",
                   "In the Pashupatinath Jalahari case (080-CR-0047), the Commission alleged that 1,491.718 grams of gold were missing. The case illustrates why the amount alleged in a charge sheet must be distinguished from what a court establishes through evidence. An allegation is not a judicial finding, and the amount claimed cannot automatically be treated as an amount proven in court.",
                 )}
