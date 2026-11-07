@@ -515,7 +515,23 @@ def appeal_effect():
         dec = int(side.appeals.sum() - side.no_outcome_recorded.sum())
         e[key] = {"appeals": int(side.appeals.sum()), "decided": dec,
                   "reversed": s(side, "reversed"),
-                  "pct": round(s(side, "reversed") / dec * 100, 1) if dec else 0.0}
+                  "pct": round(s(side, "reversed") / dec * 100, 1) if dec else 0.0,
+                  # Full OR partial reversal, so a side can be compared like for like with
+                  # `commission_on_acquittals.reversed_incl` below.
+                  "reversed_incl": s(side, "reversed", "partially_reversed"),
+                  "pct_incl": round(s(side, "reversed", "partially_reversed") / dec * 100, 1) if dec else 0.0}
+    # The Commission's appeals AGAINST ACQUITTALS only. `commission` above pools every CIAA
+    # appeal, including those against full or partial convictions it thought too light, so its
+    # 6 full reversals are not "acquittals overturned". Quote this block whenever the copy says
+    # a Commission win turns an acquittal into a conviction.
+    acq = won_by_commission
+    acq_dec = int(acq.appeals.sum() - acq.no_outcome_recorded.sum())
+    e["commission_on_acquittals"] = {
+        "appeals": int(acq.appeals.sum()), "decided": acq_dec,
+        "reversed": s(acq, "reversed"), "reversed_incl": s(acq, "reversed", "partially_reversed"),
+        "pct": round(s(acq, "reversed") / acq_dec * 100, 2) if acq_dec else 0.0,
+        "pct_incl": round(s(acq, "reversed", "partially_reversed") / acq_dec * 100, 2) if acq_dec else 0.0,
+    }
     return e
 
 def ad_to_bs(ad):

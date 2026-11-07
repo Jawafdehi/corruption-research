@@ -180,6 +180,12 @@ export default function Highlights() {
   );
 
   // 04 — appeals, drawn over every established appeal so the untraced share shows.
+  // The Commission's side is its appeals AGAINST ACQUITTALS only, because the card's
+  // claim is about overturning an acquittal; `appeals.commission` pools appeals against
+  // convictions too (claims ledger M020/M023).
+  // TODO(report): H1 — swap in the per-trial figures (230/565 vs 4/423) when the
+  // appeal table moves off dataset/appeals.csv.
+  const ciaaOnAcq = appeals.commission_on_acquittals;
   const appealSides: AppealSide[] = [
     {
       key: "defendant",
@@ -197,14 +203,17 @@ export default function Highlights() {
     },
     {
       key: "commission",
-      who: t("research.corruption.appeals.whoCommission", "The Commission"),
+      who: t(
+        "research.corruption.appeals.whoCommissionAcq",
+        "The Commission, against an acquittal",
+      ),
       stake: t(
         "research.corruption.appeals.stakeCommission",
         "a win converts an acquittal into a conviction",
       ),
-      appeals: appeals.commission.appeals,
-      decided: appeals.commission.decided,
-      reversed: appeals.commission.reversed,
+      appeals: ciaaOnAcq.appeals,
+      decided: ciaaOnAcq.decided,
+      reversed: ciaaOnAcq.reversed,
     },
   ];
   const untracedPct = appeals.appeals
@@ -613,16 +622,18 @@ export default function Highlights() {
             body: (
               <>
                 <p>
+                  {/* Both sides counted on one basis: full OR partial reversal
+                      (claims ledger R018). TODO(report): H1 — per-trial figures. */}
                   {t(
-                    "research.corruption.route.i7BodyA",
-                    "The CIAA appealed {{share}} of the acquittals against it, filing {{n}} appeals. But of the {{decided}} appeals that have been decided, only {{won}} resulted in a different verdict — {{pctWon}} of them. By contrast, {{dp}} of decided appeals filed by convicted people resulted in a change to their convictions.",
+                    "research.corruption.route.i7BodyA2",
+                    "The CIAA appealed {{share}} of the acquittals against it, filing {{n}} appeals. But of the {{decided}} appeals that have been decided, only {{won}} resulted in a different verdict, in full or in part — {{pctWon}} of them. By contrast, {{dp}} of the decided appeals brought by the convicted changed the conviction, in full or in part. Both figures count appeals, not people.",
                     {
                       share: pct1(ciaaAcqShare),
                       n: n(ciaaAcqAppeals),
                       decided: n(ciaaAcqDecided),
                       won: n(ciaaAcqWon),
                       pctWon: pct2((ciaaAcqWon / ciaaAcqDecided) * 100),
-                      dp: pct1(appeals.defendant.pct),
+                      dp: pct1(appeals.defendant.pct_incl),
                     },
                   )}
                 </p>
@@ -1101,28 +1112,26 @@ export default function Highlights() {
 
         <Highlight
           index={5}
+          // TODO(report): H1 — per-trial figures replace these when the appeal table is swapped.
           stat={n(appeals.defendant.reversed)}
           statCaption={t(
-            "research.corruption.hl.f4Stat",
-            "convicted people had their convictions overturned on appeal. The CIAA succeeded in overturning just {{c}} acquittals.",
-            { c: n(appeals.commission.reversed) },
+            "research.corruption.hl.f4Stat2",
+            "convictions were overturned in full on appeals brought by the convicted. These are cases, counted once per trial and appealing side, not people. On its appeals against acquittals, the CIAA had {{c}} acquittals overturned in full, {{cp}} counting partial reversals.",
+            { c: n(ciaaOnAcq.reversed), cp: n(ciaaOnAcq.reversed_incl) },
           )}
           headline={t(
             "research.corruption.hl.f4",
             "A conviction is far easier to overturn than an acquittal",
           )}
           explain={t(
-            "research.corruption.hl.f4Body",
-            "Of the {{dd}} decided appeals filed by convicted people, {{d}} ({{dpct}}) succeeded. By comparison, the CIAA succeeded in just {{c}} of its {{cd}} decided appeals ({{cpct}}). In simple terms, convicted people were much more likely to win their appeals than the CIAA was to overturn an acquittal. There is also a major gap in the records: no outcome could be found for {{pct}} of the appeals traced. These missing records make it harder to assess the full picture.",
+            "research.corruption.hl.f4Body2",
+            "Of the {{dd}} decided appeals brought by the convicted, {{d}} ({{dpct}}) ended in a full reversal. Of the {{cd}} decided appeals the CIAA brought against acquittals, {{c}} ({{cpct}}) did; counting partial reversals, {{cp}} ({{cppct}}). Each count is of appeals, one per trial and appealing side, not of people. In simple terms, a conviction was far more likely to be overturned on appeal than an acquittal. There is also a major gap in the records: no outcome could be found for {{pct}} of the appeals traced. These missing records make it harder to assess the full picture.",
             {
-              c: n(appeals.commission.reversed),
-              cd: n(appeals.commission.decided),
-              cpct: pct1(
-                appeals.commission.decided
-                  ? (appeals.commission.reversed / appeals.commission.decided) *
-                      100
-                  : 0,
-              ),
+              c: n(ciaaOnAcq.reversed),
+              cd: n(ciaaOnAcq.decided),
+              cpct: pct1(ciaaOnAcq.pct),
+              cp: n(ciaaOnAcq.reversed_incl),
+              cppct: pct1(ciaaOnAcq.pct_incl),
               d: n(appeals.defendant.reversed),
               dd: n(appeals.defendant.decided),
               dpct: pct1(

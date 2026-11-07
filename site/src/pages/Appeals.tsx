@@ -76,9 +76,11 @@ export default function Appeals() {
     {
       key: "commission",
       who: t("research.corruption.appeals.whoCommission", "The Commission"),
+      // All CIAA appeals, against acquittals and convictions alike, so the stake is
+      // not only "an acquittal becomes a conviction" (claims ledger M111).
       stake: t(
-        "research.corruption.appeals.stakeCommission",
-        "a win converts an acquittal into a conviction",
+        "research.corruption.appeals.stakeCommissionAll",
+        "a win goes against the accused; on an acquittal, it convicts",
       ),
       appeals: appeals.commission.appeals,
       decided: appeals.commission.decided,
@@ -105,7 +107,10 @@ export default function Appeals() {
     },
     {
       key: "commission",
-      who: t("research.corruption.appeals.whoCommission", "The Commission"),
+      who: t(
+        "research.corruption.appeals.whoCommissionAll",
+        "The Commission (any trial outcome)",
+      ),
       ...appeals.commission,
     },
   ];
@@ -128,7 +133,7 @@ export default function Appeals() {
         <Lede>
           {t(
             "research.corruption.appeals.lede",
-            "A verdict at the Special Court is not the end of a case. {{appeals}} of these trials have an established Supreme Court appeal, and the two sides fare very differently when they get there — which means the trial-court conviction rate overstates how much accountability actually sticks.",
+            "A verdict at the Special Court is not the end of a case. {{appeals}} Supreme Court appeals have been traced to these trials, counted once per trial and appealing side, so a trial both sides appealed counts twice. The two sides fare very differently when they get there — which means the trial-court conviction rate overstates how much accountability actually sticks.",
             { appeals: n(appeals.appeals) },
           )}
         </Lede>
@@ -190,7 +195,7 @@ export default function Appeals() {
         >
           {t(
             "research.corruption.appeals.tracingBody",
-            "{{no}} of {{total}} established appeals carry no outcome anywhere in the record, so every rate below is computed over the {{decided}} that do. The missing half is a filing problem rather than a judicial one. And a case with no appeal on record is one we cannot follow, never one that nobody appealed.",
+            "{{no}} of {{total}} established appeals carry no outcome in the records used here, so every rate below is computed over the {{decided}} that do. Some of them may have been decided by the Supreme Court without the outcome reaching our matched records; the data cannot say how many. And a case with no appeal on record is one we cannot follow, never one that nobody appealed.",
             {
               no: n(appeals.no_outcome),
               total: n(appeals.appeals),
@@ -244,7 +249,7 @@ export default function Appeals() {
           )}
           caption={t(
             "research.corruption.appeals.tableCaption",
-            "Direction matters: a reversal means the opposite thing depending on who brought the appeal. Where the convicted person appeals, a reversal clears them; where the Commission appeals an acquittal, a reversal convicts. Appeals with no recorded outcome are excluded from these rates rather than counted as losses.",
+            "Direction matters: a reversal means the opposite thing depending on who brought the appeal. Where the convicted person appeals, a reversal clears them; where the Commission appeals an acquittal, a reversal convicts. The Commission row pools its appeals against acquittals with its appeals against convictions. Appeals with no recorded outcome are excluded from these rates rather than counted as losses. Counts are of appeals, once per trial and appealing side, not of people.",
           )}
         >
           <table className="w-full min-w-[32rem] border-collapse text-sm">
@@ -315,10 +320,13 @@ export default function Appeals() {
         <Body>
           {t(
             "research.corruption.appeals.body",
-            "Across {{cDecided}} decided appeals the Commission obtained a full reversal {{cRev}} times. Convicted people, across {{dDecided}}, did so {{dRev}} times. Put plainly: when the Commission loses at trial, that is usually the end of it; when it wins, the verdict is considerably less secure than it looks.",
+            "Across {{cDecided}} decided appeals of every kind — against acquittals and against convictions alike — the Commission obtained a full reversal {{cRev}} times. Against acquittals alone, {{aRev}} of {{aDecided}} decided appeals ended in a full reversal, {{aRevIncl}} counting partial reversals. The convicted, across {{dDecided}} decided appeals, did so {{dRev}} times. Put plainly: when the Commission loses at trial, that is usually the end of it; when it wins, the verdict is considerably less secure than it looks.",
             {
               cDecided: n(appeals.commission.decided),
               cRev: n(appeals.commission.reversed),
+              aRev: n(appeals.commission_on_acquittals.reversed),
+              aDecided: n(appeals.commission_on_acquittals.decided),
+              aRevIncl: n(appeals.commission_on_acquittals.reversed_incl),
               dDecided: n(appeals.defendant.decided),
               dRev: n(appeals.defendant.reversed),
             },
@@ -604,10 +612,12 @@ export default function Appeals() {
         <Body>
           {t(
             "research.corruption.appealDecisions.body2",
-            "The two series move independently. Decisions to appeal swing from {{min}} in one year to {{max}} in another, while decisions to decline stay far steadier. A reader should resist the obvious inference: the reports do not say how many eligible verdicts there were in any year, so a low appeal count may mean the Commission lost less, declined more, or simply met less often.",
+            "The two series move independently. Decisions to appeal swing from {{min}} in one year to {{max}} in another, while decisions to decline, between {{minNo}} and {{maxNo}}, vary somewhat less. A reader should resist the obvious inference: the reports do not say how many eligible verdicts there were in any year, so a low appeal count may mean the Commission lost less, declined more, or simply met less often.",
             {
               min: n(decisionTotals.minAppealed),
               max: n(decisionTotals.maxAppealed),
+              minNo: n(Math.min(...ciaaDecisions.map((r) => r.notAppealed))),
+              maxNo: n(Math.max(...ciaaDecisions.map((r) => r.notAppealed))),
             },
           )}
         </Body>
@@ -630,8 +640,8 @@ export default function Appeals() {
             "Accountability gap · Appeals",
           )}
           title={t(
-            "research.corruption.gap.dTitle",
-            "Half the appeals end in silence",
+            "research.corruption.gap.dTitle2",
+            "Nearly half the appeals traced have no recorded outcome",
           )}
           showsLabel={t(
             "research.corruption.gap.shows",
@@ -644,7 +654,7 @@ export default function Appeals() {
           )}
           shows={t(
             "research.corruption.gap.dEstablishes",
-            "{{no}} of the {{total}} appeals traced — {{pct}} — carry no recorded outcome anywhere.",
+            "{{no}} of the {{total}} appeals traced — {{pct}} — carry no outcome in the records used here. Supreme Court records may hold one for some of them.",
             {
               no: n(appeals.no_outcome),
               total: n(appeals.appeals),
@@ -654,7 +664,7 @@ export default function Appeals() {
         >
           {t(
             "research.corruption.gap.dBody",
-            "This is the filing system, not the bench. Trial and appeal cases sit in one table with nothing joining them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and failing both, by matching defendant names. Anything unresolved is counted as unknown — never as a case nobody appealed, and never as a loss.",
+            "Part of the gap comes from how the records are kept, not from the bench. Trial and appeal cases sit in one table with nothing joining them, so the pairing was rebuilt from the Commission's register, from judgments naming the trial case, and failing both, by matching defendant names. Anything unresolved is counted as unknown — never as a case nobody appealed, and never as a loss.",
           )}
           <p>
             {t(

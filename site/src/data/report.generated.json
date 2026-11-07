@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-11-07T19:40:37+00:00",
-    "commit": "180a5de",
+    "generatedAt": "2026-11-07T19:40:48+00:00",
+    "commit": "5879ad9",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -850,13 +850,25 @@
       "appeals": 705,
       "decided": 429,
       "reversed": 157,
-      "pct": 36.6
+      "pct": 36.6,
+      "reversed_incl": 162,
+      "pct_incl": 37.8
     },
     "commission": {
       "appeals": 1092,
       "decided": 549,
       "reversed": 6,
-      "pct": 1.1
+      "pct": 1.1,
+      "reversed_incl": 18,
+      "pct_incl": 3.3
+    },
+    "commission_on_acquittals": {
+      "appeals": 734,
+      "decided": 419,
+      "reversed": 2,
+      "reversed_incl": 4,
+      "pct": 0.48,
+      "pct_incl": 0.95
     },
     "byTrialOutcome": [
       {
