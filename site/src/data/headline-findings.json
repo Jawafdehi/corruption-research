@@ -10,7 +10,13 @@
           "key": "shelved",
           "headline": "Most complaints are closed before any investigation, and no reason is given",
           "explain": "In {{fy}} the CIAA closed {{shelved}} complaints ({{shelvedPct}} of those it dealt with) without investigating them, and sent only {{toInv}} ({{toInvPct}}) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
-          "figures": { "fy": "2081/82", "shelved": "17,716", "shelvedPct": "6 in 10", "toInv": "927", "toInvPct": "3 in 100" },
+          "figures": {
+            "fy": "2081/82",
+            "shelved": "17,716",
+            "shelvedPct": "6 in 10",
+            "toInv": "927",
+            "toInvPct": "3 in 100"
+          },
           "gap": "A→B",
           "source": "stages/1-3-SCREENING.md; CIAA 35th annual report, table 2.14",
           "href": "/report#complaints"
@@ -19,7 +25,14 @@
           "key": "afterInvestigation",
           "headline": "After a full investigation, the CIAA now shelves most cases instead of charging them",
           "explain": "In {{fyThen}} it took {{filedThen}} investigated cases to court and shelved {{shelvedThenPct}} of its decisions. By {{fyNow}} it took {{filedNow}} to court and shelved {{shelvedNowPct}}. The change came in one year and has not reversed. No reason is published for any of these closures.",
-          "figures": { "fyThen": "2076/77", "filedThen": "441", "shelvedThenPct": "16%", "fyNow": "2081/82", "filedNow": "137", "shelvedNowPct": "75%" },
+          "figures": {
+            "fyThen": "2076/77",
+            "filedThen": "441",
+            "shelvedThenPct": "16%",
+            "fyNow": "2081/82",
+            "filedNow": "137",
+            "shelvedNowPct": "75%"
+          },
           "gap": "A",
           "source": "RESEARCH-INVENTORY entry 1; CIAA annual reports 2073/74–2081/82",
           "href": "/report#investigation"
@@ -28,7 +41,11 @@
           "key": "backlog",
           "headline": "Thousands of complaints wait, and nobody says for how long",
           "explain": "At the end of {{fy}}, {{carried}} complaints (about {{share}} of those on the books) were carried into the next year. The CIAA publishes how many are waiting, but not how long any of them has waited.",
-          "figures": { "fy": "2081/82", "carried": "7,323", "share": "1 in 5" },
+          "figures": {
+            "fy": "2081/82",
+            "carried": "7,323",
+            "share": "1 in 5"
+          },
           "gap": "A",
           "source": "stages/1-3-SCREENING.md (screening_series.csv, pending_out)",
           "href": "/report#complaints"
@@ -37,7 +54,9 @@
           "key": "tracking",
           "headline": "A person who complains cannot follow what happens to the complaint",
           "explain": "When we checked the CIAA's website on {{checked}}, it gave no complaint number and no way to look up a complaint's status. Its online complaint portal was offline for an upgrade.",
-          "figures": { "checked": "7 November 2026" },
+          "figures": {
+            "checked": "7 November 2026"
+          },
           "gap": "A",
           "source": "stages/public-view/PUBLIC-VIEW.md, check 2 (screenshots)",
           "href": "/report#complaints"
@@ -52,9 +71,29 @@
           "key": "whoConvicted",
           "headline": "The public cannot see which defendants were convicted and which were cleared",
           "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects {{people}} of the {{all}} people prosecuted (about {{share}}).",
-          "figures": { "people": "3,038", "all": "8,846", "share": "1 in 3" },
+          "figures": {
+            "people": "3,038",
+            "all": "8,846",
+            "share": "1 in 3"
+          },
           "gap": "A→B",
           "source": "synthesis/ENTRY2_REFRAMED.md (inventory entry 2); court pages checked 2026-11-07",
+          "href": "/report#trial"
+        },
+        {
+          "key": "whyAcquitted",
+          "headline": "When the court acquits, it usually says the charge was not proved, or was not a crime; it sometimes says the CIAA charged selectively",
+          "explain": "In the {{read}} acquittal judgments we read, the court said the evidence did not prove the charge in {{evid}}, that what was charged was not the offence (no loss, no bad intent or the wrong offence) in {{charge}}, and named a flaw in the CIAA's investigation in {{inv}}. Reading every judgment that mentions it, we found {{selective}} where the court cleared people partly because the CIAA charged some and left out others who did the same, including the wide-body aircraft and Pashupatinath Jalahari cases. The CIAA publishes no review of why it loses.",
+          "figures": {
+            "read": "31",
+            "evid": "13",
+            "charge": "11",
+            "inv": "5",
+            "selective": "12"
+          },
+          "gap": "A→B",
+          "caveat": "Read by an agent, not by a lawyer; 31 judgments is a sample.",
+          "source": "acquittal-reasons/FINDING.md (card 6.4; READING.csv)",
           "href": "/report#trial"
         }
       ]
@@ -67,7 +106,12 @@
           "key": "oneWay",
           "headline": "Appeals go one way: convictions are often overturned, acquittals almost never",
           "explain": "When a convicted person appeals, the Supreme Court fully overturns the conviction in about 4 of 10 trials ({{defRev}} of {{defDec}}). When the government appeals an acquittal, it wins in about 1 of 100 ({{govRev}} of {{govDec}}).",
-          "generated": ["defRev", "defDec", "govRev", "govDec"],
+          "generated": [
+            "defRev",
+            "defDec",
+            "govRev",
+            "govDec"
+          ],
           "gap": "A",
           "source": "headline/FINDINGS.md H1 (per trial, appeal links as of 2026-11-03)",
           "href": "/appeals#appeal-asymmetry"
@@ -76,7 +120,13 @@
           "key": "whyLost",
           "headline": "Overturned convictions mostly fail on how the case was investigated and proved, not on a trial judge's mistake",
           "explain": "In the {{read}} overturned convictions we read, the Supreme Court pointed to the investigation in {{inv}}, to bribe money the CIAA itself supplied (evidence the Constitutional Bench ruled out in 2021) in {{sting}}, and to the charge in {{charge}}. Of all the trials whose appeal judgment cites that 2021 ruling, {{stingPct}} ended with the conviction overturned.",
-          "figures": { "read": "16", "inv": "7", "sting": "6", "charge": "3", "stingPct": "84%" },
+          "figures": {
+            "read": "16",
+            "inv": "7",
+            "sting": "6",
+            "charge": "3",
+            "stingPct": "84%"
+          },
           "gap": "A",
           "caveat": "Read by an agent, not by a lawyer; 16 judgments is a sample.",
           "source": "legal-check/AGENT_READING.csv; stages/8.5-REVERSAL-REASONS.md (83.7%)",
@@ -86,7 +136,11 @@
           "key": "notAppealed",
           "headline": "About 1 in 5 acquittals never gets a government appeal, and no reason is published",
           "explain": "For {{none}} of {{judgeable}} acquittals old enough to judge ({{pct}}), we found no government appeal in any record. The CIAA publishes how often it decides not to appeal, but no reasons and no list of the cases.",
-          "generated": ["none", "judgeable", "pct"],
+          "generated": [
+            "none",
+            "judgeable",
+            "pct"
+          ],
           "gap": "A",
           "source": "headline/FINDINGS.md H2; stages/DECLINE_TO_APPEAL.md",
           "href": "/report#appeal-lodged"
@@ -95,7 +149,13 @@
           "key": "duration",
           "headline": "An appeal takes about four years, and more than one in four takes over six",
           "explain": "Counting the appeals still waiting, half of those registered {{from}}–{{to}} took more than {{km}} years to decide; {{over6}} of the decided ones took over six. A convicted person's appeal waits longer, about {{person}} years.",
-          "generated": ["from", "to", "km", "over6", "person"],
+          "generated": [
+            "from",
+            "to",
+            "km",
+            "over6",
+            "person"
+          ],
           "gap": "A",
           "source": "stages/8.2-DURATION.md (origin universe, NGM 2026-11-02)",
           "href": "/appeals#appeal-duration"
@@ -104,7 +164,12 @@
           "key": "hearings",
           "headline": "About 3 in 4 scheduled hearings do not happen, mostly for the court's own reasons",
           "explain": "Of {{listings}} times a corruption appeal was put on the Supreme Court's list, {{notPct}} ended without the bench taking it up. In {{courtShare}} of those, the reason was on the court's side: the list was not reached, a judge could not sit on the case, or the bench did not sit. The next date was typically about {{gap}} later.",
-          "figures": { "listings": "29,789", "notPct": "77%", "courtShare": "3 in 4", "gap": "two months" },
+          "figures": {
+            "listings": "29,789",
+            "notPct": "77%",
+            "courtShare": "3 in 4",
+            "gap": "two months"
+          },
           "gap": "A",
           "source": "stages/8.3-HEARINGS.md (court case pages, 2–3 Nov 2026); median 56 days, stages/hearings/gap_after_unproductive.py",
           "href": "/report#appeal-decided"
@@ -113,7 +178,12 @@
           "key": "neverListed",
           "headline": "730 open appeals have never been listed for a hearing",
           "explain": "Of the {{pending}} corruption appeals still open, {{never}} ({{pct}}) have never once been put on a hearing list. They have waited a median of about {{months}} months since they were registered.",
-          "figures": { "pending": "1,890", "never": "730", "pct": "39%", "months": "16" },
+          "figures": {
+            "pending": "1,890",
+            "never": "730",
+            "pct": "39%",
+            "months": "16"
+          },
           "gap": "A",
           "source": "stages/8.3-HEARINGS.md, result 3 (15.7 months)",
           "href": "/report#appeal-decided"
@@ -122,7 +192,13 @@
           "key": "arson",
           "headline": "After the September 2025 arson, 865 open appeals still have no file, and decisions have fallen by more than half",
           "explain": "The Supreme Court was set on fire on 9 September 2025. Fourteen months later, {{lost}} pending corruption appeals are still marked \"file destroyed, not recovered\", and {{notListedPct}} of them have not been listed since. In the 14 months after the fire the court decided {{after}} of the appeals pending; in the 14 months before, during a drive to clear old cases, {{before}} (and {{yearBefore}} the year before that).",
-          "figures": { "lost": "865", "notListedPct": "85%", "after": "15%", "before": "33%", "yearBefore": "17%" },
+          "figures": {
+            "lost": "865",
+            "notListedPct": "85%",
+            "after": "15%",
+            "before": "33%",
+            "yearBefore": "17%"
+          },
           "gap": "A",
           "source": "work/2026-11-02-destroyed-files/ARTICLE.md (court case pages, 1–2 Nov 2026)",
           "href": "/report#appeal-decided"
@@ -131,7 +207,10 @@
           "key": "noLink",
           "headline": "The public cannot follow a case from trial to appeal",
           "explain": "No public court record says which Special Court trial an appeal comes from. We rebuilt the links by hand from judgments, the CIAA's register and names; {{unlinked}} of {{all}} appeals still could not be linked to any trial.",
-          "figures": { "unlinked": "726", "all": "4,430" },
+          "figures": {
+            "unlinked": "726",
+            "all": "4,430"
+          },
           "gap": "A→B",
           "source": "RESEARCH-INVENTORY entry 8; GAPS 7.2 (APPEALS_MASTER.csv, 2026-11-03)",
           "href": "/report#appeal-lodged"
@@ -146,7 +225,9 @@
           "key": "recovery",
           "headline": "No one publishes how much is recovered from corruption judgments",
           "explain": "The courts publish one fine ledger for every kind of case, and \"disposed of\" includes prison served instead of payment. Outside one or two courts, about {{share}} of that ledger is disposed of in a year. No institution publishes the figure for corruption.",
-          "figures": { "share": "1 in 9" },
+          "figures": {
+            "share": "1 in 9"
+          },
           "gap": "A",
           "source": "RESEARCH-INVENTORY entry 10 (11–12%); Supreme Court annual reports 2075/76–2081/82",
           "href": "/appeals#recovery-gap"
