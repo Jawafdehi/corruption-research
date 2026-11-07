@@ -183,7 +183,11 @@ export default function Method() {
         <Body>
           {t(
             "research.corruption.method.limitsRecovery",
-            "Money recovered after a conviction is not published by any institution and does not appear in the court record, so the final stage of accountability is absent here rather than measured as zero. Reasons for closing a complaint at intake are likewise unpublished case by case.",
+            "No institution publishes what is recovered from corruption judgments, and the court record used here carries no amount, so the final stage of accountability is absent here rather than measured as zero. The Supreme Court's annual report does publish a fine ledger for all district courts every year ({{fy}}: {{pct}} of the ledger recorded as disposed of), but it does not separate corruption cases, and “disposed of” includes imprisonment served in lieu of payment and entries written off, not only money paid. Reasons for closing a complaint at intake are likewise unpublished case by case.",
+            {
+              fy: REPORT.fineLedger[REPORT.fineLedger.length - 1].fy,
+              pct: pct1(REPORT.fineLedger[REPORT.fineLedger.length - 1].disposedPct),
+            },
           )}
         </Body>
       </Block>

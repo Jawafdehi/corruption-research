@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-11-07T19:40:48+00:00",
-    "commit": "5879ad9",
+    "generatedAt": "2026-11-07T19:42:40+00:00",
+    "commit": "ae4617e",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1259,6 +1259,64 @@
       "inv_held": 10,
       "source_url": "https://ciaa.gov.np/uploads/publicationsAndReports/g5a7AK.pdf",
       "note": "35th annual report. Screening/preliminary figures from तालिका २.१४ (जम्मा row): 927+17130+586+11060 = 29703 disposed, leaving 7323 carried forward. The detailed-investigation outcome is from बुँदा १३ of the summary: 947 investigations COMPLETED in the year, of which 137 filed, 794 tameli, 10 held. Note that `to_investigation` (927, sent) and `investigations_completed` (947, finished) are different events in the same year and must not be differenced."
+    }
+  ],
+  "fineLedger": [
+    {
+      "fy": "2075/76",
+      "ledgerRs": 15824938816.82,
+      "disposedRs": 3921563843.02,
+      "disposedPct": 24.78,
+      "page": 274,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/An7576.pdf"
+    },
+    {
+      "fy": "2076/77",
+      "ledgerRs": 16991932997.26,
+      "disposedRs": 2514636094.38,
+      "disposedPct": 14.8,
+      "page": 277,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/An7677.pdf"
+    },
+    {
+      "fy": "2077/78",
+      "ledgerRs": 18223304989.34,
+      "disposedRs": 1911591462.39,
+      "disposedPct": 10.49,
+      "page": 295,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/An7778.pdf"
+    },
+    {
+      "fy": "2078/79",
+      "ledgerRs": 20031873523.69,
+      "disposedRs": 2283743988.58,
+      "disposedPct": 11.4,
+      "page": 294,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%B7%E0%A4%BF%E0%A4%95%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A4%E0%A4%BF%E0%A4%B5%E0%A5%87%E0%A4%A6%E0%A4%A8%20%E0%A5%A8%E0%A5%A6%E0%A5%AD%E0%A5%AE%E0%A5%A4%E0%A5%A6%E0%A5%AD%E0%A5%AF...pdf"
+    },
+    {
+      "fy": "2079/80",
+      "ledgerRs": 21734020161.48,
+      "disposedRs": 2335557046.79,
+      "disposedPct": 10.75,
+      "page": 227,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/%E0%A4%B8%E0%A4%B0%E0%A5%8D%E0%A4%B5%E0%A5%8B%E0%A4%9A%E0%A5%8D%E0%A4%9A-%E0%A4%85%E0%A4%A6%E0%A4%BE%E0%A4%B2%E0%A4%A4-%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%B7%E0%A4%BF%E0%A4%95-%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A4%E0%A4%BF%E0%A4%B5%E0%A5%87%E0%A4%A6%E0%A4%A8-%E0%A5%A8%E0%A5%A6%E0%A5%AD%E0%A5%AF-%E0%A5%A6%E0%A5%AE%E0%A5%A6%20.pdf"
+    },
+    {
+      "fy": "2080/81",
+      "ledgerRs": 44503211124.78,
+      "disposedRs": 12383606901.76,
+      "disposedPct": 27.83,
+      "page": 298,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/%E0%A4%B8%E0%A4%B0%E0%A5%8D%E0%A4%B5%E0%A5%8B%E0%A4%9A%E0%A5%8D%E0%A4%9A%20%E0%A4%85%E0%A4%A6%E0%A4%BE%E0%A4%B2%E0%A4%A4%E0%A4%95%E0%A5%8B%20%E0%A4%B5%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%B7%E0%A4%BF%E0%A4%95%20%E0%A4%AA%E0%A5%8D%E0%A4%B0%E0%A4%A4%E0%A4%BF%E0%A4%B5%E0%A5%87%E0%A4%A6%E0%A4%A8%20%E0%A5%A8%E0%A5%A6%E0%A5%AE%E0%A5%A6%E0%A5%A4%E0%A5%A6%E0%A5%AE%E0%A5%A7.pdf"
+    },
+    {
+      "fy": "2081/82",
+      "ledgerRs": 46525829589.82,
+      "disposedRs": 14686365114.47,
+      "disposedPct": 31.57,
+      "page": 224,
+      "sourceUrl": "https://supremecourt.gov.np/web/assets/downloads/annual/barsik-pratibedan-208182.pdf"
     }
   ],
   "duration": {

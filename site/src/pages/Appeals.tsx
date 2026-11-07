@@ -28,6 +28,8 @@ export default function Appeals() {
   const { t } = useTranslation();
   const { n, pct1 } = useFormat();
   const { appeals, ciaa, outcome, supremeDelay } = REPORT;
+  /** All-case district-court fine ledger, latest year (Supreme Court annual report). */
+  const fineLast = REPORT.fineLedger[REPORT.fineLedger.length - 1];
 
   const decided = decidedClean(outcome);
   const convictedTrial = outcome.convicted + outcome.partial;
@@ -697,18 +699,31 @@ export default function Appeals() {
               "How much of the money a court orders repaid is ever collected?",
             )}
             shows={t(
-              "research.corruption.gap.eEstablishes",
-              "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. Nobody publishes what was ordered, what was recovered or what is outstanding, and the court record carries none of the three.",
-              { bn: ciaa.damagesClaimedYearBn },
+              "research.corruption.gap.eEstablishes2",
+              "The Commission publishes what it demands — Rs {{bn}} billion in FY2081/82. The Supreme Court's annual report publishes the district courts' fine ledger for all case types every year — in {{fy}}, Rs {{disposed}} billion of a Rs {{ledger}} billion ledger recorded as disposed of ({{pct}}) — but nothing for corruption cases on their own. No institution publishes what is recovered from corruption judgments, and the court record used here carries no amount.",
+              {
+                bn: ciaa.damagesClaimedYearBn,
+                fy: fineLast.fy,
+                disposed: (fineLast.disposedRs / 1e9).toFixed(3),
+                ledger: (fineLast.ledgerRs / 1e9).toFixed(3),
+                pct: pct1(fineLast.disposedPct),
+              },
             )}
           >
             <>
               {t(
-                "research.corruption.gap.eBody",
-                "Every other stage has an institution that publishes something about it. This one has none, which is why it is the only stage with no number against it anywhere on this site. A finding on बिगो is a legal determination; no published source says whether a rupee followed it. Read the blank as missing, not as zero.",
+                "research.corruption.gap.eBody2",
+                "Every other stage has an institution that publishes something about corruption cases in particular. This one has only the all-case ledger, which does not separate corruption from other cases, and whose “disposed of” column counts imprisonment served in lieu of payment and entries written off as well as money paid. A finding on बिगो is a legal determination; no published source says whether a rupee followed it in a corruption case. Read the blank as missing, not as zero.",
               )}{" "}
               <Cite href={CITATIONS.ciaaReports}>
                 {t("research.corruption.gap.eCite", "CIAA annual reports")}
+              </Cite>{" "}
+              <Cite href={fineLast.sourceUrl}>
+                {t(
+                  "research.corruption.gap.eCiteSc",
+                  "Supreme Court annual report, {{fy}}, appendix 65(क)",
+                  { fy: fineLast.fy },
+                )}
               </Cite>
             </>
             <p>

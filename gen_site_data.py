@@ -224,6 +224,12 @@ def build() -> dict:
             "byCharge": _rows(f["defendants_by_charge"], charge_en="en", charge_ne="ne"),
         },
         "complaintDisposal": _rows(cd.load_complaint_disposal()),
+        # All-case district-court fine ledger (Supreme Court annual report). Not corruption-
+        # specific and not cash: see corpus_data.load_sc_fine_ledger.
+        "fineLedger": _rows(cd.load_sc_fine_ledger()[
+            ["fy", "fine_ledger_total_rs", "fine_disposed_rs", "disposed_pct", "source_page", "source_url"]],
+            fine_ledger_total_rs="ledgerRs", fine_disposed_rs="disposedRs", disposed_pct="disposedPct",
+            source_page="page", source_url="sourceUrl"),
         "duration": {
             "bands": _rows(f["duration"]),
             **{k: _num(v) for k, v in f["duration_summary"].iloc[0].items()},

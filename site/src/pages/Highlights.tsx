@@ -49,6 +49,8 @@ export default function Highlights() {
   /** The 35th annual report's own screening table — the only year it is published. */
   const cd = REPORT.complaintDisposal[0];
   const supremeDelay = REPORT.supremeDelay;
+  /** All-case district-court fine ledger, latest year (Supreme Court annual report). */
+  const fineLast = REPORT.fineLedger[REPORT.fineLedger.length - 1];
 
   /**
    * Published Jawafdehi pages behind the route insights. Each was checked to resolve
@@ -1175,22 +1177,28 @@ export default function Highlights() {
           index={6}
           stat={t("research.corruption.hl.f5Stat", "Not published")}
           statCaption={t(
-            "research.corruption.hl.f5Caption",
-            "The CIAA said Rs {{bn}} billion was taken in 2081/82. No institution reports how much was recovered.",
+            "research.corruption.hl.f5Caption2",
+            "The CIAA claimed Rs {{bn}} billion of बिगो in its 2081/82 charge sheets, an allegation rather than an amount shown to have been taken. No institution publishes how much is recovered from corruption judgments.",
             { bn: ciaa.damagesClaimedYearBn },
           )}
           headline={t(
-            "research.corruption.hl.f5",
-            "No one tracks whether the money is ever returned",
+            "research.corruption.hl.f5b",
+            "No one publishes what is recovered from corruption judgments",
           )}
           explain={t(
-            "research.corruption.hl.f5Body",
-            "When the CIAA files a case it names the sum it says was taken, and the court can order it repaid. After that the trail stops: neither the CIAA, nor the courts, nor the treasury publish what was actually collected. The blank means unknown, not zero.",
+            "research.corruption.hl.f5Body2",
+            "When the CIAA files a case it names the sum it claims, and the court can order it repaid. The Supreme Court's annual report publishes a fine ledger for all district courts every year: in {{fy}}, Rs {{disposed}} billion of a Rs {{ledger}} billion ledger was recorded as disposed of ({{pct}}). But that ledger covers every kind of case and does not separate corruption, and “disposed of” includes imprisonment served in lieu of payment and entries written off, not only money paid. Neither the CIAA, nor the courts, nor the treasury publish the figure for corruption judgments. The blank means unknown, not zero.",
+            {
+              fy: fineLast.fy,
+              disposed: (fineLast.disposedRs / 1e9).toFixed(3),
+              ledger: (fineLast.ledgerRs / 1e9).toFixed(3),
+              pct: pct1(fineLast.disposedPct),
+            },
           )}
           meta={{
             source: t(
-              "research.corruption.hl.f5Src",
-              "CIAA annual report; no recovery source exists",
+              "research.corruption.hl.f5Src2",
+              "CIAA annual report; Supreme Court annual report (all-case fine ledger)",
             ),
             to: "/appeals#recovery-gap",
             toLabel: t("research.corruption.hl.f5Link", "The recovery gap"),

@@ -333,6 +333,22 @@ def load_bigo_demanded():
     return pd.read_csv(DATA / "ciaa_bigo_demanded.csv")
 
 
+def load_sc_fine_ledger():
+    """The district courts' fine ledger, all case types, from the Supreme Court annual report.
+
+    Appendix 65(क) grand-total row of each report (FY2075/76-2081/82): the fine ledger
+    (लगत), what was disposed of (फछ्‌र्यौट) and what remains. Built from the research
+    lane's `recovery/series.csv`, which reconciles each total against the report's own prose.
+
+    ⚠️ NOT a corruption figure and NOT cash. The ledger covers every case type in all 77
+    district courts and is never broken down by case type, so no corruption recovery rate
+    can be read from it. "Disposed" includes imprisonment served in lieu of payment and
+    ledger entries written off, not only money paid. Both columns are stocks carrying
+    decades of arrears, not one year's fines.
+    """
+    return pd.read_csv(DATA / "sc_fine_ledger.csv")
+
+
 def load_investigation_appeal_decisions():
     """Whether the Commission decided to APPEAL a Special Court verdict, by fiscal year.
 

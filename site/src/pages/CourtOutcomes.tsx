@@ -626,8 +626,8 @@ export default function CourtOutcomes() {
             </p>
             <p>
               {t(
-                "research.corruption.gap.cBody2",
-                "The Commission reported Rs {{bn}} billion in claimed बिगो for FY2081/82. The published data examined here does not provide a comparable total for the amounts upheld by courts. Without matching figures for both, the gap cannot be measured across cases or years. Recording both the amount claimed and the amount upheld in each case would make that comparison possible.",
+                "research.corruption.gap.cBody2b",
+                "The Commission reported Rs {{bn}} billion in claimed बिगो for FY2081/82. No published source gives a comparable total for the amounts courts upheld in corruption cases: the Supreme Court's annual report carries a fine ledger for all case types in the district courts, not the बिगो confirmed in corruption judgments. Without matching figures for both, the gap cannot be measured across cases or years. Recording both the amount claimed and the amount upheld in each case would make that comparison possible.",
                 { bn: REPORT.ciaa.damagesClaimedYearBn },
               )}
             </p>
