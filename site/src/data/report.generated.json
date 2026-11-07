@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-11-07T19:42:40+00:00",
-    "commit": "ae4617e",
+    "generatedAt": "2026-11-07T19:45:51+00:00",
+    "commit": "c9d6c37",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1261,6 +1261,13 @@
       "note": "35th annual report. Screening/preliminary figures from तालिका २.१४ (जम्मा row): 927+17130+586+11060 = 29703 disposed, leaving 7323 carried forward. The detailed-investigation outcome is from बुँदा १३ of the summary: 947 investigations COMPLETED in the year, of which 137 filed, 794 tameli, 10 held. Note that `to_investigation` (927, sent) and `investigations_completed` (947, finished) are different events in the same year and must not be differenced."
     }
   ],
+  "stingRuling": {
+    "rulingBs": "2078-01-08",
+    "fy": "2077/78",
+    "filed": 70,
+    "before": 64,
+    "after": 6
+  },
   "fineLedger": [
     {
       "fy": "2075/76",

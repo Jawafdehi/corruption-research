@@ -224,6 +224,7 @@ def build() -> dict:
             "byCharge": _rows(f["defendants_by_charge"], charge_en="en", charge_ne="ne"),
         },
         "complaintDisposal": _rows(cd.load_complaint_disposal()),
+        "stingRuling": cd.bribery_around_sting_ruling(),
         # All-case district-court fine ledger (Supreme Court annual report). Not corruption-
         # specific and not cash: see corpus_data.load_sc_fine_ledger.
         "fineLedger": _rows(cd.load_sc_fine_ledger()[

@@ -35,6 +35,11 @@ export default function Investigation() {
   const peakIdx = chargeMixByYear.indexOf(briberyPeak);
   const briberyAfter = chargeMixByYear[peakIdx + 1] ?? briberyPeak;
   const briberyAfter2 = chargeMixByYear[peakIdx + 2] ?? briberyAfter;
+  // Fake-credential filings across the same year, because they fell further in
+  // proportion: bribery's is the largest fall in NUMBER, not in share (M051).
+  const fakeBefore = chargeMixByYear[peakIdx];
+  const fakeAfter = chargeMixByYear[peakIdx + 1] ?? fakeBefore;
+  const sting = REPORT.stingRuling;
   const cd = REPORT.complaintDisposal[0];
 
   // Shares at the screening stage are over the complaints DISPOSED OF in the year
@@ -396,7 +401,7 @@ export default function Investigation() {
         <Body>
           {t(
             "research.corruption.investigation.tameliLeadership",
-            "Two developments in the public record fall within this period. The chief commissioner's post was vacant for about five months from Bhadra {{vacancyBs}}, before a new chief commissioner was appointed — the first substantive appointment since 2073. The available reports do not explain why the Commission's decisions changed, and the timing alone does not establish that the leadership change caused the shift.",
+            "Two developments in the public record fall within this period. The chief commissioner's post was vacant for about five months from Bhadra {{vacancyBs}}, before a new chief commissioner was appointed — the first substantive chief commissioner since Lokman Singh Karki was removed in 2073. The available reports do not explain why the Commission's decisions changed, and the timing alone does not establish that the leadership change caused the shift.",
             { vacancyBs: "2077" },
           )}
         </Body>
@@ -495,9 +500,16 @@ export default function Investigation() {
               b: n(briberyAfter.bribery),
             })}
             statCaption={t(
-              "research.corruption.gap.sStatCaption",
-              "Bribery cases filed in court, {{peakFy}} compared with {{afterFy}}. The ruling falls inside that window.",
-              { peakFy: fy(briberyPeak.fy), afterFy: fy(briberyAfter.fy) },
+              "research.corruption.gap.sStatCaption2",
+              "Bribery cases filed in court, {{peakFy}} compared with {{afterFy}}. The fall came before the ruling: {{before}} of the {{filed}} bribery cases filed in {{rulingFy}} were registered before it, {{after}} after.",
+              {
+                peakFy: fy(briberyPeak.fy),
+                afterFy: fy(briberyAfter.fy),
+                before: n(sting.before),
+                after: n(sting.after),
+                filed: n(sting.filed),
+                rulingFy: sting.fy,
+              },
             )}
             showsLabel={t(
               "research.corruption.gap.shows",
@@ -513,12 +525,16 @@ export default function Investigation() {
                 </p>
                 <p>
                   {t(
-                    "research.corruption.gap.sEstablishes2",
-                    "Bribery was the charge stings produced. Filings fell from {{a}} in {{peakFy}} to {{b}} in {{afterFy}} and {{c}} the year after — the steepest fall of any charge in this archive. Section 62(d) has since put sting operations into the Act itself, four years on.",
+                    // TODO(claims): M052 unverified — check section 62(d) and its date
+                    // against the amended CIAA Act text before restoring a date here.
+                    "research.corruption.gap.sEstablishes3",
+                    "Bribery was the charge stings produced. Filings fell from {{a}} in {{peakFy}} to {{b}} in {{afterFy}} and {{c}} the year after — the largest fall in number of any charge in this archive, though fake-credential filings fell further in proportion the same year, from {{fa}} to {{fb}}. Section 62(d) has since put sting operations into the Act itself.",
                     {
                       a: n(briberyPeak.bribery),
                       b: n(briberyAfter.bribery),
                       c: n(briberyAfter2.bribery),
+                      fa: n(fakeBefore.fake),
+                      fb: n(fakeAfter.fake),
                       peakFy: fy(briberyPeak.fy),
                       afterFy: fy(briberyAfter.fy),
                     },

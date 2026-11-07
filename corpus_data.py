@@ -349,6 +349,30 @@ def load_sc_fine_ledger():
     return pd.read_csv(DATA / "sc_fine_ledger.csv")
 
 
+#: The Supreme Court constitutional bench voided rule 30 of the CIAA Rules, 2059 (sting
+#: operations funded by the Commission) on this date, in month 10 of FY2077/78.
+STING_RULING_BS = "2078-01-08"
+
+
+def bribery_around_sting_ruling():
+    """Bribery filings in the fiscal year of the sting ruling, split at the ruling date.
+
+    Same case universe and charge grouping as `charge_mix_by_year` (petitions and money
+    laundering out, `_fam6`), so the counts match the chart. It exists because the fall in
+    bribery filings is often read as the ruling's effect, and most of that year's filings
+    were registered BEFORE it.
+    """
+    c = load_dataset()["cases"]
+    ct = c.case_type.fillna("")
+    cm = c[~ct.str.contains("निवेदन") & ~ct.str.contains("सम्पत्ति शुद्धीकरण")].copy()
+    cm = cm[cm.case_type.map(_fam6) == "bribery"]
+    fy = _filing_fy(STING_RULING_BS)
+    yr = cm[cm.registration_date_bs.map(_filing_fy) == fy]
+    before = int((yr.registration_date_bs < STING_RULING_BS).sum())
+    return {"rulingBs": STING_RULING_BS, "fy": fy, "filed": int(len(yr)),
+            "before": before, "after": int(len(yr)) - before}
+
+
 def load_investigation_appeal_decisions():
     """Whether the Commission decided to APPEAL a Special Court verdict, by fiscal year.
 
