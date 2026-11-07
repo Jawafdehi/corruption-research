@@ -9,6 +9,7 @@ import { Layout } from "@/components/layout/Layout";
 // `Layout`, around the outlet, so the header and section nav stay on screen
 // while a section's chunk arrives.
 const Highlights = lazy(() => import("@/pages/Highlights"));
+const Report = lazy(() => import("@/pages/Report"));
 const Investigation = lazy(() => import("@/pages/Investigation"));
 const Prosecution = lazy(() => import("@/pages/Prosecution"));
 const CourtOutcomes = lazy(() => import("@/pages/CourtOutcomes"));
@@ -28,6 +29,7 @@ const Method = lazy(() => import("@/pages/Method"));
  */
 export const SECTIONS = [
   { path: "/", key: "highlights", label: "Highlights", blurb: "What the research found" },
+  { path: "/report", key: "report", label: "Report", blurb: "Where accountability leaks" },
   { path: "/investigation", key: "investigation", label: "Investigation", blurb: "Complaint to charge" },
   { path: "/prosecution", key: "prosecution", label: "Prosecution", blurb: "What gets charged" },
   { path: "/court-outcomes", key: "courtOutcomes", label: "Court outcomes", blurb: "What the court decides" },
@@ -40,6 +42,7 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Highlights />} />
+        <Route path="report" element={<Report />} />
         <Route path="investigation" element={<Investigation />} />
         <Route path="prosecution" element={<Prosecution />} />
         <Route path="court-outcomes" element={<CourtOutcomes />} />

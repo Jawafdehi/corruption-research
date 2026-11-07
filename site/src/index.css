@@ -99,3 +99,25 @@
     @apply -mx-4 overflow-x-auto px-4;
   }
 }
+
+/* The report page renders committed markdown (`../report/`). The site has no typography
+   plugin, so the few elements the report uses are styled here, in the Prose scale. */
+@layer components {
+  .report-md {
+    @apply mt-4 max-w-3xl text-sm leading-6 text-foreground/85 md:text-base md:leading-7;
+  }
+  .report-md > * + * { @apply mt-4; }
+  .report-md h2 { @apply mt-10 font-display text-xl font-bold leading-snug text-foreground md:text-2xl; }
+  .report-md h3 { @apply mt-8 font-display text-lg font-semibold text-foreground; }
+  .report-md ul { @apply list-disc space-y-1 pl-6; }
+  .report-md ol { @apply list-decimal space-y-1 pl-6; }
+  .report-md li > ul, .report-md li > ol { @apply mt-1; }
+  .report-md a { @apply underline decoration-accent/50 underline-offset-2 hover:decoration-accent; }
+  .report-md strong { @apply font-semibold text-foreground; }
+  .report-md code { @apply rounded bg-muted px-1 py-0.5 text-[0.85em]; }
+  .report-md blockquote { @apply border-l-4 border-accent/40 pl-4 italic; }
+  .report-md hr { @apply my-8 border-border; }
+  .report-md table { @apply block w-full overflow-x-auto border-collapse text-sm; }
+  .report-md th, .report-md td { @apply border-b border-border px-2 py-1.5 text-left align-top; }
+  .report-md th { @apply font-semibold text-foreground; }
+}
