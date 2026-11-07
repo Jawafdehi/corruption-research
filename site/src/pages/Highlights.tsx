@@ -193,13 +193,11 @@ export default function Highlights() {
     (c) => c.fy === latestSettled.fy,
   );
 
-  // 04 — appeals, drawn over every established appeal so the untraced share shows.
-  // The Commission's side is its appeals AGAINST ACQUITTALS only, because the card's
-  // claim is about overturning an acquittal; `appeals.commission` pools appeals against
-  // convictions too (claims ledger M020/M023).
-  // TODO(report): H1 — swap in the per-trial figures (230/565 vs 4/423) when the
-  // appeal table moves off dataset/appeals.csv.
-  const ciaaOnAcq = appeals.commission_on_acquittals;
+  // 04 — appeals, PER TRIAL (H1): each side counted only against the verdict it can
+  // overturn. The Commission's side is its appeals AGAINST ACQUITTALS only, because the
+  // card's claim is about overturning an acquittal (claims ledger M020/M023).
+  const defendant = appeals.convictedVsConviction;
+  const ciaaOnAcq = appeals.governmentVsAcquittal;
   const appealSides: AppealSide[] = [
     {
       key: "defendant",
@@ -211,9 +209,9 @@ export default function Highlights() {
         "research.corruption.appeals.stakeDefendant",
         "a win clears them",
       ),
-      appeals: appeals.defendant.appeals,
-      decided: appeals.defendant.decided,
-      reversed: appeals.defendant.reversed,
+      appeals: defendant.trials,
+      decided: defendant.decided,
+      reversed: defendant.reversed,
     },
     {
       key: "commission",
@@ -225,31 +223,26 @@ export default function Highlights() {
         "research.corruption.appeals.stakeCommission",
         "a win converts an acquittal into a conviction",
       ),
-      appeals: ciaaOnAcq.appeals,
+      appeals: ciaaOnAcq.trials,
       decided: ciaaOnAcq.decided,
       reversed: ciaaOnAcq.reversed,
     },
   ];
-  const untracedPct = appeals.appeals
-    ? (appeals.no_outcome / appeals.appeals) * 100
+  const untracedPct = appeals.appealsAll
+    ? (appeals.appealsNoFinalOutcome / appeals.appealsAll) * 100
     : 0;
 
   /*
-   * What the Commission did about the cases it lost outright, and what came of it.
-   * From the acquittal row of byTrialOutcome rather than the all-appeals totals,
-   * because the question is specifically about appealing a loss.
+   * What the Commission did about the acquittals it lost, and what came of it (H2):
+   * per trial, acquittals old enough for an appeal to have been registered.
    */
-  const acqRow = appeals.byTrialOutcome.find(
-    (r) => r.trial_outcome === "सफाई" && r.appealed_by === "CIAA_GOVERNMENT",
-  );
-  const ciaaAcqAppeals = acqRow?.appeals ?? 0;
-  const ciaaAcqWon =
-    (acqRow?.reversed ?? 0) + (acqRow?.partially_reversed ?? 0);
-  const ciaaAcqDecided = acqRow
-    ? acqRow.appeals - acqRow.no_outcome_recorded
-    : 0;
-  const ciaaAcqShare = outcome.acquitted
-    ? (ciaaAcqAppeals / outcome.acquitted) * 100
+  const acq = appeals.acquittals;
+  const ciaaWonIncl = ciaaOnAcq.reversed + ciaaOnAcq.partialOnly;
+  const ciaaAcqWon = ciaaWonIncl;
+  const ciaaAcqDecided = ciaaOnAcq.decided;
+  const ciaaAcqShare = acq.judgeable ? (acq.appealed / acq.judgeable) * 100 : 0;
+  const defWonIncl = defendant.decided
+    ? ((defendant.reversed + defendant.partialOnly) / defendant.decided) * 100
     : 0;
 
   // D — how the Supreme Court treated the judgment below it, summed across the
@@ -641,17 +634,17 @@ export default function Highlights() {
               <>
                 <p>
                   {/* Both sides counted on one basis: full OR partial reversal
-                      (claims ledger R018). TODO(report): H1 — per-trial figures. */}
+                      (claims ledger R018), per trial (H1/H2). */}
                   {t(
-                    "research.corruption.route.i7BodyA2",
-                    "The CIAA appealed {{share}} of the acquittals against it, filing {{n}} appeals. But of the {{decided}} appeals that have been decided, only {{won}} resulted in a different verdict, in full or in part — {{pctWon}} of them. By contrast, {{dp}} of the decided appeals brought by the convicted changed the conviction, in full or in part. Both figures count appeals, not people.",
+                    "research.corruption.route.i7BodyA3",
+                    "The CIAA appealed {{share}} of the {{judgeable}} acquittals old enough to judge. But of the {{decided}} acquittal trials where an appeal has been decided, only {{won}} ended in a different verdict, in full or in part — {{pctWon}} of them. By contrast, {{dp}} of the decided trials appealed by the convicted changed the conviction, in full or in part. Both figures count trials, not people.",
                     {
                       share: pct1(ciaaAcqShare),
-                      n: n(ciaaAcqAppeals),
+                      judgeable: n(acq.judgeable),
                       decided: n(ciaaAcqDecided),
                       won: n(ciaaAcqWon),
                       pctWon: pct2((ciaaAcqWon / ciaaAcqDecided) * 100),
-                      dp: pct1(appeals.defendant.pct_incl),
+                      dp: pct1(defWonIncl),
                     },
                   )}
                 </p>
@@ -697,14 +690,16 @@ export default function Highlights() {
               <>
                 <p>
                   {t(
-                    "research.corruption.route.i8BodyA2",
-                    "Of the {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve. More than one in three took over six years. The average waiting time was {{mean}} years.",
+                    "research.corruption.route.i8BodyA3",
+                    "Of the {{n}} corruption appeals registered at the Supreme Court between {{from}} and {{to}} that have since been decided, half took at least {{median}} years to resolve, and {{over6}} took over six years. Counting the appeals still waiting as well, the typical wait is about {{km}} years. Appeals brought by convicted people wait longest: about {{person}} years.",
                     {
                       n: n(supremeDelay.decided),
                       from: supremeDelay.fromYear,
                       to: supremeDelay.toYear,
                       median: supremeDelay.medianYears.toFixed(1),
-                      mean: supremeDelay.meanYears.toFixed(1),
+                      over6: pct(supremeDelay.overSixPct),
+                      km: (supremeDelay.kmMedianYears ?? supremeDelay.medianYears).toFixed(1),
+                      person: supremeDelay.bySide.person.medianYears.toFixed(1),
                     },
                   )}
                 </p>
@@ -1140,35 +1135,30 @@ export default function Highlights() {
 
         <Highlight
           index={5}
-          // TODO(report): H1 — per-trial figures replace these when the appeal table is swapped.
-          stat={n(appeals.defendant.reversed)}
+          stat={n(defendant.reversed)}
           statCaption={t(
-            "research.corruption.hl.f4Stat2",
-            "convictions were overturned in full on appeals brought by the convicted. These are cases, counted once per trial and appealing side, not people. On its appeals against acquittals, the CIAA had {{c}} acquittals overturned in full, {{cp}} counting partial reversals.",
-            { c: n(ciaaOnAcq.reversed), cp: n(ciaaOnAcq.reversed_incl) },
+            "research.corruption.hl.f4Stat3",
+            "trials ended with the conviction overturned in full on an appeal by the convicted. These are trials, not people. On its appeals against acquittals, the CIAA had {{c}} acquittals overturned in full, {{cp}} counting partial reversals.",
+            { c: n(ciaaOnAcq.reversed), cp: n(ciaaWonIncl) },
           )}
           headline={t(
             "research.corruption.hl.f4",
             "A conviction is far easier to overturn than an acquittal",
           )}
           explain={t(
-            "research.corruption.hl.f4Body2",
-            "Of the {{dd}} decided appeals brought by the convicted, {{d}} ({{dpct}}) ended in a full reversal. Of the {{cd}} decided appeals the CIAA brought against acquittals, {{c}} ({{cpct}}) did; counting partial reversals, {{cp}} ({{cppct}}). Each count is of appeals, one per trial and appealing side, not of people. In simple terms, a conviction was far more likely to be overturned on appeal than an acquittal. There is also a major gap in the records: no outcome could be found for {{pct}} of the appeals traced. These missing records make it harder to assess the full picture.",
+            "research.corruption.hl.f4Body3",
+            "Of the {{dd}} trials where an appeal by the convicted has been decided, {{d}} ({{dpct}}) ended in a full reversal. Of the {{cd}} acquittals where a CIAA appeal has been decided, {{c}} ({{cpct}}) did; counting partial reversals, {{cp}} ({{cppct}}). Each count is of trials, not of people. In simple terms, a conviction was far more likely to be overturned on appeal than an acquittal. There is also a gap in the records: {{pct}} of the {{all}} appeals registered have no final outcome yet.",
             {
               c: n(ciaaOnAcq.reversed),
               cd: n(ciaaOnAcq.decided),
               cpct: pct1(ciaaOnAcq.pct),
-              cp: n(ciaaOnAcq.reversed_incl),
-              cppct: pct1(ciaaOnAcq.pct_incl),
-              d: n(appeals.defendant.reversed),
-              dd: n(appeals.defendant.decided),
-              dpct: pct1(
-                appeals.defendant.decided
-                  ? (appeals.defendant.reversed / appeals.defendant.decided) *
-                      100
-                  : 0,
-              ),
+              cp: n(ciaaWonIncl),
+              cppct: pct1(ciaaOnAcq.decided ? (ciaaWonIncl / ciaaOnAcq.decided) * 100 : 0),
+              d: n(defendant.reversed),
+              dd: n(defendant.decided),
+              dpct: pct1(defendant.pct),
               pct: pct1(untracedPct),
+              all: n(appeals.appealsAll),
             },
           )}
           chart={
@@ -1177,16 +1167,16 @@ export default function Highlights() {
                 sides={appealSides}
                 wonLabel={t("research.corruption.appeals.won", "succeeded of")}
                 ofDecidedLabel={t(
-                  "research.corruption.appeals.ofDecided",
-                  "{{won}} of {{decided}} decided appeals succeeded",
+                  "research.corruption.appeals.ofDecidedTrials",
+                  "{{won}} of {{decided}} decided trials ended in a full reversal",
                 )}
                 untraced={{
-                  missing: appeals.no_outcome,
-                  total: appeals.appeals,
+                  missing: appeals.appealsNoFinalOutcome,
+                  total: appeals.appealsAll,
                 }}
                 untracedLabel={t(
-                  "research.corruption.appeals.untraced",
-                  "Not counted above: {{missing}} of the {{total}} appeals traced ({{pct}}) have no recorded outcome.",
+                  "research.corruption.appeals.untraced2",
+                  "Not counted above: {{missing}} of the {{total}} appeals registered ({{pct}}) have no final outcome yet.",
                 )}
               />
             </div>
@@ -1251,15 +1241,15 @@ export default function Highlights() {
             "Winning at the Special Court is not the end. The appeal takes years.",
           )}
           explain={t(
-            "research.corruption.hl.f6Body2",
-            "Of {{n}} corruption appeals registered between {{from}} and {{to}} that have since been decided, half took at least {{median}} years and {{over}} took more than six; the average is {{mean}} years. And the wait is growing: appeals decided in {{rFrom}}–{{rTo}} had been waiting a median of {{rMed}} years against {{eMed}} for those decided in {{eFrom}}–{{eTo}}. The figures are a floor — {{open}} of the {{all}} appeals registered carry no recorded decision at all.",
+            "research.corruption.hl.f6Body3",
+            "Of {{n}} corruption appeals registered between {{from}} and {{to}} that have since been decided, half took at least {{median}} years and {{over}} took more than six. Counting the appeals still waiting, the typical wait is about {{km}} years. And the wait is growing: appeals decided in {{rFrom}}–{{rTo}} had been waiting a median of {{rMed}} years against {{eMed}} for those decided in {{eFrom}}–{{eTo}}. The figures are a floor — {{open}} of the {{all}} appeals registered carry no recorded decision at all.",
             {
               n: n(supremeDelay.decided),
               from: supremeDelay.fromYear,
               to: supremeDelay.toYear,
               median: supremeDelay.medianYears.toFixed(1),
               over: pct1(supremeDelay.overSixPct),
-              mean: supremeDelay.meanYears.toFixed(1),
+              km: (supremeDelay.kmMedianYears ?? supremeDelay.medianYears).toFixed(1),
               rFrom: supremeDelay.recent.from,
               rTo: supremeDelay.recent.to,
               rMed: supremeDelay.recent.medianYears.toFixed(1),

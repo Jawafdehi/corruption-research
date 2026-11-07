@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-11-07T19:45:51+00:00",
-    "commit": "c9d6c37",
+    "generatedAt": "2026-11-07T20:26:44+00:00",
+    "commit": "2c0eb85",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -15,9 +15,17 @@
         "rows": 12547,
         "modified": "2026-08-04"
       },
-      "appeals": {
-        "rows": 5,
-        "modified": "2026-10-07"
+      "supreme appeals": {
+        "rows": 4430,
+        "modified": "2026-11-07"
+      },
+      "appeal trials": {
+        "rows": 3665,
+        "modified": "2026-11-07"
+      },
+      "acquittal appeal status": {
+        "rows": 1067,
+        "modified": "2026-11-07"
       }
     }
   },
@@ -837,96 +845,45 @@
     "completeThroughFy": 2080
   },
   "appeals": {
-    "appeals": 1797,
-    "no_outcome": 819,
-    "lost": 157,
-    "gained": 4,
-    "lost_full": 143,
-    "gained_full": 5,
-    "decided": 978,
-    "net": -153,
-    "net_full": -138,
-    "defendant": {
-      "appeals": 705,
-      "decided": 429,
-      "reversed": 157,
-      "pct": 36.6,
-      "reversed_incl": 162,
-      "pct_incl": 37.8
+    "convictedVsConviction": {
+      "trials": 1003,
+      "decided": 567,
+      "reversed": 230,
+      "partialOnly": 20,
+      "pct": 40.6
     },
-    "commission": {
-      "appeals": 1092,
-      "decided": 549,
-      "reversed": 6,
-      "pct": 1.1,
-      "reversed_incl": 18,
-      "pct_incl": 3.3
+    "governmentVsAcquittal": {
+      "trials": 732,
+      "decided": 420,
+      "reversed": 4,
+      "partialOnly": 2,
+      "pct": 1.0
     },
-    "commission_on_acquittals": {
-      "appeals": 734,
-      "decided": 419,
-      "reversed": 2,
-      "reversed_incl": 4,
-      "pct": 0.48,
-      "pct_incl": 0.95
+    "governmentVsConviction": {
+      "trials": 389,
+      "decided": 167,
+      "reversed": 8,
+      "partialOnly": 14,
+      "pct": 4.8
     },
-    "byTrialOutcome": [
-      {
-        "trial_outcome": "ठहर",
-        "appealed_by": "CIAA_GOVERNMENT",
-        "appeals": 99,
-        "affirmed": 16,
-        "claim_denied": 14,
-        "reversed": 1,
-        "partially_reversed": 1,
-        "other_procedural": 0,
-        "no_outcome_recorded": 67
-      },
-      {
-        "trial_outcome": "ठहर",
-        "appealed_by": "DEFENDANT_PERSON",
-        "appeals": 596,
-        "affirmed": 226,
-        "claim_denied": 4,
-        "reversed": 142,
-        "partially_reversed": 1,
-        "other_procedural": 8,
-        "no_outcome_recorded": 215
-      },
-      {
-        "trial_outcome": "आंशिक ठहर",
-        "appealed_by": "CIAA_GOVERNMENT",
-        "appeals": 259,
-        "affirmed": 48,
-        "claim_denied": 31,
-        "reversed": 3,
-        "partially_reversed": 9,
-        "other_procedural": 7,
-        "no_outcome_recorded": 161
-      },
-      {
-        "trial_outcome": "आंशिक ठहर",
-        "appealed_by": "DEFENDANT_PERSON",
-        "appeals": 109,
-        "affirmed": 25,
-        "claim_denied": 2,
-        "reversed": 15,
-        "partially_reversed": 4,
-        "other_procedural": 2,
-        "no_outcome_recorded": 61
-      },
-      {
-        "trial_outcome": "सफाई",
-        "appealed_by": "CIAA_GOVERNMENT",
-        "appeals": 734,
-        "affirmed": 410,
-        "claim_denied": 3,
-        "reversed": 2,
-        "partially_reversed": 2,
-        "other_procedural": 2,
-        "no_outcome_recorded": 315
-      }
-    ],
+    "perAppellant": {
+      "decided": 925,
+      "reversed": 418
+    },
+    "appealsAll": 4430,
+    "appealsNoFinalOutcome": 2022,
+    "acquittals": {
+      "all": 1067,
+      "tooRecent": 57,
+      "judgeable": 1010,
+      "appealed": 783,
+      "weak": 8,
+      "noAppeal": 219,
+      "noAppealPct": 21.7,
+      "ciaaFiledJudgeable": 979,
+      "ciaaFiledNoAppeal": 211,
+      "ciaaFiledNoAppealPct": 21.6
+    },
     "ciaaDecisions": [
       {
         "fy": "2075/76",
@@ -1350,57 +1307,92 @@
     "pending": 76
   },
   "supremeDelay": {
+    "fromYear": 2008,
+    "toYear": 2018,
+    "censorDate": "2026-11-02",
+    "appeals": 1521,
+    "decided": 1407,
+    "medianYears": 3.77,
+    "kmMedianYears": 4.1,
+    "overSixPct": 28.3,
+    "kmOpenAtSixPct": 33.7,
     "bands": [
       {
         "from": 0,
         "to": 2,
-        "cases": 305
+        "cases": 462
       },
       {
         "from": 2,
         "to": 4,
-        "cases": 159
+        "cases": 282
       },
       {
         "from": 4,
         "to": 6,
-        "cases": 211
+        "cases": 265
       },
       {
         "from": 6,
         "to": 8,
-        "cases": 286
+        "cases": 318
       },
       {
         "from": 8,
         "to": 99,
-        "cases": 68
+        "cases": 80
       }
     ],
-    "meanYears": 4.35,
-    "recent": {
-      "from": 2023,
-      "to": 2026,
-      "appeals": 804,
-      "medianYears": 5.41
+    "withoutMassTrial": {
+      "trial": "069-CR-0025",
+      "dockets": 87,
+      "appeals": 1434,
+      "decided": 1320,
+      "medianYears": 3.58,
+      "kmMedianYears": 3.85,
+      "overSixPct": 23.6,
+      "kmOpenAtSixPct": 29.7
+    },
+    "keywordOnly": {
+      "appeals": 1137,
+      "decided": 1064,
+      "medianYears": 4.57,
+      "kmMedianYears": 4.93,
+      "overSixPct": 34.5,
+      "kmOpenAtSixPct": 38.7
+    },
+    "bySide": {
+      "person": {
+        "appeals": 1059,
+        "decided": 981,
+        "medianYears": 4.23,
+        "kmMedianYears": 4.66,
+        "overSixPct": 32.0,
+        "kmOpenAtSixPct": 37.0
+      },
+      "government": {
+        "appeals": 458,
+        "decided": 424,
+        "medianYears": 2.13,
+        "kmMedianYears": 2.37,
+        "overSixPct": 19.6,
+        "kmOpenAtSixPct": 25.5
+      }
     },
     "earlier": {
       "from": 2015,
       "to": 2019,
-      "appeals": 481,
-      "medianYears": 1.83
+      "appeals": 676,
+      "medianYears": 2.08
     },
-    "fromYear": 2008,
-    "toYear": 2018,
-    "cohorts": 11,
-    "decided": 1029,
-    "medianYears": 4.53,
-    "p75Years": 6.29,
-    "overSixPct": 34.4,
-    "slowestYear": 2017,
-    "slowestYears": 6.27,
-    "registeredAll": 2976,
-    "withoutVerdict": 1462
+    "recent": {
+      "from": 2023,
+      "to": 2026,
+      "appeals": 1031,
+      "medianYears": 5.33
+    },
+    "registeredAll": 4430,
+    "withoutVerdict": 2128
   },
   "crossCheck": {
     "sourceAgreement": [

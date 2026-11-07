@@ -114,8 +114,11 @@ def _provenance() -> dict:
     the file, which is the thing a reader actually wants to know.
     """
     files = {}
-    for name in ("cases", "hearings", "entities", "appeals"):
-        p = ROOT / "dataset" / f"{name}.csv"
+    # The appeal files are the 2026-11 per-trial export (headline/export_site.py in the
+    # research lane); `appeals.csv`, the 2026-09 aggregate, no longer feeds the site.
+    for name in ("cases", "hearings", "entities", "supreme appeals", "appeal trials",
+                 "acquittal appeal status"):
+        p = ROOT / "dataset" / f"{name.replace(' ', '_')}.csv"
         if not p.exists():
             continue
         committed = _git("log", "-1", "--format=%cs", "--", str(p.relative_to(ROOT)))
@@ -142,6 +145,12 @@ def build() -> dict:
     # A cohort is "complete" while nothing from it is still pending; the first year that
     # still has pending cases ends the run. Derived, so it tracks the data year to year.
     complete_through = max((c["fy"] for c in cohorts if c["pending"] == 0), default=0)
+
+    # The appeal and duration figures must equal the research cards' (corpus_data raises
+    # on any drift), so the site cannot publish a number the findings do not.
+    per_trial = cd.appeals_per_trial()
+    delay = cd.supreme_appeal_duration_origin()
+    cd.reconcile_research_figures(per_trial, delay)
 
     trend = f["filed_vs_decided_by_year"]
     verdict = f["verdict_by_year"]
@@ -205,7 +214,9 @@ def build() -> dict:
             "cohorts": cohorts,
             "completeThroughFy": complete_through,
         },
-        "appeals": {**cd.appeal_effect(), "byTrialOutcome": _rows(cd.load_appeals()),
+        # Per trial (H1) and unappealed acquittals (H2), on the appeal table of 2026-11-03.
+        # Replaces the 2026-09 aggregate (`appeals.csv`, still used by the notebook).
+        "appeals": {**per_trial,
                     "ciaaDecisions": _rows(cd.load_investigation_appeal_decisions()
                                            [["fy", "appealed", "not_appealed"]],
                                            not_appealed="notAppealed")},
@@ -235,9 +246,10 @@ def build() -> dict:
             "bands": _rows(f["duration"]),
             **{k: _num(v) for k, v in f["duration_summary"].iloc[0].items()},
         },
-        # Supreme Court appeal delay. Only the settled-cohort summary crosses into the
-        # site; the censoring rule that produces it lives in corpus_data, not here.
-        "supremeDelay": cd.supreme_appeal_delay(),
+        # Supreme Court appeal delay: origin universe, registered 2008-2018, with the
+        # Kaplan-Meier median beside the decided-only one. The censoring rule lives in
+        # corpus_data, not here. Supersedes the keyword-universe `supreme_appeal_delay`.
+        "supremeDelay": delay,
         "crossCheck": _cross_check(),
         "assumptions": _rows(f["assumptions"]),
         "leadership": _rows(f["leadership"]),

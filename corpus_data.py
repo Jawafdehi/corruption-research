@@ -574,6 +574,294 @@ def appeal_effect():
     }
     return e
 
+
+# ---------------------------------------------------------------- appeals, per trial (2026-11)
+#
+# The three files below replace `appeals.csv` as the site's appeal source. They are exported by
+# the research lane's `headline/export_site.py` from the appeal table as it stood on 2026-11-03
+# (`APPEALS_MASTER.csv`, rewritten 10:42 UTC) and the NGM replica pull of 2026-11-02. They carry
+# case numbers, labels, dates and flags only -- no party names.
+
+#: Link grades counted as established (the research lane's `master_rates.py` "firm").
+APPEAL_FIRM_GRADES = {"FIRM", "HIGH", "MEDIUM", "CITED", "CONFIRMED", "STRONG"}
+
+
+def load_supreme_appeals():
+    """One row per Supreme Court appeal of a Special Court corruption case: the ORIGIN universe.
+
+    4,430 appeals, selected by where the case came from rather than by the word भ्रष्टाचार in
+    the case type (`keyword_universe` marks the 3,177 the keyword would have selected).
+    `decided_ad` is NGM's verdict date (pull 2026-11-02); blank means no recorded decision, and
+    those rows are kept because they are what censoring is about. `final_outcome` is blank
+    unless the appeal has a FINAL outcome (referrals to a larger bench and adjournments are not).
+    `trials` lists the linked Special Court trial(s), space-separated.
+    """
+    return pd.read_csv(DATA / "supreme_appeals.csv", dtype=str, keep_default_na=False)
+
+
+def load_appeal_trials():
+    """One row per (appeal, linked trial), trials registered FY2069/70-2082/83 only.
+
+    `trial_verdict` is the trial's single court-published verdict on the 2026-11-02 pull (blank
+    when it has none or more than one). It is NOT the same snapshot as `hearings.csv`
+    (2026-10-08), so these trial counts are not a subset of the site's outcome counts.
+    `decided` = the appeal has a final outcome (NGM, or the court portal where NGM is blank);
+    `full_reversal` = that outcome is REVERSED. Every link grade is kept; rates use the firm ones.
+    """
+    df = pd.read_csv(DATA / "appeal_trials.csv", dtype=str, keep_default_na=False)
+    for c in ("decided", "full_reversal"):
+        df[c] = df[c] == "True"
+    return df
+
+
+def load_acquittal_appeal_status():
+    """One row per Special Court acquittal (सफाई) in the window: did the government appeal?
+
+    `status` is the strongest evidence found, in order: a linked appeal, the CIAA's own appeal
+    register (2022-2026), a reverse search of every Supreme Court -CR- docket, a weak single-name
+    match, too recent to judge (verdict under 419 days before the newest Supreme Court
+    registration, 2026-09-30), or none found. `ciaa_filed` is False for trials the
+    `ciaa-vs-register` comparison lists as not filed by the CIAA (money laundering, other
+    agencies, निर्णय बदर petitions).
+
+    ⚠️ "no_appeal_found" is not proof that no appeal exists: NGM may lack dockets, the register
+    covers only 2022-2026, and the reverse search misses about 4% of known appeals.
+    """
+    df = pd.read_csv(DATA / "acquittal_appeal_status.csv", dtype=str, keep_default_na=False)
+    df["ciaa_filed"] = df["ciaa_filed"] == "True"
+    return df
+
+
+def appeals_per_trial():
+    """H1 and H2: what the Supreme Court does to Special Court verdicts, PER TRIAL.
+
+    Each side is counted only against the verdict it can overturn: convicted individuals against
+    convictions (ठहर / आंशिक ठहर), the government against acquittals (सफाई). Government appeals
+    against convictions (seeking a heavier sentence or a larger बिगो) are a different event and
+    are reported separately. Firm links, final outcomes only.
+
+    Unit: the TRIAL (Special Court docket). A trial counts as decided when at least one of its
+    appeals from that side has a final outcome, and as reversed when at least one of those ended
+    in a full reversal. One label per docket: a judgment that acquits some appellants and upholds
+    the rest counts as "at least one full reversal". The per-appellant figure is included only
+    because mass trials dominate it -- quote it with that caveat or not at all.
+    """
+    lt = load_appeal_trials()
+    firm = lt[lt.link_grade.isin(APPEAL_FIRM_GRADES) & (lt.trial_verdict != "")]
+    conv = firm.trial_verdict.isin(["ठहर", "आंशिक ठहर"])
+
+    def group(mask):
+        g = firm[mask].assign(partial=lambda d: d.decided & (d.outcome == "PARTIALLY_REVERSED"))
+        per = g.groupby("trial").agg(decided=("decided", "any"), reversed=("full_reversal", "any"),
+                                     partial=("partial", "any"))
+        dec = per[per.decided]
+        rev = int(dec.reversed.sum())
+        return {"trials": int(len(per)), "decided": int(len(dec)), "reversed": rev,
+                "partialOnly": int((dec.partial & ~dec.reversed).sum()),
+                "pct": round(rev / len(dec) * 100, 1) if len(dec) else 0.0}
+
+    person = firm.appellant_side == "person"
+    gov = firm.appellant_side == "government"
+    pa = firm[person & conv & firm.decided]
+
+    ap = load_supreme_appeals()
+    acq = load_acquittal_appeal_status()
+    judge = acq[acq.status != "too_recent"]
+    none_ = judge[judge.status == "no_appeal_found"]
+    return {
+        "convictedVsConviction": group(person & conv),
+        "governmentVsAcquittal": group(gov & ~conv),
+        "governmentVsConviction": group(gov & conv),
+        "perAppellant": {"decided": int(pa.appeal.nunique()),
+                         "reversed": int(pa[pa.full_reversal].appeal.nunique())},
+        "appealsAll": int(len(ap)),
+        "appealsNoFinalOutcome": int((ap.final_outcome == "").sum()),
+        "acquittals": {
+            "all": int(len(acq)),
+            "tooRecent": int((acq.status == "too_recent").sum()),
+            "judgeable": int(len(judge)),
+            "appealed": int(judge.status.str.startswith("appealed").sum()),
+            "weak": int((judge.status == "weak_name_match").sum()),
+            "noAppeal": int(len(none_)),
+            "noAppealPct": round(len(none_) / len(judge) * 100, 1),
+            "ciaaFiledJudgeable": int(judge.ciaa_filed.sum()),
+            "ciaaFiledNoAppeal": int(none_.ciaa_filed.sum()),
+            "ciaaFiledNoAppealPct": round(float(none_.ciaa_filed.sum() / judge.ciaa_filed.sum() * 100), 1),
+        },
+    }
+
+
+# ---------------------------------------------------------------- appeal duration, origin universe
+#: Censoring date: the NGM pull the verdict dates come from.
+APPEAL_CENSOR_AD = "2026-11-02"
+#: The fixed registration window of the research card (8.2): the cohorts that are mostly decided.
+#: Fixed rather than derived, because on the origin universe the 85%-settled rule is brittle (two
+#: cohorts sit just under it) and swings the pooled median between 3.78 and 4.58 years.
+APPEAL_WINDOW = (2008, 2018)
+#: One trial's co-defendants filed 87 dockets in 2017, all decided on 2023-06-05.
+APPEAL_MASS_TRIAL = "069-CR-0025"
+
+
+def kaplan_meier(days, decided):
+    """Product-limit survival curve of time to decision: [(t, S(t))] at each event time.
+
+    `days[i]` is time to decision if `decided[i]`, else time to the censoring date. Kept in exact
+    fractions: in floating point S can land a hair above 0.5 where it is exactly 0.5, which moves
+    a median by a whole step (the research lane hit this on the 2013-2017 cohort).
+    """
+    from fractions import Fraction
+    ev = sorted(zip(days, decided))
+    n, s, i, out = len(ev), Fraction(1), 0, []
+    while i < len(ev):
+        t = ev[i][0]
+        j = i
+        while j < len(ev) and ev[j][0] == t:
+            j += 1
+        d = sum(1 for x in ev[i:j] if x[1])
+        if d:
+            s *= Fraction(n - d, n)
+            out.append((t, s))
+        n -= j - i
+        i = j
+    return out
+
+
+def km_quantile(days, decided, p=0.5):
+    """Smallest t with S(t) <= p; None if survival never gets there (not yet observable).
+
+    Where S sits exactly on p, the midpoint to the next event time (R survival's convention), so
+    a fully decided group's KM median equals its ordinary median.
+    """
+    curve = kaplan_meier(days, decided)
+    for k, (t, s) in enumerate(curve):
+        if s <= p:
+            if s == p and k + 1 < len(curve):
+                return (t + curve[k + 1][0]) / 2
+            return float(t)
+    return None
+
+
+def km_survival_at(days, decided, t_max):
+    curve = [s for t, s in kaplan_meier(days, decided) if t <= t_max]
+    return float(curve[-1]) if curve else 1.0
+
+
+def supreme_appeal_duration_origin():
+    """How long the Supreme Court takes to decide a corruption appeal: research card 8.2.
+
+    Unit: appeal DOCKETS (co-defendants appeal on separate dockets, so one trial can weigh dozens
+    of times). Measured from registration at the Supreme Court to NGM's verdict date; undecided
+    appeals are censored at the 2026-11-02 pull. Window: registered 2008-2018.
+
+    Two medians, because they answer different questions. The median over DECIDED appeals is a
+    floor: an appeal still open is by definition a slow one. The Kaplan-Meier median counts the
+    undecided too, assuming an open appeal behaves like decided ones of the same age.
+
+    Supersedes `supreme_appeal_delay` (keyword universe, file pulled 2026-10-13) on the site.
+    """
+    Y = 365.25
+    yrs = lambda d: round(float(d) / Y, 2)
+    censor = pd.Timestamp(APPEAL_CENSOR_AD)
+    ap = load_supreme_appeals()
+    ap["reg"] = pd.to_datetime(ap.registered_ad)
+    ap["dec"] = pd.to_datetime(ap.decided_ad.replace("", None))
+    ap["is_decided"] = ap.dec.notna() & (ap.dec <= censor)
+    ap["days"] = (ap.dec.where(ap.is_decided, censor) - ap.reg).dt.days
+    ap["cohort"] = ap.reg.dt.year
+    lo, hi = APPEAL_WINDOW
+    win = ap[ap.cohort.between(lo, hi)]
+
+    def block(df):
+        d = df[df.is_decided].days
+        km = km_quantile(df.days.tolist(), df.is_decided.tolist())
+        return {"appeals": int(len(df)), "decided": int(len(d)),
+                "medianYears": yrs(d.median()),
+                "kmMedianYears": yrs(km) if km is not None else None,
+                "overSixPct": round(float((d / Y > 6).mean() * 100), 1),
+                "kmOpenAtSixPct": round(100 * km_survival_at(df.days.tolist(), df.is_decided.tolist(), 6 * Y), 1)}
+
+    mass = win.trials.str.split().map(lambda ts: APPEAL_MASS_TRIAL in ts)
+    pool = win[win.is_decided].days / Y
+    bands = [{"from": a, "to": b, "cases": int(((pool >= a) & (pool < b)).sum())}
+             for a, b in [(0, 2), (2, 4), (4, 6), (6, 8), (8, 99)]]
+
+    dec = ap[ap.is_decided].copy()
+    dec["dy"] = dec.dec.dt.year
+    last = int(dec.dy.max())
+
+    def window(a, b):
+        g = dec[dec.dy.between(a, b)].days
+        return {"from": a, "to": b, "appeals": int(g.size), "medianYears": yrs(g.median())}
+
+    return {
+        "fromYear": lo, "toYear": hi, "censorDate": APPEAL_CENSOR_AD,
+        **block(win),
+        "bands": bands,
+        "withoutMassTrial": {"trial": APPEAL_MASS_TRIAL, "dockets": int(mass.sum()), **block(win[~mass])},
+        "keywordOnly": block(win[win.keyword_universe == "True"]),
+        "bySide": {s: block(win[win.appellant_side == s]) for s in ("person", "government")},
+        "earlier": window(last - 11, last - 7),
+        "recent": window(last - 3, last),
+        "registeredAll": int(len(ap)),
+        "withoutVerdict": int((~ap.is_decided).sum()),
+    }
+
+
+#: The figures the research cards print for the files committed in dataset/ (FINDINGS.md H1/H2,
+#: 8.2-DURATION.md, RESEARCH-INVENTORY entries 6b/8/9). The site must show exactly these; any
+#: drift is a regression (or a dataset refresh that needs the cards regenerated first) and raises.
+_RESEARCH_FIGURES = {
+    ("convictedVsConviction", "reversed"): 230, ("convictedVsConviction", "decided"): 567,
+    ("convictedVsConviction", "pct"): 40.6,
+    ("governmentVsAcquittal", "reversed"): 4, ("governmentVsAcquittal", "decided"): 420,
+    ("governmentVsAcquittal", "pct"): 1.0,
+    ("governmentVsConviction", "reversed"): 8, ("governmentVsConviction", "decided"): 167,
+    ("convictedVsConviction", "partialOnly"): 20, ("governmentVsAcquittal", "partialOnly"): 2,
+    ("governmentVsConviction", "partialOnly"): 14,
+    ("perAppellant", "reversed"): 418, ("perAppellant", "decided"): 925,
+    ("appealsAll",): 4430, ("appealsNoFinalOutcome",): 2022,
+    ("acquittals", "noAppeal"): 219, ("acquittals", "judgeable"): 1010, ("acquittals", "noAppealPct"): 21.7,
+    ("acquittals", "ciaaFiledNoAppeal"): 211, ("acquittals", "ciaaFiledJudgeable"): 979,
+    ("acquittals", "ciaaFiledNoAppealPct"): 21.6, ("acquittals", "tooRecent"): 57,
+    ("acquittals", "appealed"): 783, ("acquittals", "weak"): 8,
+}
+_DURATION_FIGURES = {
+    ("appeals",): 1521, ("decided",): 1407, ("medianYears",): 3.77, ("kmMedianYears",): 4.10,
+    ("overSixPct",): 28.3, ("kmOpenAtSixPct",): 33.7,
+    ("withoutMassTrial", "dockets"): 87, ("withoutMassTrial", "medianYears"): 3.58,
+    ("withoutMassTrial", "overSixPct"): 23.6, ("withoutMassTrial", "kmMedianYears"): 3.85,
+    ("keywordOnly", "medianYears"): 4.57, ("keywordOnly", "kmMedianYears"): 4.93,
+    ("bySide", "person", "medianYears"): 4.23, ("bySide", "person", "kmMedianYears"): 4.66,
+    ("bySide", "government", "medianYears"): 2.13, ("bySide", "government", "kmMedianYears"): 2.37,
+    ("earlier", "medianYears"): 2.08, ("earlier", "appeals"): 676,
+    ("recent", "medianYears"): 5.33, ("recent", "appeals"): 1031,
+    ("registeredAll",): 4430, ("withoutVerdict",): 2128,
+}
+
+
+def reconcile_research_figures(per_trial=None, duration=None):
+    """Raise if the site's appeal and duration figures differ from the research cards.
+
+    Also self-checks the Kaplan-Meier code: on a group with every appeal decided it must return
+    the ordinary median.
+    """
+    per_trial = per_trial or appeals_per_trial()
+    duration = duration or supreme_appeal_duration_origin()
+    drift = []
+    for figures, source in ((_RESEARCH_FIGURES, per_trial), (_DURATION_FIGURES, duration)):
+        for path, want in figures.items():
+            got = source
+            for k in path:
+                got = got[k]
+            if got != want:
+                drift.append(f"{'.'.join(path)}: card {want}, computed {got}")
+    for days in ([5, 1, 3], [4, 1, 3, 2], [7, 7, 2, 9, 9, 1]):
+        if km_quantile(days, [True] * len(days)) != float(pd.Series(days).median()):
+            drift.append(f"kaplan_meier self-check failed on {days}")
+    if drift:
+        raise ValueError("appeal figures drifted from the research cards:\n  " + "\n  ".join(drift))
+
+
 def ad_to_bs(ad):
     "AD 'YYYY-MM-DD' -> BS 'YYYY-MM-DD', via the nepali_datetime calendar library."
     import datetime, nepali_datetime
