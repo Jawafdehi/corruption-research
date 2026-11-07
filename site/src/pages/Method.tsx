@@ -17,6 +17,13 @@ export default function Method() {
       ? (Math.abs(crossCheck.registerComparableTotal - crossCheck.ciaaFiledTotal) / crossCheck.ciaaFiledTotal) * 100
       : 0;
   const unexplained = crossCheck.surplusReasons.find((r) => r.unexplained)?.count ?? 0;
+  // The offence charts do not share one universe; each is named rather than claiming a
+  // single "narrower cut" none of them uses (claims ledger M129).
+  const mixUniverse = REPORT.chargeMixByYear.reduce(
+    (a, r) => a + r.bribery + r.fake + r.embezzlement + r.benefit + r.loss + r.other,
+    0,
+  );
+  const chargeDecided = REPORT.byCharge.reduce((a, c) => a + c.convicted + c.partial + c.acquitted, 0);
 
   return (
     <>
@@ -47,12 +54,16 @@ export default function Method() {
         </Body>
         <Body>
           {t(
-            "research.corruption.method.substantiveBody",
-            "Charts about offences use a narrower cut of {{substantive}} cases: the archive minus {{ml}} money-laundering prosecutions, which are tried here but under a different statute, and {{other}} cases whose charge text could not be classified. Counts of filings, decisions and backlog use the full {{corpus}}, which works out at roughly {{avg}} new cases a year.",
+            "research.corruption.method.substantiveBody2",
+            "Charts about offences do not all count the same cases, so each states its own base. The archive minus {{ml}} money-laundering prosecutions, which are tried here but under a different statute, and {{other}} cases whose charge text could not be classified, leaves {{substantive}}. The charge mix by year counts {{mix}} cases (money laundering and petitions out, unclassified charges kept as “other”); the conviction rate by charge counts the {{chargeDecided}} decided cases with a classified charge, money laundering included; the defendants table counts {{defDecided}} decided cases with at least one accused; and the Prosecution page's headline count is {{exMl}}, money laundering out. Counts of filings, decisions and backlog use the full {{corpus}}, which works out at roughly {{avg}} new cases a year.",
             {
               substantive: n(corpus.substantive),
               ml: n(corpus.moneyLaundering),
               other: n(corpus.otherBucket),
+              mix: n(mixUniverse),
+              chargeDecided: n(chargeDecided),
+              defDecided: n(REPORT.defendants.decidedCases),
+              exMl: n(corpus.ciaaProsecutions - corpus.moneyLaundering),
               corpus: n(corpus.ciaaProsecutions),
               avg: corpus.avgFiledPerYear,
             },
@@ -256,8 +267,8 @@ export default function Method() {
         <SectionHeading>{t("research.corruption.method.provenanceTitle", "Provenance")}</SectionHeading>
         <Body>
           {t(
-            "research.corruption.method.provenanceBody",
-            "This site holds no figures of its own. Every number is generated from the published data pack at build time, so the page and the dataset cannot disagree. Rebuild it and the numbers follow the data.",
+            "research.corruption.method.provenanceBody2",
+            "Every count and rate on this site is generated from the published data pack at build time, so the page and the dataset cannot disagree; rebuild it and those numbers follow the data. Some details are written into the text instead: amounts and dates from individual judgments and rulings, such as the cases discussed by name, and dates of appointments.",
           )}
         </Body>
         <Figure

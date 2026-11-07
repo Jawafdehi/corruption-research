@@ -88,6 +88,16 @@ export default function CourtOutcomes() {
     { cv: 0, dec: 0 },
   );
   const restPct = rest.dec ? (rest.cv / rest.dec) * 100 : 0;
+  // The lowest single charge, among those with enough decided cases for a rate to
+  // hold. The pooled "every other offence" rate is not the low end (claims ledger M087).
+  const lowestCharge = byCharge
+    .map((c) => ({
+      en: c.en,
+      decided: c.convicted + c.partial + c.acquitted,
+      pct: outcomePct(c, "convicted"),
+    }))
+    .filter((c) => c.decided >= 60)
+    .reduce((a, b) => (b.pct < a.pct ? b : a));
   const chargeDecidedTotal = byCharge.reduce(
     (s, c) => s + c.convicted + c.partial + c.acquitted,
     0,
@@ -190,12 +200,16 @@ export default function CourtOutcomes() {
         </SectionHeading>
         <Lede>
           {t(
-            "research.corruption.outcomes.lede2",
-            "Across {{decided}} cases with a clear verdict, {{rate}} resulted in conviction in whole or in part, while {{full}} resulted in full conviction. But these overall figures hide major differences between offences. Courts uphold some types of charges in nearly 90% of cases, while others succeed in only about 20%. A single conviction rate does not show these differences.",
+            "research.corruption.outcomes.lede3",
+            "Across {{decided}} cases with a clear verdict, {{rate}} resulted in conviction in whole or in part, while {{full}} resulted in full conviction. But these overall figures hide major differences between offences. Courts uphold fake-credential charges in full in {{top}} of cases, and {{lowName}} charges in only {{low}}; every offence other than fake credentials and bribery, taken together, is upheld in full in about {{rest}}. A single conviction rate does not show these differences.",
             {
               decided: n(decided),
               rate: pct1(rates.convictionPct),
               full: pct1(rates.convictionFullOnlyPct),
+              top: pct(fake.pct),
+              low: pct(lowestCharge.pct),
+              lowName: lowestCharge.en.toLowerCase(),
+              rest: pct(restPct),
             },
           )}
         </Lede>
@@ -313,8 +327,8 @@ export default function CourtOutcomes() {
             {
               value: pct(bribery.pct),
               caption: t(
-                "research.corruption.byCharge.keyBribery",
-                "of bribery cases, the next largest category, across {{n}} decided cases",
+                "research.corruption.byCharge.keyBribery2",
+                "of bribery cases upheld in full — the largest category, with {{n}} decided cases, and the second-highest rate",
                 {
                   n: n(bribery.decided),
                 },
