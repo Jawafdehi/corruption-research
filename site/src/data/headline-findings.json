@@ -40,14 +40,14 @@
         {
           "key": "backlog",
           "headline": "Thousands of complaints wait, and nobody says for how long",
-          "explain": "At the end of {{fy}}, {{carried}} complaints (about {{share}} of those on the books) were carried into the next year. The CIAA publishes how many are waiting, but not how long any of them has waited.",
+          "explain": "At the end of {{fy}}, {{carried}} complaints (about {{share}} of those on the books) were carried into the next year. The CIAA's report for that year says how many are waiting and promises to clear \"old complaints\" first, but does not say how long any of them has waited.",
           "figures": {
             "fy": "2081/82",
             "carried": "7,323",
             "share": "1 in 5"
           },
-          "gap": "A",
-          "source": "stages/1-3-SCREENING.md (screening_series.csv, pending_out)",
+          "gap": "A→B",
+          "source": "stages/1-3-SCREENING.md; GAPS 1.3, checked in the 35th report text 2026-11-07",
           "href": "/report#complaints"
         },
         {
@@ -165,13 +165,13 @@
           "headline": "About 3 in 4 scheduled hearings do not happen, mostly for the court's own reasons",
           "explain": "Of {{listings}} times a corruption appeal was put on the Supreme Court's list, {{notPct}} ended without the bench taking it up. In {{courtShare}} of those, the reason was on the court's side: the list was not reached, a judge could not sit on the case, or the bench did not sit. The next date was typically about {{gap}} later.",
           "figures": {
-            "listings": "29,789",
+            "listings": "27,855",
             "notPct": "77%",
             "courtShare": "3 in 4",
             "gap": "two months"
           },
           "gap": "A",
-          "source": "stages/8.3-HEARINGS.md (court case pages, 2–3 Nov 2026); median 56 days, stages/hearings/gap_after_unproductive.py",
+          "source": "report/07-appeal-decided.md and stages/CARD_8.3.md (appeals numbered 070-CR- onward, court case pages 2–3 Nov 2026; 77.1%, court side 58.2% of listings); median 58 days to the next listing, stages/hearings/gap_after_unproductive.py --070",
           "href": "/report#appeal-decided"
         },
         {
