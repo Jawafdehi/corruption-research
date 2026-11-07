@@ -193,7 +193,9 @@ def build() -> dict:
         "entityResolution": {
             "defendantRows": totals["corpus_defendant_rows"],
             "distinctNames": totals["corpus_distinct_defendants"],
+            # `resolved` is a count of RECORDS; `resolvedNames` the distinct names among them.
             "resolved": totals["corpus_defendants_resolved"],
+            "resolvedNames": totals["corpus_defendants_resolved_names"],
         },
         "overTime": {
             "byVerdictYear": _rows(

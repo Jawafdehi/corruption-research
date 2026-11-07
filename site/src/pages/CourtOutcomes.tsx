@@ -651,16 +651,27 @@ export default function CourtOutcomes() {
             <p>
               {t(
                 "research.corruption.gap.fEstablishes",
-                "The archive contains {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} names, about {{pct}}, are linked to a known person or office.",
+                "The archive contains {{rows}} defendant records under {{distinct}} distinct names. Only {{resolved}} of those records ({{rpct}}), carrying {{resolvedNames}} distinct names ({{npct}} of names), are linked to a known person or office. These counts include {{inst}} records where the prosecutor was filed on the defence side; the Prosecution page leaves them out and counts {{accused}} records.",
                 {
                   rows: n(REPORT.entityResolution.defendantRows),
                   distinct: n(REPORT.entityResolution.distinctNames),
                   resolved: n(REPORT.entityResolution.resolved),
-                  pct: pct(
+                  resolvedNames: n(REPORT.entityResolution.resolvedNames),
+                  rpct: pct1(
                     (REPORT.entityResolution.resolved /
+                      REPORT.entityResolution.defendantRows) *
+                      100,
+                  ),
+                  npct: pct1(
+                    (REPORT.entityResolution.resolvedNames /
                       REPORT.entityResolution.distinctNames) *
                       100,
                   ),
+                  inst: n(
+                    REPORT.entityResolution.defendantRows -
+                      REPORT.defendants.accusedRows,
+                  ),
+                  accused: n(REPORT.defendants.accusedRows),
                 },
               )}
             </p>

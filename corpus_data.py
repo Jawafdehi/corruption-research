@@ -828,8 +828,14 @@ def _transform(cases, hearings, entities, assumptions):
     has_status = corpus.case_status.notna() & (corpus.case_status.astype(str).str.strip() != "")
     e = entities.copy()
     e["resolved"] = e.nes_id.fillna("").astype(str).str.strip() != ""
-    eg = e.groupby("side").agg(rows=("name", "size"), distinct=("name", "nunique"), resolved=("resolved", "sum"))
-    drow = eg.sort_values("rows", ascending=False).iloc[0] if len(eg) else {"rows": 0, "distinct": 0, "resolved": 0}
+    e["resolved_name"] = e.name.where(e.resolved)
+    # `resolved` counts RECORDS carrying an nes_id; `resolved_names` counts the distinct names among
+    # them. Quote the records figure against records and the names figure against names -- dividing
+    # resolved records by distinct names mixes the two units.
+    eg = e.groupby("side").agg(rows=("name", "size"), distinct=("name", "nunique"), resolved=("resolved", "sum"),
+                               resolved_names=("resolved_name", "nunique"))
+    drow = eg.sort_values("rows", ascending=False).iloc[0] if len(eg) else {
+        "rows": 0, "distinct": 0, "resolved": 0, "resolved_names": 0}
     ct_rows = [
         ["corpus_in_window", corpus_all], ["substantive", substantive],
         ["money_laundering", int(mix.get("7_money_laundering", 0))],
@@ -859,6 +865,7 @@ def _transform(cases, hearings, entities, assumptions):
         ["corpus_defendant_rows", int(drow["rows"])],
         ["corpus_distinct_defendants", int(drow["distinct"])],
         ["corpus_defendants_resolved", int(drow["resolved"])],
+        ["corpus_defendants_resolved_names", int(drow["resolved_names"])],
     ]
     # object dtype so integer counts stay ints (avoid "2,880.0") next to the one float (avg/year)
     f["corpus_totals"] = pd.DataFrame({"metric": [r[0] for r in ct_rows],

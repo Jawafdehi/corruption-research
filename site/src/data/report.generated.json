@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-10-14T12:14:49+00:00",
-    "commit": "c2be6d3",
+    "generatedAt": "2026-11-07T19:39:30+00:00",
+    "commit": "0905896",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -630,7 +630,8 @@
   "entityResolution": {
     "defendantRows": 9576,
     "distinctNames": 8321,
-    "resolved": 607
+    "resolved": 607,
+    "resolvedNames": 582
   },
   "overTime": {
     "byVerdictYear": [

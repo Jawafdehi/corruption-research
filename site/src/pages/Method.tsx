@@ -171,11 +171,12 @@ export default function Method() {
         <Body>
           {t(
             "research.corruption.method.limitsResolution",
-            "The archive carries {{rows}} defendant records covering {{distinct}} distinct names, of which {{resolved}} are matched to a known person or office. A match means identification only — it is never a statement that the person was convicted.",
+            "The archive carries {{rows}} defendant records covering {{distinct}} distinct names. {{resolved}} of the records, carrying {{resolvedNames}} distinct names, are matched to a known person or office. A match means identification only — it is never a statement that the person was convicted.",
             {
               rows: n(entityResolution.defendantRows),
               distinct: n(entityResolution.distinctNames),
               resolved: n(entityResolution.resolved),
+              resolvedNames: n(entityResolution.resolvedNames),
             },
           )}
         </Body>
