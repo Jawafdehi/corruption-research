@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Highlight, Reveal } from "@/components/highlights/Highlight";
 import { MiniTrend, type TrendPoint } from "@/components/highlights/MiniTrend";
 import { AboutResearch } from "@/components/highlights/AboutResearch";
+import { HeadlineFindings } from "@/components/highlights/HeadlineFindings";
 import { DurationSpread } from "@/components/highlights/DurationSpread";
 import {
   RouteMap,
@@ -777,6 +778,8 @@ export default function Highlights() {
 
   return (
     <div className="theme-editorial -mx-4 bg-background px-4 py-8 text-foreground md:-mx-6 md:px-6 md:py-10">
+      <HeadlineFindings />
+      <div className="mt-16" />
       <Reveal>
         <AboutResearch
           label={t("research.corruption.about.label2", "About Jawafdehi")}
