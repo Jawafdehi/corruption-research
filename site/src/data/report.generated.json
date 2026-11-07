@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "generatedAt": "2026-11-07T19:39:30+00:00",
-    "commit": "0905896",
+    "generatedAt": "2026-11-07T19:40:37+00:00",
+    "commit": "180a5de",
     "dataset": {
       "cases": {
         "rows": 2949,
@@ -1482,7 +1482,7 @@
       "key": "ciaa_success_rate_pct",
       "value": 52.67,
       "unit": "percent",
-      "note": "CIAA single-year success rate FY2081/82 (full + partial conviction; volatile YoY ~33–72%)",
+      "note": "CIAA single-year success rate FY2081/82 (207 of 393 decisions; full + partial conviction; volatile year to year: 33.43% to 88.24% across FY2069/70–2081/82 per table 3.12)",
       "source_url": "https://jawafdehi.org/material/ciaa_annual_report/ee0b4f80b24b8665"
     }
   ],
