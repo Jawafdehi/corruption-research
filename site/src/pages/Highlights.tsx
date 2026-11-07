@@ -153,6 +153,18 @@ export default function Highlights() {
       (hi, r) => (shareOf(r) > shareOf(hi) ? r : hi),
       chargeMixByYear[lowIdx],
     );
+  // Where the rebound starts: the largest one-year rise between the low and the
+  // rebound peak. The share climbs in 2080/81 already, not only in the peak year
+  // (claims ledger M016).
+  const reboundIdx = chargeMixByYear.indexOf(rebound);
+  let reboundStart = rebound;
+  for (let i = lowIdx + 1, best = -Infinity; i <= reboundIdx; i++) {
+    const rise = shareOf(chargeMixByYear[i]) - shareOf(chargeMixByYear[i - 1]);
+    if (rise > best) {
+      best = rise;
+      reboundStart = chargeMixByYear[i];
+    }
+  }
 
   /*
    * 04 — median months to verdict for each filing cohort.
@@ -776,13 +788,14 @@ export default function Highlights() {
                 n: n(corpus.fiscalYears.length),
               }),
               label: t(
-                "research.corruption.about.fYearsLabel",
-                "of CIAA and court records, {{from}} to {{to}}",
+                "research.corruption.about.fYearsLabel2",
+                "of Special Court records, {{from}} to {{to}}, read with CIAA annual reports up to {{ciaaTo}}",
                 {
                   from: fyLabel(corpus.fiscalYears[0]),
                   to: fyLabel(
                     corpus.fiscalYears[corpus.fiscalYears.length - 1],
                   ),
+                  ciaaTo: lastDisposal.fy,
                 },
               ),
             },
@@ -790,24 +803,25 @@ export default function Highlights() {
               key: "cases",
               value: n(corpus.ciaaProsecutions),
               label: t(
-                "research.corruption.about.fCases",
-                "prosecutions followed from filing to final appeal",
+                "research.corruption.about.fCases2",
+                "prosecutions followed from filing to verdict",
               ),
             },
             {
               key: "appeals",
               value: n(supremeDelay.registeredAll),
               label: t(
-                "research.corruption.about.fAppeals",
-                "Supreme Court corruption appeals measured",
+                "research.corruption.about.fAppeals2",
+                "Supreme Court corruption appeals on the register; {{m}} decided ones measured for time taken",
+                { m: n(supremeDelay.decided) },
               ),
             },
             {
               key: "open",
               value: t("research.corruption.about.fOpen", "Open"),
               label: t(
-                "research.corruption.about.fOpenLabel",
-                "every figure traced to a public source you can check",
+                "research.corruption.about.fOpenLabel2",
+                "every figure computed from published data and code; the appeal pairing is published only in aggregate",
               ),
             },
           ]}
@@ -832,7 +846,7 @@ export default function Highlights() {
           <p>
             {t(
               "research.corruption.about.b2a",
-              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of records from the ",
+              "Beyond documenting individual cases, Jawafdehi also looks at the bigger picture. Through this research, we seek to discover and rediscover gaps in Nepal's accountability system by studying 14 years of Special Court cases alongside the ",
             )}
             <a href={CITATIONS.ciaaReports} target="_blank" rel="noreferrer">
               {t("research.corruption.about.b2Ciaa", "CIAA's annual reports")}
@@ -941,7 +955,14 @@ export default function Highlights() {
               )}
               courtLabel={t("research.corruption.hl.f1Court", "To court")}
               holdLabel={t("research.corruption.hl.f1Hold", "Tameli")}
-              shareLabel={t("research.corruption.hl.f1Share", "Tameli %")}
+              decisionsLabel={t(
+                "research.corruption.hl.f1Decisions",
+                "All decisions",
+              )}
+              shareLabel={t(
+                "research.corruption.hl.f1Share2",
+                "Tameli, % of decisions",
+              )}
             />
           }
           meta={{
@@ -1014,10 +1035,11 @@ export default function Highlights() {
           )}
           explain={t(
             "research.corruption.hl.f3Body2",
-            "These cases are upheld in full about {{conv}} of the time, the highest rate of any charge, which is why they carry so much of the conviction figure for the early years. The fall is not a straight line — the share rose again in {{bumpYear}} before dropping back — so read {{first}} as the shape of one period, not of the whole record.",
+            "These cases are upheld in full about {{conv}} of the time, the highest rate of any charge, which is why they carry so much of the conviction figure for the early years. The fall is not a straight line — the share rose again in {{bumpFrom}}–{{bumpTo}} before dropping back — so read {{first}} as the shape of one period, not of the whole record.",
             {
               conv: pct(topCharge.fullPct),
-              bumpYear: fyLabel(rebound.fy),
+              bumpFrom: fyLabel(reboundStart.fy),
+              bumpTo: fyLabel(rebound.fy),
               first: pct(shareOf(fakeFirst)),
             },
           )}

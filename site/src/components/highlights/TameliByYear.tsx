@@ -18,6 +18,7 @@ export function TameliByYear({
   investigatedLabel,
   courtLabel,
   holdLabel,
+  decisionsLabel,
   shareLabel,
 }: {
   rows: readonly Disposal[];
@@ -25,6 +26,8 @@ export function TameliByYear({
   investigatedLabel: string;
   courtLabel: string;
   holdLabel: string;
+  /** The share's denominator, shown so the % can be checked against its own column. */
+  decisionsLabel: string;
   shareLabel: string;
 }) {
   const { n, pct1 } = useFormat();
@@ -58,6 +61,9 @@ export function TameliByYear({
             <th scope="col" className="py-2 pr-3 text-right font-medium">
               {holdLabel}
             </th>
+            <th scope="col" className="py-2 pr-3 text-right font-medium">
+              {decisionsLabel}
+            </th>
             <th scope="col" className="py-2 text-right font-medium">
               {shareLabel}
             </th>
@@ -89,6 +95,9 @@ export function TameliByYear({
                 </td>
                 <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
                   {n(r.tameli)}
+                </td>
+                <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-foreground/80">
+                  {n(r.total)}
                 </td>
                 <td
                   className={
