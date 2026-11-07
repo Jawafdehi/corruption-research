@@ -377,8 +377,8 @@ export default function Highlights() {
           insight: {
             kind: "gap",
             title: t(
-              "research.corruption.route.i2Title5",
-              "Six in ten complaints are placed in Tameli, but no reasons are given for these decisions",
+              "research.corruption.route.i2Title6",
+              "Six in ten complaints disposed of are placed in Tameli, and the report's table gives no reason for any one of them",
             ),
             body: (
               <>
@@ -580,13 +580,13 @@ export default function Highlights() {
             gapNote: (
               <p>
                 {t(
-                  "research.corruption.route.i6Gap4",
-                  "Of the {{all}} complaints on the Commission's books in {{fy}}, {{filed}} were filed in court — {{pct}}. Of the cases a court has decided, {{less}} did not end in full conviction. Not every complaint should lead to a prosecution, and an acquittal does not prove the Commission was wrong to bring the case. But very few complaints become cases, and more than half of the cases that do fall short of a full conviction. The published record gives no reason for either — not why a complaint was dropped, and not why a case failed — so there is no way to tell where corruption prosecution is breaking down.",
+                  "research.corruption.route.i6Gap5",
+                  "In {{fy}} the Commission filed {{filed}} cases in court in a year that registered {{fresh}} new complaints — a same-year ratio of {{pct}}, not the share of complaints that became cases, since most of those cases came from complaints made in earlier years. Of the cases a court has decided, {{less}} did not end in full conviction. Not every complaint should lead to a prosecution, and an acquittal does not prove the Commission was wrong to bring the case. But very few complaints become cases, and more than half of the cases that do fall short of a full conviction. Individual judgments give the court's reasons, but no published record gathers the reasons across cases — neither why complaints are dropped nor why cases fail — so there is no way to tell where corruption prosecution is breaking down.",
                   {
-                    all: n(cd.total_complaints),
+                    fresh: n(cd.registered_new),
                     fy: cd.fy,
                     filed: n(cd.inv_filed),
-                    pct: pct2((cd.inv_filed / cd.total_complaints) * 100),
+                    pct: pct2((cd.inv_filed / cd.registered_new) * 100),
                     less: pct1(
                       ((outcome.partial + outcome.acquitted) / decided) * 100,
                     ),

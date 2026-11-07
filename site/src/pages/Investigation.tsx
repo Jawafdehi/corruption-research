@@ -37,15 +37,18 @@ export default function Investigation() {
   const briberyAfter2 = chargeMixByYear[peakIdx + 2] ?? briberyAfter;
   const cd = REPORT.complaintDisposal[0];
 
-  const sentShare = (cd.to_investigation / cd.total_complaints) * 100;
+  // Shares at the screening stage are over the complaints DISPOSED OF in the year
+  // (तालिका २.१४), never over the year's whole workload: 7,323 of the 37,026 were
+  // still undecided at year end and have not "gone" anywhere (claims ledger M030-M036).
+  const sentShare = (cd.to_investigation / cd.disposed) * 100;
   // What the whole page adds up to: Tameli at both filters, against the year's own
   // total. The two are different populations and are never chained into a rate, but
   // they are both outcomes for complaints on the same year's books, so adding them is
   // a count of complaints -- not a conversion.
   // Both of the report's Tameli rows over the year's own total. One population, one
   // denominator -- not the two filters added together, which mixes two.
-  const tameliShareOfBooks =
-    ((cd.tameli + cd.tameli_with_advice) / cd.total_complaints) * 100;
+  const tameliShareOfDisposed =
+    ((cd.tameli + cd.tameli_with_advice) / cd.disposed) * 100;
   // NOTE on the third tile: its 137 is deliberately NOT given as a share of the 37,026.
   // Those cases came out of the 947 investigations FINISHED this year, which is a
   // different population from the 927 sent for investigation this year. Dividing one
@@ -110,10 +113,11 @@ export default function Investigation() {
               "Sent for a full investigation",
             )}
             note={t(
-              "research.corruption.investigation.tileInvestigatedNote",
-              "{{pct}} of those complaints",
+              "research.corruption.investigation.tileInvestigatedNote2",
+              "{{pct}} of the {{disposed}} complaints disposed of that year",
               {
                 pct: pct1(sentShare),
+                disposed: n(cd.disposed),
               },
             )}
           />
@@ -159,8 +163,9 @@ export default function Investigation() {
           <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
             <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
               {t(
-                "research.corruption.hl.cdTitle",
-                "One complaint in forty is sent for a full investigation",
+                "research.corruption.hl.cdTitle2",
+                "About one complaint in {{k}} disposed of is sent for a full investigation",
+                { k: n(Math.round(cd.disposed / cd.to_investigation)) },
               )}
             </h3>
             <p className="mt-3 font-mono text-2xl font-semibold tabular-nums text-accent md:text-3xl">
@@ -175,6 +180,11 @@ export default function Investigation() {
                   carried: n(cd.carried_in),
                   fresh: n(cd.registered_new),
                 },
+              )}{" "}
+              {t(
+                "research.corruption.hl.cdBase",
+                "Shares below are of the {{disposed}} complaints disposed of during the year; the {{pending}} still pending at year end are shown as a count.",
+                { disposed: n(cd.disposed), pending: n(cd.pending_out) },
               )}
             </p>
 
@@ -214,6 +224,7 @@ export default function Investigation() {
                     "research.corruption.hl.cdPending",
                     "still pending, carried to the next year",
                   ),
+                  countOnly: true,
                 },
               ].map(
                 (r: {
@@ -222,6 +233,7 @@ export default function Investigation() {
                   l: string;
                   hot?: boolean;
                   sub?: string;
+                  countOnly?: boolean;
                 }) => (
                   <li key={r.k}>
                     <div className="flex items-baseline justify-between gap-3 text-sm">
@@ -236,15 +248,17 @@ export default function Investigation() {
                       </span>
                       <span className="shrink-0 font-mono tabular-nums">
                         {n(r.v)}
-                        <span
-                          className={
-                            r.hot
-                              ? "ml-2 font-semibold text-accent"
-                              : "ml-2 text-muted-foreground"
-                          }
-                        >
-                          {pct1((r.v / cd.total_complaints) * 100)}
-                        </span>
+                        {r.countOnly ? null : (
+                          <span
+                            className={
+                              r.hot
+                                ? "ml-2 font-semibold text-accent"
+                                : "ml-2 text-muted-foreground"
+                            }
+                          >
+                            {pct1((r.v / cd.disposed) * 100)}
+                          </span>
+                        )}
                       </span>
                     </div>
                     {r.sub ? (
@@ -252,48 +266,66 @@ export default function Investigation() {
                         {r.sub}
                       </p>
                     ) : null}
+                    {r.countOnly ? null : (
                     <div className="mt-1 h-2 w-full rounded-sm bg-foreground/[0.07]">
                       <div
                         className="h-full rounded-sm"
                         style={{
-                          width: `${(r.v / cd.total_complaints) * 100}%`,
+                          width: `${(r.v / cd.disposed) * 100}%`,
                           backgroundColor: r.hot
                             ? "hsl(var(--accent))"
                             : "hsl(var(--foreground) / 0.35)",
                         }}
                       />
                     </div>
+                    )}
                   </li>
                 ),
               )}
             </ul>
           </div>
 
+          {/*
+            After the investigation, on the decision table (तालिका २.१५ series) and its
+            own total of decisions — the same base as the tile above and the Highlights
+            card. The बुँदा १३ split over 947 completed investigations (137+794+10 = 941)
+            gave 83.8% and contradicted both (claims ledger M038, M045).
+          */}
           <div className="rounded-lg border border-border bg-[hsl(var(--surface))] p-4">
             <h3 className="font-display text-lg font-bold leading-snug text-foreground md:text-xl">
               {t(
-                "research.corruption.hl.cdInvTitle",
-                "Of the {{n}} complaints investigated in full, five in six were then kept in Tameli",
-                { n: n(cd.investigations_completed) },
+                "research.corruption.hl.cdInvTitle2",
+                "Of the {{n}} decisions taken after a full investigation in {{fy}}, three in four were Tameli",
+                { n: n(last.total), fy: last.fy },
               )}
             </h3>
+            <p className="mt-0.5 text-xs leading-5 text-muted-foreground">
+              {t(
+                "research.corruption.hl.cdInvNote",
+                "{{done}} investigations were completed that year. One investigation can lead to more than one decision, so the decisions outnumber them.",
+                { done: n(cd.investigations_completed) },
+              )}
+            </p>
             <dl className="mt-4 grid grid-cols-3 gap-3">
               {[
                 {
                   k: "filed",
-                  v: cd.inv_filed,
+                  v: last.filed,
                   l: t("research.corruption.hl.cdFiled", "taken to court"),
                 },
                 {
                   k: "tameli",
-                  v: cd.inv_tameli,
+                  v: last.tameli,
                   l: t("research.corruption.hl.cdInvTameli", "kept in Tameli"),
                   hot: true,
                 },
                 {
-                  k: "held",
-                  v: cd.inv_held,
-                  l: t("research.corruption.hl.cdHeld", "held in abeyance"),
+                  k: "other",
+                  v: last.advice + last.referred + last.held,
+                  l: t(
+                    "research.corruption.hl.cdInvOther",
+                    "advice, referral or held in abeyance",
+                  ),
                 },
               ].map((r) => (
                 <div key={r.k}>
@@ -303,7 +335,7 @@ export default function Investigation() {
                   >
                     {n(r.v)}
                     <span className="ml-1.5 text-sm font-normal text-muted-foreground">
-                      {pct1((r.v / cd.investigations_completed) * 100)}
+                      {pct1((r.v / last.total) * 100)}
                     </span>
                   </dt>
                   <dd className="mt-1 text-xs leading-4 text-muted-foreground">
@@ -399,19 +431,21 @@ export default function Investigation() {
 
         <ClosingAnalysis
           headline={t(
-            "research.corruption.investigation.closeHeadline",
-            "Nearly half of every complaint ends in Tameli, and not one of those decisions carries a reason",
+            "research.corruption.investigation.closeHeadline2",
+            "Six in ten complaints disposed of end in Tameli, and the published tables give a reason for none of them",
           )}
-          stat={pct1(tameliShareOfBooks)}
+          stat={pct1(tameliShareOfDisposed)}
           statCaption={t(
-            "research.corruption.investigation.closeStat",
-            "Of the {{total}} complaints on the Commission's records in {{fy}}, {{alone}} were placed under Tameli and another {{advice}} were set aside with advice to the relevant agency. The share was even higher among complaints that had undergone a full investigation: {{after}} were placed under Tameli.",
+            "research.corruption.investigation.closeStat2",
+            "Of the {{disposed}} complaints the Commission disposed of in {{fy}} ({{total}} were on its books, {{pending}} still pending at year end), {{alone}} were placed under Tameli and another {{advice}} were set aside with advice to the relevant agency. The share was higher still after a full investigation: {{after}} of the decisions taken on investigated complaints were Tameli.",
             {
+              disposed: n(cd.disposed),
               total: n(cd.total_complaints),
+              pending: n(cd.pending_out),
               fy: cd.fy,
               alone: n(cd.tameli),
               advice: n(cd.tameli_with_advice),
-              after: pct1((cd.inv_tameli / cd.investigations_completed) * 100),
+              after: pct1(tameliPct(last)),
             },
           )}
           questionLabel={t(
@@ -431,8 +465,10 @@ export default function Investigation() {
           </p>
           <p>
             {t(
+              // TODO(claims): M046 unverified — whether any report gives per-complaint or
+              // category-level grounds for Tameli needs a read of each report's Tameli section.
               "research.corruption.investigation.closeA2",
-              "The reports count these decisions to the last complaint and explain not one of them. Nor do they say how many were ever revived, and Tameli is reversible when new evidence appears — so a count of revivals would show whether these files are being parked or simply cleared. No report has published one. What reached court instead is ",
+              "The reports count these decisions to the last complaint, but the tables that count them give no reason for any individual one. Nor do they say how many were ever revived, and Tameli is reversible when new evidence appears — so a count of revivals would show whether these files are being parked or simply cleared. No report has published one. What reached court instead is ",
             )}
             <Ref to="/prosecution#charge-mix">
               {t(

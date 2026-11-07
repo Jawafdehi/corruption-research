@@ -133,13 +133,14 @@ export default function Prosecution() {
         </SectionHeading>
         <Lede>
           {t(
-            "research.corruption.prosecution.lede",
-            "In fiscal year {{fy}}, the Commission received {{total}} complaints and filed {{filed}} cases in court, equivalent to {{pct}} of the complaints recorded that year. This section examines the types of cases filed, how filing patterns have changed over time, and the amounts claimed by the Commission.",
+            "research.corruption.prosecution.lede2",
+            "In fiscal year {{fy}}, the Commission registered {{fresh}} new complaints ({{total}} on its books, counting those carried over) and filed {{filed}} cases in court. The cases came mostly from investigations of complaints made in earlier years, so {{pct}} is a same-year ratio of cases to new complaints, not the share of complaints that became cases. This section examines the types of cases filed, how filing patterns have changed over time, and the amounts claimed by the Commission.",
             {
               total: n(cdz.total_complaints),
+              fresh: n(cdz.registered_new),
               fy: cdz.fy,
               filed: n(cdz.inv_filed),
-              pct: `${((cdz.inv_filed / cdz.total_complaints) * 100).toFixed(2)}%`,
+              pct: `${((cdz.inv_filed / cdz.registered_new) * 100).toFixed(2)}%`,
             },
           )}
         </Lede>
@@ -160,14 +161,21 @@ export default function Prosecution() {
             )}
           />
           <StatTile
-            value={n(Math.round(corpus.avgFiledPerYear))}
+            // Same base as the card beside it, money laundering excluded (claims ledger
+            // M055); corpus.avgFiledPerYear (≈211) is over all 2,949 cases.
+            value={n(
+              Math.round(
+                (corpus.ciaaProsecutions - corpus.moneyLaundering) /
+                  corpus.fiscalYears.length,
+              ),
+            )}
             label={t(
               "research.corruption.prosecution.tileRate",
               "Cases filed per year, on average",
             )}
             note={t(
-              "research.corruption.prosecution.tileRateNote",
-              "Across the {{years}}-year period.",
+              "research.corruption.prosecution.tileRateNote2",
+              "Across the {{years}}-year period, excluding money-laundering cases.",
               { years: corpus.fiscalYears.length },
             )}
           />
@@ -284,8 +292,8 @@ export default function Prosecution() {
         </SectionHeading>
         <Body>
           {t(
-            "research.corruption.size.body",
-            "Cases differ in how many people are charged together. This chart compares the average number of defendants per decided case with the share of cases in which the charge was upheld in full.",
+            "research.corruption.size.body2",
+            "Cases differ in how many accused are named together. This chart compares the average number of defendant records per decided case — charge-sheet entries, not verified individuals — with the share of cases in which the charge was upheld in full.",
           )}
         </Body>
 
@@ -306,8 +314,8 @@ export default function Prosecution() {
               "Average defendants",
             )}
             averageUnit={t(
-              "research.corruption.size.colAverageUnit",
-              "people per case",
+              "research.corruption.size.colAverageUnit2",
+              "accused per case (charge-sheet records)",
             )}
             convictionLabel={t(
               "research.corruption.size.colConviction",
@@ -333,8 +341,8 @@ export default function Prosecution() {
             bottom: pct(accusedExtremes.fewest.fullPct),
           })}
           statCaption={t(
-            "research.corruption.size.noteCaption",
-            "Full-conviction rate, from the offence charged against the most people per case ({{topAvg}}) to the one charged against the fewest ({{bottomAvg}}).",
+            "research.corruption.size.noteCaption2",
+            "Full-conviction rate, from the offence with the most defendant records per case ({{topAvg}}) to the one with the fewest ({{bottomAvg}}).",
             {
               topAvg: accusedExtremes.most.avg.toFixed(1),
               bottomAvg: accusedExtremes.fewest.avg.toFixed(1),
