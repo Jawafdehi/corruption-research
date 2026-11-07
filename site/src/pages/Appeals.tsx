@@ -134,6 +134,8 @@ export default function Appeals() {
         </SectionHeading>
         <Lede>
           {t(
+            // TODO(report): H1 — built on dataset/appeals.csv (2026-09 mapping); swap in the
+            // per-trial figures (230/565 = 40.7% vs 4/423 = 0.9%) in the later pass.
             "research.corruption.appeals.lede",
             "A verdict at the Special Court is not the end of a case. {{appeals}} Supreme Court appeals have been traced to these trials, counted once per trial and appealing side, so a trial both sides appealed counts twice. The two sides fare very differently when they get there — which means the trial-court conviction rate overstates how much accountability actually sticks.",
             { appeals: n(appeals.appeals) },
@@ -321,6 +323,8 @@ export default function Appeals() {
 
         <Body>
           {t(
+            // TODO(report): H1 — built on dataset/appeals.csv (2026-09 mapping); swap in the
+            // per-trial figures (230/565 = 40.7% vs 4/423 = 0.9%) in the later pass.
             "research.corruption.appeals.body",
             "Across {{cDecided}} decided appeals of every kind — against acquittals and against convictions alike — the Commission obtained a full reversal {{cRev}} times. Against acquittals alone, {{aRev}} of {{aDecided}} decided appeals ended in a full reversal, {{aRevIncl}} counting partial reversals. The convicted, across {{dDecided}} decided appeals, did so {{dRev}} times. Put plainly: when the Commission loses at trial, that is usually the end of it; when it wins, the verdict is considerably less secure than it looks.",
             {
