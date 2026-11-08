@@ -16,7 +16,7 @@ A corruption complaint in Nepal can pass through nine stages. At the Commission 
 
 **What the public record cannot answer.** At almost every stage the deciding fact is not published:
 - why the CIAA closes a complaint at screening (59.6% of the 29,703 complaints it closed in FY2081/82), or why it closes a particular investigation;
-- why the CIAA does not appeal a particular acquittal, why it loses the cases it loses at trial, and why it leaves some people out of a charge sheet (in 12 judgments the Special Court cleared defendants partly because the CIAA had charged selectively, among them the wide-body aircraft and Pashupatinath Jalahari cases);
+- why the CIAA does not appeal a particular acquittal, why it loses the cases it loses at trial (about 4 in 10 of its cases end in full acquittal, 39.1% of 2,649 decided, and no record says how long each was investigated or what it cost), and why it leaves some people out of a charge sheet (in 12 judgments the Special Court cleared defendants partly because the CIAA had charged selectively, among them the wide-body aircraft and Pashupatinath Jalahari cases);
 - which defendants in a partly upheld case were convicted. About a third of everyone prosecuted (34.3% of defendant entries in the court record) is in such a case;
 - how much of what a court orders in a corruption case is ever paid.
 

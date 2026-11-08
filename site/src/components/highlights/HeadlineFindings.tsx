@@ -20,6 +20,7 @@ type Finding = {
 const GAP_LABEL: Record<string, string> = {
   A: "Gap in the system",
   "A→B": "Gap in the system, which also limits this research",
+  "leak+A": "Measured leak; what it costs is not published, a gap in the system",
 };
 
 /**

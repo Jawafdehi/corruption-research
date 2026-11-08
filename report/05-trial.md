@@ -1,6 +1,47 @@
 # Stage 6: the Special Court trial
 
-The Special Court tries the cases the CIAA files. Its case records are published on the Supreme Court's website. The trial stage is not where cases wait: of 2,949 corruption cases registered FY2069/70–2082/83, 79 were pending, 77 of them registered in the last two fiscal years (court record, 2026-11-02). The leaks at this stage are in what the public record says about the outcome.
+The Special Court tries the cases the CIAA files. Its case records are published on the Supreme Court's website. The trial stage is not where cases wait: of 2,949 corruption cases registered FY2069/70–2082/83, 79 were pending, 77 of them registered in the last two fiscal years (court record, 2026-11-02). The leaks at this stage are how often the CIAA loses, and what the public record says about the outcome.
+
+## About 4 in 10 cases the CIAA takes to court end in full acquittal, after a full investigation
+
+Of 2,649 CIAA cases the Special Court has decided, 1,035 (39.1%) ended with every defendant acquitted. Another 410 (15.5%) ended in a partial conviction. The share is rising. Of verdicts given in FY2072/73–2076/77, 24.4% were full acquittals; in FY2077/78–2081/82, 50.3%. Leaving out FY2078/79, when the 2021 ruling on CIAA sting money cleared most bribery cases (78.4% acquitted that year), it is 40.8%. Each of these cases had already had a full CIAA investigation and a decision to prosecute. In court, acquitted cases took a median of 1.5 years from registration to verdict, against 1.0 year for full convictions: 1,594 case-years in all. Their charge sheets claimed at least Rs 865 crore in बिगो (the loss or unlawful gain alleged). How much the CIAA spent investigating them is not published, so nobody outside the CIAA can say what a lost case cost.
+
+**Gap type: a measured leak, plus A.** The acquittal rate is measured from the court record; it is a leak at the trial stage, not a gap in what is recorded. (A) The CIAA publishes neither how long it investigated a case before filing it nor what the investigation cost, and no review of why it loses (gap 4.3). Checked in its own annual reports FY2069/70–2081/82: its 35th report names the time taken to dispose of complaints as a problem, says it is growing and sets a target to cut it, but no report gives a figure for it, per case or on average. The cost of a lost case therefore cannot be measured from public records.
+
+**Why the CIAA loses.** In the acquittal judgments we read (next sections), the court said the evidence did not prove the charge, or the act charged was not the offence, or the CIAA's investigation was flawed. It never put the failure on the trial.
+
+**The CIAA's own figure.** The CIAA's 35th annual report (table 3.12) gives a "rate at which the offence was established" for every year since FY2059/60: 52.67% in FY2081/82, 33.43% in FY2079/80. It differs from the figures here in two ways, and once both are allowed for, the two agree:
+- *What counts as a win.* The CIAA counts a case as won if the offence was established against anyone in it, so a partial conviction is a win. Here a full acquittal is a loss, and the CIAA's rate should be compared with full plus partial convictions.
+- *Which year.* The CIAA counts a judgment in the year it receives the written judgment; this research uses the verdict date. Single years therefore differ (FY2080/81: CIAA 65.2% won, here 49.9%; FY2081/82: CIAA 52.7%, here 66.4%), but over the five years FY2077/78–2081/82 the CIAA reports 611 of 1,228 judgments won (49.8%) and the court record gives 648 of 1,303 cases with at least a partial conviction (49.7%).
+
+Both count cases, not people.
+
+**Key figures** (unit: decided Special Court cases filed by the CIAA, with a verdict published by the court; registered FY2069/70 onward; source: court record held on 2026-10-08, the dataset of inventory entry 2; 106 cases filed by other agencies, money laundering and निर्णय बदर removed):
+
+| Verdict year (FY) | Decided | Full acquittal | Share |
+|---|---:|---:|---:|
+| 2072/73–2076/77 | 903 | 220 | 24.4% |
+| 2077/78 | 130 | 42 | 32.3% |
+| 2078/79 | 328 | 257 | 78.4% |
+| 2079/80 | 255 | 81 | 31.8% |
+| 2080/81 | 465 | 233 | 50.1% |
+| 2081/82 | 125 | 42 | 33.6% |
+| 2077/78–2081/82 | 1,303 | 655 | 50.3% |
+| All years | 2,649 | 1,035 | 39.1% |
+
+| Registration to verdict | Cases with both dates | Median | More than 2 years |
+|---|---:|---:|---:|
+| Full acquittal | 984 | 1.5 years | 34.0% |
+| Partial conviction | 368 | 1.6 years | 42.7% |
+| Full conviction | 1,171 | 1.0 years | 19.4% |
+
+- **बिगो in acquitted cases:** an amount is named in 723 of the 947 acquittal judgments with a text. The median is Rs 3.7 lakh; ten cases make up 58% of the total. The ten largest were checked by hand and all are the amount claimed in the charge sheet.
+
+**What this cannot establish.**
+- A rate per person. These are cases; the court publishes one verdict per case (see the next section).
+- The full बिगो. For each case the largest single amount the judgment names is taken, which can be less than the total claimed against all defendants; 312 acquitted cases have no amount found or no judgment text. Read Rs 865 crore as a minimum.
+- Time before the case reached court. The CIAA's investigation time is not published (A, above).
+- Verdicts after 2026-10-08, and 126 decided cases whose verdict date is not in the record (left out of the year and duration tables).
 
 ## From the court's public website, nobody can tell which defendants in a case were convicted and which were cleared
 

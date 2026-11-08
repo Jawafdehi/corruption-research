@@ -68,6 +68,30 @@
       "title": "Trial (Special Court)",
       "findings": [
         {
+          "key": "lossRate",
+          "headline": "About 4 in 10 cases the CIAA takes to court end in full acquittal, after a full investigation",
+          "explain": "Of {{decided}} CIAA cases the Special Court has decided, {{acq}} ({{acqPct}}) ended with every defendant acquitted. It is getting worse: about {{earlyShare}} verdicts ended this way in {{earlyYears}}, and {{lateShare}} in {{lateYears}} ({{lateNoStingPct}} leaving out {{stingYear}}, when the sting-money ruling cleared most bribery cases). The CIAA's own report gives the same picture ({{ciaaPct}} won in those five years) but counts a partial conviction as a win. Each lost case had already cost a full investigation. Acquitted cases then spent a median {{acqYears}} years in court, against {{convYears}} for full convictions, and their charge sheets claimed at least Rs {{bigo}} in loss or gain (बिगो). How long the CIAA spent investigating them is not published. In the acquittal judgments we read, the court most often said the evidence did not prove the charge or the act charged was not the offence. It never blamed the trial.",
+          "figures": {
+            "decided": "2,649",
+            "acq": "1,035",
+            "acqPct": "39%",
+            "earlyShare": "1 in 4",
+            "earlyYears": "2072/73–2076/77",
+            "lateShare": "1 in 2",
+            "lateYears": "2077/78–2081/82",
+            "lateNoStingPct": "41%",
+            "stingYear": "2078/79",
+            "ciaaPct": "50%",
+            "acqYears": "1.5",
+            "convYears": "1.0",
+            "bigo": "865 crore"
+          },
+          "gap": "leak+A",
+          "caveat": "Cases, not people. Verdict years are Nepali fiscal years. The बिगो is a lower bound read from judgment texts.",
+          "source": "trial-acquittals/FINDING.md (card 6.5); court record 2026-10-08; CIAA 35th annual report, table 3.12",
+          "href": "/report#trial"
+        },
+        {
           "key": "whoConvicted",
           "headline": "The public cannot see which defendants were convicted and which were cleared",
           "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects {{people}} of the {{all}} people prosecuted (about {{share}}).",
