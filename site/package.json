@@ -7,7 +7,9 @@
     "data": "cd .. && python gen_site_data.py",
     "dev": "vite",
     "tunnel": "cloudflared tunnel --url http://localhost:5173",
-    "build": "tsc --noEmit && vite build",
+    "home:sync": "bash scripts/sync-home.sh",
+    "home:data": "python3 scripts/home_build_data.py",
+    "build": "npm run home:data && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy"

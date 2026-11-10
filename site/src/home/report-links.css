@@ -1,0 +1,55 @@
+/* The "Read the full report" block on the launch home page. Uses the home page's own
+   design tokens (public/home/base.css) with fallbacks, and nothing from Tailwind. */
+.jw-reportlinks {
+  background: var(--navy, #0e1f3b);
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.jw-reportlinks .in {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 36px;
+}
+.jw-reportlinks h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.jw-reportlinks ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.jw-reportlinks a {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: #fff;
+  text-decoration: none;
+}
+.jw-reportlinks a:hover,
+.jw-reportlinks a:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+.jw-reportlinks a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.jw-reportlinks b {
+  display: block;
+  font-size: 15px;
+}
+.jw-reportlinks span {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+@media print {
+  .jw-reportlinks { display: none; }
+}

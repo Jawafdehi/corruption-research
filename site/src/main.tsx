@@ -1,17 +1,19 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+// Two entry points behind one index.html.
+//
+// "/" is the launch home page: the vanilla HTML/CSS/JS page from the design work
+// (copied in by scripts/sync-home.sh), mounted by home/mount.ts. It owns the whole
+// viewport and its own header and footer, and loads neither React nor the site's
+// Tailwind stylesheet, so neither can restyle it.
+//
+// Every other path is the report: the React app in spa.tsx, unchanged.
+const base = import.meta.env.BASE_URL;
+const path = window.location.pathname;
+const isHome = path === base || path === base.replace(/\/$/, "") || path === `${base}index.html`;
 
-import App from "./App";
-import "./index.css";
+if (isHome) {
+  void import("./home/mount").then((m) => m.mountHome());
+} else {
+  void import("./spa");
+}
 
-// `BASE_URL` is "/" in dev and under the Cloudflare tunnel, and the project
-// sub-path on GitHub Pages. Passing it as the router basename keeps every
-// in-app link correct in both without a second set of paths.
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-);
+export {};

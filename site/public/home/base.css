@@ -1,0 +1,114 @@
+/* Shared tokens for all five options, taken from jawafdehi.org (services/jawafdehi-frontend/src/index.css). The site's own palette (index.css on the research
+   branch): warm off-white paper, navy ink, the accent red, the court green. Red is kept
+   for one job only: a leak. A limit of this research (B) is never red; it is grey and
+   hatched, so it can never be read as an institution failing. */
+:root {
+  --paper: #fafaf7;
+  --card: #f2f2ef;
+  --ink: #1f2a37;
+  --ink-2: #4b5563;
+  --muted: #6b7280;
+  --line: #dde1e7;
+  --navy: #0e1f3b;   /* jawafdehi.org --base-navy */
+  --cream: #fffdfa;  /* --base-cream */
+  --leak-on-dark: #e76a70; /* damo's lighter crimson hsl(357 72% 66%): 5.3:1 on navy */
+  --ciaa: #1f3a68;
+  --court: #2e4e3f;
+  --leak: #b5242c;
+  --leak-dark: #7f1a20;
+  --leak-light: #e0868b;
+  --mute: #858e9c;   /* 3:1 on paper, so the 'rest' part of a chart still counts as a mark */
+  --on: #1f3a68;
+  --focus: #2563eb;
+  --serif: "Vesper Libre", Georgia, "Noto Serif Devanagari", "Noto Sans Devanagari", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 var(--sans); }
+/* Devanagari needs a step up in size and more line height for matras above and below. */
+html[lang="ne"] body { font-size: 17px; line-height: 1.7; }
+html[lang="ne"] h1, html[lang="ne"] h2, html[lang="ne"] h3 { line-height: 1.35; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+html[lang="ne"] .num { font-family: var(--sans); letter-spacing: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Language toggle */
+.lang { display: inline-flex; border: 1px solid currentColor; border-radius: 999px; overflow: hidden; font-size: 14px; }
+.lang button { background: none; border: 0; padding: 6px 12px; min-height: 36px; }
+.lang button[aria-pressed="true"] { background: currentColor; }
+.lang button[aria-pressed="true"] span { color: var(--paper); }
+
+/* Gap chips: A / A→B / leak+A / B */
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; line-height: 1.2; padding: 3px 8px 3px 4px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--ink-2); white-space: nowrap; }
+.chip b { font-family: var(--mono); font-size: 11px; padding: 2px 5px; border-radius: 999px; background: var(--navy); color: #fff; }
+.chip[data-gap="B"] b { background: repeating-linear-gradient(135deg, #9ca3af 0 3px, #d1d5db 3px 6px); color: var(--ink); }
+.chip[data-gap="A→B"] b { background: linear-gradient(90deg, var(--navy) 55%, #9ca3af 55%); }
+
+/* Charts */
+.viz { display: block; width: 100%; height: auto; }
+.viz text { font-family: var(--sans); fill: var(--ink-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-2); margin: 8px 0 0; padding: 0; list-style: none; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.absent { display: flex; align-items: center; gap: 12px; padding: 14px; border: 2px dashed var(--leak); border-radius: 10px; color: var(--leak-dark); font-weight: 600; font-size: 15px; background: #fff; }
+.absent svg { flex: none; }
+
+/* Evidence drawer: a bottom sheet on phones, a side panel on wide screens. */
+.jw-scrim { position: fixed; inset: 0; background: rgba(14, 31, 58, .45); z-index: 50; opacity: 0; transition: opacity .2s; }
+.jw-scrim.on { opacity: 1; }
+.jw-drawer { position: fixed; z-index: 51; background: var(--paper); color: var(--ink); overflow-y: auto; box-shadow: 0 -8px 40px rgba(0,0,0,.25);
+  left: 0; right: 0; bottom: 0; max-height: 92vh; border-radius: 16px 16px 0 0; transform: translateY(100%); transition: transform .25s ease; }
+.jw-drawer.on { transform: none; }
+@media (min-width: 900px) {
+  .jw-drawer { top: 0; left: auto; width: 560px; max-height: none; border-radius: 0; transform: translateX(100%); }
+}
+.jw-drawer .in { padding: 20px 22px 40px; }
+.jw-drawer .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; position: sticky; top: 0; background: var(--paper); padding: 12px 22px; border-bottom: 1px solid var(--line); z-index: 1; }
+.jw-drawer .dlogo { height: 22px; width: auto; }
+.jw-drawer .x { background: none; border: 1px solid var(--line); border-radius: 999px; width: 40px; height: 40px; font-size: 20px; line-height: 1; }
+.jw-drawer h2 { font-family: var(--serif); font-size: 24px; line-height: 1.25; margin: 10px 0 14px; }
+.jw-drawer .big { font-family: var(--serif); font-size: 56px; line-height: 1; font-weight: 700; letter-spacing: 0; color: var(--leak); margin: 4px 0 6px; }
+.jw-drawer .big small { font-size: 22px; color: var(--ink-2); margin-left: 6px; }
+.jw-drawer .lbl { color: var(--ink-2); margin: 0 0 16px; }
+.jw-drawer section { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 18px; }
+.jw-drawer h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+html[lang="ne"] .jw-drawer h3 { letter-spacing: 0; text-transform: none; font-size: 14px; }
+.jw-drawer .src { font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); word-break: break-word; }
+.jw-drawer .cite { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13.5px; }
+.jw-drawer .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--navy); background: #fff; color: var(--navy); text-decoration: none; font-size: 14px; font-weight: 600; }
+.btn.solid { background: var(--navy); color: #fff; }
+.jw-drawer .note { font-size: 13px; color: var(--muted); }
+.jw-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 8px; z-index: 60; font-size: 14px; }
+.draft { background: #fff7e6; color: #7a4b00; font-size: 13px; padding: 6px 12px; text-align: center; border-bottom: 1px solid #f0d9a8; }
+
+@media print {
+  .jw-scrim, .lang, .no-print { display: none !important; }
+  .jw-drawer { position: static; transform: none; box-shadow: none; max-height: none; width: auto; }
+  body { background: #fff; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+.hbars { display: grid; gap: 12px; }
+.hb .hl { font-size: 14px; color: var(--ink-2); line-height: 1.35; }
+.hb .ht { height: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 4px; margin: 4px 0 2px; overflow: hidden; }
+.hb .ht i { display: block; height: 100%; }
+.hb .hv { font-size: 14px; color: var(--ink); }
+
+/* Jawafdehi Initiative brand lockup and footer, on every option. */
+.jw-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.jw-brand img { height: 30px; width: auto; display: block; }
+.jw-brand span { font-size: 12.5px; line-height: 1.25; border-left: 1px solid currentColor; padding-left: 10px; opacity: .85; }
+.jw-brand span b { display: block; font-weight: 700; }
+@media (max-width: 420px) { .jw-brand img { height: 24px; } .jw-brand span { display: none; } }
+.jw-foot { background: var(--navy); color: var(--cream); padding: 26px 20px 30px; }
+.jw-foot .in { max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between; }
+.jw-foot img { height: 34px; width: auto; display: block; }
+.jw-foot .tag { font-family: "Noto Sans Devanagari", var(--sans); font-size: 18px; font-weight: 600; color: var(--cream); }
+.jw-foot .tag::before { content: ""; display: inline-block; width: 22px; height: 3px; background: var(--leak-on-dark); vertical-align: middle; margin-right: 10px; }
+.jw-foot small { display: block; color: #c8cfdb; font-size: 13px; margin-top: 4px; }
+.jw-foot a { color: var(--cream); }
+@media print { .jw-foot { background: none; color: var(--ink); border-top: 1px solid var(--line); } .jw-foot .tag, .jw-foot a { color: var(--ink); } .jw-foot small { color: var(--muted); } }

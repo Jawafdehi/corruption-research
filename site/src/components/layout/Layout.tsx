@@ -2,7 +2,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { SECTIONS } from "@/App";
+import { SECTIONS } from "@/sections";
 import { LanguageToggle } from "@/components/layout/LanguageToggle";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CITATIONS, REPORT } from "@/data/research-corruption";

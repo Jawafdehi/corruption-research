@@ -53,6 +53,31 @@ The site is served at the root of its own domain, so the default base of `/` is
 correct everywhere and `BASE_PATH` is not set. It stays as an override only for the
 case of hosting under a sub-path again.
 
+## The home page ("/")
+
+`/` is the launch home page, "Where accountability leaks": the vanilla HTML/CSS/JS
+page from the design work (`options/7-final` in the design workspace), not a React
+page. `src/main.tsx` boots it on a full page load of `/` via `src/home/mount.ts`,
+which inserts the page's markup and loads `public/home/*` as plain scripts. It loads
+neither React nor Tailwind. Every other path is the React report, as before; the old
+landing section is now `/highlights`. In-app navigation to `/` reloads into the home
+page (`src/home/HomeReload.tsx`). `src/home/report-links.ts` adds the "Read the full
+report" links above the home page's footer.
+
+Do not edit `public/home/*`, `src/home/*.generated.ts` or `scripts/home_build_data.py`
+by hand. Pull later edits of the mockup in, then rebuild:
+
+```bash
+npm run home:sync   # copy 7-final + shared assets, regenerate findings.js
+npm run build       # reruns home:data (findings.js from src/data/*.json) first
+```
+
+`public/home/findings.js` holds every figure on the home page. `scripts/home_build_data.py`
+builds it from this checkout's `src/data/headline-findings.json` and
+`report.generated.json`, and asserts that the chart counts match those figures, so
+`npm run build` fails if the two drift apart. `public/og-image.png` comes from
+`scripts/make-og-image.py`.
+
 ## Hosting
 
 A **static-asset Worker** on Cloudflare (`wrangler.toml`, project

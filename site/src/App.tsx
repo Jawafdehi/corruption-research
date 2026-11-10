@@ -2,6 +2,9 @@ import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { Layout } from "@/components/layout/Layout";
+import { HomeReload } from "@/home/HomeReload";
+
+export { SECTIONS } from "@/sections";
 
 // Split per route. The charting library is most of the bundle and the landing
 // section does not use it, so loading it with the first chart rather than with
@@ -16,32 +19,15 @@ const CourtOutcomes = lazy(() => import("@/pages/CourtOutcomes"));
 const Appeals = lazy(() => import("@/pages/Appeals"));
 const Method = lazy(() => import("@/pages/Method"));
 
-/**
- * One route per section. The split is deliberate: these pages are written to be
- * lifted into the jawafdehi.org SPA, where the research will be arranged as
- * sections anyway — so each one is already a self-contained page component that
- * reads from `@/data/research-corruption` and takes no props.
- *
- * `label`/`blurb` are the English source copy and are handed to `t()` as the
- * default at the point of use — the same `t("key", "English default")` shape as
- * every other string on the site, so the nav translates through one mechanism
- * rather than a second one. `key` names the pair: `…nav.<key>` / `…nav.<key>Blurb`.
- */
-export const SECTIONS = [
-  { path: "/", key: "highlights", label: "Highlights", blurb: "What the research found" },
-  { path: "/report", key: "report", label: "Report", blurb: "Where accountability leaks" },
-  { path: "/investigation", key: "investigation", label: "Investigation", blurb: "Complaint to charge" },
-  { path: "/prosecution", key: "prosecution", label: "Prosecution", blurb: "What gets charged" },
-  { path: "/court-outcomes", key: "courtOutcomes", label: "Court outcomes", blurb: "What the court decides" },
-  { path: "/appeals", key: "appeals", label: "Appeals", blurb: "What survives the Supreme Court" },
-  { path: "/method", key: "method", label: "Method", blurb: "Sources, limits and provenance" },
-] as const;
 
 export default function App() {
   return (
     <Routes>
+      {/* "/" is the launch home page. It is not a React page: main.tsx boots it on a
+          full page load, so an in-app navigation to "/" reloads into it. */}
+      <Route index element={<HomeReload />} />
       <Route element={<Layout />}>
-        <Route index element={<Highlights />} />
+        <Route path="highlights" element={<Highlights />} />
         <Route path="report" element={<Report />} />
         <Route path="investigation" element={<Investigation />} />
         <Route path="prosecution" element={<Prosecution />} />
