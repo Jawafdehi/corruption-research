@@ -181,7 +181,7 @@
   const linkFor = (k) => { const u = new URL(location.href); u.hash = "f=" + k; return u.href; };
   const citation = (f) =>
     lang === "ne"
-      ? `जवाफदेही इनिशिएटिभ, "जवाफदेहिता कहाँ चुहिन्छ" (${LAUNCH ? "" : "मस्यौदा, "}कार्तिक २०८३)। निष्कर्ष: ${f.headline.ne}। ${f.href}। स्रोत: ${f.src.ne}।`
+      ? `जवाफदेही इनिशिएटिभ, "जवाफदेहिता कहाँ चुहिन्छ" (${LAUNCH ? "" : "मस्यौदा, "}कार्तिक २०८३)। निष्कर्ष: ${f.headline.ne.replace(/।$/, "")}। ${f.href}। स्रोत: ${f.src.ne}।`
       : `Jawafdehi Initiative, "Where accountability leaks" (${LAUNCH ? "" : "draft, "}November 2026). Finding: ${f.headline.en}. ${f.href}. Source: ${f.src.en}.`;
 
   let drawer, scrim, lastFocus, pushed = false, lockY = 0;

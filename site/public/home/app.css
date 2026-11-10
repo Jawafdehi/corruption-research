@@ -378,3 +378,119 @@ html[lang="ne"] .stop .who { text-transform: none; letter-spacing: 0; font-size:
   .card .kind { font-size: 10.5px; }
   .lab { font-size: 14px; }
 }
+
+/* ===================== round 6 (damo, 10 November) ===================== */
+/* Cards lead with the gap, as a bold plain sentence; the figure is the evidence underneath,
+   with its unit and base. Sizes: body text ≥ 16 px, labels ≥ 14 px (12.5 for the small label
+   row), Nepali about 10% larger. */
+.card { display: flex; flex-direction: column; align-items: stretch; gap: 5px; padding: 11px 14px 10px; }
+.card .hl { font-weight: 700; font-size: 16px; line-height: 1.32; color: var(--ink); }
+.card .ev { font-size: 15px; line-height: 1.4; color: var(--ink-2); }
+.card .ev .v { font: 700 15.5px/1.2 var(--mono); color: var(--leak); letter-spacing: -0.01em; white-space: normal; }
+.card .ft { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 12px; margin-top: 2px; }
+.card .ft .kind { font-size: 12.5px; max-width: none; text-align: left; padding: 0; letter-spacing: 0; }
+.card .go { font-size: 13.5px; font-weight: 600; color: var(--leak-dark); white-space: nowrap; }
+html[lang="ne"] .card .hl { font-size: 17.5px; line-height: 1.45; }
+html[lang="ne"] .card .ev { font-size: 16.5px; line-height: 1.5; }
+html[lang="ne"] .card .ev .v { font-family: var(--sans); font-size: 16.5px; }
+html[lang="ne"] .card .ft .kind { font-size: 13.5px; }
+/* the tap hint sits outside the card, at its left edge (desktop); none on phones */
+.hand { left: -34px; right: auto; top: 12px; bottom: auto; }
+@media (max-width: 899px) { .hand, .grp.on .card .hand { display: none !important; } }
+/* labels in the stage column and the pipe view: at least 14 px */
+.grp h2 { font-size: 14px; } .grp h2 span { font-size: 16px; } .grp .hint { font-size: 14px; }
+html[lang="ne"] .grp h2 { font-size: 15.5px; } html[lang="ne"] .grp h2 span { font-size: 17.5px; }
+.morel { font-size: 14px; } html[lang="ne"] .morel { font-size: 15.5px; }
+.more button { font-size: 16px; } html[lang="ne"] .more button { font-size: 17.5px; }
+.drip .h { font-size: 17px; font-weight: 700; order: -1; margin: 0 0 6px; } html[lang="ne"] .drip .h { font-size: 18.5px; }
+.drip .v { font-size: 26px; } .drip .u { font-size: 15px; } html[lang="ne"] .drip .u { font-size: 16.5px; }
+.lab { font-size: max(16px, 1.45vw); } html[lang="ne"] .lab { font-size: max(17.5px, 1.6vw); }
+.fnote, .per, .scale, .srcbtn, .method p, .allg .allnote { font-size: max(15px, 1em); }
+html[lang="ne"] .fnote, html[lang="ne"] .per, html[lang="ne"] .method p { font-size: 16.5px; }
+
+/* "All the leaks", in the report's ranked order: tier 1 large, tier 2 medium, tier 3 a list */
+.allg .tierh { font: 700 15px var(--sans); color: var(--leak-dark); margin: 22px 0 10px; text-transform: none; }
+html[lang="ne"] .allg .tierh { font-size: 16.5px; }
+.allg .g.tier1 { grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 14px; }
+.allg .g.tier1 .card { padding: 16px 18px 14px; border-left-width: 6px; }
+.allg .g.tier1 .card .hl { font-size: 20px; } html[lang="ne"] .allg .g.tier1 .card .hl { font-size: 22px; }
+.allg .g.tier1 .card .ev { font-size: 16px; } .allg .g.tier1 .card .ev .v { font-size: 19px; }
+.allg .g.tier2 { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.allg .g.tier3 { display: block; border-top: 1px solid var(--line); }
+.row3 { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 10px 2px; font-size: 16px; color: var(--ink); min-height: 44px; }
+.row3 .hl { font-weight: 700; } .row3 .ev { color: var(--ink-2); } .row3 .ev b { color: var(--leak); font-family: var(--mono); } .row3 .go { color: var(--leak-dark); margin-left: auto; }
+html[lang="ne"] .row3 { font-size: 17.5px; } html[lang="ne"] .row3 .ev b { font-family: var(--sans); }
+.row3:hover { background: #fff; }
+@media (max-width: 899px) { .allg .g.tier1 { grid-template-columns: 1fr; } }
+
+/* header: on phones (and in Nepali) the mark alone, then the name once */
+@media (max-width: 599px) { .top .jw-brand img { width: 22px; height: 22px; object-fit: cover; object-position: left center; } }
+html[lang="ne"] .top .jw-brand img { width: 26px; height: 30px; object-fit: cover; object-position: left center; }
+
+/* ---------- phones below 600 px: no side-by-side. A full-width ladder under the switch,
+   then the stage, then its cards, each at full width. ---------- */
+.ladder { display: none; }
+@media (max-width: 599px) {
+  .stage { display: flex; flex-direction: column; gap: 8px; padding: calc(var(--top) + var(--sw) + 6px) 14px 8px; }
+  .stage .funcol { display: none; }
+  .ladder { display: block; flex: none; }
+  .ladder ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+  .ladder li button { display: grid; grid-template-columns: 8.6em 1fr 4.6em; align-items: center; gap: 8px; width: 100%; background: none; border: 0; padding: 2px 4px; min-height: 22px; text-align: left; border-radius: 4px; color: var(--ink-2); }
+  .ladder .ln { font-size: 13.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ladder .lb { height: 10px; display: flex; justify-content: center; }
+  .ladder .lb i { display: block; height: 100%; border-radius: 3px; background: var(--ciaa); opacity: .35; }
+  .ladder .lb i.special, .ladder .lb i.supreme { background: var(--court); }
+  .ladder .lb i.none { background: repeating-linear-gradient(90deg, var(--leak) 0 3px, transparent 3px 6px); }
+  .ladder .lc { font: 700 16px/1 var(--mono); text-align: right; color: var(--ink-2); }
+  .ladder li.done .lb i { opacity: .7; }
+  .ladder li.on button { background: #e9edf4; color: var(--ink); }
+  .ladder li.on .ln { font-weight: 700; }
+  .ladder li.on .lb i { opacity: 1; }
+  .ladder li.on .lc { color: var(--navy); }
+  .ladder .lbnd { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); border-top: 1px dashed #b9c0cb; margin: 2px 4px 1px; padding-top: 1px; line-height: 1.2; }
+  html[lang="ne"] .ladder .ln { font-size: 14.5px; } html[lang="ne"] .ladder .lc { font-family: var(--sans); }
+  .read { padding-bottom: 0; }
+  .read .eyebrow { display: none; }
+  .sname { font-size: 19px; margin: 0; }
+  .count { font-size: 40px; margin: 0; }
+  .lab { font-size: 15.5px; } html[lang="ne"] .read .lab { font-size: 16px; }
+  .gaps { flex: 1 1 auto; min-height: 0; padding-top: 0; }
+  .grp .hint { display: none; }
+  .card { padding: 9px 12px 8px; }
+  .card .hl { font-size: 16px; } html[lang="ne"] .card .hl { font-size: 16.5px; line-height: 1.42; }
+  .card .ev { font-size: 14.5px; } html[lang="ne"] .card .ev { font-size: 15.5px; }
+}
+@media (max-width: 599px) and (max-height: 780px) {
+  .ladder li button { min-height: 19px; padding: 1px 4px; }
+  .count { font-size: 34px; }
+  .lab { font-size: 14.5px; line-height: 1.3; }
+  .read .row, .read .per { display: none; }
+  .card .hl { font-size: 15px; } .card .ev { font-size: 14px; }
+}
+.more button .hl { display: block; font-weight: 700; color: var(--ink); }
+.more button .ev { display: block; font-size: .92em; color: var(--ink-2); margin-top: 2px; }
+/* phones: compact enough that a stage, its ladder and two full-width cards fit on one screen */
+@media (max-width: 599px) {
+  .stage { gap: 6px; padding-top: calc(var(--top) + var(--sw) + 4px); }
+  .ladder li button { min-height: 19px; padding: 1px 4px; }
+  .ladder .lbnd { margin: 1px 4px 0; }
+  .read .srcbtn { margin-top: 0; min-height: 28px; padding: 2px 0; }
+  .read .row { margin-top: 2px; }
+  .grp h2 { margin-bottom: 4px; }
+  .cards { gap: 6px; }
+  .card { padding: 8px 11px 7px; gap: 3px; }
+  .card .hl { font-size: 15.5px; line-height: 1.28; }
+  .card .ev { font-size: 14px; line-height: 1.35; }
+  html[lang="ne"] .card .hl { font-size: 16px; line-height: 1.38; }
+  html[lang="ne"] .card .ev { font-size: 15px; line-height: 1.42; }
+  .card .ft .kind { font-size: 12px; } .card .go { font-size: 13px; }
+}
+@media (max-width: 599px) and (max-height: 780px) {
+  .ladder li button { min-height: 17px; }
+  .ladder .ln { font-size: 13px; } .ladder .lc { font-size: 15px; }
+  .sname { font-size: 17px; } .count { font-size: 30px; }
+  .lab { font-size: 14px; line-height: 1.28; }
+  .card .hl { font-size: 14.5px; } html[lang="ne"] .card .hl { font-size: 15px; }
+  .card .ev { font-size: 13.5px; } html[lang="ne"] .card .ev { font-size: 14px; }
+  .card .ft { display: none; }
+}
