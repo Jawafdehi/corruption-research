@@ -8,7 +8,7 @@ import { CITATIONS, REPORT, fyLabel, tameliPct } from "@/data/research-corruptio
 
 export default function Method() {
   const { t } = useTranslation();
-  const { n, pct1 } = useFormat();
+  const { n, pct1, date } = useFormat();
   const { assumptions, corpus, crossCheck, entityResolution, provenance } = REPORT;
 
   const years = corpus.fiscalYears;
@@ -113,7 +113,7 @@ export default function Method() {
               {crossCheck.surplusReasons.map((r) => (
                 <tr key={r.en} className="border-b border-border/60 last:border-0">
                   <th scope="row" className="py-3 pr-4 text-left font-normal text-foreground/85">
-                    {r.en}
+                    {t(`research.corruption.method.surplus.${r.en}`, r.en)}
                   </th>
                   <td className="py-3 text-right font-mono font-semibold text-foreground">{n(r.count)}</td>
                 </tr>
@@ -157,10 +157,14 @@ export default function Method() {
                   <td className="whitespace-nowrap py-3 pr-4 font-mono font-semibold text-foreground">
                     {n(a.value)}
                     {a.unit && a.unit !== "count" ? (
-                      <span className="ml-1 font-sans text-xs font-normal text-muted-foreground">{a.unit}</span>
+                      <span className="ml-1 font-sans text-xs font-normal text-muted-foreground">
+                        {t(`research.corruption.method.unit.${a.unit}`, a.unit)}
+                      </span>
                     ) : null}
                   </td>
-                  <td className="py-3 pr-4 leading-6 text-foreground/80">{a.note}</td>
+                  <td className="py-3 pr-4 leading-6 text-foreground/80">
+                    {t(`research.corruption.method.assumption.${a.key}`, a.note)}
+                  </td>
                   <td className="py-3 leading-6">
                     {a.source_url ? (
                       <Cite href={a.source_url}>{t("research.corruption.method.report", "Report")}</Cite>
@@ -300,12 +304,12 @@ export default function Method() {
               {Object.entries(provenance.dataset).map(([name, meta]) => (
                 <tr key={name} className="border-b border-border/60 last:border-0">
                   <th scope="row" className="py-3 pr-4 text-left font-normal capitalize text-foreground/85">
-                    {name}
+                    {t(`research.corruption.method.dataset.${name}`, name)}
                   </th>
                   <td className="py-3 text-right font-mono text-foreground">
                     {n(meta.rows)}{" "}
                     <span className="font-sans text-xs text-muted-foreground">
-                      {t("research.corruption.method.rowsAt", "rows · {{date}}", { date: meta.modified })}
+                      {t("research.corruption.method.rowsAt", "rows · {{date}}", { date: date(meta.modified) })}
                     </span>
                   </td>
                 </tr>

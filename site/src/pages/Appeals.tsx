@@ -26,7 +26,7 @@ import { CITATIONS, REPORT } from "@/data/research-corruption";
 
 export default function Appeals() {
   const { t } = useTranslation();
-  const { n, pct1 } = useFormat();
+  const { n, pct1, date } = useFormat();
   const { appeals, ciaa, supremeDelay } = REPORT;
   /** All-case district-court fine ledger, latest year (Supreme Court annual report). */
   const fineLast = REPORT.fineLedger[REPORT.fineLedger.length - 1];
@@ -202,11 +202,11 @@ export default function Appeals() {
         >
           {t(
             "research.corruption.appeals.tracingBody2",
-            "{{no}} of {{total}} registered appeals carry no final outcome in the records used here (pull of {{censor}}), so every rate below is computed over trials whose appeal has one. Most are still pending; some may have been decided without the outcome reaching the records. Referrals to a larger bench and adjournments are not counted as outcomes.",
+            "{{no}} of {{total}} registered appeals carry no final outcome in the records used here (collected on {{censor}}), so every rate below is computed over trials whose appeal has one. Most are still pending; some may have been decided without the outcome reaching the records. Referrals to a larger bench and adjournments are not counted as outcomes.",
             {
               no: n(appeals.appealsNoFinalOutcome),
               total: n(appeals.appealsAll),
-              censor: supremeDelay.censorDate,
+              censor: date(supremeDelay.censorDate),
             },
           )}
         </Unknown>

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
+import { startNepaliDigits } from "./lib/ne-digits";
 import "./index.css";
 
 // index.html carries the launch home page's title and share tags; each report page sets
@@ -11,7 +12,9 @@ import "./index.css";
 // `BASE_URL` is "/" in dev and under the Cloudflare tunnel, and the project
 // sub-path on GitHub Pages. Passing it as the router basename keeps every
 // in-app link correct in both without a second set of paths.
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!;
+startNepaliDigits(root);
+createRoot(root).render(
   <StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <App />

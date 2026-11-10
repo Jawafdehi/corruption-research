@@ -47,7 +47,7 @@ const JALAHARI = {
 
 export default function Prosecution() {
   const { t, language } = useTranslation();
-  const { n, pct, pct2, fy } = useFormat();
+  const { n, pct, pct2, fy, month, rsBn } = useFormat();
 
   // The worked example's round figures. Written through t() rather than concatenated,
   // because "lakh" is a word and Nepali does not put it where English does.
@@ -180,7 +180,7 @@ export default function Prosecution() {
             )}
           />
           <StatTile
-            value={`Rs ${bigoTotalBn.toFixed(1)} billion`}
+            value={rsBn(bigoTotalBn)}
             label={t(
               "research.corruption.prosecution.tileBigo",
               "Total amount claimed",
@@ -384,7 +384,7 @@ export default function Prosecution() {
             "research.corruption.month.statCaption",
             "Average filed in {{peak}}, the final month of Nepal's fiscal year, against {{otherMean}} per month across the other eleven.",
             {
-              peak: peakMonth.name,
+              peak: month(peakMonth),
               otherMean: otherMonthMean.toFixed(1),
             },
           )}
@@ -394,7 +394,7 @@ export default function Prosecution() {
               "research.corruption.month.body",
               "{{peak}}, the final month of Nepal's fiscal year, sees an average of {{peakMean}} cases filed by the Commission, compared with {{otherMean}} per month during the other eleven months. That is nearly {{morePct}} more than the monthly average for the rest of the year. The figures show a clear concentration of filings at the fiscal year's end, but the available data do not establish why it occurs or whether it is linked to investigation timelines, institutional deadlines or other factors.",
               {
-                peak: peakMonth.name,
+                peak: month(peakMonth),
                 peakMean: peakMonth.mean.toFixed(1),
                 otherMean: otherMonthMean.toFixed(1),
                 morePct: `${Math.round((peakMonth.mean / otherMonthMean - 1) * 100)}%`,
@@ -944,7 +944,7 @@ export default function Prosecution() {
             "The Commission claimed Rs {{bn}} billion. How much did courts uphold?",
             { bn: bigoTotalBn.toFixed(1) },
           )}
-          stat={`Rs ${bigoTotalBn.toFixed(1)} billion`}
+          stat={rsBn(bigoTotalBn)}
           statCaption={t(
             "research.corruption.gap.jEstablishes",
             "Across the {{n}} fiscal years for which annual reports provide totals, the Commission claimed Rs {{bn}} billion in बिगो, the amount it alleged as loss or unlawful gain in its charge sheets.",
@@ -1007,7 +1007,7 @@ export default function Prosecution() {
           title={t(
             "research.corruption.gap.kTitle",
             "The Commission files more cases in {{peak}} than in any other month. The reason remains unclear.",
-            { peak: peakMonth.name },
+            { peak: month(peakMonth) },
           )}
           stat={t("research.corruption.gap.kStat", "{{v}} cases", {
             v: peakMonth.mean.toFixed(1),
@@ -1016,7 +1016,7 @@ export default function Prosecution() {
             "research.corruption.gap.kEstablishes",
             "The Commission filed an average of {{peakMean}} cases in {{peak}}, the final month of Nepal's fiscal year, compared with {{otherMean}} per month across the other eleven months. That is nearly {{morePct}} more. The pattern is based on {{years}} complete fiscal years, although the number of filings varies considerably from year to year.",
             {
-              peak: peakMonth.name,
+              peak: month(peakMonth),
               peakMean: peakMonth.mean.toFixed(1),
               otherMean: otherMonthMean.toFixed(1),
               morePct: `${Math.round((peakMonth.mean / otherMonthMean - 1) * 100)}%`,

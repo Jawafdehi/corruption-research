@@ -93,6 +93,7 @@ export default function CourtOutcomes() {
   const lowestCharge = byCharge
     .map((c) => ({
       en: c.en,
+      ne: c.ne,
       decided: c.convicted + c.partial + c.acquitted,
       pct: outcomePct(c, "convicted"),
     }))
@@ -126,7 +127,8 @@ export default function CourtOutcomes() {
 
   const chargeRows: ChargeRow[] = byCharge.map((c) => ({
     label: language === "ne" ? c.ne : c.en,
-    sublabel: language === "ne" ? c.en : c.ne,
+    // The court's own Nepali name under the English one; a Nepali page needs no English gloss.
+    sublabel: language === "ne" ? undefined : c.ne,
     convicted: c.convicted,
     partial: c.partial,
     acquitted: c.acquitted,
@@ -208,7 +210,7 @@ export default function CourtOutcomes() {
               full: pct1(rates.convictionFullOnlyPct),
               top: pct(fake.pct),
               low: pct(lowestCharge.pct),
-              lowName: lowestCharge.en.toLowerCase(),
+              lowName: language === "ne" ? lowestCharge.ne : lowestCharge.en.toLowerCase(),
               rest: pct(restPct),
             },
           )}

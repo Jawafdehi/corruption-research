@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { useFormat } from "@/lib/format";
 
 export type TrendPoint = {
@@ -38,6 +40,7 @@ export function MiniTrend({
   ariaLabel: string;
 }) {
   const { n } = useFormat();
+  const { t } = useTranslation();
   const W = 600;
   const H = 148;
   const padX = 10;
@@ -147,8 +150,16 @@ export function MiniTrend({
 
       {/* The series as text, for a reader who cannot use the figure at all. */}
       <span className="sr-only">
-        {points.map((p) => `${p.label}: ${format(p.value)}${p.provisional ? " (provisional)" : ""}`).join(", ")}
-        {reference ? `. ${reference.label}.` : ""}
+        {points
+          .map(
+            (p) =>
+              `${p.label}: ${format(p.value)}${
+                p.provisional ? ` (${t("research.corruption.pipeline.provisional", "provisional")})` : ""
+              }`,
+          )
+          .join(", ")}
+        {/* A label that already ends a sentence ("15 म.", "…।") gets no second stop. */}
+        {reference ? `. ${reference.label}${/[.।]$/.test(reference.label) ? "" : "."}` : ""}
         {` ${n(points.length)}`}
       </span>
     </figure>

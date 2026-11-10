@@ -42,7 +42,9 @@ export function FiledByMonth({
   /** Caption on the all-month baseline, e.g. "all-month average". */
   averageLabel: string;
 }) {
-  const { n, dec1 } = useFormat();
+  const { n, dec1, month } = useFormat();
+  // The month names follow the page's language; the data carries them romanised.
+  data = data.map((d) => ({ ...d, name: month(d) }));
   const mounted = useMounted();
   const height = 300;
   // Pin the axis to [0, nice-max]: filings can't be negative, so a large SD

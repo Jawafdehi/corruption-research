@@ -58,6 +58,43 @@ export const ne: Record<string, string> = {
   "research.corruption.nav.home": "गृहपृष्ठ",
   "research.corruption.doc.title": "जवाफदेहिता कहाँ चुहिन्छ",
   "research.corruption.doc.site": "जवाफदेही इनिशिएटिभ",
+  // /highlights "headline findings": the findings' own words come from the home page's data.
+  "research.corruption.hf.eyebrow": "मुख्य निष्कर्ष",
+  "research.corruption.hf.title": "उजुरीदेखि रकम असुलीसम्म, जवाफदेहिता कहाँ चुहिन्छ",
+  "research.corruption.hf.intro":
+    "हरेक चरणमा संस्थाहरूकै अभिलेखले के देखाउँछ, सरल भाषामा। हरेक निष्कर्षबाट त्यसको विस्तृत विवरणमा जान सकिन्छ। यी निष्कर्ष मात्र हुन्; यो अनुसन्धानले कुनै सिफारिस गर्दैन।",
+  "research.corruption.hf.stage.ciaa": "उजुरी र अनुसन्धान (अख्तियार दुरुपयोग अनुसन्धान आयोग)",
+  "research.corruption.hf.stage.trial": "विशेष अदालतमा मुद्दा",
+  "research.corruption.hf.stage.appeal": "सर्वोच्च अदालतमा पुनरावेदन",
+  "research.corruption.hf.stage.recovery": "रकम असुली",
+  "research.corruption.hf.detail": "विस्तृत विवरण",
+
+  // /method tables: rows that come from the data, keyed by the data's own key.
+  "research.corruption.method.surplus.Counted in the previous year's report": "अघिल्लो वर्षको प्रतिवेदनमा गनिएको",
+  "research.corruption.method.surplus.Omitted, but confirmed by a later report": "छुटेको, तर पछिको प्रतिवेदनले पुष्टि गरेको",
+  "research.corruption.method.surplus.Recorded under a different offence label": "फरक कसुरको नाममा दर्ता गरिएको",
+  "research.corruption.method.surplus.Still unexplained": "अझै कारण नखुलेको",
+  "research.corruption.method.unit.Rs billion": "अर्ब रुपैयाँ",
+  "research.corruption.method.unit.percent": "प्रतिशत",
+  "research.corruption.method.assumption.funnel_complaints":
+    "आ.व. २०८१/८२ मा दर्ता भएका नयाँ उजुरी (तालिका २.२, चालु आ.व. महल; अघिल्लो वर्षबाट सरेका ८,४७२ उजुरी यसमा छैनन्; सो वर्ष जम्मा ३७,०२६ उजुरी लगतमा थिए)",
+  "research.corruption.method.assumption.funnel_investigated": "आ.व. २०८१/८२ मा सम्पन्न विस्तृत अनुसन्धान",
+  "research.corruption.method.assumption.funnel_filed":
+    "आ.व. २०८१/८२ मा विशेष अदालतमा दायर भ्रष्टाचार मुद्दा (भ्रष्टाचारका १३५ र सम्पत्ति शुद्धीकरणका २)",
+  "research.corruption.method.assumption.ciaa_complaints_5yr":
+    "आ.व. २०७७/७८–२०८१/८२ मा दर्ता भएका नयाँ उजुरी (पाँच वर्षको जम्मा लगत १४८,२३५ मा अघिल्लो वर्षबाट सरेका ४१,१८५ उजुरी दोहोरिएकाले घटाइएको)",
+  "research.corruption.method.assumption.ciaa_filed_5yr":
+    "आ.व. २०७७/७८–२०८१/८२ मा दायर भ्रष्टाचार मुद्दा (चार्ट ३.२ को जोड: ११३ + १३१ + १६२ + २०१ + १३७)",
+  "research.corruption.method.assumption.ciaa_damages_1yr_bn":
+    "आ.व. २०८१/८२ मा अख्तियारले दाबी गरेको बिगो (रू. ६,०१८,४७२,६९२)",
+  "research.corruption.method.assumption.ciaa_success_rate_pct":
+    "आ.व. २०८१/८२ मा अख्तियारको एक वर्षको सफलता दर (३९३ फैसलामध्ये २०७; पूर्ण र आंशिक कसुर ठहर; यो दर वर्षपिच्छे धेरै फरक पर्छ: तालिका ३.१२ अनुसार आ.व. २०६९/७०–२०८१/८२ मा ३३.४३% देखि ८८.२४% सम्म)",
+  "research.corruption.method.dataset.cases": "मुद्दा",
+  "research.corruption.method.dataset.hearings": "पेशी",
+  "research.corruption.method.dataset.entities": "पक्ष (प्रतिवादी र अन्य)",
+  "research.corruption.method.dataset.supreme appeals": "सर्वोच्च अदालतका पुनरावेदन",
+  "research.corruption.method.dataset.appeal trials": "पुनरावेदन भएका मुद्दा",
+  "research.corruption.method.dataset.acquittal appeal status": "सफाइविरुद्ध पुनरावेदनको स्थिति",
   "research.corruption.nav.homeBlurb": "जवाफदेहिता कहाँ चुहिन्छ, एक नजरमा",
   "research.corruption.nav.aria": "प्रतिवेदनका खण्डहरू",
   "research.corruption.loading": "खण्ड लोड हुँदै",

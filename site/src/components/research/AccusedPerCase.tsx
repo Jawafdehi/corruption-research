@@ -96,9 +96,9 @@ export function AccusedPerCase({
                 <th
                   scope="row"
                   className="py-2.5 pr-4 text-left text-sm font-normal text-foreground/85"
-                  title={r.ne}
+                  title={language === "ne" ? r.en : r.ne}
                 >
-                  {r.en}
+                  {language === "ne" ? r.ne : r.en}
                   {/* Spelled out, not "1,098 / 41": a bare fraction gives a reader no
                       way to tell which side is which. */}
                   <span className="mt-0.5 block text-[0.68rem] text-muted-foreground">

@@ -8,7 +8,7 @@
     "dev": "vite",
     "tunnel": "cloudflared tunnel --url http://localhost:5173",
     "home:sync": "bash scripts/sync-home.sh",
-    "home:data": "python3 scripts/home_build_data.py",
+    "home:data": "python3 scripts/home_build_data.py && node scripts/home_findings_for_highlights.mjs",
     "build": "npm run home:data && tsc --noEmit && vite build",
     "build:launch": "npm run home:data && tsc --noEmit && VITE_JW_LAUNCH=1 vite build --outDir dist-launch",
     "preview": "vite preview",
