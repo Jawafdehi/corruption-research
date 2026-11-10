@@ -38,6 +38,7 @@
     recovery: ["Supreme Court annual reports 2080/81 and 2081/82, appendix 65(क) (series from 2075/76)", "सर्वोच्च अदालतका वार्षिक प्रतिवेदन २०८०/८१ र २०८१/८२, अनुसूची ६५(क) (२०७५/७६ देखिको शृङ्खला)"],
   };
   const CAVEAT = {
+    afterInvestigation: ["Figures for 2081/82 (35th report). The CIAA's 2082/83 summary does not give this breakdown. Its own list of the commission's decisions that year does not add up (the parts sum to 1,217 against a stated 1,130): a gap in the CIAA's own reporting.", "तथ्यांक २०८१/८२ का हुन् (३५औं प्रतिवेदन)। अख्तियारको २०८२/८३ को सारांशमा यो विवरण छैन। सो वर्ष आयोगले गरेका निर्णयको सूचीको जोड पनि मिल्दैन (भागहरूको जोड १,२१७, उल्लिखित जम्मा १,१३०): यो अख्तियारकै प्रतिवेदनको कमी हो।"],
     lossRate: ["Counts cases, not people. Years are Nepali fiscal years. The amount claimed (बिगो) is a minimum, read from the judgments.", "मुद्दा गनिएको हो, व्यक्ति होइन। वर्ष नेपाली आर्थिक वर्ष हुन्। बिगो न्यूनतम रकम हो, फैसलाबाट पढिएको।"],
     whoConvicted: ["Counts defendant entries in the court record, not identified people.", "अदालतको अभिलेखमा प्रतिवादीका प्रविष्टि गनिएको हो, पहिचान भएका व्यक्ति होइन।"],
     whyAcquitted: ["Read with AI software, not yet reviewed by a lawyer. A sample: 42 judgments drawn, 31 could be used. Not a national rate.", "एआई सफ्टवेयरको सहायताले पढिएको, कानुन व्यवसायीले अझै समीक्षा गरेका छैनन्। नमुना: ४२ फैसला लिइयो, ३१ प्रयोग गर्न सकियो। राष्ट्रिय दर होइन।"],
@@ -251,6 +252,8 @@
   fix("neverListed", "explain", "appeals still open", "appeals still pending");
   fix("arson", "short.en", "865 open appeals", "865 pending appeals");
   fix("arson", "big.label.en", "open appeals still marked", "pending appeals still marked");
+  // The CIAA's own success rate: five years, so it is not read against a single year's figure.
+  fix("lossRate", "explain", "(50% won in those five years) but counts a partial conviction as a win.", "(50% won over those five years, 2077/78–2081/82) but counts a partial conviction as a win. Its latest single-year figure is 51.92% (81 of 156 verdicts, 2082/83, from the 36th report's summary).");
   // The drawer for "tracking" says the same as its card.
   fix("tracking", "big.value.en", "0", "None");
   fix("tracking", "big.value.ne", "०", "छैन");
@@ -284,6 +287,11 @@
   const walk2 = (o, isNe) => { if (!o || typeof o !== "object") return; for (const k of Object.keys(o)) { const v = o[k], ne = isNe || k === "ne" || /_ne$/.test(k);
     if (typeof v === "string") o[k] = (ne ? NE_FIXES2 : EN_FIXES2).reduce((x, [a, b]) => x.split(a).join(b), v); else if (typeof v === "object") walk2(v, ne && k !== "en"); } };
   JW.findings.forEach((f) => walk2(f, false)); JW.stages.forEach((st) => walk2(st, false));
+  // Round 7 (test/ne-fixes3.json): उजुरी before filing, कसुरदार ठहरिएका प्रतिवादी, कसुर ठहर.
+  const NE_FIXES3 = [["अख्तियारले अहिले विस्तृत अनुसन्धान गरेका धेरैजसो मुद्दा पनि दायर नगरी तामेलीमा राख्छ।", "विस्तृत अनुसन्धान सकिएका धेरैजसो उजुरी पनि अख्तियारले मुद्दा दायर नगरी तामेलीमा राख्छ।"], ["निर्णयमध्ये मुद्दा तामेली", "निर्णयमध्ये उजुरी तामेली"], ["१६% मा मुद्दा तामेलीमा", "१६% मा उजुरी तामेलीमा"], ["तामेलीमा राखिएका मुद्दाको मुद्दागत कारण", "तामेलीमा राखिएका उजुरीको उजुरीगत कारण"], ["२३० मुद्दामा ठहर पूरै", "२३० मुद्दामा कसुर ठहर पूरै"], ["दोषीले पुनरावेदन गर्दा ठहर उल्टियो", "कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा कसुर ठहर उल्टियो"], ["दोषीको पुनरावेदन: ठहर उल्टियो", "कसुरदार ठहरिएका प्रतिवादीको पुनरावेदन: कसुर ठहर उल्टियो"], ["दोषीले पुनरावेदन गर्दा ठहर पूरै उल्टिन्छ", "कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा कसुर ठहर पूरै उल्टिन्छ"], ["पढिएका १६ उल्टिएका ठहरमा", "पढिएका १६ उल्टिएका कसुर ठहरमा"], ["पढेका उल्टिएका ठहरमा सर्वोच्च", "पढेका उल्टिएका कसुर ठहरमा सर्वोच्च"], ["पढेका उल्टिएका ठहरमा (नमुना)", "पढेका उल्टिएका कसुर ठहरमा (नमुना)"], ["मुद्दामा कम्तीमा एक जना दोषी ठहर", "मुद्दामा कम्तीमा एक प्रतिवादीलाई कसुर ठहर"], ["एक जना दोषी ठहरिए", "एक जना प्रतिवादी कसुरदार ठहरिए"], ["१,६१४) मा ठहर हुन्छ", "१,६१४) मा कसुर ठहर हुन्छ"], ["दोषीले पुनरावेदन गर्दा ५९%", "कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा ५९%"], ["३३७) मा ठहर कायम रहन्छ", "३३७) मा कसुर ठहर कायम रहन्छ"], ["कायम रहने ठहरमा पुग्छन्", "कायम रहने कसुर ठहरमा पुग्छन्"], ["सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा फैसला", "सर्वोच्च अदालत: कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा फैसला"], ["(५९%) मा ठहर कायम रह्यो", "(५९%) मा कसुर ठहर कायम रह्यो"], ["नभएका सबै ठहर पनि", "नभएका सबै कसुर ठहर पनि"], ["ठहर पुनरावेदनपछि पनि कायम", "कसुर ठहर पुनरावेदनपछि पनि कायम"], ["ठहरमा पुनरावेदन अभिलेखमा छ), अन्त", "कसुर ठहरमा पुनरावेदन अभिलेखमा छ), अन्त"]];
+  const walk3 = (o, isNe) => { if (!o || typeof o !== "object") return; for (const k of Object.keys(o)) { const v = o[k], ne = isNe || k === "ne" || /_ne$/.test(k);
+    if (typeof v === "string" && ne) o[k] = NE_FIXES3.reduce((x, [a, b]) => x.split(a).join(b), v); else if (typeof v === "object") walk3(v, ne && k !== "en"); } };
+  JW.findings.forEach((f) => walk3(f, false)); JW.stages.forEach((st) => walk3(st, false));
   // Every Nepali headline is a sentence and ends in । (the recovery one could not be reached by a pair).
   JW.findings.forEach((f) => { if (!/[।?]$/.test(f.headline.ne)) f.headline.ne += "।"; });
   JW.stages.forEach((st) => walkNe(st, false));

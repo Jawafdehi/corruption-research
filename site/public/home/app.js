@@ -72,9 +72,9 @@
       { en: "{complaints} new complaints, {investigated} complaints sent on for full investigation and {filed} cases filed in court are the CIAA's own figures for {fy}, from the summary of its 36th annual report. They count different events in the same year; they do not follow one group of complaints.",
         ne: "{complaints} नयाँ उजुरी, विस्तृत अनुसन्धानका लागि पठाइएका {investigated} उजुरी र अदालतमा दायर {filed} मुद्दा अख्तियारकै ३६औं वार्षिक प्रतिवेदनको सारांशमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
       { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from many years of court records.",
-        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादीलाई कसुर ठहर भयो। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
+        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादीलाई कसुर ठहर भयो। सर्वोच्च अदालत: कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा कसुर ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
       { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
-        ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
+        ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
     ],
     latest: { en: "CIAA figures are for {fy}, from the summary of its 36th annual report (published 14 Kartik 2083). The full report is not yet online. Where the summary does not give a figure, the card uses {fyOld} (35th report) and says so.",
       ne: "अख्तियारका तथ्यांक {fy} का हुन्, ३६औं वार्षिक प्रतिवेदनको सारांशबाट (२०८३ कार्तिक १४ मा सार्वजनिक)। पूरा प्रतिवेदन अझै अनलाइन छैन। सारांशमा नभएका अंकका लागि कार्डमा {fyOld} (३५औं प्रतिवेदन) प्रयोग गरिएको छ र सोही कुरा उल्लेख छ।" },
@@ -121,10 +121,10 @@
     },
     supreme: {
       name: { en: "Supreme Court", ne: "सर्वोच्च अदालत" },
-      label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "कसुर ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्च अदालतमा पुनरावेदनपछि पनि ठहर कायम रहने अनुमानित मुद्दा" },
-      note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of cases whose appeal has been decided ({apStand} of {apDec}).", ne: "दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका मुद्दामध्ये {standRate} ({apDec} मध्ये {apStand}) मा ठहर पूरै उल्टिँदैन।" },
+      label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "कसुर ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्च अदालतमा पुनरावेदनपछि पनि कसुर ठहर कायम रहने अनुमानित मुद्दा" },
+      note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of cases whose appeal has been decided ({apStand} of {apDec}).", ne: "कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका मुद्दामध्ये {standRate} ({apDec} मध्ये {apStand}) मा कसुर ठहर पूरै उल्टिँदैन।" },
       how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}); in {apPartial} of these it overturned part of it. Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHi} in 10,000 complaints instead of {end}.",
-        ne: "हाम्रो अनुमान। दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा ठहरको केही अंश उल्टियो। अनुमानित करिब {special} कसुर ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै ठहर कायम रहन्छन् भनी मान्ने हो भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
+        ne: "हाम्रो अनुमान। कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले कसुर ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा कसुर ठहरको केही अंश उल्टियो। अनुमानित करिब {special} कसुर ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै कसुर ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
       src: { en: "Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", ne: "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (२०८३ कार्तिक १७ सम्म)" },
       href: "https://research.jawafdehi.org/appeals#appeal-asymmetry",
     },
@@ -230,7 +230,7 @@
   // with its unit and base.
   const card = (k, first, tier) => {
     const f = byKey(k), g = gapCode(f.gap), v = f.pill || t(f.card || f.big.value);
-    const ev = f.pill ? esc(t(f.tag)) : `<b class="v num">${esc(v)}${f.big.unit.en ? ` ${esc(t(f.big.unit))}` : ""}</b> ${esc(t(f.tag))}`;
+    const ev = evHTML(f) || (f.pill ? esc(t(f.tag)) : `<b class="v num">${esc(v)}${f.big.unit.en ? ` ${esc(t(f.big.unit))}` : ""}</b> ${esc(t(f.tag))}`);
     return `<button type="button" class="card${tier ? " t" + tier : ""}" data-open="${k}"><span class="hl">${esc(t(f.headline))}</span><span class="ev">${ev}</span><span class="ft"><i class="kind" data-gap="${esc(g)}">${esc(t(KIND[f.gap]))}</i><span class="go">${esc(tx("evidence"))} →</span></span>${first ? handSVG : ""}</button>`;
   };
   // The honesty label (A / A→B / B) on each card, in plain words; the drawer gives the full meaning.
@@ -240,8 +240,10 @@
     "A→B": { en: "Gap in the system; also limits this research", ne: "प्रणालीको कमी; यस अनुसन्धानको पनि सीमा" },
     B: { en: "Limit of this research", ne: "यस अनुसन्धानको सीमा" },
   };
+  // The evidence as one full sentence (evidence.js), its figure in bold.
+  const evHTML = (f) => { if (!f.ev) return ""; const sn = t({ en: f.ev.en, ne: f.ev.ne }), fg = U.lang === "ne" ? f.ev.fig_ne : f.ev.fig_en; return fg ? esc(sn).replace(esc(fg), `<b class="v num">${esc(fg)}</b>`) : esc(sn); };
   // Tier 3: one line each, opens the drawer.
-  const row3 = (k) => { const f = byKey(k), v = f.pill || t(f.card || f.big.value); return `<button type="button" class="row3" data-open="${k}"><span class="hl">${esc(t(f.headline))}</span> <span class="ev"><b class="num">${esc(v)}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}</span> <span class="go">→</span></button>`; };
+  const row3 = (k) => { const f = byKey(k), v = f.pill || t(f.card || f.big.value); return `<button type="button" class="row3" data-open="${k}"><span class="hl">${esc(t(f.headline))}</span> <span class="ev">${evHTML(f) || `<b class="num">${esc(v)}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}`}</span> <span class="go">→</span></button>`; };
   const cm = (x) => esc(x).replace(/[,.]/g, (c) => `<span class="cm">${c}</span>`);
   const instDot = (st) => `<i class="dot ${st.inst}"></i>`;
   // The eyebrow names who holds the case, so it never repeats the stage name below it.
@@ -357,11 +359,11 @@
           <h2 class="name"><span class="sr">${esc(tx("stage"))} ${N(s.n)}: </span>${esc(t(s))}</h2>
           <button type="button" class="drip" data-open="${lead.key}">
             <span class="v num${v.length > 6 ? " long" : ""}">${esc(v)}${lead.big.unit.en && !lead.pill ? ` <small>${esc(t(lead.big.unit))}</small>` : ""}</span>
-            ${lead.pill ? "" : `<span class="u">${esc(t(lead.tag))}</span>`}
+            ${lead.pill ? "" : `<span class="u">${evHTML(lead) || esc(t(lead.tag))}</span>`}
             <span class="h">${esc(t(lead.headline))}</span>
             <span class="go">${tx("evidence")} →</span>${si === 0 ? handSVG : ""}
           </button>
-          ${rest.length ? `<p class="morel">${esc(t(P.more))}</p><ul class="more">${rest.map((f) => `<li><button type="button" data-open="${f.key}"><span class="hl">${esc(t(f.headline))}</span> <span class="ev"><b class="num">${esc(f.pill || t(f.card || f.big.value))}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}</span></button></li>`).join("")}</ul>` : ""}
+          ${rest.length ? `<p class="morel">${esc(t(P.more))}</p><ul class="more">${rest.map((f) => `<li><button type="button" data-open="${f.key}"><span class="hl">${esc(t(f.headline))}</span> <span class="ev">${evHTML(f) || `<b class="num">${esc(f.pill || t(f.card || f.big.value))}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}`}</span></button></li>`).join("")}</ul>` : ""}
         </li>`;
       }).join("")}</ol>
       <div class="pend"><span class="tap" aria-hidden="true">?</span><p>${esc(t(P.end))}</p></div>

@@ -497,3 +497,12 @@ html[lang="ne"] .top .jw-brand img { width: 26px; height: 30px; object-fit: cove
 /* pipe view: seven columns are narrow between 1000 and 1250 px, so long words wrap inside the card */
 .drip, .stop { min-width: 0; overflow-wrap: anywhere; }
 @media (min-width: 1000px) and (max-width: 1250px) { .drip .h { font-size: 15px; } html[lang="ne"] .drip .h { font-size: 16px; } .drip .v { font-size: 22px; } .drip { padding: 10px 11px; } }
+/* ladder: each bar starts right after the stage name and uses the free width, so the
+   narrowing reads at a glance */
+@media (max-width: 599px) {
+  .ladder li button { grid-template-columns: 8.2em minmax(0, 1fr) 4.4em; gap: 6px; }
+  .ladder .lb { justify-content: flex-start; height: 12px; }
+  .ladder .lb i { border-radius: 2px 6px 6px 2px; }
+  html[lang="ne"] .ladder li button { grid-template-columns: 8.8em minmax(0, 1fr) 4.4em; }
+}
+@media (max-width: 340px) { .top .jw-brand span { display: none; } }

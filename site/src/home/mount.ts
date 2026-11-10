@@ -14,7 +14,7 @@ import { mountReportLinks } from "./report-links";
 const asset = (name: string) => `${import.meta.env.BASE_URL}home/${name}?v=${HOME_VERSION}`;
 
 const STYLES = ["base.css", "app.css"];
-const SCRIPTS = ["findings.js", "copy.js", "ne.js", "ui.js", "app.js"];
+const SCRIPTS = ["findings.js", "copy.js", "ne.js", "evidence.js", "ui.js", "app.js"];
 
 function addStyle(name: string) {
   return new Promise<void>((resolve) => {

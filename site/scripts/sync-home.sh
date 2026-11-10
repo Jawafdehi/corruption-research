@@ -31,7 +31,7 @@ done
 mkdir -p "$OUT/brand" "$SITE/src/home"
 
 rewrite() { sed -e 's#\.\./shared/#/home/#g' "$1" > "$2"; }
-for f in app.css app.js ui.js copy.js ne.js; do rewrite "$SRC/$f" "$OUT/$f"; done
+for f in app.css app.js ui.js copy.js ne.js evidence.js; do rewrite "$SRC/$f" "$OUT/$f"; done
 rewrite "$SH/base.css" "$OUT/base.css"
 cp "$SH"/brand/*.svg "$OUT/brand/"
 # The CIAA's 36th annual report (2082/83) figures, extracted from its summary (ciaa-2082-83/).
