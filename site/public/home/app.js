@@ -151,7 +151,8 @@
   // One scroll step per group of gap cards: up to three on wide screens; two on phones, where
   // every card is full width and leads with its sentence.
   const NARROW = matchMedia("(max-width: 599px)");
-  const PER = NARROW.matches ? 2 : 3;
+  const SHORTWIDE = matchMedia("(min-width: 600px) and (max-height: 860px)"); // e.g. 1024×768: two cards fit, three do not
+  const PER = NARROW.matches || SHORTWIDE.matches ? 2 : 3;
   const STEPS = [];
   S.forEach((st, i) => {
     const parts = PARTS[st.key] ? PARTS[st.key].map((p, j) => ({ p, gaps: st.gaps.filter((k) => PART[k] === j) })) : [{ p: null, gaps: st.gaps }];
@@ -591,6 +592,7 @@
   window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(relayout, 120); });
   RM.addEventListener?.("change", () => { if (U.view === "funnel") { render(); } });
   NARROW.addEventListener?.("change", () => location.reload()); // the steps differ (two cards a screen on phones)
+  SHORTWIDE.addEventListener?.("change", () => location.reload());
   SHORT.addEventListener?.("change", () => { if (U.view === "funnel" && !qs.has("static") && !RM.matches) { lastBox = ""; render(); } });
 
   // The tap hint shows until the reader opens any evidence, then never again.
