@@ -20,7 +20,7 @@
   }
 
   const SRC = {
-    tracking: ["CIAA website, checked on 7 and 10 November 2026 (screenshots kept); CIAA notice on online complaints, 17 Kartik 2083", "अख्तियारको वेबसाइट, सन् २०२६ नोभेम्बर ७ र १० मा जाँच गरिएको (स्क्रिनसट सुरक्षित); अनलाइन उजुरीसम्बन्धी अख्तियारको सूचना, २०८३ कात्तिक १७"],
+    tracking: ["CIAA website, checked on 7 and 10 November 2026 (screenshots kept); CIAA notice on online complaints, 17 Kartik 2083", "अख्तियारको वेबसाइट, सन् २०२६ नोभेम्बर ७ र १० मा जाँच गरिएको (स्क्रिनसट सुरक्षित); अनलाइन उजुरीसम्बन्धी अख्तियारको सूचना, २०८३ कार्तिक १७"],
     shelved: ["CIAA 35th annual report (2081/82), tables 2.13 and 2.14", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१३ र २.१४"],
     backlog: ["CIAA 35th annual report (2081/82), table 2.14 and report text", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१४ र प्रतिवेदनको पाठ"],
     afterInvestigation: ["CIAA annual reports, 2073/74 to 2081/82", "अख्तियारका वार्षिक प्रतिवेदन, २०७३/७४ देखि २०८१/८२"],
@@ -33,7 +33,7 @@
     whyLost: ["Supreme Court judgments that fully overturned a conviction: 16 drawn at random from 146 with a judgment text (decided 2075–2083 BS), and every appeal judgment that cites the 2021 ruling", "दोषी ठहर पूरै उल्टाएका सर्वोच्च अदालतका फैसला: फैसलाको पाठ भएका १४६ मध्ये जथाभावी छानिएका १६ (२०७५–२०८३ मा फैसला भएका), र सन् २०२१ को फैसला उद्धृत गर्ने सबै पुनरावेदन फैसला"],
     duration: ["Supreme Court case records, appeals registered 2064–2075 BS (2008–2018), as of 2 November 2026", "सर्वोच्च अदालतका मुद्दाका अभिलेख, २०६४–२०७५ (सन् २००८–२०१८) मा दर्ता भएका पुनरावेदन, सन् २०२६ नोभेम्बर २ सम्म"],
     hearings: ["Supreme Court case pages for corruption appeals, read on 2–3 November 2026", "भ्रष्टाचार पुनरावेदनका सर्वोच्च अदालतका मुद्दा पाना, २–३ नोभेम्बर २०२६ मा हेरिएको"],
-    neverListed: ["Supreme Court case pages for open corruption appeals, November 2026", "बाँकी भ्रष्टाचार पुनरावेदनका सर्वोच्च अदालतका मुद्दा पाना, नोभेम्बर २०२६"],
+    neverListed: ["Supreme Court case pages for pending corruption appeals, November 2026", "बाँकी भ्रष्टाचार पुनरावेदनका सर्वोच्च अदालतका मुद्दा पाना, नोभेम्बर २०२६"],
     arson: ["Supreme Court case pages, read on 1–2 November 2026", "सर्वोच्च अदालतका मुद्दा पाना, १–२ नोभेम्बर २०२६ मा हेरिएको"],
     recovery: ["Supreme Court annual reports 2080/81 and 2081/82, appendix 65(क) (series from 2075/76)", "सर्वोच्च अदालतका वार्षिक प्रतिवेदन २०८०/८१ र २०८१/८२, अनुसूची ६५(क) (२०७५/७६ देखिको शृङ्खला)"],
   };
@@ -85,7 +85,6 @@
 
   // More plain-language fixes from the word-by-word pass (round 2).
   fix("oneWay", "big.label.en", "when the convicted appeal ·", "when the convicted person appeals ·");
-  fix("neverListed", "explain", "since they were registered", "since it was registered");
   fix("duration", "viz.en", "Decided appeals by years taken; red: over six", "Decided appeals, by years taken to decide. Red: over six years.");
   fix("duration", "viz.ne", "फैसला भएका पुनरावेदन, लागेको वर्षअनुसार; रातो: छ वर्षभन्दा बढी", "फैसला भएका पुनरावेदन, फैसला हुन लागेको वर्षअनुसार। रातो: छ वर्षभन्दा बढी।");
   F("duration").viz.unit_en = F("duration").viz.unit_ne = ""; // now said in the caption
@@ -241,6 +240,10 @@
   fix("hearings", "headline.ne", "तोकिएका ४ मध्ये करिब ३ पेशी हुँदैनन्", "पेशी तोकिएका ४ मध्ये करिब ३ पटक सुनुवाइ हुँदैन");
   fix("whyAcquitted", "short.en", "Of 31 judgments with acquittals that we read (from a sample of 42):", "Of 31 judgments with acquittals that we read (from a random sample of 42):");
 
+  // "Pending", not "open", for appeals not yet decided (one word everywhere).
+  fix("neverListed", "explain", "appeals still open", "appeals still pending");
+  fix("arson", "short.en", "865 open appeals", "865 pending appeals");
+  fix("arson", "big.label.en", "open appeals still marked", "pending appeals still marked");
   // The drawer for "tracking" says the same as its card.
   fix("tracking", "big.value.en", "0", "None");
   fix("tracking", "big.value.ne", "०", "छैन");

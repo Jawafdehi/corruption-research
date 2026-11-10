@@ -35,7 +35,7 @@
     },
     cue: { en: "Scroll down", ne: "तल स्क्रोल गर्नुहोस्" },
     // One line in the intro with the two figures that matter (both from the funnel's data).
-    gist: { en: "{complaints} complaints → about {supreme} convictions that stand", ne: "{complaints} उजुरी → करिब {supreme} कायम रहने कसुर ठहर" },
+    gist: { en: "{complaints} complaints → about {supreme} cases with a conviction that stands", ne: "{complaints} उजुरी → कसुर ठहर कायम रहने करिब {supreme} मुद्दा" },
     skip: { en: "Without animation", ne: "एनिमेसनबिना" },
     skipShort: { en: "Static", ne: "स्थिर" },
     skipLong: { en: "Or read it all on one page, without animation", ne: "वा एनिमेसनबिना सबै एउटै पानामा पढ्नुहोस्" },
@@ -75,6 +75,8 @@
       { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
         ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
     ],
+    latest: { en: "Latest CIAA year in this research: {fy} (35th report). The 36th report (2082/83) came out on 14 Kartik 2083 and is not yet included.",
+      ne: "यस अनुसन्धानमा अख्तियारको पछिल्लो वर्ष: {fy} (३५औं प्रतिवेदन)। ३६औं प्रतिवेदन (२०८२/८३) २०८३ कार्तिक १४ मा सार्वजनिक भयो, यसमा अझै समावेश छैन।" },
     src: { en: "Sources: CIAA 35th annual report ({fy}); Special Court and Supreme Court case records.", ne: "स्रोत: अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}); विशेष अदालत र सर्वोच्च अदालतका मुद्दाका अभिलेख।" },
   };
 
@@ -102,8 +104,8 @@
       name: { en: "Decision to charge", ne: "मुद्दा दायर गर्ने निर्णय" },
       label: { en: "cases the CIAA filed at the Special Court", ne: "अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा" },
       note: { en: "The CIAA's own figures end here. The next two stages are our estimates.", ne: "अख्तियारको आफ्नै तथ्यांक यहीँ सकिन्छ। त्यसपछिका दुई चरण हाम्रो अनुमान हुन्।" },
-      how: { en: "Cases the CIAA filed at the Special Court in {fy} after a full investigation, from the summary of its 35th annual report. The 75% card at this stage counts something else: the CIAA's decisions after a full investigation, not investigations finished. The CIAA reports the two separately, so the 75% cannot be worked out from {investigated} → {filed}.",
-        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। यस चरणको ७५% भन्ने कार्डले फरक कुरा गन्छ: विस्तृत अनुसन्धानपछिका अख्तियारका निर्णय, सकिएका अनुसन्धान होइन। अख्तियारले यी दुई छुट्टाछुट्टै प्रकाशित गर्छ, त्यसैले ७५% लाई {investigated} → {filed} बाट निकाल्न मिल्दैन।" },
+      how: { en: "Cases the CIAA filed at the Special Court in {fy} after a full investigation, from the summary of its 35th annual report. The 75% card at this stage counts something else: the CIAA's decisions after a full investigation, not investigations finished. One finished investigation can lead to more than one decision (for example, a case filed and advice given), so the 75% cannot be worked out from {investigated} → {filed}. Counted by investigation, the share closed is even higher.",
+        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। यस चरणको ७५% भन्ने कार्डले फरक कुरा गन्छ: विस्तृत अनुसन्धानपछिका अख्तियारका निर्णय, सकिएका अनुसन्धान होइन। एउटा सम्पन्न अनुसन्धानमा एकभन्दा बढी निर्णय हुन सक्छ (जस्तै मुद्दा दायर र सुझाव), त्यसैले ७५% लाई {investigated} → {filed} बाट निकाल्न मिल्दैन। अनुसन्धानका हिसाबले गन्दा तामेलीको अनुपात अझ बढी हुन्छ।" },
       src: { en: "CIAA 35th annual report ({fy}), summary", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), सारांश" },
       href: "https://research.jawafdehi.org/report#investigation",
     },
@@ -292,7 +294,7 @@
           <div class="money"><p>${esc(t(C.money))}</p><button type="button" class="btn" data-open="recovery">${esc(tx("evidence"))}</button></div>
         </div>
       </div>
-      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p>
+      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p><p class="src">${esc(T(C.latest))}</p>
         <p class="printl"><a class="btn" href="${printHref()}">${esc(t(C.print))}</a> <span>${esc(t(C.printNote))}</span></p></div>
       <div class="allg" id="leaks"><h2>${esc(T(C.all))}</h2><p class="allnote">${esc(T(C.allNote))} ${U.reportLink("https://research.jawafdehi.org/report#ranked-leaks", esc(t(C.ranked))).replace('class="btn"', 'class="tl"')}</p><div class="g">${S.flatMap((s) => s.gaps).map((g) => card(g, false)).join("")}</div></div>
     </div></section>`;

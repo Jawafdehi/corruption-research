@@ -10,7 +10,7 @@
     "home:sync": "bash scripts/sync-home.sh",
     "home:data": "python3 scripts/home_build_data.py",
     "build": "npm run home:data && tsc --noEmit && vite build",
-    "build:launch": "VITE_JW_LAUNCH=1 npm run build",
+    "build:launch": "npm run home:data && tsc --noEmit && VITE_JW_LAUNCH=1 vite build --outDir dist-launch",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy"
