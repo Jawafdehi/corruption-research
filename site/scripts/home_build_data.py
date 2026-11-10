@@ -362,7 +362,7 @@ def build_funnel():
         "fy": cd["fy"], "complaints": n(c0), "onBooks": n(cd["total_complaints"]),
         "investigated": n(c1), "filed": n(c2),
         "lrDec": n(lr_dec), "lrConv": n(lr_dec - lr_acq), "convRate": f"{round(conv_rate * 100)}%",
-        "apDec": n(cv["decided"]), "apStand": n(cv["decided"] - cv["reversed"]), "standRate": f"{round(stand_rate * 100)}%",
+        "apDec": n(cv["decided"]), "apStand": n(cv["decided"] - cv["reversed"]), "apPartial": n(cv["partialOnly"]), "standRate": f"{round(stand_rate * 100)}%",
         "special": n(round(c3)), "supreme": n(round(c4)),
         "end": n(round(per(c4))), "endPct": pct(c4), "endHi": n(round(per(c4_hi))), "endHiPct": pct(c4_hi),
         "appealedShare": f"{round(appealed_share * 10)} in 10",

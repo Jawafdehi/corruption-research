@@ -1061,6 +1061,7 @@ window.JW = {
    "convRate": "61%",
    "apDec": "567",
    "apStand": "337",
+   "apPartial": "20",
    "standRate": "59%",
    "special": "83",
    "supreme": "50",

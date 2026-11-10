@@ -37,8 +37,8 @@
   const CAVEAT = {
     lossRate: ["Counts cases, not people. Years are Nepali fiscal years. The amount claimed (बिगो) is a minimum, read from the judgments.", "मुद्दा गनिएको हो, व्यक्ति होइन। वर्ष नेपाली आर्थिक वर्ष हुन्। बिगो न्यूनतम रकम हो, फैसलाबाट पढिएको।"],
     whoConvicted: ["Counts defendant entries in the court record, not identified people.", "अदालतको अभिलेखमा प्रतिवादीका प्रविष्टि गनिएको हो, पहिचान भएका व्यक्ति होइन।"],
-    whyAcquitted: ["Read with AI software, not yet reviewed by a lawyer. 31 judgments is a sample.", "एआई सफ्टवेयरको सहायताले पढिएको, कानुन व्यवसायीले अझै समीक्षा गरेका छैनन्। ३१ फैसला नमुना मात्र हो।"],
-    whyLost: ["Read with AI software, not yet reviewed by a lawyer. 16 judgments is a sample.", "एआई सफ्टवेयरको सहायताले पढिएको, कानुन व्यवसायीले अझै समीक्षा गरेका छैनन्। १६ फैसला नमुना मात्र हो।"],
+    whyAcquitted: ["Read with AI software, not yet reviewed by a lawyer. A sample: 42 judgments drawn, 31 could be used. Not a national rate.", "एआई सफ्टवेयरको सहायताले पढिएको, कानुन व्यवसायीले अझै समीक्षा गरेका छैनन्। नमुना: ४२ फैसला लिइयो, ३१ प्रयोग गर्न सकियो। राष्ट्रिय दर होइन।"],
+    whyLost: ["Read with AI software, not yet reviewed by a lawyer. 16 judgments is a sample, not a national rate.", "एआई सफ्टवेयरको सहायताले पढिएको, कानुन व्यवसायीले अझै समीक्षा गरेका छैनन्। १६ फैसला नमुना मात्र हो, राष्ट्रिय दर होइन।"],
   };
   JW.findings.forEach((f) => {
     const s = SRC[f.key];
@@ -97,6 +97,74 @@
   fix("recovery", "short.ne", "फछ्र्यौट", "फर्छ्यौट");
   // Curly quotes in English running text.
   JW.findings.forEach((f) => { f.explain = f.explain.replace(/"([^"]+)"/g, "“$1”"); });
+
+  // Arson chart: the "year before the drive" window overlaps the next one by two months
+  // (figure audit, FIGURES.md), so the chart compares only the 14 months before and after the fire.
+  (() => {
+    const v = F("arson").viz;
+    if (v.check[0] !== "yearBefore" || v.rows[0].v !== 17) { bad.push("arson.viz: first row is no longer the year before"); return; }
+    v.rows.shift(); v.check.shift();
+  })();
+  fix("arson", "explain", " (and 17% the year before that)", "");
+  fix("arson", "short.en", "865 files still destroyed;", "865 open appeals still have no case file;");
+  fix("arson", "short.ne", "८६५ मिसिल अझै नष्ट;", "८६५ खुला पुनरावेदनको मिसिल अझै नष्ट;");
+
+  // Card lines (round 3). Each card reads as one phrase: the big number, then what it counts,
+  // so no number stands alone without its unit. The figure itself still comes from the data:
+  // `v` is checked against the data's own value before the line is replaced.
+  const CARD = {
+    tracking: { v: ["None", "छैन"], from: "0", tag: ["Public way to look up a complaint's status", "उजुरीको स्थिति सार्वजनिक रूपमा हेर्ने उपाय"] },
+    shelved: { tag: ["complaints closed with no investigation and no reason given", "उजुरी कुनै अनुसन्धान र कारणबिनै तामेलीमा"] },
+    backlog: { tag: ["complaints still waiting; nobody says for how long", "उजुरी अझै पर्खिरहेका; कति समयदेखि, कसैले भन्दैन"] },
+    afterInvestigation: { tag: ["of decisions after a full investigation closed the case", "विस्तृत अनुसन्धानपछिका निर्णयमा मुद्दा तामेली"] },
+    lossRate: { tag: ["of CIAA cases the Special Court decided: everyone acquitted", "विशेष अदालतले फैसला गरेका अख्तियारका मुद्दामा सबैलाई सफाइ"] },
+    whoConvicted: { x: [/of ([\d,]+) /, /\(([०-९,]+) (?:अभियुक्त)?मध्ये\)/], tag: ["defendant records (of {x}) where the public page does not say who was convicted", "प्रतिवादी अभिलेख ({x} मध्ये): सार्वजनिक पानाले को दोषी ठहरियो भन्दैन"] },
+    whyAcquitted: { tag: ["judgments we read (sample of 42): the evidence did not prove the charge", "हामीले पढेका फैसलामा (४२ को नमुना): प्रमाणले अभियोग पुष्टि गरेन"] },
+    oneWay: { v: ["41%", "४१%"], from: "41% · 1%", x: [/· ([\d.]+%)$/, /· ([०-९.]+%)$/], xf: "value", tag: ["of appealed convictions are overturned, against {x} of appealed acquittals", "पुनरावेदन भएका दोषी ठहर उल्टिन्छन्; पुनरावेदन भएका सफाइ भने {x} मात्र"] },
+    whyLost: { tag: ["overturned convictions we read (a sample): the Supreme Court pointed to the investigation", "हामीले पढेका उल्टिएका ठहरमा (नमुना): सर्वोच्चले अनुसन्धानलाई औंल्यायो"] },
+    notAppealed: { x: [/\(([\d,]+ of [\d,]+)\)/, /\(([०-९,]+ मध्ये [०-९,]+)\)/], tag: ["of acquittals ({x}) have no government appeal on record", "सफाइ ({x}) मा सरकारी पुनरावेदन अभिलेखमा छैन"] },
+    duration: { tag: ["typical time for a Supreme Court appeal to be decided", "सर्वोच्चमा पुनरावेदनको फैसला हुन लाग्ने सामान्य समय"] },
+    hearings: { tag: ["of scheduled hearings ended without the appeal being heard", "तोकिएका पेशीमा पुनरावेदनको सुनुवाइ नै भएन"] },
+    neverListed: { tag: ["open appeals never once listed for a hearing", "खुला पुनरावेदन एक पटक पनि पेशीमा नचढेका"] },
+    arson: { tag: ["open Supreme Court appeals whose case file was lost in the 2025 fire", "सर्वोच्चका खुला पुनरावेदन जसको मिसिल सन् २०२५ को आगजनीमा नष्ट भयो"] },
+    noLink: { x: [/of ([\d,]+) /, /\(([०-९,]+) मध्ये\)/], tag: ["appeals (of {x}) that cannot be traced to their trial", "पुनरावेदन ({x} मध्ये) कुन मुद्दाको हो, जोड्न सकिएन"] },
+    recovery: { tag: ["No one publishes what is recovered", "असुली कति भयो, कसैले प्रकाशित गर्दैन"] },
+  };
+  JW.findings.forEach((f) => {
+    const c = CARD[f.key];
+    if (!c) { bad.push(`${f.key}: no card line`); return; }
+    if (c.v) {
+      if (f.big.value.en !== c.from) bad.push(`${f.key}: card value "${c.from}" no longer matches the data`);
+      f.card = { en: c.v[0], ne: c.v[1] };
+    }
+    // {x}: a number taken from the data's own label (never typed here); fails loudly if absent.
+    const take = (re, text) => { const m = re && text.match(re); if (!m) bad.push(`${f.key}: card number not found in its label`); return m ? m[1] : "?"; };
+    f.tag = c.x
+      ? { en: c.tag[0].replace("{x}", take(c.x[0], f.big[c.xf || "label"].en)), ne: c.tag[1].replace("{x}", take(c.x[1], f.big[c.xf || "label"].ne)) }
+      : { en: c.tag[0], ne: c.tag[1] };
+  });
+  // Units, from the figure audit (FIGURES.md, round 3).
+  // 3,038 / 8,846 count defendant records, not identified people (someone charged twice counts twice).
+  fix("whoConvicted", "short.en", "people prosecuted", "defendant records");
+  fix("whoConvicted", "short.ne", "अभियुक्त", "प्रतिवादी अभिलेख");
+  fix("whoConvicted", "big.label.en", "of 8,846 people prosecuted are in cases", "of 8,846 defendant records are in cases");
+  fix("whoConvicted", "big.label.ne", "जना (८,८४६ अभियुक्तमध्ये)", "प्रतिवादी अभिलेख (८,८४६ मध्ये)");
+  fix("whoConvicted", "explain", "the 8,846 people prosecuted (about 1 in 3).", "the 8,846 defendant records (about 1 in 3). A person charged in two cases counts twice.");
+  // 31 judgments are the usable part of a sample of 42; some of them also convicted others.
+  fix("whyAcquitted", "short.en", "Of 31 acquittals read:", "Of 31 judgments with acquittals that we read (from a sample of 42):");
+  fix("whyAcquitted", "short.ne", "पढिएका ३१ सफाइमा:", "पढिएका सफाइसहितका ३१ फैसलामा (४२ को नमुनाबाट):");
+  fix("whyAcquitted", "big.label.en", "acquittal judgments we read said", "judgments with acquittals that we read (a sample) said");
+  fix("whyAcquitted", "big.label.ne", "हामीले पढेका सफाइ फैसलामा", "हामीले पढेका सफाइसहितका फैसलामा (नमुना)");
+  fix("whyAcquitted", "explain", "In the 31 acquittal judgments we read,", "In 31 judgments with acquittals that we read (from a sample of 42; the other 11 could not be used),");
+  // The 16 readings say where the Supreme Court placed the failure; they do not show the trial judge made no mistake.
+  fix("whyLost", "headline.en", ", not on a trial judge's mistake", "");
+  fix("whyLost", "headline.ne", ", तल्लो अदालतका न्यायाधीशको गल्तीले होइन", "");
+
+  // The drawer for "tracking" says the same as its card.
+  fix("tracking", "big.value.en", "0", "None");
+  fix("tracking", "big.value.ne", "०", "छैन");
+  fix("tracking", "big.label.en", "ways to look up a complaint's status on the CIAA website", "public way to look up a complaint's status on the CIAA website");
+  fix("tracking", "big.label.ne", "अख्तियारको वेबसाइटमा उजुरीको स्थिति हेर्ने उपाय", "अख्तियारको वेबसाइटमा उजुरीको स्थिति हेर्ने सार्वजनिक उपाय");
 
   if (bad.length) { console.error("copy.js: text no longer matches the data:\n" + bad.join("\n")); window.JW_COPY_ERRORS = bad; }
 })();

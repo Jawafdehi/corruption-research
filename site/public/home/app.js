@@ -16,6 +16,8 @@
   const inN = (s) => (U.lang === "ne" ? String(s).replace(/(\d+) in (\d+)/, (m, a, b) => `${dev(b)} मा ${dev(a)}`) : s);
   // Fill {key} from the funnel's computed values, with Nepali digits in Nepali.
   const fill = (s) => s.replace(/\{(\w+)\}/g, (m, k) => {
+    if (k === "nLeaks") return N(JW.findings.length);
+    if (k === "perK") return N(Math.ceil(F.end.per10k / 10)); // "fewer than N in 1,000", from the end figure
     if (k === "toInv") return N(byKey("shelved").viz.parts.find((p) => p.tone === "on").v);
     const v = V[k]; if (v == null) throw new Error("no value " + k);
     if (/ in /.test(v)) return inN(v);
@@ -49,19 +51,24 @@
     stands: { en: "End in a conviction that stands", ne: "कायम रहने दोषी ठहरमा पुग्ने" },
     leaked: { en: "Lost along the way", ne: "बीच बाटोमै छुटेका" },
     endLine: {
-      en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than 2 in 1,000.",
-      ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मात्र सर्वोच्च अदालतपछि पनि कायम रहने दोषी ठहरमा पुग्छन्: १,००० मा २ भन्दा कम।",
+      en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than {perK} in 1,000.",
+      ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मात्र सर्वोच्च अदालतपछि पनि कायम रहने दोषी ठहरमा पुग्छन्: १,००० मा {perK} भन्दा कम।",
     },
     money: { en: "And the money? No one publishes how much is recovered from corruption judgments.", ne: "अनि रकम? भ्रष्टाचारका फैसलाबाट कति रकम असुल भयो, कसैले प्रकाशित गर्दैन।" },
     how: { en: "How we counted", ne: "हामीले कसरी गन्यौं" },
-    all: { en: "All 16 leaks, with evidence", ne: "सबै १६ चुहावट, प्रमाणसहित" },
+    print: { en: "Print or save as PDF", ne: "प्रिन्ट गर्नुहोस् वा PDF मा सुरक्षित गर्नुहोस्" },
+    printNote: { en: "The whole page, without animation, ready to print.", ne: "पूरा पाना, एनिमेसनबिना, प्रिन्टका लागि तयार।" },
+    all: { en: "All {nLeaks} leaks, with evidence", ne: "सबै {nLeaks} चुहावट, प्रमाणसहित" },
+    allNote: { en: "These are the report's {nLeaks} headline findings, one card each. The full report also ranks the leaks by size and by how sure we are; that list groups some of these together and adds a few about how cases are charged and recorded.",
+      ne: "यी प्रतिवेदनका {nLeaks} मुख्य निष्कर्ष हुन्, हरेकको एउटा कार्ड। पूरा प्रतिवेदनले चुहावटलाई आकार र हामी कत्तिको निश्चित छौं भन्ने आधारमा क्रमबद्ध पनि गर्छ; त्यो सूचीले यीमध्ये केहीलाई एकै ठाउँ राख्छ र मुद्दा कसरी चलाइन्छ र अभिलेख कसरी राखिन्छ भन्नेबारे केही थप्छ।" },
+    ranked: { en: "The ranked list", ne: "क्रमबद्ध सूची" },
     method: [
       { en: "No public record follows a complaint all the way from the CIAA to the Supreme Court. That is itself one of the gaps. So we take one year's complaints and apply the rate measured at each later stage.",
         ne: "कुनै उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म पछ्याउने सार्वजनिक अभिलेख छैन। यो आफैंमा एउटा कमी हो। त्यसैले हामीले एक वर्षका उजुरी लिएर त्यसपछिका हरेक चरणमा नापिएको दर लागू गरेका छौं।" },
       { en: "{complaints} new complaints, {investigated} full investigations completed and {filed} cases filed in court are the CIAA's own figures for {fy}, from its 35th annual report. They count different events in the same year; they do not follow one group of complaints.",
         ne: "{complaints} नयाँ उजुरी, सम्पन्न {investigated} विस्तृत अनुसन्धान र अदालतमा दायर {filed} मुद्दा अख्तियारकै ३५औं वार्षिक प्रतिवेदनमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
-      { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of {apDec} decided appeals ({standRate}). Both rates come from many years of court records.",
-        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक जना दोषी ठहरिए। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा फैसला भएका {apDec} पुनरावेदनमध्ये {apStand} ({standRate}) मा ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
+      { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from many years of court records.",
+        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक जना दोषी ठहरिए। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
       { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
         ne: "त्यसैले फनेलले प्रणालीमा एउटा उजुरीको सम्भावना देखाउँछ, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
     ],
@@ -109,9 +116,9 @@
     supreme: {
       name: { en: "Supreme Court", ne: "सर्वोच्च अदालत" },
       label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "दोषी ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्चमा पुनरावेदनपछि पनि ठहर कायम रहने अनुमानित मुद्दा" },
-      note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of decided appeals ({apStand} of {apDec}).", ne: "दोषीले पुनरावेदन गर्दा फैसला भएका पुनरावेदनमध्ये {standRate} ({apDec} मध्ये {apStand}) मा ठहर पूरै उल्टिँदैन।" },
-      how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of {apDec} decided appeals ({standRate}). Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHi} in 10,000 complaints instead of {end}.",
-        ne: "हाम्रो अनुमान। दोषीले पुनरावेदन गर्दा फैसला भएका {apDec} पुनरावेदनमध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले ठहर पूरै उल्टाएन। अनुमानित करिब {special} दोषी ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
+      note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of cases whose appeal has been decided ({apStand} of {apDec}).", ne: "दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका मुद्दामध्ये {standRate} ({apDec} मध्ये {apStand}) मा ठहर पूरै उल्टिँदैन।" },
+      how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}); in {apPartial} of these it overturned part of it. Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHi} in 10,000 complaints instead of {end}.",
+        ne: "हाम्रो अनुमान। दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा ठहरको केही अंश उल्टियो। अनुमानित करिब {special} दोषी ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
       src: { en: "Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", ne: "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (३ नोभेम्बर २०२६ सम्म)" },
       href: "https://research.jawafdehi.org/appeals#appeal-asymmetry",
     },
@@ -121,13 +128,14 @@
       note: { en: "", ne: "" },
     },
   };
-  // The Supreme Court has eight leaks; they come in two screens of four.
-  const PARTS = { supreme: [{ en: "The appeal", ne: "पुनरावेदन" }, { en: "Delays and lost files", ne: "ढिलाइ र नष्ट मिसिल" }] };
+  // The Supreme Court has eight leaks; they come in three screens (3, 3, 2), so every group
+  // fits on a 360×740 phone with its full card lines.
+  const PARTS = { supreme: [{ en: "The appeal", ne: "पुनरावेदन" }, { en: "Why convictions fall, and how long it takes", ne: "ठहर किन उल्टिन्छ, र कति समय लाग्छ" }, { en: "Appeals left waiting, files lost", ne: "अलपत्र पुनरावेदन, नष्ट मिसिल" }] };
 
-  // One scroll step per group of up to four gap cards.
-  const STEPS = [];
+  // One scroll step per group of up to three gap cards.
+  const STEPS = [], PER = 3;
   S.forEach((st, i) => {
-    const n = Math.ceil(st.gaps.length / 4) || 1, per = Math.ceil(st.gaps.length / n);
+    const n = Math.ceil(st.gaps.length / PER) || 1, per = Math.ceil(st.gaps.length / n);
     for (let j = 0; j < n; j++) STEPS.push({ s: i, gaps: st.gaps.slice(j * per, (j + 1) * per), part: PARTS[st.key] ? PARTS[st.key][j] : null });
   });
   const NST = STEPS.length, LASTSTEP = NST - 1;
@@ -197,7 +205,7 @@
   /* ---------- markup ---------- */
   const handSVG = `<span class="hand" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path fill="#0e1f3b" stroke="#fff" stroke-width="1.2" paint-order="stroke" d="M9 11.24V7.5C9 6.12 10.12 5 11.5 5S14 6.12 14 7.5v3.74c1.21-.81 2-2.18 2-3.74C16 5.01 13.99 3 11.5 3S7 5.01 7 7.5c0 1.56.79 2.93 2 3.74zm9.84 4.63l-4.54-2.26c-.17-.07-.35-.11-.54-.11H13v-6c0-.83-.67-1.5-1.5-1.5S10 6.67 10 7.5v10.74l-3.43-.72c-.08-.01-.15-.03-.24-.03-.31 0-.59.13-.79.33l-.79.8 4.94 4.94c.27.27.65.44 1.06.44h6.79c.75 0 1.33-.55 1.44-1.28l.75-5.27c.01-.07.02-.14.02-.2 0-.62-.38-1.16-.91-1.38z"/></svg></span>`;
   const card = (k, first) => {
-    const f = byKey(k), g = gapCode(f.gap), v = f.pill || t(f.big.value);
+    const f = byKey(k), g = gapCode(f.gap), v = f.pill || t(f.card || f.big.value);
     return `<button type="button" class="card" data-open="${k}"><b class="v num${v.length > 5 ? " long" : ""}">${esc(v)}${f.big.unit.en && !f.pill ? ` <small>${esc(t(f.big.unit))}</small>` : ""}</b><span class="tg">${esc(t(f.tag))}</span><i class="kind" data-gap="${esc(g)}">${esc(t(KIND[f.gap]))}</i>${first ? handSVG : ""}</button>`;
   };
   // The honesty label (A / A→B / B) on each card, in plain words; the drawer gives the full meaning.
@@ -215,6 +223,7 @@
   const perTxt = (st) => (st.per10k == null ? "" : `${esc(t(C.per))} <b class="num">${approx(st)}${N(st.per10k)}</b>`);
   const skipHref = (on) => { const u = new URL(location.href); u.hash = ""; on ? u.searchParams.set("static", "1") : u.searchParams.delete("static"); u.searchParams.delete("at"); return u.pathname + u.search; };
 
+  const printHref = () => { const u = new URL(skipHref(true), location.href); u.searchParams.set("view", "funnel"); u.searchParams.set("print", "1"); return u.pathname + u.search; };
   const isStatic = () => qs.has("static") || RM.matches;
   // The Funnel | Pipeline switch opens the middle part; it sticks while the reader is in it.
   const switchHTML = (live) => `<div class="switch" id="switch"><div class="swin"><span class="swl" id="swl">${esc(tx("viewLabel"))}</span><span data-viewtoggle></span>${U.view === "funnel" ? `<a class="skip" id="skip" href="${skipHref(live)}">${esc(t(live ? C.skip : C.animated))}</a>` : ""}</div></div>`;
@@ -226,7 +235,6 @@
       <h1>${esc(t(C.q)).replace("{n}", `<span class="num">${cm(N(S[0].count))}</span>`)}</h1>
       <p class="sub">${esc(t(C.sub))}</p>
       <p class="cue" aria-hidden="true">${esc(t(C.cue))}<svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 8l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
-      <a class="skip2" href="${skipHref(true)}">${esc(t(C.skipLong))}</a>
     </div></section>`;
   }
 
@@ -277,8 +285,9 @@
           <div class="money"><p>${esc(t(C.money))}</p><button type="button" class="btn" data-open="recovery">${esc(tx("evidence"))}</button></div>
         </div>
       </div>
-      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p></div>
-      <div class="allg" id="leaks"><h2>${esc(t(C.all))}</h2><div class="g">${S.flatMap((s) => s.gaps).map((g) => card(g, false)).join("")}</div></div>
+      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p>
+        <p class="printl"><a class="btn" href="${printHref()}">${esc(t(C.print))}</a> <span>${esc(t(C.printNote))}</span></p></div>
+      <div class="allg" id="leaks"><h2>${esc(T(C.all))}</h2><p class="allnote">${esc(T(C.allNote))} ${U.reportLink("https://research.jawafdehi.org/report#ranked-leaks", esc(t(C.ranked))).replace('class="btn"', 'class="tl"')}</p><div class="g">${S.flatMap((s) => s.gaps).map((g) => card(g, false)).join("")}</div></div>
     </div></section>`;
   }
 
@@ -302,7 +311,7 @@
       <ol class="stops">${JW.stages.map((s, si) => {
         const lead = byKey(LEAD[s.key]);
         const rest = JW.findings.filter((f) => f.stage === s.key && f.key !== lead.key);
-        const v = lead.pill || t(lead.big.value); // recovery shows "?", as on the funnel
+        const v = lead.pill || t(lead.card || lead.big.value); // recovery shows "?", as on the funnel
         return `<li class="stop" data-inst="${s.inst}">
           <span class="joint" aria-hidden="true">${N(s.n)}</span>
           <p class="who">${esc(t(JW.institutions[s.inst]))}</p>
@@ -312,7 +321,7 @@
             <span class="h">${esc(t(lead.headline))}</span>
             <span class="go">${tx("evidence")} →</span>${si === 0 ? handSVG : ""}
           </button>
-          ${rest.length ? `<p class="morel">${esc(t(P.more))}</p><ul class="more">${rest.map((f) => `<li><button type="button" data-open="${f.key}"><b class="num">${esc(f.pill || t(f.big.value))}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.headline))}</button></li>`).join("")}</ul>` : ""}
+          ${rest.length ? `<p class="morel">${esc(t(P.more))}</p><ul class="more">${rest.map((f) => `<li><button type="button" data-open="${f.key}"><b class="num">${esc(f.pill || t(f.card || f.big.value))}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}</button></li>`).join("")}</ul>` : ""}
         </li>`;
       }).join("")}</ol>
       <div class="pend"><span class="tap" aria-hidden="true">?</span><p>${esc(t(P.end))}</p></div>
@@ -334,7 +343,7 @@
           <p class="note">${perTxt(st)}</p>
           <section><h3>${esc(tx("howCounted"))}</h3><p>${esc(T(sc.how))}</p></section>
           <section><h3>${esc(tx("source"))}</h3><p class="src">${esc(T(sc.src))}</p>
-            <div class="acts"><a class="btn" href="${esc(sc.href)}" target="_blank" rel="noopener">${esc(tx("readMore"))} →</a></div></section>`,
+            <div class="acts">${U.reportLink(sc.href, esc(tx("readMore")))}</div></section>`,
       };
     };
   });
@@ -420,7 +429,8 @@
     const s = Math.min(fb.width / W, fb.height / H), oy = fb.height - H * s;
     const levelPx = fb.top - sb.top + oy + Y[STEPS[active].s] * s;
     const g = el.grps[active], gh = g.offsetHeight, home = gb.top - sb.top - (parseFloat(el.gaps.dataset.y) || 0);
-    const y = Math.max(0, Math.min(levelPx - 46 - home, sb.height - gh - home - 16));
+    const c0 = g.querySelector(".card"), aim = c0 ? c0.offsetTop + c0.offsetHeight / 2 : 46;
+    const y = Math.max(0, Math.min(levelPx - aim - home, sb.height - gh - home - 16));
     el.gaps.dataset.y = y.toFixed(0);
     el.gaps.style.transform = `translateY(${y.toFixed(0)}px)`;
   }
@@ -550,5 +560,9 @@
 
   U.onRender(() => { lastBox = ""; render(); });
   // Fonts change the column sizes: lay out again once they are in, then honour ?at=.
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { lastBox = ""; relayout(); goAt(); });
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    lastBox = ""; relayout(); goAt();
+    // ?print=1 (from "Print or save as PDF"): the one-page version, straight to the print dialog.
+    if (qs.has("print") && mode === "static") setTimeout(() => window.print(), 300);
+  });
 })();

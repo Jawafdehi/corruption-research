@@ -49,6 +49,12 @@ export async function mountHome() {
   document.body.insertAdjacentHTML("afterbegin", HOME_MARKUP);
   mountReportLinks();
 
+  // The one launch flag: VITE_JW_LAUNCH=1 (npm run build:launch) drops the "draft" line and
+  // the "draft" in citations. JW_IN_SITE makes evidence links stay on this site.
+  const w = window as unknown as { JW_LAUNCH?: boolean; JW_IN_SITE?: boolean };
+  w.JW_LAUNCH = import.meta.env.VITE_JW_LAUNCH === "1";
+  w.JW_IN_SITE = true;
+
   await Promise.all(STYLES.map(addStyle));
   // async=false keeps execution in insertion order while the files download in parallel.
   await Promise.all(SCRIPTS.map(addScript));

@@ -170,6 +170,11 @@
      A bottom sheet on phones, a side panel on wide screens. Opens on tap; closes on the X,
      a tap on the backdrop, a swipe down (phones), Esc, or the browser's back button.
      The page underneath never moves: it is locked in place while the drawer is open. */
+  // Inside the real site (window.JW_IN_SITE), report links stay on this site, in this tab;
+  // in the mockup they open research.jawafdehi.org in a new tab. Citations keep the full URL.
+  const reportLink = (h, label) => window.JW_IN_SITE
+    ? `<a class="btn" href="${esc(h.replace(/^https:\/\/research\.jawafdehi\.org/, ""))}">${label} →</a>`
+    : `<a class="btn" href="${esc(h)}" target="_blank" rel="noopener">${label} →</a>`;
   const linkFor = (k) => { const u = new URL(location.href); u.hash = "f=" + k; return u.href; };
   const citation = (f) =>
     lang === "ne"
@@ -205,7 +210,7 @@
             <button type="button" class="btn" data-a="cite">${tx("copyCite")}</button>
             ${navigator.share ? `<button type="button" class="btn" data-a="share">${tx("share")}</button>` : ""}
             <button type="button" class="btn" data-a="print">${tx("print")}</button>
-            <a class="btn" href="${esc(f.href)}" target="_blank" rel="noopener">${tx("readMore")} →</a>
+            ${reportLink(f.href, tx("readMore"))}
           </div>
         </section>`,
       act: (a) => {
@@ -240,7 +245,8 @@
     lock(true);
     document.body.append(scrim, drawer);
     document.getElementById("app")?.setAttribute("aria-hidden", "true");
-    requestAnimationFrame(() => { scrim.classList.add("on"); drawer.classList.add("on"); });
+    const sc = scrim, dr = drawer; // a fast open-then-close must not touch a removed drawer
+    requestAnimationFrame(() => { sc.classList.add("on"); dr.classList.add("on"); });
     scrim.addEventListener("click", () => closeFinding());
     drawer.querySelector(".x").addEventListener("click", () => closeFinding());
     drawer.querySelectorAll("[data-a]").forEach((b) => b.addEventListener("click", () => body.act && body.act(b.dataset.a)));
@@ -366,6 +372,6 @@
     if (m) openFinding(m[1], { fromLoad: true });
   }
 
-  window.JWUI = { LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
+  window.JWUI = { reportLink, LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
     get lang() { return lang; }, get view() { return view; } };
 })();
