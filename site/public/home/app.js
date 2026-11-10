@@ -256,7 +256,7 @@
   const printHref = () => { const u = new URL(skipHref(true), location.href); u.searchParams.set("view", "funnel"); u.searchParams.set("print", "1"); return u.pathname + u.search; };
   // Screens too short for the funnel beside its cards (landscape phones, 320×568, 200% zoom)
   // get the one-page version, which shows the same content.
-  const SHORT = matchMedia("(max-height: 600px)");
+  const SHORT = matchMedia("(max-height: 680px)");
   const isStatic = () => qs.has("static") || RM.matches || SHORT.matches;
   // The Funnel | Pipeline switch opens the middle part; it sticks while the reader is in it.
   const switchHTML = (live) => `<div class="switch" id="switch"><div class="swin"><span class="swl" id="swl">${esc(tx("viewLabel"))}</span><span data-viewtoggle></span>${U.view === "funnel" ? `<a class="skip" id="skip" href="${skipHref(live)}"><span class="lg">${esc(t(live ? C.skip : C.animated))}</span>${live ? `<span class="sh" aria-hidden="true">${esc(t(C.skipShort))}</span>` : ""}</a>` : ""}</div></div>`;
@@ -468,7 +468,13 @@
   // Slide the card column so the current group sits level with its stage.
   function placeGaps() {
     if (!el.gaps) return;
-    if (NARROW.matches) { el.gaps.style.transform = ""; el.gaps.dataset.y = "0"; return; }
+    if (NARROW.matches) {
+      el.gaps.style.transform = ""; el.gaps.dataset.y = "0";
+      // the ladder's name column fits its longest stage name
+      const lad = document.getElementById("ladder");
+      if (lad && !lad.dataset.w) { const w = Math.max(...[...lad.querySelectorAll(".ln")].map((x) => x.scrollWidth)); if (w > 0) { lad.style.setProperty("--lnw", `${Math.ceil(w) + 2}px`); lad.dataset.w = "1"; } }
+      return;
+    }
     const fb = el.fun.getBoundingClientRect(), sb = el.stage.getBoundingClientRect(), gb = el.gaps.getBoundingClientRect();
     const s = Math.min(fb.width / W, fb.height / H), oy = fb.height - H * s;
     const levelPx = fb.top - sb.top + oy + Y[STEPS[active].s] * s;
