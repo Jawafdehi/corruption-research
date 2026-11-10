@@ -151,7 +151,8 @@ export function Layout() {
               alt={t("research.corruption.site.logoAlt", "Jawafdehi")}
               className="h-7 w-auto md:h-8"
             />
-            <span className="border-l border-border pl-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {/* Hidden on phones, where the logo and the language buttons need the row. */}
+            <span className="hidden border-l border-border pl-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:inline">
               {t("research.corruption.site.eyebrow2", "Research")}
             </span>
           </a>

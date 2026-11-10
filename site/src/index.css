@@ -121,3 +121,11 @@
   .report-md th, .report-md td { @apply border-b border-border px-2 py-1.5 text-left align-top; }
   .report-md th { @apply font-semibold text-foreground; }
 }
+
+/* Devanagari: letter-spacing pulls conjuncts and matras apart, and uppercase has no meaning
+   in the script, so neither applies to Nepali text. `:lang(ne)` follows <html lang>, and
+   leaves the English report body (lang="en") alone. */
+:lang(ne) {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}

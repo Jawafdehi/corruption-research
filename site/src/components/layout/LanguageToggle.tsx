@@ -12,7 +12,7 @@ export function LanguageToggle() {
   const { t, i18n, language } = useTranslation();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center justify-end gap-2">
       <div
         role="group"
         aria-label={t("research.corruption.lang.aria", "Language")}
@@ -30,7 +30,8 @@ export function LanguageToggle() {
               aria-pressed={active}
               onClick={() => void i18n.changeLanguage(lng)}
               className={cn(
-                "rounded px-2.5 py-1 text-xs font-medium transition-colors",
+                // 44 px tall: a full tap target on a phone, as on the home page.
+                "min-h-[44px] rounded px-3 text-sm font-medium transition-colors",
                 active
                   ? "bg-accent text-accent-foreground"
                   : "text-muted-foreground hover:text-foreground",
@@ -54,7 +55,7 @@ export function LanguageToggle() {
             "research.corruption.lang.unreviewedTitle",
             "This Nepali translation is an unreviewed machine-authored first pass. The figures are counted from the court record and do not change with the language.",
           )}
-          className="rounded border border-border px-1.5 py-0.5 text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground"
+          className="whitespace-nowrap rounded border border-border px-1.5 py-0.5 text-xs font-medium text-muted-foreground"
         >
           {t("research.corruption.lang.unreviewed", "unreviewed translation")}
         </span>
