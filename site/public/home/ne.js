@@ -38,6 +38,17 @@
     recovery:
       "अदालतहरूले सबै प्रकारका मुद्दाको एउटै दण्ड-जरिवाना लगत प्रकाशित गर्छन्, र “फर्छ्यौट” भनिएकोमा रकम तिर्नुको सट्टा कैद बसेर भुक्तान गरिएको अंश पनि पर्छ। २०८०/८१ र २०८१/८२ मा त्यो लगतको हरेक ९ रुपैयाँमा करिब १ रुपैयाँ वर्षभरिमा फर्छ्यौट भयो; त्यसअघि यो करिब ६ मा १ थियो। यसमा विशेष अदालतका जरिवाना अभिलेख रहने काठमाडौं जिल्ला अदालत, र २०८१/८२ मा स्याङ्जा जिल्ला अदालत, समावेश छैनन्; ती अदालतको एकमुष्ट फर्छ्यौटले राष्ट्रिय जम्माको अधिकांश हिस्सा ओगटेको थियो। भ्रष्टाचारको छुट्टै अंक कुनै पनि संस्थाले प्रकाशित गर्दैन।",
   };
+  // Shelved and backlog: built from the data, so the year and the numbers follow the latest
+  // CIAA report (2082/83, 36th report summary) without retyping.
+  (() => {
+    const JW = window.JW, F = (k) => JW.findings.find((f) => f.key === k);
+    const dv = (x) => String(x).replace(/[0-9]/g, (d) => "०१२३४५६७८९"[d]);
+    const n = (x) => dv(Number(x).toLocaleString("en-IN")), fy = dv(JW.funnel.values.fy);
+    const sv = F("shelved").viz, sh = sv.parts[0].v, ti = sv.parts[2].v, dec = sv.total;
+    NE.shelved = `${fy} मा अख्तियारले ${n(sh)} उजुरी (सो वर्ष फर्छ्यौट गरेका ${n(dec)} उजुरीमध्ये १० मा ${dv(Math.round((sh / dec) * 10))}) विस्तृत अनुसन्धान नगरी तामेलीमा राख्यो, र ${n(ti)} (१०० मा ${dv(Math.round((ti / dec) * 100))}) उजुरी मात्र विस्तृत अनुसन्धानका लागि अघि बढायो। अख्तियारका प्रतिवेदनले कुनै पनि उजुरी तामेलीमा राख्नुको कारण खुलाउँदैनन्, त्यसैले अख्तियारबाहिरका कसैले पनि किन भनेर थाहा पाउन सक्दैन।`;
+    const bv = F("backlog").viz, ca = bv.parts[0].v, tot = bv.total;
+    NE.backlog = `${fy} को अन्त्यमा ${n(ca)} उजुरी (लगतमा रहेका उजुरीमध्ये करिब ${dv(Math.round(tot / ca))} मा १) अर्को वर्षमा सरे। अख्तियारले कति उजुरी बाँकी छन् भन्ने प्रकाशित गर्छ, तर कुनै पनि उजुरी कति समयदेखि पर्खिरहेको छ भन्ने बताउँदैन।`;
+  })();
   window.JW.findings.forEach((f) => {
     if (!NE[f.key]) {
       (window.JW_COPY_ERRORS = window.JW_COPY_ERRORS || []).push(f.key + ": no Nepali explanation");

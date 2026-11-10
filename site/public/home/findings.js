@@ -118,8 +118,8 @@ window.JW = {
     "ne": "धेरैजसो उजुरी कुनै अनुसन्धानै नगरी तामेलीमा राखिन्छन्, र कारण खुलाइँदैन"
    },
    "short": {
-    "en": "17,716 complaints closed in 2081/82 with no investigation; only 927 went on to a full one.",
-    "ne": "२०८१/८२ मा १७,७१६ उजुरी अनुसन्धान नगरी तामेलीमा; विस्तृत अनुसन्धानमा गए ९२७ मात्र।"
+    "en": "18,833 complaints closed in 2082/83 with no investigation; only 722 went on to a full one.",
+    "ne": "२०८२/८३ मा १८,८३३ उजुरी अनुसन्धान नगरी तामेलीमा; विस्तृत अनुसन्धानमा गए ७२२ मात्र।"
    },
    "big": {
     "value": {
@@ -131,35 +131,35 @@ window.JW = {
      "ne": ""
     },
     "label": {
-     "en": "complaints closed without any investigation in 2081/82. No reason given.",
-     "ne": "उजुरी २०८१/८२ मा कुनै अनुसन्धान नगरी तामेलीमा। कारण खुलाइएको छैन।"
+     "en": "complaints closed without any investigation in 2082/83. No reason given.",
+     "ne": "उजुरी २०८२/८३ मा कुनै अनुसन्धान नगरी तामेलीमा। कारण खुलाइएको छैन।"
     }
    },
    "viz": {
     "type": "waffle",
     "parts": [
      {
-      "v": 17716,
+      "v": 18833,
       "tone": "leak",
       "en": "Closed, no reason",
       "ne": "तामेली, कारण नखुलाई"
      },
      {
-      "v": 11060,
+      "v": 13268,
       "tone": "mute",
       "en": "Other action",
       "ne": "अन्य कारबाही"
      },
      {
-      "v": 927,
+      "v": 722,
       "tone": "on",
       "en": "Sent to full investigation",
       "ne": "विस्तृत अनुसन्धानमा"
      }
     ],
-    "total": 29703
+    "total": 32823
    },
-   "explain": "In 2081/82 the CIAA closed 17,716 complaints (6 in 10 of those it dealt with) without a full investigation, and sent only 927 (3 in 100) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
+   "explain": "In 2082/83 the CIAA closed 18,833 complaints (6 in 10 of those it dealt with) without a full investigation, and sent only 722 (2 in 100) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
    "caveat": "",
    "source": "stages/1-3-SCREENING.md; CIAA 35th annual report, table 2.14",
    "href": "https://research.jawafdehi.org/report#complaints",
@@ -232,42 +232,42 @@ window.JW = {
     "ne": "हजारौं उजुरी पर्खिरहेका छन्, कति समयदेखि भनेर कसैले बताउँदैन"
    },
    "short": {
-    "en": "7,323 complaints carried into the next year; the waiting time is not published.",
-    "ne": "७,३२३ उजुरी अर्को वर्षमा सरे; कति पर्खिए भन्ने प्रकाशित छैन।"
+    "en": "8,019 complaints carried into the next year; the waiting time is not published.",
+    "ne": "८,०१९ उजुरी अर्को वर्षमा सरे; कति पर्खिए भन्ने प्रकाशित छैन।"
    },
    "big": {
     "value": {
-     "en": "7,323",
-     "ne": "७,३२३"
+     "en": "8,019",
+     "ne": "८,०१९"
     },
     "unit": {
      "en": "",
      "ne": ""
     },
     "label": {
-     "en": "complaints still waiting at the end of 2081/82. How long they have waited is not published.",
-     "ne": "उजुरी २०८१/८२ को अन्त्यसम्म पनि पर्खिरहेका। कति समयदेखि भन्ने प्रकाशित छैन।"
+     "en": "complaints still waiting at the end of 2082/83. How long they have waited is not published.",
+     "ne": "उजुरी २०८२/८३ को अन्त्यसम्म पनि पर्खिरहेका। कति समयदेखि भन्ने प्रकाशित छैन।"
     }
    },
    "viz": {
     "type": "waffle",
     "parts": [
      {
-      "v": 7323,
+      "v": 8019,
       "tone": "leak",
       "en": "Carried into next year",
       "ne": "अर्को वर्षमा सरेका"
      },
      {
-      "v": 29703,
+      "v": 32823,
       "tone": "mute",
       "en": "Dealt with in the year",
       "ne": "वर्षभित्र टुंगिएका"
      }
     ],
-    "total": 37026
+    "total": 40842
    },
-   "explain": "At the end of 2081/82, 7,323 complaints (about 1 in 5 of those on the books) were carried into the next year. The CIAA's report for that year says how many are waiting and promises to clear \"old complaints\" first, but does not say how long any of them has waited.",
+   "explain": "At the end of 2082/83, 8,019 complaints (about 1 in 5 of those on the books) were carried into the next year. The CIAA's report for that year says how many are waiting and promises to clear \"old complaints\" first, but does not say how long any of them has waited.",
    "caveat": "",
    "source": "stages/1-3-SCREENING.md; GAPS 1.3, checked in the 35th report text 2026-11-07",
    "href": "https://research.jawafdehi.org/report#complaints",
@@ -1051,11 +1051,13 @@ window.JW = {
  ],
  "funnel": {
   "values": {
-   "fy": "2081/82",
-   "complaints": "28,554",
-   "onBooks": "37,026",
-   "investigated": "947",
-   "filed": "137",
+   "fy": "2082/83",
+   "fyOld": "2081/82",
+   "sent": "1",
+   "complaints": "33,519",
+   "onBooks": "40,842",
+   "investigated": "722",
+   "filed": "175",
    "lrDec": "2,649",
    "lrConv": "1,614",
    "convRate": "61%",
@@ -1063,19 +1065,19 @@ window.JW = {
    "apStand": "337",
    "apPartial": "20",
    "standRate": "59%",
-   "special": "83",
-   "supreme": "50",
-   "end": "17",
-   "endPct": "0.17%",
-   "endHi": "22",
-   "endHiPct": "0.22%",
+   "special": "107",
+   "supreme": "63",
+   "end": "19",
+   "endPct": "0.19%",
+   "endHi": "24",
+   "endHiPct": "0.24%",
    "appealedShare": "6 in 10"
   },
   "stages": [
    {
     "key": "complaints",
     "inst": "ciaa",
-    "count": 28554,
+    "count": 33519,
     "est": false,
     "gaps": [
      "tracking"
@@ -1086,24 +1088,24 @@ window.JW = {
      "ne": "उजुरी"
     },
     "label": {
-     "en": "new complaints registered with the CIAA in one year (2081/82)",
-     "ne": "एक वर्ष (२०८१/८२) मा अख्तियारमा दर्ता भएका नयाँ उजुरी"
+     "en": "new complaints registered with the CIAA in one year (2082/83)",
+     "ne": "एक वर्ष (२०८२/८३) मा अख्तियारमा दर्ता भएका नयाँ उजुरी"
     },
     "note": {
-     "en": "With last year's backlog, 37,026 were on its books.",
-     "ne": "अघिल्लो वर्षको बाँकीसहित ३७,०२६ उजुरी थिए।"
+     "en": "With last year's backlog, 40,842 were on its books.",
+     "ne": "अघिल्लो वर्षको बाँकीसहित ४०,८४२ उजुरी थिए।"
     }
    },
    {
     "key": "investigated",
     "inst": "ciaa",
-    "count": 947,
+    "count": 722,
     "est": false,
     "gaps": [
      "shelved",
      "backlog"
     ],
-    "per10k": 332,
+    "per10k": 215,
     "name": {
      "en": "Full investigation",
      "ne": "विस्तृत अनुसन्धान"
@@ -1120,12 +1122,12 @@ window.JW = {
    {
     "key": "charged",
     "inst": "ciaa",
-    "count": 137,
+    "count": 175,
     "est": false,
     "gaps": [
      "afterInvestigation"
     ],
-    "per10k": 48,
+    "per10k": 52,
     "name": {
      "en": "Decision to charge",
      "ne": "मुद्दा चलाउने निर्णय"
@@ -1142,14 +1144,14 @@ window.JW = {
    {
     "key": "special",
     "inst": "special",
-    "count": 83,
+    "count": 107,
     "est": true,
     "gaps": [
      "lossRate",
      "whyAcquitted",
      "whoConvicted"
     ],
-    "per10k": 29,
+    "per10k": 32,
     "name": {
      "en": "Special Court",
      "ne": "विशेष अदालत"
@@ -1166,7 +1168,7 @@ window.JW = {
    {
     "key": "supreme",
     "inst": "supreme",
-    "count": 50,
+    "count": 63,
     "est": true,
     "gaps": [
      "notAppealed",
@@ -1178,7 +1180,7 @@ window.JW = {
      "neverListed",
      "arson"
     ],
-    "per10k": 17,
+    "per10k": 19,
     "name": {
      "en": "Supreme Court",
      "ne": "सर्वोच्च अदालत"
@@ -1216,17 +1218,17 @@ window.JW = {
    }
   ],
   "end": {
-   "per10k": 17,
-   "per10kHi": 22,
+   "per10k": 19,
+   "per10kHi": 24,
    "pct": {
-    "en": "0.17%",
-    "ne": "०.१७%"
+    "en": "0.19%",
+    "ne": "०.१९%"
    }
   },
   "copy": {
    "endLine": {
-    "en": "About 17 in every 10,000 complaints end in a conviction that still stands after the Supreme Court. That is fewer than 2 in 1,000.",
-    "ne": "हरेक १०,००० उजुरीमध्ये करिब १७ मात्र सर्वोच्च अदालतपछि पनि कायम रहने ठहरमा पुग्छन्। अर्थात् १,००० मा २ भन्दा कम।"
+    "en": "About 19 in every 10,000 complaints end in a conviction that still stands after the Supreme Court. That is fewer than 2 in 1,000.",
+    "ne": "हरेक १०,००० उजुरीमध्ये करिब १९ मात्र सर्वोच्च अदालतपछि पनि कायम रहने ठहरमा पुग्छन्। अर्थात् १,००० मा २ भन्दा कम।"
    },
    "method": [
     {
@@ -1234,16 +1236,16 @@ window.JW = {
      "ne": "कुनै एक उजुरीलाई सर्वोच्च अदालतसम्म पछ्याउन मिल्ने सार्वजनिक अभिलेख छैन। यो आफैंमा एउटा कमी हो। त्यसैले हामीले एक वर्षका उजुरी लिएर हरेक चरणको नापिएको दर लागू गरेका छौं।"
     },
     {
-     "en": "28,554 new complaints, 947 full investigations finished and 137 cases taken to court are the CIAA's own figures for 2081/82 (35th annual report).",
-     "ne": "२८,५५४ नयाँ उजुरी, ९४७ सकिएका विस्तृत अनुसन्धान र अदालत लगिएका १३७ मुद्दा अख्तियारकै २०८१/८२ का तथ्यांक हुन् (३५औं वार्षिक प्रतिवेदन)।"
+     "en": "33,519 new complaints, 722 full investigations finished and 175 cases taken to court are the CIAA's own figures for 2082/83 (35th annual report).",
+     "ne": "३३,५१९ नयाँ उजुरी, ७२२ सकिएका विस्तृत अनुसन्धान र अदालत लगिएका १७५ मुद्दा अख्तियारकै २०८२/८३ का तथ्यांक हुन् (३५औं वार्षिक प्रतिवेदन)।"
     },
     {
      "en": "Special Court: 1,614 of 2,649 decided CIAA cases (61%) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction stood in 337 of 567 decided appeals (59%). Both come from the court record over many years.",
      "ne": "विशेष अदालत: फैसला भएका अख्तियारका २,६४९ मुद्दामध्ये १,६१४ (६१%) मा कम्तीमा एक जना दोषी ठहरिए। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा फैसला भएका ५६७ मध्ये ३३७ (५९%) मा ठहर कायम रह्यो। दुवै धेरै वर्षको अदालती अभिलेखबाट।"
     },
     {
-     "en": "So this shows the system's odds, not one group of complaints followed through: complaints and finished investigations in a year are different events, and the court rates come from earlier cases. Court stages count cases, not people. If every conviction that nobody appealed also stands (about 6 in 10 convictions have an appeal on record), the end figure is about 22 in 10,000 (0.22%).",
-     "ne": "त्यसैले यसले प्रणालीको सम्भावना देखाउँछ, उजुरीको एउटै समूह अन्त्यसम्म पछ्याएको होइन: एक वर्षका उजुरी र सकिएका अनुसन्धान फरक घटना हुन्, र अदालतका दर पहिलेका मुद्दाबाट लिइएका हुन्। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब १० मा ६ ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक १०,००० मा करिब २२ (०.२२%) हुन्छ।"
+     "en": "So this shows the system's odds, not one group of complaints followed through: complaints and finished investigations in a year are different events, and the court rates come from earlier cases. Court stages count cases, not people. If every conviction that nobody appealed also stands (about 6 in 10 convictions have an appeal on record), the end figure is about 24 in 10,000 (0.24%).",
+     "ne": "त्यसैले यसले प्रणालीको सम्भावना देखाउँछ, उजुरीको एउटै समूह अन्त्यसम्म पछ्याएको होइन: एक वर्षका उजुरी र सकिएका अनुसन्धान फरक घटना हुन्, र अदालतका दर पहिलेका मुद्दाबाट लिइएका हुन्। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब १० मा ६ ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक १०,००० मा करिब २४ (०.२४%) हुन्छ।"
     }
    ]
   }

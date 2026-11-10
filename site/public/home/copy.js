@@ -21,8 +21,8 @@
 
   const SRC = {
     tracking: ["CIAA website, checked on 7 and 10 November 2026 (screenshots kept); CIAA notice on online complaints, 17 Kartik 2083", "अख्तियारको वेबसाइट, सन् २०२६ नोभेम्बर ७ र १० मा जाँच गरिएको (स्क्रिनसट सुरक्षित); अनलाइन उजुरीसम्बन्धी अख्तियारको सूचना, २०८३ कार्तिक १७"],
-    shelved: ["CIAA 35th annual report (2081/82), tables 2.13 and 2.14", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१३ र २.१४"],
-    backlog: ["CIAA 35th annual report (2081/82), table 2.14 and report text", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१४ र प्रतिवेदनको पाठ"],
+    shelved: ["CIAA 36th annual report, summary (2082/83), screening table, page 7", "अख्तियारको ३६औं वार्षिक प्रतिवेदनको सारांश (२०८२/८३), प्रारम्भिक छानबिन तालिका, पृष्ठ ७"],
+    backlog: ["CIAA 36th annual report, summary (2082/83), page 6 and the year-end table", "अख्तियारको ३६औं वार्षिक प्रतिवेदनको सारांश (२०८२/८३), पृष्ठ ६ र वर्षान्तको तालिका"],
     afterInvestigation: ["CIAA annual reports, 2073/74 to 2081/82", "अख्तियारका वार्षिक प्रतिवेदन, २०७३/७४ देखि २०८१/८२"],
     lossRate: ["Special Court case records (downloaded 8 October 2026); CIAA 35th annual report, table 3.12", "विशेष अदालतका मुद्दाका अभिलेख (८ अक्टोबर २०२६ मा लिइएको); अख्तियारको ३५औं वार्षिक प्रतिवेदन, तालिका ३.१२"],
     whoConvicted: ["Special Court case pages on its website (cases filed 2069/70–2082/83, verdicts to 8 October 2026), checked on 7 November 2026", "विशेष अदालतको वेबसाइटका मुद्दा पाना (२०६९/७० देखि २०८२/८३ सम्म दायर, सन् २०२६ अक्टोबर ८ सम्मका फैसला), सन् २०२६ नोभेम्बर ७ मा जाँच गरिएको"],
@@ -119,7 +119,7 @@
     tracking: { v: ["None", "छैन"], from: "0", tag: ["There is no public way to look up a complaint's status", "उजुरीको स्थिति सार्वजनिक रूपमा हेर्ने कुनै उपाय छैन"] },
     shelved: { tag: ["of the complaints the CIAA decided that year were closed without a full investigation, with no reason given", "सो वर्ष अख्तियारले निर्णय गरेका उजुरी विस्तृत अनुसन्धान नगरी, कारण नखुलाई तामेलीमा"] },
     backlog: { tag: ["complaints still waiting; nobody says for how long", "उजुरी अझै पर्खिरहेका; कति समयदेखि, कसैले भन्दैन"] },
-    afterInvestigation: { tag: ["of the CIAA's decisions after a full investigation closed the case", "विस्तृत अनुसन्धानपछिका अख्तियारका निर्णयमा मुद्दा तामेली"] },
+    afterInvestigation: { tag: ["of the CIAA's decisions after a full investigation closed the case (2081/82: the 36th report's summary does not give this)", "विस्तृत अनुसन्धानपछिका अख्तियारका निर्णयमा मुद्दा तामेली (२०८१/८२; ३६औं प्रतिवेदनको सारांशमा यो छैन)"] },
     lossRate: { tag: ["of CIAA cases the Special Court decided: everyone acquitted", "विशेष अदालतले फैसला गरेका अख्तियारका मुद्दामा सबैलाई सफाइ"] },
     whoConvicted: { x: [/of ([\d,]+) /, /\(([०-९,]+) (?:अभियुक्त)?मध्ये\)/], tag: ["defendant records (of {x}) where the court's website does not say who was convicted", "प्रतिवादी अभिलेख ({x} मध्ये): अदालतको वेबसाइटले को दोषी ठहरियो भन्दैन"] },
     whyAcquitted: { tag: ["judgments we read (sample of 42): the evidence did not prove the charge", "हामीले पढेका फैसलामा (४२ को नमुना): प्रमाणले अभियोग पुष्टि गरेन"] },
@@ -176,15 +176,22 @@
 
   // Board review, 11:25 PT (facts). Numbers stay the data's own; only words change.
   const num = (x, ne) => (ne ? Number(x).toLocaleString("en-IN").replace(/[0-9]/g, (d) => "०१२३४५६७८९"[d]) : Number(x).toLocaleString("en-US"));
-  const decided = F("shelved").viz.total; // complaints the CIAA decided in 2081/82 (table 2.14)
-  // 1–2. "6 in 10" is of the complaints decided, not of the new ones; and 927 sent vs 947 finished.
-  fix("shelved", "short.en", "17,716 complaints closed in 2081/82", `17,716 of the ${num(decided)} complaints decided in 2081/82 were`);
-  fix("shelved", "short.en", "only 927 went on to a full one.", "only 927 were sent on for one.");
-  fix("shelved", "short.ne", "२०८१/८२ मा १७,७१६ उजुरी", `२०८१/८२ मा निर्णय भएका ${num(decided, 1)} उजुरीमध्ये १७,७१६`);
-  fix("shelved", "big.label.en", "complaints closed without a full investigation in 2081/82.", "of the complaints the CIAA decided in 2081/82 were closed without a full investigation.");
-  fix("shelved", "big.label.ne", "उजुरी २०८१/८२ मा", "२०८१/८२ मा अख्तियारले निर्णय गरेका उजुरी");
-  fix("shelved", "explain", "(6 in 10 of those it dealt with)", `(6 in 10 of the ${num(decided)} complaints it decided that year)`);
-  fix("shelved", "explain", "so nobody outside the CIAA can tell why.", "so nobody outside the CIAA can tell why. The funnel above shows 947 instead: full investigations completed that year, a different count from the 927 sent on.");
+  const decided = F("shelved").viz.total; // complaints the CIAA decided that year (screening table)
+  const SH = F("shelved").viz.parts, shN = SH[0].v, toInv = SH[2].v, FY = JW.funnel.values.fy;
+  const neFy = num(0, 1) && FY.replace(/[0-9]/g, (d) => "०१२३४५६७८९"[d]);
+  // 1–2. "6 in 10" is of the complaints decided, not of the new ones.
+  fix("shelved", "short.en", `${num(shN)} complaints closed in ${FY}`, `${num(shN)} of the ${num(decided)} complaints decided in ${FY} were`);
+  fix("shelved", "short.en", `only ${num(toInv)} went on to a full one.`, `only ${num(toInv)} were sent on for one.`);
+  fix("shelved", "short.ne", `${neFy} मा ${num(shN, 1)} उजुरी`, `${neFy} मा निर्णय भएका ${num(decided, 1)} उजुरीमध्ये ${num(shN, 1)}`);
+  fix("shelved", "big.label.en", `complaints closed without a full investigation in ${FY}.`, `of the complaints the CIAA decided in ${FY} were closed without a full investigation.`);
+  fix("shelved", "big.label.ne", `उजुरी ${neFy} मा`, `${neFy} मा अख्तियारले निर्णय गरेका उजुरी`);
+  fix("shelved", "explain", "of those it dealt with)", `of the ${num(decided)} complaints it decided that year)`);
+  // The funnel's second stage counts what this card calls "sent on" only when the report gives
+  // no count of completed investigations; otherwise the card says the two counts differ.
+  if (JW.funnel.stages[1].count !== toInv) fix("shelved", "explain", "so nobody outside the CIAA can tell why.", `so nobody outside the CIAA can tell why. The funnel above shows ${num(JW.funnel.stages[1].count)} instead: full investigations completed that year, a different count from the ${num(toInv)} sent on.`);
+  // Backlog: the 36th report's summary gives the count; the promise to clear "old complaints"
+  // was in the 35th report's text, so the card says only what both show.
+  fix("backlog", "explain", "The CIAA's report for that year says how many are waiting and promises to clear “old complaints” first, but does not say how long any of them has waited.", "The CIAA publishes how many are waiting, but not how long any of them has waited.");
   // 3. "1 in 4 to 1 in 2" with the unusual year said in the same line.
   fix("lossRate", "short.en", "the share rose from 1 in 4 verdicts to 1 in 2.", "the share was about 1 in 4 before 2077/78 and about 1 in 2 since (about 4 in 10 leaving out the unusual year 2078/79).");
   fix("lossRate", "short.ne", "यो अनुपात ४ मा १ फैसलाबाट २ मा १ पुग्यो।", "यो अनुपात २०७७/७८ अघि करिब ४ मा १ थियो, त्यसयता करिब २ मा १ छ (असामान्य वर्ष २०७८/७९ छाडेर करिब १० मा ४)।");

@@ -34,6 +34,10 @@ rewrite() { sed -e 's#\.\./shared/#/home/#g' "$1" > "$2"; }
 for f in app.css app.js ui.js copy.js ne.js; do rewrite "$SRC/$f" "$OUT/$f"; done
 rewrite "$SH/base.css" "$OUT/base.css"
 cp "$SH"/brand/*.svg "$OUT/brand/"
+# The CIAA's 36th annual report (2082/83) figures, extracted from its summary (ciaa-2082-83/).
+# home_build_data.py reads them from src/data/ciaa-2082-83.json.
+CIAA_NEW="$OPT/../ciaa-2082-83/figures-2082-83.json"
+[[ -f "$CIAA_NEW" ]] && cp "$CIAA_NEW" "$SITE/src/data/ciaa-2082-83.json"
 
 python3 - "$SRC/index.html" "$SH/build_data.py" "$SITE" <<'PY'
 import hashlib, json, re, sys

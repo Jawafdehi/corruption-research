@@ -38,6 +38,31 @@ RG = show("site/src/data/report.generated.json")
 ap, sd = RG["appeals"], RG["supremeDelay"]
 cd = RG["complaintDisposal"][0]
 
+# The CIAA's 36th annual report (2082/83). Its 10-page summary is the latest published
+# source (work/2026-11-08-research-site-design/ciaa-2082-83/FIGURES-2082-83.md, converted with
+# likhit). Where it gives a figure, the page uses it. It does not give the number of full
+# investigations completed, so the funnel's second stage counts complaints sent on for full
+# investigation: same year, same report. Findings the summary cannot cover keep 2081/82 and
+# say so on the card.
+NEW = next((p for p in [HERE.parent.parent / "ciaa-2082-83" / "figures-2082-83.json",
+                        HERE.parent / "src" / "data" / "ciaa-2082-83.json"] if p.exists()), None)
+CD_OLD = cd
+if NEW:
+    nw = json.loads(NEW.read_text())
+    assert nw["total_complaints"] == (cd["pending_out"] + nw["registered_new"]), "36th: carried in + new = on the books"
+    assert nw["disposed"] + nw["backlog_end"] == nw["total_complaints"], "36th: decided + waiting = on the books"
+    cd = dict(cd, fy=nw["fy"], registered_new=nw["registered_new"], total_complaints=nw["total_complaints"],
+              carried_in=nw["total_complaints"] - nw["registered_new"], disposed=nw["disposed"],
+              tameli=nw["shelved"], tameli_with_advice=0, to_investigation=nw["to_investigation"],
+              other_action=nw["disposed"] - nw["shelved"] - nw["to_investigation"], pending_out=nw["backlog_end"],
+              investigations_completed=None, inv_filed=nw["inv_filed"], source="CIAA 36th annual report summary (2082/83)")
+    def _set(key, **kv):
+        f = next(f for st in HF["stages"] for f in st["findings"] if f["key"] == key)
+        f["figures"].update(kv)
+    _set("shelved", fy=nw["fy"], shelved=f'{nw["shelved"]:,}', shelvedPct=f'{round(nw["shelved"] / nw["disposed"] * 10)} in 10',
+         toInv=f'{nw["to_investigation"]:,}', toInvPct=f'{round(nw["to_investigation"] / nw["disposed"] * 100)} in 100')
+    _set("backlog", fy=nw["fy"], carried=f'{nw["backlog_end"]:,}', share=f'1 in {round(nw["total_complaints"] / nw["backlog_end"])}')
+
 
 def n(x):
     return f"{x:,}"
@@ -350,16 +375,16 @@ def build_funnel():
     stand_rate = (cv["decided"] - cv["reversed"]) / cv["decided"]
     convicted_cases = RG["outcome"]["convicted"] + RG["outcome"]["partial"]
     appealed_share = cv["trials"] / convicted_cases
-    c0, c1, c2 = cd["registered_new"], cd["investigations_completed"], cd["inv_filed"]
-    # The site's own funnel (AccountabilityFunnel) uses the same three CIAA counts.
-    assert [c0, c1, c2] == [s["count"] for s in RG["funnel"][:3]]
+    c0, c1, c2 = cd["registered_new"], cd["investigations_completed"] or cd["to_investigation"], cd["inv_filed"]
+    # The site's own funnel (AccountabilityFunnel) uses the same three CIAA counts (2081/82).
+    if not NEW: assert [c0, c1, c2] == [s["count"] for s in RG["funnel"][:3]]
     c3 = c2 * conv_rate
     c4 = c3 * stand_rate
     c4_hi = c3 * (1 - appealed_share * (1 - stand_rate))  # if unappealed convictions all stand
     per = lambda c: c / c0 * 10000
     pct = lambda c: f"{c / c0 * 100:.2f}%"
     v = {
-        "fy": cd["fy"], "complaints": n(c0), "onBooks": n(cd["total_complaints"]),
+        "fy": cd["fy"], "fyOld": CD_OLD["fy"], "sent": "1" if NEW else "", "complaints": n(c0), "onBooks": n(cd["total_complaints"]),
         "investigated": n(c1), "filed": n(c2),
         "lrDec": n(lr_dec), "lrConv": n(lr_dec - lr_acq), "convRate": f"{round(conv_rate * 100)}%",
         "apDec": n(cv["decided"]), "apStand": n(cv["decided"] - cv["reversed"]), "apPartial": n(cv["partialOnly"]), "standRate": f"{round(stand_rate * 100)}%",

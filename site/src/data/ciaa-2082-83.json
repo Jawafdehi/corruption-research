@@ -1,0 +1,14 @@
+{
+  "fy": "2082/83",
+  "registered_new": 33519,
+  "total_complaints": 40842,
+  "disposed": 32823,
+  "shelved": 18833,
+  "to_investigation": 722,
+  "investigations_completed": null,
+  "inv_filed": 175,
+  "after_inv_decisions": null,
+  "after_inv_closed": null,
+  "backlog_end": 8019,
+  "ciaa_success_pct": 51.92
+}

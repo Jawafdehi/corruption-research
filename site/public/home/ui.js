@@ -24,7 +24,7 @@
     research: { en: "Research", ne: "अनुसन्धान" },
     byline: { en: "A research report by Jawafdehi Initiative · jawafdehi.org", ne: "जवाफदेही इनिशिएटिभको अनुसन्धान प्रतिवेदन · jawafdehi.org" },
     draft: { en: "Draft for review, not yet published.", ne: "समीक्षाका लागि मस्यौदा, अहिलेसम्म प्रकाशित गरिएको छैन।" },
-    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, and the CIAA's 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: २०८३ असोज २२ देखि कार्तिक १७ सम्म सङ्कलित अदालतका अभिलेख, र अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
+    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, and the CIAA's 36th annual report summary (2082/83) and 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: २०८३ असोज २२ देखि कार्तिक १७ सम्म सङ्कलित अदालतका अभिलेख, र अख्तियारको ३६औं वार्षिक प्रतिवेदनको सारांश (२०८२/८३) र ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
     evidence: { en: "Show evidence", ne: "प्रमाण हेर्नुहोस्" },
     close: { en: "Close", ne: "बन्द गर्नुहोस्" },
     whatWeFound: { en: "What we found", ne: "हामीले के भेट्यौं" },
