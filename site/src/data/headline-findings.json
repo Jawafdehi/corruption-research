@@ -8,8 +8,8 @@
       "findings": [
         {
           "key": "shelved",
-          "headline": "Most complaints are closed before any investigation, and no reason is given",
-          "explain": "In {{fy}} the CIAA closed {{shelved}} complaints ({{shelvedPct}} of those it dealt with) without investigating them, and sent only {{toInv}} ({{toInvPct}}) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
+          "headline": "Most complaints are closed before a full investigation, and no reason is given",
+          "explain": "In {{fy}} the CIAA closed {{shelved}} complaints ({{shelvedPct}} of those it dealt with) without a full investigation, and sent only {{toInv}} ({{toInvPct}}) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
           "figures": {
             "fy": "2081/82",
             "shelved": "17,716",
@@ -24,7 +24,7 @@
         {
           "key": "afterInvestigation",
           "headline": "After a full investigation, the CIAA now shelves most cases instead of charging them",
-          "explain": "In {{fyThen}} it took {{filedThen}} investigated cases to court and shelved {{shelvedThenPct}} of its decisions. By {{fyNow}} it took {{filedNow}} to court and shelved {{shelvedNowPct}}. The change came in one year and has not reversed. No reason is published for any of these closures.",
+          "explain": "In {{fyThen}} it took {{filedThen}} investigated cases to court and shelved {{shelvedThenPct}} of its decisions. By {{fyNow}} it took {{filedNow}} to court and shelved {{shelvedNowPct}}. The change came within two years and has not reversed. No case-by-case reason is published for these closures.",
           "figures": {
             "fyThen": "2076/77",
             "filedThen": "441",
@@ -94,7 +94,7 @@
         {
           "key": "whoConvicted",
           "headline": "The public cannot see which defendants were convicted and which were cleared",
-          "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects {{people}} of the {{all}} people prosecuted (about {{share}}).",
+          "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects {{people}} of the {{all}} defendant records (about {{share}}).",
           "figures": {
             "people": "3,038",
             "all": "8,846",
@@ -142,7 +142,7 @@
         },
         {
           "key": "whyLost",
-          "headline": "Overturned convictions mostly fail on how the case was investigated and proved, not on a trial judge's mistake",
+          "headline": "Overturned convictions mostly fail on how the case was investigated and proved",
           "explain": "In the {{read}} overturned convictions we read, the Supreme Court pointed to the investigation in {{inv}}, to bribe money the CIAA itself supplied (evidence the Constitutional Bench ruled out in 2021) in {{sting}}, and to the charge in {{charge}}. Of all the trials whose appeal judgment cites that 2021 ruling, {{stingPct}} ended with the conviction overturned.",
           "figures": {
             "read": "16",
@@ -215,7 +215,7 @@
         {
           "key": "arson",
           "headline": "After the September 2025 arson, 865 open appeals still have no file, and decisions have fallen by more than half",
-          "explain": "The Supreme Court was set on fire on 9 September 2025. Fourteen months later, {{lost}} pending corruption appeals are still marked \"file destroyed, not recovered\", and {{notListedPct}} of them have not been listed since. In the 14 months after the fire the court decided {{after}} of the appeals pending; in the 14 months before, during a drive to clear old cases, {{before}} (and {{yearBefore}} the year before that).",
+          "explain": "The Supreme Court was set on fire on 9 September 2025. Fourteen months later, {{lost}} pending corruption appeals are still marked \"file destroyed, not recovered\", and {{notListedPct}} of them have not been listed since. In the 14 months after the fire the court decided {{after}} of the appeals pending; in the 14 months before, during a drive to clear old cases, {{before}}.",
           "figures": {
             "lost": "865",
             "notListedPct": "85%",

@@ -1233,11 +1233,12 @@ export default function Highlights() {
         <Highlight
           index={7}
           stat={t("research.corruption.hl.f6Stat", "{{v}} years", {
-            v: supremeDelay.medianYears.toFixed(1),
+            // Same measure as the home page: counting the appeals still waiting (Kaplan–Meier median).
+            v: (supremeDelay.kmMedianYears ?? supremeDelay.medianYears).toFixed(1),
           })}
           statCaption={t(
-            "research.corruption.hl.f6Caption2",
-            "Half of decided appeals took at least this long, from the day the appeal is registered at the Supreme Court to the day it is decided — not the length of the whole case.",
+            "research.corruption.hl.f6Caption3",
+            "Median time from the day an appeal is registered at the Supreme Court to the day it is decided, for appeals registered 2008–2018, counting those still waiting: half take longer. Not the length of the whole case.",
           )}
           headline={t(
             "research.corruption.hl.f6",

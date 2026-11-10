@@ -40,7 +40,8 @@ function parts(): Part[] {
 }
 
 export default function Report() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const ne = i18n.language?.startsWith("ne");
   const list = useMemo(parts, []);
 
   return (
@@ -67,10 +68,15 @@ export default function Report() {
         </nav>
       </Block>
 
+      {ne && (
+        <Block>
+          <p lang="ne" className="text-sm text-muted-foreground">यो प्रतिवेदन हाल अंग्रेजीमा मात्र उपलब्ध छ। नेपाली अनुवाद छिट्टै थपिनेछ।</p>
+        </Block>
+      )}
       {list.map((p) => (
         <Block key={p.slug} id={p.slug}>
           <SectionHeading>{p.title}</SectionHeading>
-          <div className="report-md" dangerouslySetInnerHTML={{ __html: p.html }} />
+          <div className="report-md" lang="en" dangerouslySetInnerHTML={{ __html: p.html }} />
         </Block>
       ))}
     </>

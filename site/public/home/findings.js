@@ -114,7 +114,7 @@ window.JW = {
    "inst": "ciaa",
    "gap": "A→B",
    "headline": {
-    "en": "Most complaints are closed before any investigation, and no reason is given",
+    "en": "Most complaints are closed before a full investigation, and no reason is given",
     "ne": "धेरैजसो उजुरी कुनै अनुसन्धानै नगरी तामेलीमा राखिन्छन्, र कारण खुलाइँदैन"
    },
    "short": {
@@ -159,7 +159,7 @@ window.JW = {
     ],
     "total": 29703
    },
-   "explain": "In 2081/82 the CIAA closed 17,716 complaints (6 in 10 of those it dealt with) without investigating them, and sent only 927 (3 in 100) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
+   "explain": "In 2081/82 the CIAA closed 17,716 complaints (6 in 10 of those it dealt with) without a full investigation, and sent only 927 (3 in 100) on for a full investigation. Its reports give no reason for any closure, so nobody outside the CIAA can tell why.",
    "caveat": "",
    "source": "stages/1-3-SCREENING.md; CIAA 35th annual report, table 2.14",
    "href": "https://research.jawafdehi.org/report#complaints",
@@ -213,7 +213,7 @@ window.JW = {
      "ne": "अदालत लगिएका मुद्दा: ४४१ → १३७"
     }
    },
-   "explain": "In 2076/77 it took 441 investigated cases to court and shelved 16% of its decisions. By 2081/82 it took 137 to court and shelved 75%. The change came in one year and has not reversed. No reason is published for any of these closures.",
+   "explain": "In 2076/77 it took 441 investigated cases to court and shelved 16% of its decisions. By 2081/82 it took 137 to court and shelved 75%. The change came within two years and has not reversed. No case-by-case reason is published for these closures.",
    "caveat": "",
    "source": "RESEARCH-INVENTORY entry 1; CIAA annual reports 2073/74–2081/82",
    "href": "https://research.jawafdehi.org/report#investigation",
@@ -428,7 +428,7 @@ window.JW = {
      "all"
     ]
    },
-   "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects 3,038 of the 8,846 people prosecuted (about 1 in 3).",
+   "explain": "The court's public case page gives one outcome for the whole case. When a case is \"partly upheld\", it does not say who was convicted. That is only in the full judgment, on a separate page, and some judgments are never uploaded. This affects 3,038 of the 8,846 defendant records (about 1 in 3).",
    "caveat": "Counted as defendant entries in the court record, not identified people.",
    "source": "synthesis/ENTRY2_REFRAMED.md (inventory entry 2); court pages checked 2026-11-07",
    "href": "https://research.jawafdehi.org/report#trial",
@@ -581,7 +581,7 @@ window.JW = {
    "inst": "supreme",
    "gap": "A",
    "headline": {
-    "en": "Overturned convictions mostly fail on how the case was investigated and proved, not on a trial judge's mistake",
+    "en": "Overturned convictions mostly fail on how the case was investigated and proved",
     "ne": "उल्टिएका ठहर प्रायः अनुसन्धान र प्रमाणका कारण असफल हुन्छन्, तल्लो अदालतका न्यायाधीशको गल्तीले होइन"
    },
    "short": {
@@ -939,7 +939,7 @@ window.JW = {
     "en": "Share of pending appeals decided",
     "ne": "बाँकी पुनरावेदनमध्ये फैसला भएको अंश"
    },
-   "explain": "The Supreme Court was set on fire on 9 September 2025. Fourteen months later, 865 pending corruption appeals are still marked \"file destroyed, not recovered\", and 85% of them have not been listed since. In the 14 months after the fire the court decided 15% of the appeals pending; in the 14 months before, during a drive to clear old cases, 33% (and 17% the year before that).",
+   "explain": "The Supreme Court was set on fire on 9 September 2025. Fourteen months later, 865 pending corruption appeals are still marked \"file destroyed, not recovered\", and 85% of them have not been listed since. In the 14 months after the fire the court decided 15% of the appeals pending; in the 14 months before, during a drive to clear old cases, 33%.",
    "caveat": "",
    "source": "work/2026-11-02-destroyed-files/ARTICLE.md (court case pages, 1–2 Nov 2026)",
    "href": "https://research.jawafdehi.org/report#appeal-decided",

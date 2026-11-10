@@ -16,7 +16,7 @@
 export const SECTIONS = [
   { path: "/", key: "home", label: "Home", blurb: "Where accountability leaks, at a glance" },
   { path: "/highlights", key: "highlights", label: "Highlights", blurb: "What the research found" },
-  { path: "/report", key: "report", label: "Report", blurb: "Where accountability leaks" },
+  { path: "/report", key: "report", label: "Report", blurb: "Full report, stage by stage" },
   { path: "/investigation", key: "investigation", label: "Investigation", blurb: "Complaint to charge" },
   { path: "/prosecution", key: "prosecution", label: "Prosecution", blurb: "What gets charged" },
   { path: "/court-outcomes", key: "courtOutcomes", label: "Court outcomes", blurb: "What the court decides" },

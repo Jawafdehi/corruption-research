@@ -18,7 +18,7 @@ import "./report-links.css";
 // are unreviewed.
 const NE: Record<string, [string, string]> = {
   highlights: ["मुख्य निष्कर्ष", ""],
-  report: ["प्रतिवेदन", ""],
+  report: ["प्रतिवेदन", "पूरा प्रतिवेदन, चरण-चरण"],
   investigation: ["अनुसन्धान", ""],
   prosecution: ["अभियोजन", ""],
   courtOutcomes: ["अदालतको फैसला", ""],

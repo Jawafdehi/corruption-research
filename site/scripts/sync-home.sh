@@ -24,14 +24,14 @@ SRC="$OPT/7-final"
 SH="$OPT/shared"
 OUT="$SITE/public/home"
 
-for f in "$SRC/index.html" "$SRC/app.css" "$SRC/app.js" "$SRC/ui.js" "$SRC/copy.js" "$SH/base.css" "$SH/build_data.py"; do
+for f in "$SRC/index.html" "$SRC/app.css" "$SRC/app.js" "$SRC/ui.js" "$SRC/copy.js" "$SRC/ne.js" "$SH/base.css" "$SH/build_data.py"; do
   [[ -f "$f" ]] || { echo "sync-home: missing $f" >&2; exit 1; }
 done
 
 mkdir -p "$OUT/brand" "$SITE/src/home"
 
 rewrite() { sed -e 's#\.\./shared/#/home/#g' "$1" > "$2"; }
-for f in app.css app.js ui.js copy.js; do rewrite "$SRC/$f" "$OUT/$f"; done
+for f in app.css app.js ui.js copy.js ne.js; do rewrite "$SRC/$f" "$OUT/$f"; done
 rewrite "$SH/base.css" "$OUT/base.css"
 cp "$SH"/brand/*.svg "$OUT/brand/"
 
@@ -87,3 +87,17 @@ PY
 
 python3 "$SITE/scripts/home_build_data.py"
 echo "sync-home: copied 7-final into $OUT and regenerated findings.js"
+
+# The no-JavaScript fallback (generated in the mockup from the same data) also goes into the
+# site's own index.html, which is what a reader without JavaScript actually gets.
+python3 - "$SRC/index.html" "$SITE/index.html" <<'PY'
+import re, sys
+src, dst = sys.argv[1], sys.argv[2]
+m = re.search(r"<noscript>.*?</noscript>", open(src, encoding="utf8").read(), re.S)
+if not m: sys.exit("sync-home: no <noscript> in the mockup (run node test/gen-noscript.mjs)")
+html = open(dst, encoding="utf8").read()
+block = "<!--noscript-->" + m.group(0) + "<!--/noscript-->"
+html = re.sub(r"<!--noscript-->.*?<!--/noscript-->", lambda _: block, html, flags=re.S) if "<!--noscript-->" in html else html.replace('<div id="root"></div>', '<div id="root"></div>\n    ' + block)
+open(dst, "w", encoding="utf8").write(html)
+print("sync-home: no-JavaScript fallback written into index.html")
+PY

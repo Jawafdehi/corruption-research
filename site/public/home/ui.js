@@ -11,6 +11,9 @@
   let lang = pick(params.get("lang") || localStorage.getItem("jw-lang"), ["en", "ne"], "en");
   let view = pick(params.get("view") || localStorage.getItem("jw7-view"), ["funnel", "pipe"], "funnel");
   const renderers = [];
+  // Closing the drawer goes back one history entry; the browser must not restore an old
+  // scroll position when it does (Firefox jumped to the top).
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   // The one launch flag: the review build says "draft"; the launch build (the site sets
   // window.JW_LAUNCH = true, or ?launch=1) does not.
   const LAUNCH = !!window.JW_LAUNCH || params.get("launch") === "1";
@@ -21,7 +24,7 @@
     research: { en: "Research", ne: "अनुसन्धान" },
     byline: { en: "A research report by Jawafdehi Initiative · jawafdehi.org", ne: "जवाफदेही इनिशिएटिभको अनुसन्धान प्रतिवेदन · jawafdehi.org" },
     draft: { en: "Draft for review, not yet published.", ne: "समीक्षाका लागि मस्यौदा, अहिलेसम्म प्रकाशित गरिएको छैन।" },
-    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, and the CIAA's 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: ८ अक्टोबर देखि ३ नोभेम्बर २०२६ सम्म सङ्कलित अदालतका अभिलेख, र अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
+    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, and the CIAA's 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: २०८३ असोज २२ देखि कार्तिक १७ सम्म सङ्कलित अदालतका अभिलेख, र अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
     evidence: { en: "Show evidence", ne: "प्रमाण हेर्नुहोस्" },
     close: { en: "Close", ne: "बन्द गर्नुहोस्" },
     whatWeFound: { en: "What we found", ne: "हामीले के भेट्यौं" },
@@ -39,7 +42,7 @@
     of: { en: "of", ne: "मध्ये" },
     neNote: {
       en: "",
-      ne: "तलको पूरा विवरण अहिले अंग्रेजीमा मात्र छ। नेपाली अनुवाद छिट्टै थपिनेछ।",
+      ne: "",
     },
     view: { en: "View", ne: "दृश्य" },
     funnel: { en: "Funnel", ne: "फनेल" },
@@ -147,7 +150,7 @@
   const LOGO = { light: "/home/brand/jawafdehi-logo-navy-for-light-bg.svg", dark: "/home/brand/jawafdehi-logo-white-for-dark-bg.svg" };
   const TAGLINE = "जवाफदेहिताको कहिल्यै म्याद सकिँदैन।";
   const brand = () => `<a class="jw-brand" href="https://jawafdehi.org" aria-label="${esc(tx("site"))} · jawafdehi.org"><img src="${LOGO.light}" alt="" width="66" height="30"><span aria-hidden="true"><b>${esc(tx("site"))}</b>${esc(tx("research"))}</span></a>`;
-  const CHECKED = { en: "7–10 November 2026", ne: "७–१० नोभेम्बर २०२६" }; // dates of the recomputations (FIGURES.md, Q9)
+  const CHECKED = { en: "7–10 November 2026", ne: "२०८३ कार्तिक २१–२४" }; // dates of the recomputations (FIGURES.md, Q9)
   const brandFoot = () => `<div class="in"><img src="${LOGO.dark}" alt="${esc(tx("site"))}" width="75" height="34"><div><p class="tag" lang="ne">${TAGLINE}</p><small>${esc(tx("byline"))}</small><small>${esc(tx("checked").replace("{d}", t(CHECKED)))}</small>${LAUNCH ? "" : `<small class="draftfoot">${esc(tx("draft"))}</small>`}</div></div>`;
 
   /* ---------- header controls ---------- */
@@ -178,7 +181,7 @@
   const linkFor = (k) => { const u = new URL(location.href); u.hash = "f=" + k; return u.href; };
   const citation = (f) =>
     lang === "ne"
-      ? `जवाफदेही इनिशिएटिभ, "जवाफदेहिता कहाँ चुहिन्छ" (${LAUNCH ? "" : "मस्यौदा, "}नोभेम्बर २०२६)। निष्कर्ष: ${f.headline.ne}। ${f.href}। स्रोत: ${f.src.ne}।`
+      ? `जवाफदेही इनिशिएटिभ, "जवाफदेहिता कहाँ चुहिन्छ" (${LAUNCH ? "" : "मस्यौदा, "}कार्तिक २०८३)। निष्कर्ष: ${f.headline.ne}। ${f.href}। स्रोत: ${f.src.ne}।`
       : `Jawafdehi Initiative, "Where accountability leaks" (${LAUNCH ? "" : "draft, "}November 2026). Finding: ${f.headline.en}. ${f.href}. Source: ${f.src.en}.`;
 
   let drawer, scrim, lastFocus, pushed = false, lockY = 0;
@@ -196,7 +199,7 @@
         <p class="lbl">${esc(t(f.big.label))}</p>
         <div class="dviz">${viz(f, { max: 300 })}</div>
         <section><h3>${tx("whatWeFound")}</h3>
-          ${lang === "ne" ? `<p>${esc(f.short.ne)}</p><p class="note">${tx("neNote")}</p><p lang="en">${esc(f.explain)}</p>` : `<p>${esc(f.explain)}</p>`}
+          ${lang !== "ne" ? `<p>${esc(f.explain)}</p>` : f.explain_ne ? `<p>${esc(f.explain_ne)}</p>` : `<p>${esc(f.short.ne)}</p><p class="note">${tx("neNote")}</p><p lang="en">${esc(f.explain)}</p>`}
         </section>
         <section><h3>${tx("howSure")}</h3>
           <p>${chip(f.gap)}</p><p class="note">${esc(t({ en: JW.gap[f.gap].long_en, ne: JW.gap[f.gap].long_ne }))}</p>

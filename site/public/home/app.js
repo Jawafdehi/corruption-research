@@ -28,31 +28,34 @@
   const T = (o) => fill(t(o));
 
   const C = {
-    q: { en: "{n} new complaints in one year. How many end in a conviction that stands?", ne: "एक वर्षमा {n} नयाँ उजुरी। तीमध्ये कति कायम रहने दोषी ठहरमा पुग्छन्?" },
+    q: { en: "{n} new complaints in one year. How many end in a conviction that stands?", ne: "एक वर्षमा {n} नयाँ उजुरी। तीमध्ये कतिमा अन्तिमसम्म कायम रहने कसुर ठहर हुन्छ?" },
     sub: {
       en: "Follow one year of complaints from the CIAA to the Supreme Court, stage by stage. At each stage, red cards show where accountability leaks. Tap any card for the evidence.",
-      ne: "एक वर्षका उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म, चरण-चरण पछ्याउनुहोस्। हरेक चरणमा रातो कार्डले जवाफदेहिता कहाँ चुहिन्छ देखाउँछन्। प्रमाण हेर्न कुनै पनि कार्डमा थिच्नुहोस्।",
+      ne: "एक वर्षका उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म चरणगत रूपमा पछ्याउनुहोस्। हरेक चरणमा रातो कार्डहरूले जवाफदेहिता कहाँ चुहिन्छ भन्ने देखाउँछन्। प्रमाण हेर्न कुनै पनि कार्डमा थिच्नुहोस्।",
     },
-    cue: { en: "Scroll down", ne: "तल सार्नुहोस्" },
+    cue: { en: "Scroll down", ne: "तल स्क्रोल गर्नुहोस्" },
+    // One line in the intro with the two figures that matter (both from the funnel's data).
+    gist: { en: "{complaints} complaints → about {supreme} convictions that stand", ne: "{complaints} उजुरी → करिब {supreme} कायम रहने कसुर ठहर" },
     skip: { en: "Without animation", ne: "एनिमेसनबिना" },
+    skipShort: { en: "Static", ne: "स्थिर" },
     skipLong: { en: "Or read it all on one page, without animation", ne: "वा एनिमेसनबिना सबै एउटै पानामा पढ्नुहोस्" },
     animated: { en: "With animation", ne: "एनिमेसनसहित" },
     per: { en: "For every 10,000 complaints:", ne: "हरेक १०,००० उजुरीमा:" },
     est: { en: "Our estimate", ne: "हाम्रो अनुमान" },
-    figSrc: { en: "How this figure was counted", ne: "यो अंक कसरी गनियो" },
+    figSrc: { en: "How this figure was counted", ne: "यो अंक कसरी निकालियो" },
     leaks: { en: "Where it leaks at this stage", ne: "यस चरणमा कहाँ चुहिन्छ" },
     hint: { en: "Tap a card to see the evidence", ne: "प्रमाण हेर्न कार्डमा थिच्नुहोस्" },
-    scale: { en: "Widths are not to scale, so that every stage can be read.", ne: "चौडाइ अनुपातमा छैन, ताकि हरेक चरण पढ्न सकियोस्।" },
+    scale: { en: "Widths are not to scale, so that every stage can be read.", ne: "हरेक चरण पढ्न सकियोस् भनेर पट्टीहरूको चौडाइ अनुपातअनुसार राखिएको छैन।" },
     ciaa: { en: "CIAA", ne: "अख्तियार" },
     courts: { en: "Courts", ne: "अदालत" },
     endEyebrow: { en: "Where it ends", ne: "अन्त्यमा" },
     estLine: { en: "An estimate: each stage's rate applied in turn to one year's complaints, not one group of complaints followed to the end.", ne: "अनुमान: एक वर्षका उजुरीमा हरेक चरणको दर क्रमशः लागू गरेर निकालिएको, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएर होइन।" },
     squares: { en: "Each square is one complaint: 10,000 in all", ne: "हरेक वर्ग एउटा उजुरी हो: जम्मा १०,०००" },
-    stands: { en: "End in a conviction that stands", ne: "कायम रहने दोषी ठहरमा पुग्ने" },
+    stands: { en: "End in a conviction that stands", ne: "अन्तिमसम्म दोषी ठहर कायम रहने" },
     leaked: { en: "Lost along the way", ne: "बीच बाटोमै छुटेका" },
     endLine: {
       en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than {perK} in 1,000.",
-      ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मात्र सर्वोच्च अदालतपछि पनि कायम रहने दोषी ठहरमा पुग्छन्: १,००० मा {perK} भन्दा कम।",
+      ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मा मात्र सर्वोच्च अदालतपछि पनि दोषी ठहर कायम रहन्छ: १,००० मा {perK} भन्दा कम।",
     },
     money: { en: "And the money? No one publishes how much is recovered from corruption judgments.", ne: "अनि रकम? भ्रष्टाचारका फैसलाबाट कति रकम असुल भयो, कसैले प्रकाशित गर्दैन।" },
     how: { en: "How we counted", ne: "हामीले कसरी गन्यौं" },
@@ -60,7 +63,7 @@
     printNote: { en: "The whole page, without animation, ready to print.", ne: "पूरा पाना, एनिमेसनबिना, प्रिन्टका लागि तयार।" },
     all: { en: "All {nLeaks} leaks, with evidence", ne: "सबै {nLeaks} चुहावट, प्रमाणसहित" },
     allNote: { en: "These are the report's {nLeaks} headline findings, one card each. The full report also ranks the leaks by size and by how sure we are; that list groups some of these together and adds a few about how cases are charged and recorded.",
-      ne: "यी प्रतिवेदनका {nLeaks} मुख्य निष्कर्ष हुन्, हरेकको एउटा कार्ड। पूरा प्रतिवेदनले चुहावटलाई आकार र हामी कत्तिको निश्चित छौं भन्ने आधारमा क्रमबद्ध पनि गर्छ; त्यो सूचीले यीमध्ये केहीलाई एकै ठाउँ राख्छ र मुद्दा कसरी चलाइन्छ र अभिलेख कसरी राखिन्छ भन्नेबारे केही थप्छ।" },
+      ne: "यी प्रतिवेदनका {nLeaks} मुख्य निष्कर्ष हुन्, हरेकको एउटा कार्ड। पूरा प्रतिवेदनले चुहावटलाई आकार र हामी कत्तिको निश्चित छौं भन्ने आधारमा क्रमबद्ध पनि गर्छ; त्यस सूचीमा यीमध्ये केही निष्कर्ष एकै शीर्षकमा गाभिएका छन्, र मुद्दा चलाउने तरिका र अभिलेख व्यवस्थापनसम्बन्धी केही थप निष्कर्ष छन्।" },
     ranked: { en: "The ranked list", ne: "क्रमबद्ध सूची" },
     method: [
       { en: "No public record follows a complaint all the way from the CIAA to the Supreme Court. That is itself one of the gaps. So we take one year's complaints and apply the rate measured at each later stage.",
@@ -68,9 +71,9 @@
       { en: "{complaints} new complaints, {investigated} full investigations completed and {filed} cases filed in court are the CIAA's own figures for {fy}, from its 35th annual report. They count different events in the same year; they do not follow one group of complaints.",
         ne: "{complaints} नयाँ उजुरी, सम्पन्न {investigated} विस्तृत अनुसन्धान र अदालतमा दायर {filed} मुद्दा अख्तियारकै ३५औं वार्षिक प्रतिवेदनमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
       { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from many years of court records.",
-        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक जना दोषी ठहरिए। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
+        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादी दोषी ठहरियो। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
       { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
-        ne: "त्यसैले फनेलले प्रणालीमा एउटा उजुरीको सम्भावना देखाउँछ, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
+        ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
     ],
     src: { en: "Sources: CIAA 35th annual report ({fy}); Special Court and Supreme Court case records.", ne: "स्रोत: अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}); विशेष अदालत र सर्वोच्च अदालतका मुद्दाका अभिलेख।" },
   };
@@ -89,37 +92,37 @@
     investigated: {
       name: { en: "Full investigation", ne: "विस्तृत अनुसन्धान" },
       label: { en: "full investigations the CIAA completed that year", ne: "सो वर्ष अख्तियारले सम्पन्न गरेका विस्तृत अनुसन्धान" },
-      note: { en: "Most complaints are closed at screening or sent elsewhere.", ne: "धेरैजसो उजुरी प्रारम्भिक छानबिनमै तामेलीमा राखिन्छन् वा अन्यत्र पठाइन्छन्।" },
+      note: { en: "Most complaints are closed at screening or sent elsewhere.", ne: "धेरैजसो उजुरी स्क्रिनिङ र प्रारम्भिक छानबिनमै तामेलीमा राखिन्छन् वा अन्यत्र पठाइन्छन्।" },
       how: { en: "Full investigations the CIAA completed during {fy}, from the summary of its 35th annual report. The same report says {toInv} complaints were sent on for full investigation that year. That counts a different event (sent, not completed), so the two figures cannot be subtracted from each other.",
         ne: "{fy} मा अख्तियारले सम्पन्न गरेका विस्तृत अनुसन्धान, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। सोही प्रतिवेदनअनुसार सो वर्ष {toInv} उजुरी विस्तृत अनुसन्धानमा पठाइए। त्यो फरक घटना हो (पठाइएको, सम्पन्न भएको होइन), त्यसैले यी दुई अंक एकअर्काबाट घटाउन मिल्दैन।" },
       src: { en: "CIAA 35th annual report ({fy}), summary", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), सारांश" },
       href: "https://research.jawafdehi.org/report#investigation",
     },
     charged: {
-      name: { en: "Decision to charge", ne: "मुद्दा चलाउने निर्णय" },
+      name: { en: "Decision to charge", ne: "मुद्दा दायर गर्ने निर्णय" },
       label: { en: "cases the CIAA filed at the Special Court", ne: "अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा" },
       note: { en: "The CIAA's own figures end here. The next two stages are our estimates.", ne: "अख्तियारको आफ्नै तथ्यांक यहीँ सकिन्छ। त्यसपछिका दुई चरण हाम्रो अनुमान हुन्।" },
       how: { en: "Cases the CIAA filed at the Special Court in {fy} after a full investigation, from the summary of its 35th annual report. The 75% card at this stage counts something else: the CIAA's decisions after a full investigation, not investigations finished. The CIAA reports the two separately, so the 75% cannot be worked out from {investigated} → {filed}.",
-        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। यस चरणको ७५% को कार्डले अर्कै कुरा गन्छ: विस्तृत अनुसन्धानपछिका अख्तियारका निर्णय, सकिएका अनुसन्धान होइन। अख्तियारले यी दुई छुट्टाछुट्टै प्रकाशित गर्छ, त्यसैले ७५% लाई {investigated} → {filed} बाट निकाल्न मिल्दैन।" },
+        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। यस चरणको ७५% भन्ने कार्डले फरक कुरा गन्छ: विस्तृत अनुसन्धानपछिका अख्तियारका निर्णय, सकिएका अनुसन्धान होइन। अख्तियारले यी दुई छुट्टाछुट्टै प्रकाशित गर्छ, त्यसैले ७५% लाई {investigated} → {filed} बाट निकाल्न मिल्दैन।" },
       src: { en: "CIAA 35th annual report ({fy}), summary", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), सारांश" },
       href: "https://research.jawafdehi.org/report#investigation",
     },
     special: {
       name: { en: "Special Court", ne: "विशेष अदालत" },
-      label: { en: "of the {filed} cases taken to court this year are estimated to end with at least one person convicted", ne: "यस वर्ष अदालत पुगेका {filed} मुद्दामध्ये कम्तीमा एक जना दोषी ठहरिने अनुमानित मुद्दा" },
-      note: { en: "{convRate} of decided CIAA cases ({lrConv} of {lrDec}) end with at least one conviction.", ne: "फैसला भएका अख्तियारका मुद्दामध्ये {convRate} ({lrDec} मध्ये {lrConv}) मा कम्तीमा एक जना दोषी ठहरिन्छन्।" },
+      label: { en: "of the {filed} cases taken to court this year are estimated to end with at least one person convicted", ne: "यस वर्ष दायर {filed} मुद्दामध्ये कम्तीमा एक प्रतिवादी दोषी ठहरिने अनुमानित मुद्दा" },
+      note: { en: "{convRate} of decided CIAA cases ({lrConv} of {lrDec}) end with at least one conviction.", ne: "फैसला भएका अख्तियारका मुद्दामध्ये {convRate} ({lrDec} मध्ये {lrConv}) मा कम्तीमा एक प्रतिवादी दोषी ठहरिन्छ।" },
       how: { en: "Our estimate. In the Special Court's record, {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Applied to the {filed} cases filed in {fy}, that gives about {special}. It counts cases, not people.",
-        ne: "हाम्रो अनुमान। विशेष अदालतको अभिलेखमा फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक जना दोषी ठहरिए। {fy} मा दायर {filed} मुद्दामा यो दर लागू गर्दा करिब {special} हुन्छ। यसले मुद्दा गन्छ, व्यक्ति होइन।" },
-      src: { en: "Special Court case records (downloaded 8 October 2026)", ne: "विशेष अदालतका मुद्दाका अभिलेख (८ अक्टोबर २०२६ मा लिइएको)" },
+        ne: "हाम्रो अनुमान। विशेष अदालतको अभिलेखमा फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादी दोषी ठहरियो। {fy} मा दायर {filed} मुद्दामा यो दर लागू गर्दा करिब {special} हुन्छ। यसले मुद्दा गन्छ, व्यक्ति होइन।" },
+      src: { en: "Special Court case records (downloaded 8 October 2026)", ne: "विशेष अदालतका मुद्दाका अभिलेख (२०८३ असोज २२ मा लिइएको)" },
       href: "https://research.jawafdehi.org/report#trial",
     },
     supreme: {
       name: { en: "Supreme Court", ne: "सर्वोच्च अदालत" },
-      label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "दोषी ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्चमा पुनरावेदनपछि पनि ठहर कायम रहने अनुमानित मुद्दा" },
+      label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "दोषी ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्च अदालतमा पुनरावेदनपछि पनि ठहर कायम रहने अनुमानित मुद्दा" },
       note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of cases whose appeal has been decided ({apStand} of {apDec}).", ne: "दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका मुद्दामध्ये {standRate} ({apDec} मध्ये {apStand}) मा ठहर पूरै उल्टिँदैन।" },
       how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}); in {apPartial} of these it overturned part of it. Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHi} in 10,000 complaints instead of {end}.",
-        ne: "हाम्रो अनुमान। दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा ठहरको केही अंश उल्टियो। अनुमानित करिब {special} दोषी ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
-      src: { en: "Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", ne: "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (३ नोभेम्बर २०२६ सम्म)" },
+        ne: "हाम्रो अनुमान। दोषीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा ठहरको केही अंश उल्टियो। अनुमानित करिब {special} दोषी ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै ठहर कायम रहन्छन् भनी मान्ने हो भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
+      src: { en: "Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", ne: "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (२०८३ कार्तिक १७ सम्म)" },
       href: "https://research.jawafdehi.org/appeals#appeal-asymmetry",
     },
     recovery: {
@@ -220,20 +223,24 @@
   // The eyebrow names who holds the case, so it never repeats the stage name below it.
   const WHO = { ciaa: { en: "CIAA", ne: "अख्तियार" }, special: { en: "Courts", ne: "अदालत" }, supreme: { en: "Courts", ne: "अदालत" }, none: { en: "After the verdict", ne: "फैसलापछि" } };
   const eyebrowTxt = (st) => t(WHO[st.inst]);
-  const perTxt = (st) => (st.per10k == null ? "" : `${esc(t(C.per))} <b class="num">${approx(st)}${N(st.per10k)}</b>`);
+  const perTxt = (st) => (st.per10k == null || st === S[0] ? "" : `${esc(t(C.per))} <b class="num">${approx(st)}${N(st.per10k)}</b>`);
   const skipHref = (on) => { const u = new URL(location.href); u.hash = ""; on ? u.searchParams.set("static", "1") : u.searchParams.delete("static"); u.searchParams.delete("at"); return u.pathname + u.search; };
 
   const printHref = () => { const u = new URL(skipHref(true), location.href); u.searchParams.set("view", "funnel"); u.searchParams.set("print", "1"); return u.pathname + u.search; };
-  const isStatic = () => qs.has("static") || RM.matches;
+  // Screens too short for the funnel beside its cards (landscape phones, 320×568, 200% zoom)
+  // get the one-page version, which shows the same content.
+  const SHORT = matchMedia("(max-height: 600px)");
+  const isStatic = () => qs.has("static") || RM.matches || SHORT.matches;
   // The Funnel | Pipeline switch opens the middle part; it sticks while the reader is in it.
-  const switchHTML = (live) => `<div class="switch" id="switch"><div class="swin"><span class="swl" id="swl">${esc(tx("viewLabel"))}</span><span data-viewtoggle></span>${U.view === "funnel" ? `<a class="skip" id="skip" href="${skipHref(live)}">${esc(t(live ? C.skip : C.animated))}</a>` : ""}</div></div>`;
+  const switchHTML = (live) => `<div class="switch" id="switch"><div class="swin"><span class="swl" id="swl">${esc(tx("viewLabel"))}</span><span data-viewtoggle></span>${U.view === "funnel" ? `<a class="skip" id="skip" href="${skipHref(live)}"><span class="lg">${esc(t(live ? C.skip : C.animated))}</span>${live ? `<span class="sh" aria-hidden="true">${esc(t(C.skipShort))}</span>` : ""}</a>` : ""}</div></div>`;
 
   function introHTML() {
     return `<section class="intro" id="intro"><div class="in">
-      <img class="biglogo" src="${LOGO.dark}" alt="" width="119" height="54">
+      <p class="byname">${esc(t({ en: "Jawafdehi Initiative · जवाफदेही", ne: "जवाफदेही इनिशिएटिभ" }))}</p>
       <p class="eyebrow">${esc(tx("title"))}</p>
       <h1>${esc(t(C.q)).replace("{n}", `<span class="num">${cm(N(S[0].count))}</span>`)}</h1>
       <p class="sub">${esc(t(C.sub))}</p>
+      <p class="gist num">${esc(T(C.gist))}</p>
       <p class="cue" aria-hidden="true">${esc(t(C.cue))}<svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 8l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
     </div></section>`;
   }
@@ -436,11 +443,14 @@
     el.gaps.style.transform = `translateY(${y.toFixed(0)}px)`;
   }
 
-  function frame() { raf = 0; draw(posFromScroll()); }
+  function frame() { raf = 0; if (mode === "live" && el.rect) draw(posFromScroll()); }
   function onScroll() { if (!raf) raf = requestAnimationFrame(frame); }
+  // The large viewport (100lvh) does not change when a phone's address bar shows or hides,
+  // so neither does the size of a step.
+  const lvh = () => { const m = document.createElement("div"); m.style.cssText = "position:absolute;visibility:hidden;height:100lvh;width:0"; document.body.append(m); const h = m.offsetHeight || window.innerHeight; m.remove(); return Math.max(h, window.innerHeight); };
   function measure() {
-    stepPx = Math.max(420, window.innerHeight * 0.8);
-    el.track.style.height = `${Math.round(stepPx * (LASTSTEP + 0.5) + window.innerHeight)}px`;
+    stepPx = Math.max(420, lvh() * 0.8);
+    el.track.style.height = `${Math.round(stepPx * (LASTSTEP + 0.5) + lvh())}px`;
     trackTop = el.track.getBoundingClientRect().top + window.scrollY;
   }
 
@@ -545,6 +555,7 @@
   }
   window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(relayout, 120); });
   RM.addEventListener?.("change", () => { if (U.view === "funnel") { render(); } });
+  SHORT.addEventListener?.("change", () => { if (U.view === "funnel" && !qs.has("static") && !RM.matches) { lastBox = ""; render(); } });
 
   // The tap hint shows until the reader opens any evidence, then never again.
   const TAP = "jw7-tapped";
