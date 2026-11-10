@@ -103,7 +103,7 @@ function SectionNav() {
   return (
     <nav
       aria-label={t("research.corruption.nav.aria", "Report sections")}
-      className="chart-scroll border-b border-border bg-card/60"
+      className="overflow-x-auto border-b border-border bg-card/60"
     >
       <div className="container flex gap-1 px-4 md:px-6">
         {SECTIONS.map((s) => (
