@@ -777,7 +777,7 @@ export const ne: Record<string, string> = {
   "research.corruption.delay.trendRef": "विशेष अदालतको गति",
   // --- Masthead and the About Jawafdehi section ------------------------------
   "research.corruption.site.logoAlt": "जवाफदेही",
-  "research.corruption.site.eyebrow2": "रिसर्च",
+  "research.corruption.site.eyebrow2": "अनुसन्धान",
   "research.corruption.site.title2":
     "नेपालको जवाफदेहिता प्रणाली कसरी चल्छ, र कहाँ चुहिन्छ",
   "research.corruption.about.label2": "जवाफदेहीबारे",
