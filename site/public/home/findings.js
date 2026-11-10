@@ -308,7 +308,7 @@ window.JW = {
     "en": "No complaint number. No status lookup. Portal offline.",
     "ne": "उजुरी नम्बर छैन। स्थिति हेर्ने सुविधा छैन। पोर्टल बन्द।"
    },
-   "explain": "When we checked the CIAA's website on 7 November 2026, it gave no complaint number and no way to look up a complaint's status. Its online complaint portal was offline for an upgrade.",
+   "explain": "When we checked the CIAA's website on 7 November 2026, and again on 10 November 2026, it gave no complaint number and no way to look up a complaint's status. A CIAA notice dated 17 Kartik 2083 says its online complaint portal is being upgraded, and asks people to complain by email, phone, post or in person.",
    "caveat": "",
    "source": "stages/public-view/PUBLIC-VIEW.md, check 2 (screenshots)",
    "href": "https://research.jawafdehi.org/report#complaints",
@@ -502,7 +502,7 @@ window.JW = {
     }
    },
    "explain": "In the 31 acquittal judgments we read, the court said the evidence did not prove the charge in 13, that what was charged was not the offence (no loss, no bad intent or the wrong offence) in 11, and named a flaw in the CIAA's investigation in 5. Reading every judgment that mentions it, we found 12 where the court cleared people partly because the CIAA charged some and left out others who did the same, including the wide-body aircraft and Pashupatinath Jalahari cases. The CIAA publishes no review of why it loses.",
-   "caveat": "Read by an agent, not by a lawyer; 31 judgments is a sample.",
+   "caveat": "Read with AI software, not yet reviewed by a lawyer; 31 judgments is a sample.",
    "source": "acquittal-reasons/FINDING.md (card 6.4; READING.csv)",
    "href": "https://research.jawafdehi.org/report#trial",
    "tag": {
@@ -634,7 +634,7 @@ window.JW = {
     }
    },
    "explain": "In the 16 overturned convictions we read, the Supreme Court pointed to the investigation in 7, to bribe money the CIAA itself supplied (evidence the Constitutional Bench ruled out in 2021) in 6, and to the charge in 3. Of all the trials whose appeal judgment cites that 2021 ruling, 84% ended with the conviction overturned.",
-   "caveat": "Read by an agent, not by a lawyer; 16 judgments is a sample.",
+   "caveat": "Read with AI software, not yet reviewed by a lawyer; 16 judgments is a sample.",
    "source": "legal-check/AGENT_READING.csv; stages/8.5-REVERSAL-REASONS.md (83.7%)",
    "href": "https://research.jawafdehi.org/report#appeal-decided",
    "tag": {

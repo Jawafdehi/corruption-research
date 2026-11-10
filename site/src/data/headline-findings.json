@@ -53,9 +53,10 @@
         {
           "key": "tracking",
           "headline": "A person who complains cannot follow what happens to the complaint",
-          "explain": "When we checked the CIAA's website on {{checked}}, it gave no complaint number and no way to look up a complaint's status. Its online complaint portal was offline for an upgrade.",
+          "explain": "When we checked the CIAA's website on {{checked}}, and again on {{rechecked}}, it gave no complaint number and no way to look up a complaint's status. A CIAA notice dated 17 Kartik 2083 says its online complaint portal is being upgraded, and asks people to complain by email, phone, post or in person.",
           "figures": {
-            "checked": "7 November 2026"
+            "checked": "7 November 2026",
+            "rechecked": "10 November 2026"
           },
           "gap": "A",
           "source": "stages/public-view/PUBLIC-VIEW.md, check 2 (screenshots)",
@@ -116,7 +117,7 @@
             "selective": "12"
           },
           "gap": "A→B",
-          "caveat": "Read by an agent, not by a lawyer; 31 judgments is a sample.",
+          "caveat": "Read with AI software, not yet reviewed by a lawyer; 31 judgments is a sample.",
           "source": "acquittal-reasons/FINDING.md (card 6.4; READING.csv)",
           "href": "/report#trial"
         }
@@ -152,7 +153,7 @@
             "stingPct": "84%"
           },
           "gap": "A",
-          "caveat": "Read by an agent, not by a lawyer; 16 judgments is a sample.",
+          "caveat": "Read with AI software, not yet reviewed by a lawyer; 16 judgments is a sample.",
           "source": "legal-check/AGENT_READING.csv; stages/8.5-REVERSAL-REASONS.md (83.7%)",
           "href": "/report#appeal-decided"
         },

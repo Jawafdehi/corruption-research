@@ -75,6 +75,28 @@ function ScrollToTarget() {
   return null;
 }
 
+/**
+ * "<page> · Where accountability leaks · Jawafdehi Initiative", in the active language,
+ * so a report page reads as part of the same publication as the home page in a tab,
+ * a bookmark or a shared link.
+ */
+function DocumentTitle() {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const section = SECTIONS.find((s) => s.path !== "/" && pathname.startsWith(s.path));
+
+  useEffect(() => {
+    const parts = [
+      t("research.corruption.doc.title", "Where accountability leaks"),
+      t("research.corruption.doc.site", "Jawafdehi Initiative"),
+    ];
+    if (section) parts.unshift(t(`research.corruption.nav.${section.key}`, section.label));
+    document.title = parts.join(" · ");
+  }, [t, section]);
+
+  return null;
+}
+
 function SectionNav() {
   const { t } = useTranslation();
 
@@ -115,6 +137,7 @@ export function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
       <ScrollToTarget />
+      <DocumentTitle />
       {/* The wordmark gets its own band. Sharing a line with the title made the
           logo read as part of the headline rather than as whose publication this is. */}
       <div className="border-b border-border bg-[hsl(var(--surface))]">

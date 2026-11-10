@@ -34,15 +34,15 @@ Each year the CIAA closes thousands of complaints after a first check, before de
 - Whether the FY2078/79 dip and the rise since reflect a change in practice or a change in what is counted as "other action".
 - Anything for each complaint or official, or for corruption specifically: the tables cover every complaint within the CIAA's jurisdiction.
 
-## On 7 November 2026, a complainant could not track a complaint on the CIAA's website
+## On 7 and 10 November 2026, a complainant could not track a complaint on the CIAA's website
 
-A member of the public who complains to the CIAA cannot use its website to get a complaint number or check what happened to the complaint. On the day of the check the online complaint page had no form. It carried a notice, dated 18 Kartik 2083 (about 4 November 2026), that the portal is being upgraded, and listed other channels: email, hotline, messaging apps, social media, post or in person. None of those channels comes with a published complaint number or a public status lookup.
+A member of the public who complains to the CIAA cannot use its website to get a complaint number or check what happened to the complaint. On both days of the check the online complaint page had no form. It carried a notice, dated 17 Kartik 2083 (3 November 2026), that the portal is being upgraded, and listed other channels: email, hotline, messaging apps, social media, post or in person. None of those channels comes with a published complaint number or a public status lookup.
 
-**Gap type: A→B.** (A) Checked at the source on 2026-11-07, 20:02–20:04 UTC: the home page, the online complaint page, the notice, the FAQ and the feedback page. None gives a complaint number or a status lookup. The online portal itself was offline. (B) This research cannot see what the portal offered before the upgrade, or whether complaints made by email, phone or in person receive a number privately. Checking would have required submitting a complaint, which was outside this research.
+**Gap type: A→B.** (A) Checked at the source on 7 November 2026, 20:02–20:04 UTC (the home page, the online complaint page, the notice, the FAQ and the feedback page), and again on 10 November 2026. None gives a complaint number or a status lookup. The online portal itself was offline both times. (B) This research cannot see what the portal offered before the upgrade, or whether complaints made by email, phone or in person receive a number privately. Checking would have required submitting a complaint, which was outside this research.
 
-**Key figures.** None. This is a check of what the public website offers, on one date.
+**Key figures.** None. This is a check of what the public website offers, on two dates.
 
 **What this cannot establish.**
-- That tracking never existed, or that it will not exist after the upgrade. The check covers one day, during an announced upgrade.
+- That tracking never existed, or that it will not exist after the upgrade. The check covers two days, during an announced upgrade.
 - Whether a complainant who goes to the CIAA in person can get a number or ask about progress.
 - How many of the 29,703 complainants whose complaints were closed in FY2081/82 were told the outcome. That is not published (right-to-information request RTI-08).

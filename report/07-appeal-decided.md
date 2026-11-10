@@ -32,14 +32,14 @@ When people convicted by the Special Court appealed, the Supreme Court fully cle
 - Convictions after the ruling were rarely overturned: 5 of 39 trials with a text (13%), against 187 of 365 (51%) before it.
 - Per appeal rather than per trial: 186 of 360 reversing judgments (51.7%) cite the ruling, against 40 of 310 (12.9%) other final judgments.
 
-**Why convictions were overturned** (*agent reading, not a legal review*). The ruling's holding, as read: it struck down rule 30 of the CIAA Rules 2059 and held that money the CIAA hands a complainant to pass on as a bribe cannot be used as evidence. An AI agent read 16 sampled full reversals. Main ground: evidence insufficient 8, procedure 7 (6 of them the 2021 ruling), no loss shown 1. In none did the Supreme Court say it had simply weighed the same evidence differently. It placed the failure in the investigation (7), the change in the law (6) or the charge sheet (3). For the 2021 ruling, the Special Court's "error" exists only in light of the later law. A blind second reading of 10 sampled judgments agreed on outcome, stage and trial-court error in 10 of 10, and on main ground in 9 of 10.
+**Why convictions were overturned** (*read with AI software, not yet reviewed by a lawyer*). The ruling's holding, as read: it struck down rule 30 of the CIAA Rules 2059 and held that money the CIAA hands a complainant to pass on as a bribe cannot be used as evidence. 16 sampled full reversals were read with AI software. Main ground: evidence insufficient 8, procedure 7 (6 of them the 2021 ruling), no loss shown 1. In none did the Supreme Court say it had simply weighed the same evidence differently. It placed the failure in the investigation (7), the change in the law (6) or the charge sheet (3). For the 2021 ruling, the Special Court's "error" exists only in light of the later law. A blind second reading of 10 sampled judgments agreed on outcome, stage and trial-court error in 10 of 10, and on main ground in 9 of 10.
 
 **What this cannot establish.**
 - That anyone was innocent. A reversal can rest on evidence, procedure or the change in the law.
 - Outcomes for people. These are trials; the per-person figure is dominated by mass trials.
 - Outcomes for undecided appeals. 2,022 of 4,430 appeals have no final outcome, and they are not a random subset: older and harder cases are decided later.
 - That the ruling caused each reversal. A citation is not always the ground of decision. Trials with a judgment text are not a random subset: 192 of 230 overturned trials have one, against 212 of 337 not overturned.
-- Anything precise from the sample. 16 full reversals are reported as counts, not as rates. The readings are by an AI agent; no lawyer has reviewed them.
+- Anything precise from the sample. 16 full reversals are reported as counts, not as rates. They were read with AI software; no lawyer has reviewed them yet.
 - That every link is right. Firm links were 97–99.5% accurate on tests, so a few dozen of 3,304 are expected to be wrong.
 
 ## A decided appeal took a median of almost four years

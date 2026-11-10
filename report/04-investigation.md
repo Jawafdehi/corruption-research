@@ -2,7 +2,7 @@
 
 At stage 4 the CIAA investigates a complaint in full. At stage 5 it decides what to do with the result: prosecute at the Special Court, give advice, refer the matter to another body, hold it, or close it without action (तामेली). As at stages 1–3, the CIAA's annual reports are the only source, and they give counts for each year rather than records for each case.
 
-## After a full investigation, the CIAA now closes most cases instead of prosecuting them. The change happened in one year
+## After a full investigation, the CIAA now closes most cases instead of prosecuting them. The change happened within two years
 
 In FY2076/77, after completing full investigations, the CIAA decided to prosecute 441 times and closed 124 cases without action. Closures were 16.4% of its decisions. In FY2081/82 it decided to prosecute 137 times and closed 794 cases: 75.1% of 1,057 decisions. The change came between two consecutive years, FY2076/77 and FY2077/78 (16.4% → 54.1%), and has not reversed. For the 794 closures of FY2081/82 the CIAA's report gives two general grounds, not a reason for each case. Earlier reports did give one for each case.
 
@@ -54,11 +54,11 @@ In illicit-enrichment cases the CIAA has tested whether lawful income covered sp
 
 **Key figures and records.**
 - **Outcomes** (unit: decided cases; source: the Special Court's case record, this project's dataset): upheld in full 19 of 95 (20.0%); acquitted 59 of 95 (62.1%); all offences upheld in full 45.0%.
-- **The Supreme Court ruling** (decision no. 9433, 2072; [nkp.gov.np/full_detail/8476](https://nkp.gov.np/full_detail/8476)). The case was charged on a cash-flow basis and assessed by the Special Court over the whole check period. Assets over the period were Rs 74,51,426.25 against lawful income of Rs 68,47,535.90. The difference was 8.10% of total assets (Rs 6,03,890.34). The court held that a difference of up to 10% cannot be called unnatural, and the acquittal stood. Ten per cent is this court's reasoning in this case and is not in the Act. *This reading of the judgment is an agent reading, not a legal review.*
+- **The Supreme Court ruling** (decision no. 9433, 2072; [nkp.gov.np/full_detail/8476](https://nkp.gov.np/full_detail/8476)). The case was charged on a cash-flow basis and assessed by the Special Court over the whole check period. Assets over the period were Rs 74,51,426.25 against lawful income of Rs 68,47,535.90. The difference was 8.10% of total assets (Rs 6,03,890.34). The court held that a difference of up to 10% cannot be called unnatural, and the acquittal stood. Ten per cent is this court's reasoning in this case and is not in the Act. *This reading of the judgment was read with AI software and has not yet been reviewed by a lawyer.*
 - **The method is still in use.** Cash-flow reasoning appears in 5 of the 13 CIAA annual reports read (FY2069/70, 2070/71, 2075/76, 2076/77, 2077/78), both in decisions to close cases and in the CIAA's grounds for appealing acquittals, including after the ruling.
 
 **What this cannot establish.** That the method caused the outcomes, or how many charge sheets use it. The record holds the verdict only, not the method or the amount, so this can be read in judgments and reports one at a time but not counted across them.
 
 ## Where the overturned convictions come from
 
-Most convictions the Supreme Court overturns at stage 8 trace back to this stage: to how the CIAA gathered evidence in bribery arrests. The measurement, and the agent reading of the judgments, are in "Stage 8: the Supreme Court decides".
+Most convictions the Supreme Court overturns at stage 8 trace back to this stage: to how the CIAA gathered evidence in bribery arrests. The measurement, and the AI-software reading of the judgments, are in "Stage 8: the Supreme Court decides".

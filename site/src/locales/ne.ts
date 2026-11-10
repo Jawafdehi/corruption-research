@@ -56,6 +56,8 @@ export const ne: Record<string, string> = {
   "research.corruption.nav.method": "विधि",
   "research.corruption.nav.methodBlurb": "स्रोत, सीमा र प्रमाण",
   "research.corruption.nav.home": "गृहपृष्ठ",
+  "research.corruption.doc.title": "जवाफदेहिता कहाँ चुहिन्छ",
+  "research.corruption.doc.site": "जवाफदेही इनिशिएटिभ",
   "research.corruption.nav.homeBlurb": "जवाफदेहिता कहाँ चुहिन्छ, एक नजरमा",
   "research.corruption.nav.aria": "प्रतिवेदनका खण्डहरू",
   "research.corruption.loading": "खण्ड लोड हुँदै",

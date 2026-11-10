@@ -113,7 +113,7 @@ None of the 31 blames the trial itself.
 - the Pashupatinath Jalahari gold case (080-CR-0047): "something like selective prosecution … against the principle of equality and of fair investigation";
 - the Rs 10 polymer banknote case (075-CR-0134).
 
-**Gap type: A→B, with evidence.** (A) The CIAA publishes no review of why it loses at trial, and no reason when it leaves people out of a charge sheet. A citizen can find the court's reasons only by reading each judgment. (B) The shares come from a sample of 31 judgments read by an agent, not by a lawyer. The 12 selective-prosecution judgments are a minimum, because the search can miss other wordings.
+**Gap type: A→B, with evidence.** (A) The CIAA publishes no review of why it loses at trial, and no reason when it leaves people out of a charge sheet. A citizen can find the court's reasons only by reading each judgment. (B) The shares come from a sample of 31 judgments read with AI software, not yet by a lawyer. The 12 selective-prosecution judgments are a minimum, because the search can miss other wordings.
 
 **Key figures** (unit: trials; Special Court judgments for the 1,424 acquittals and partial acquittals with a text; verdicts from the court record held on 2026-11-02):
 
@@ -128,7 +128,7 @@ None of the 31 blames the trial itself.
 **What this cannot establish.**
 - A rate for all acquittals. Read the shares as "in the judgments we read".
 - Every ground in a judgment. Only the closing reasoning was read and the main ground coded; 10 of the 42 showed no ground in the part read.
-- A legal opinion. This is an agent's reading. The quoted passages are kept so a lawyer can check them.
+- A legal opinion. This is a reading made with AI software. The quoted passages are kept so a lawyer can check them.
 - Judgments without a text (126 of 1,550 trials).
 
 ## Not measured here

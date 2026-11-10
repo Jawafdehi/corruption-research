@@ -30,7 +30,7 @@ Of the Special Court acquittals that are old enough to judge, about one in five 
 
 **How an appeal was found.** An acquittal counts as appealed if any of three sources shows it: a government appeal linked to the trial (764); the CIAA's own published list of appeals, 2022–2026 (10 more); or a search of all 33,342 Supreme Court criminal appeal numbers for a government appeal against the trial's defendants, registered within 730 days of the verdict (9 more). Tested on the known cases, that search finds 96% of real appeals (732 of 764), and 99.1% of what it finds is right (737 of 744). Verdicts less than 419 days before the newest Supreme Court registration on record (2026-09-30) are set aside as too recent.
 
-**What eight unappealed acquittals show** (*agent reading, not a legal review*). Eight unappealed acquittals were read in full. In 7 of 8 the agent found no obvious ground for appeal: the acquittal followed the 2021 ruling on CIAA-supplied bribe money, or rested on gaps in the CIAA's own evidence or charge. In 1 of 8 it found a weak ground. A blind second reading of that judgment disagreed.
+**What eight unappealed acquittals show** (*read with AI software, not yet reviewed by a lawyer*). Eight unappealed acquittals were read in full. In 7 of 8 the reading found no obvious ground for appeal: the acquittal followed the 2021 ruling on CIAA-supplied bribe money, or rested on gaps in the CIAA's own evidence or charge. In 1 of 8 it found a weak ground. A blind second reading of that judgment disagreed.
 
 **What this cannot establish.**
 - That no appeal was made. "No appeal found" is not proof: the court record held may lack some Supreme Court cases, the CIAA's list covers only 2022–2026, and the search misses about 4% of real appeals.

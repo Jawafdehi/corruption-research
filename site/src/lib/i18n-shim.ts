@@ -81,9 +81,18 @@ function translateWith(lng: Language): TFunction {
 
 // --- the store -------------------------------------------------------------
 
+// The launch home page keeps the reader's choice under this key; sharing it means a reader
+// who picks नेपाली on the home page stays in नेपाली on the report pages, and back.
+const HOME_KEY = "jw-lang";
+
 function readStoredLanguage(): Language {
   if (typeof window === "undefined") return "en";
+  // `?lang=ne` / `?lang=en` first, so a shared link opens in the language it was shared in.
+  const param = new URLSearchParams(window.location.search).get("lang");
+  if (isLanguage(param)) return param;
   try {
+    const home = window.localStorage.getItem(HOME_KEY);
+    if (isLanguage(home)) return home;
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (isLanguage(saved)) return saved;
   } catch {
@@ -129,10 +138,15 @@ export const i18n = {
     current = lng;
     try {
       window.localStorage.setItem(STORAGE_KEY, lng);
+      window.localStorage.setItem(HOME_KEY, lng);
     } catch {
       // See `readStoredLanguage` — a non-persisting toggle beats a throwing one.
     }
     syncDocument(lng);
+    // Keep `?lang=` in step, as the home page does, so the address bar is a shareable link.
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", lng);
+    window.history.replaceState(window.history.state, "", url);
     listeners.forEach((l) => l());
     return translateWith(lng);
   },

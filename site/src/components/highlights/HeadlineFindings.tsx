@@ -70,12 +70,15 @@ export function HeadlineFindings() {
 
   return (
     <section id="headline-findings" className="scroll-mt-6">
-      <p
-        role="note"
-        className="mb-6 rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm text-foreground/90"
-      >
-        {DATA.status}
-      </p>
+      {/* The same launch flag as the home page: the draft line is for the review build only. */}
+      {import.meta.env.VITE_JW_LAUNCH === "1" ? null : (
+        <p
+          role="note"
+          className="mb-6 rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm text-foreground/90"
+        >
+          {DATA.status}
+        </p>
+      )}
       <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-accent">
         Headline findings
       </p>
