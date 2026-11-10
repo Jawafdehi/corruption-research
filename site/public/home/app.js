@@ -281,7 +281,7 @@
 
   const CAR = {
     prev: { en: "Previous card", ne: "अघिल्लो कार्ड" }, next: { en: "Next card", ne: "अर्को कार्ड" },
-    of: { en: "Card {i} of {n}", ne: "{n} मध्ये {i} औं कार्ड" }, swipe: { en: "Swipe or use the arrows for more", ne: "थप हेर्न सार्नुहोस् वा तीरमा थिच्नुहोस्" },
+    of: { en: "Card {i} of {n}", ne: "{n} मध्ये {i} औं कार्ड" }, swipe: { en: "Swipe or use the arrows for more", ne: "थप हेर्न स्वाइप गर्नुहोस् वा तीरमा थिच्नुहोस्" },
   };
   const carHTML = (x, k) => `<div class="car" data-n="${x.gaps.length}">
       <div class="cards" tabindex="0" role="group" aria-roledescription="carousel" aria-labelledby="grp-h-${k}">${x.gaps.map((g, j) => `<div class="slide" role="group" aria-label="${esc(t(CAR.of).replace("{i}", N(j + 1)).replace("{n}", N(x.gaps.length)))}">${card(g, false)}</div>`).join("")}</div>

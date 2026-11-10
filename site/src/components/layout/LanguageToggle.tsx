@@ -2,6 +2,10 @@ import { LANGUAGES, LANGUAGE_LABELS, useTranslation } from "react-i18next";
 
 import { cn } from "@/lib/utils";
 
+// The one flag for the "unreviewed translation" note: VITE_JW_NE_REVIEWED=1 at build time
+// removes it, once a native speaker has read the report-page Nepali (locales/ne.ts).
+const NE_REVIEWED = import.meta.env.VITE_JW_NE_REVIEWED === "1";
+
 /**
  * A two-option segmented control rather than a switch. A switch has an implicit
  * on/off direction and only labels one state — fine for a setting, wrong for a
@@ -46,10 +50,10 @@ export function LanguageToggle() {
       {/*
         The Nepali copy has not been through a native-speaker review, and a reader
         cannot tell a reviewed translation from an unreviewed one by looking at it.
-        Saying so is the honest option while that remains true — delete this once
-        `locales/ne.ts` has been cleared.
+        Saying so is the honest option while that remains true. Once the review is
+        done, build with VITE_JW_NE_REVIEWED=1 to drop it (see NE_REVIEWED below).
       */}
-      {language === "ne" && (
+      {language === "ne" && !NE_REVIEWED && (
         <span
           title={t(
             "research.corruption.lang.unreviewedTitle",
@@ -70,7 +74,7 @@ export function LanguageToggle() {
  */
 export function UnreviewedBadge() {
   const { t, language } = useTranslation();
-  if (language !== "ne") return null;
+  if (language !== "ne" || NE_REVIEWED) return null;
   return (
     <div className="border-b border-border bg-[hsl(var(--surface))]">
       <div className="container px-4 py-1.5 md:px-6">

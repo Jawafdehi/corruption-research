@@ -46,6 +46,9 @@ cd = RG["complaintDisposal"][0]
 # say so on the card.
 NEW = next((p for p in [HERE.parent.parent / "ciaa-2082-83" / "figures-2082-83.json",
                         HERE.parent / "src" / "data" / "ciaa-2082-83.json"] if p.exists()), None)
+# Fail loudly rather than quietly fall back to the 35th report's year: the copy in
+# site/src/data/ is committed, so CI always has it.
+assert NEW, "home_build_data: CIAA 2082/83 figures not found (site/src/data/ciaa-2082-83.json)"
 CD_OLD = cd
 if NEW:
     nw = json.loads(NEW.read_text())

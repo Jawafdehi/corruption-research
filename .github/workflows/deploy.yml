@@ -77,6 +77,12 @@ jobs:
 
       - name: Build
         working-directory: site
+        # The launch build: no "draft for review" line. VITE_JW_NE_REVIEWED stays off
+        # (the "unreviewed translation" note shows in Nepali mode) until the native-speaker
+        # read of the report pages is done; then set it to "1" here.
+        env:
+          VITE_JW_LAUNCH: "1"
+          VITE_JW_NE_REVIEWED: "0"
         run: npm run build
 
       - name: Deploy to Cloudflare
