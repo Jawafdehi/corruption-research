@@ -260,7 +260,8 @@ html[lang="ne"] .stop .who { text-transform: none; letter-spacing: 0; font-size:
 .drip .v { font-family: var(--serif); font-size: 32px; font-weight: 700; color: var(--leak); line-height: 1.05; letter-spacing: 0; }
 .drip .v.long { font-size: 26px; }
 .drip .v small { font-size: 16px; color: var(--ink-2); margin-left: 4px; }
-.drip .h { font-size: 15.5px; line-height: 1.4; margin-top: 6px; color: var(--ink); }
+.drip .u { font-size: 13.5px; line-height: 1.35; margin-top: 2px; color: var(--ink-2); }
+.drip .h { font-size: 15.5px; line-height: 1.4; margin-top: 8px; color: var(--ink); }
 .drip .go { font-size: 13.5px; color: var(--leak-dark); font-weight: 600; margin-top: 8px; display: block; }
 .drip .hand { right: 16px; bottom: 8px; }
 .morel { font-size: 12.5px; color: var(--ink-2); margin: 10px 0 0; }

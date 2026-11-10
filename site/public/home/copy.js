@@ -18,12 +18,12 @@
 
   const SRC = {
     tracking: ["CIAA website, checked on 7 November 2026 (screenshots kept)", "अख्तियारको वेबसाइट, ७ नोभेम्बर २०२६ मा जाँच गरिएको (स्क्रिनसट सुरक्षित)"],
-    shelved: ["CIAA 35th annual report (2081/82), table 2.14", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१४"],
+    shelved: ["CIAA 35th annual report (2081/82), tables 2.13 and 2.14", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१३ र २.१४"],
     backlog: ["CIAA 35th annual report (2081/82), table 2.14 and report text", "अख्तियारको ३५औं वार्षिक प्रतिवेदन (२०८१/८२), तालिका २.१४ र प्रतिवेदनको पाठ"],
     afterInvestigation: ["CIAA annual reports, 2073/74 to 2081/82", "अख्तियारका वार्षिक प्रतिवेदन, २०७३/७४ देखि २०८१/८२"],
     lossRate: ["Special Court case records (downloaded 8 October 2026); CIAA 35th annual report, table 3.12", "विशेष अदालतका मुद्दाका अभिलेख (८ अक्टोबर २०२६ मा लिइएको); अख्तियारको ३५औं वार्षिक प्रतिवेदन, तालिका ३.१२"],
     whoConvicted: ["Special Court public case pages, checked on 7 November 2026", "विशेष अदालतका सार्वजनिक मुद्दा पाना, ७ नोभेम्बर २०२६ मा जाँच गरिएको"],
-    whyAcquitted: ["Special Court acquittal judgments (a sample of 31, and every judgment that mentions selective charging)", "विशेष अदालतका सफाइ फैसला (३१ को नमुना, र छानेर मुद्दा चलाएको उल्लेख भएका सबै फैसला)"],
+    whyAcquitted: ["Special Court acquittal judgments (a sample of 42, of which 31 could be used, and every judgment that mentions selective charging)", "विशेष अदालतका सफाइ फैसला (४२ को नमुना, जसमध्ये ३१ प्रयोग गर्न सकियो, र छानेर मुद्दा चलाएको उल्लेख भएका सबै फैसला)"],
     notAppealed: ["Special Court and Supreme Court case records; CIAA annual reports", "विशेष अदालत र सर्वोच्च अदालतका मुद्दाका अभिलेख; अख्तियारका वार्षिक प्रतिवेदन"],
     noLink: ["Supreme Court and Special Court case records and the CIAA's case register, linked by hand (3 November 2026)", "सर्वोच्च अदालत र विशेष अदालतका मुद्दाका अभिलेख र अख्तियारको मुद्दा दर्ता, हातैले जोडिएको (३ नोभेम्बर २०२६)"],
     oneWay: ["Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (३ नोभेम्बर २०२६ सम्म)"],
@@ -114,19 +114,19 @@
   // `v` is checked against the data's own value before the line is replaced.
   const CARD = {
     tracking: { v: ["None", "छैन"], from: "0", tag: ["Public way to look up a complaint's status", "उजुरीको स्थिति सार्वजनिक रूपमा हेर्ने उपाय"] },
-    shelved: { tag: ["complaints closed with no investigation and no reason given", "उजुरी कुनै अनुसन्धान र कारणबिनै तामेलीमा"] },
+    shelved: { tag: ["complaints closed without a full investigation, and no reason given", "उजुरी विस्तृत अनुसन्धान नगरी, कारण नखुलाई तामेलीमा"] },
     backlog: { tag: ["complaints still waiting; nobody says for how long", "उजुरी अझै पर्खिरहेका; कति समयदेखि, कसैले भन्दैन"] },
-    afterInvestigation: { tag: ["of decisions after a full investigation closed the case", "विस्तृत अनुसन्धानपछिका निर्णयमा मुद्दा तामेली"] },
+    afterInvestigation: { tag: ["of the CIAA's decisions after a full investigation closed the case", "विस्तृत अनुसन्धानपछिका अख्तियारका निर्णयमा मुद्दा तामेली"] },
     lossRate: { tag: ["of CIAA cases the Special Court decided: everyone acquitted", "विशेष अदालतले फैसला गरेका अख्तियारका मुद्दामा सबैलाई सफाइ"] },
     whoConvicted: { x: [/of ([\d,]+) /, /\(([०-९,]+) (?:अभियुक्त)?मध्ये\)/], tag: ["defendant records (of {x}) where the public page does not say who was convicted", "प्रतिवादी अभिलेख ({x} मध्ये): सार्वजनिक पानाले को दोषी ठहरियो भन्दैन"] },
     whyAcquitted: { tag: ["judgments we read (sample of 42): the evidence did not prove the charge", "हामीले पढेका फैसलामा (४२ को नमुना): प्रमाणले अभियोग पुष्टि गरेन"] },
-    oneWay: { v: ["41%", "४१%"], from: "41% · 1%", x: [/· ([\d.]+%)$/, /· ([०-९.]+%)$/], xf: "value", tag: ["of appealed convictions are overturned, against {x} of appealed acquittals", "पुनरावेदन भएका दोषी ठहर उल्टिन्छन्; पुनरावेदन भएका सफाइ भने {x} मात्र"] },
+    oneWay: { v: ["41%", "४१%"], from: "41% · 1%", x: [/· ([\d.]+%)$/, /· ([०-९.]+%)$/], xf: "value", tag: ["of convictions are overturned when the convicted person appeals, against {x} of acquittals when the government appeals", "दोषीले पुनरावेदन गर्दा ठहर उल्टिन्छ; सरकारले पुनरावेदन गर्दा सफाइ {x} मात्र उल्टिन्छ"] },
     whyLost: { tag: ["overturned convictions we read (a sample): the Supreme Court pointed to the investigation", "हामीले पढेका उल्टिएका ठहरमा (नमुना): सर्वोच्चले अनुसन्धानलाई औंल्यायो"] },
     notAppealed: { x: [/\(([\d,]+ of [\d,]+)\)/, /\(([०-९,]+ मध्ये [०-९,]+)\)/], tag: ["of acquittals ({x}) have no government appeal on record", "सफाइ ({x}) मा सरकारी पुनरावेदन अभिलेखमा छैन"] },
     duration: { tag: ["typical time for a Supreme Court appeal to be decided", "सर्वोच्चमा पुनरावेदनको फैसला हुन लाग्ने सामान्य समय"] },
     hearings: { tag: ["of scheduled hearings ended without the appeal being heard", "तोकिएका पेशीमा पुनरावेदनको सुनुवाइ नै भएन"] },
     neverListed: { tag: ["open appeals never once listed for a hearing", "खुला पुनरावेदन एक पटक पनि पेशीमा नचढेका"] },
-    arson: { tag: ["open Supreme Court appeals whose case file was lost in the 2025 fire", "सर्वोच्चका खुला पुनरावेदन जसको मिसिल सन् २०२५ को आगजनीमा नष्ट भयो"] },
+    arson: { tag: ["open Supreme Court appeals whose case file is still missing after the 2025 arson", "सर्वोच्चका खुला पुनरावेदन जसको मिसिल सन् २०२५ को आगजनीपछि अझै फेला परेको छैन"] },
     noLink: { x: [/of ([\d,]+) /, /\(([०-९,]+) मध्ये\)/], tag: ["appeals (of {x}) that cannot be traced to their trial", "पुनरावेदन ({x} मध्ये) कुन मुद्दाको हो, जोड्न सकिएन"] },
     recovery: { tag: ["No one publishes what is recovered", "असुली कति भयो, कसैले प्रकाशित गर्दैन"] },
   };
@@ -159,6 +159,16 @@
   // The 16 readings say where the Supreme Court placed the failure; they do not show the trial judge made no mistake.
   fix("whyLost", "headline.en", ", not on a trial judge's mistake", "");
   fix("whyLost", "headline.ne", ", तल्लो अदालतका न्यायाधीशको गल्तीले होइन", "");
+
+  // Figure audit (FIGURES.md): "without any investigation" overstates; screening is a kind of inquiry.
+  fix("shelved", "big.label.en", "closed without any investigation", "closed without a full investigation");
+  fix("shelved", "big.label.ne", "कुनै अनुसन्धान नगरी", "विस्तृत अनुसन्धान नगरी");
+  fix("shelved", "headline.en", "closed before any investigation", "closed before a full investigation");
+  fix("shelved", "headline.ne", "कुनै अनुसन्धानै नगरी", "विस्तृत अनुसन्धान नगरी");
+  fix("shelved", "short.en", "with no investigation;", "without a full investigation;");
+  fix("shelved", "short.ne", "अनुसन्धान नगरी तामेलीमा", "विस्तृत अनुसन्धान नगरी तामेलीमा");
+  fix("shelved", "explain", "without investigating them,", "without a full investigation,");
+  fix("afterInvestigation", "explain", "The change came in one year and has not reversed. No reason is published for any of these closures.", "The change came within two years and has not reversed. No case-by-case reason is published for these closures.");
 
   // The drawer for "tracking" says the same as its card.
   fix("tracking", "big.value.en", "0", "None");

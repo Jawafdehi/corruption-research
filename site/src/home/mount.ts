@@ -51,7 +51,8 @@ export async function mountHome() {
 
   // The one launch flag: VITE_JW_LAUNCH=1 (npm run build:launch) drops the "draft" line and
   // the "draft" in citations. JW_IN_SITE makes evidence links stay on this site.
-  const w = window as unknown as { JW_LAUNCH?: boolean; JW_IN_SITE?: boolean };
+  const w = window as unknown as { JW_LAUNCH?: boolean; JW_IN_SITE?: boolean; JW_BASE?: string };
+  w.JW_BASE = import.meta.env.BASE_URL;
   w.JW_LAUNCH = import.meta.env.VITE_JW_LAUNCH === "1";
   w.JW_IN_SITE = true;
 

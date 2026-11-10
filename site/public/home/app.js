@@ -17,7 +17,7 @@
   // Fill {key} from the funnel's computed values, with Nepali digits in Nepali.
   const fill = (s) => s.replace(/\{(\w+)\}/g, (m, k) => {
     if (k === "nLeaks") return N(JW.findings.length);
-    if (k === "perK") return N(Math.ceil(F.end.per10k / 10)); // "fewer than N in 1,000", from the end figure
+    if (k === "perK") return N(Math.floor(F.end.per10k / 10) + 1); // "fewer than N in 1,000", from the end figure
     if (k === "toInv") return N(byKey("shelved").viz.parts.find((p) => p.tone === "on").v);
     const v = V[k]; if (v == null) throw new Error("no value " + k);
     if (/ in /.test(v)) return inN(v);
@@ -83,7 +83,7 @@
       note: { en: "Counting complaints carried over from the year before, {onBooks} were on its books.", ne: "अघिल्लो वर्षबाट सरेका उजुरीसमेत गर्दा {onBooks} उजुरी थिए।" },
       how: { en: "The number of new complaints the CIAA registered in fiscal year {fy}. Counting complaints carried over from the year before, {onBooks} were on its books that year.",
         ne: "आर्थिक वर्ष {fy} मा अख्तियारमा दर्ता भएका नयाँ उजुरीको संख्या। अघिल्लो वर्षबाट सरेका उजुरीसमेत गर्दा सो वर्ष {onBooks} उजुरी थिए।" },
-      src: { en: "CIAA 35th annual report ({fy}), table 2.14", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), तालिका २.१४" },
+      src: { en: "CIAA 35th annual report ({fy}), tables 2.13 and 2.14", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), तालिका २.१३ र २.१४" },
       href: "https://research.jawafdehi.org/report#complaints",
     },
     investigated: {
@@ -99,8 +99,8 @@
       name: { en: "Decision to charge", ne: "मुद्दा चलाउने निर्णय" },
       label: { en: "cases the CIAA filed at the Special Court", ne: "अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा" },
       note: { en: "The CIAA's own figures end here. The next two stages are our estimates.", ne: "अख्तियारको आफ्नै तथ्यांक यहीँ सकिन्छ। त्यसपछिका दुई चरण हाम्रो अनुमान हुन्।" },
-      how: { en: "Cases the CIAA filed at the Special Court in {fy} after a full investigation, from the summary of its 35th annual report.",
-        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट।" },
+      how: { en: "Cases the CIAA filed at the Special Court in {fy} after a full investigation, from the summary of its 35th annual report. The 75% card at this stage counts something else: the CIAA's decisions after a full investigation, not investigations finished. The CIAA reports the two separately, so the 75% cannot be worked out from {investigated} → {filed}.",
+        ne: "विस्तृत अनुसन्धानपछि {fy} मा अख्तियारले विशेष अदालतमा दायर गरेका मुद्दा, ३५औं वार्षिक प्रतिवेदनको सारांशबाट। यस चरणको ७५% को कार्डले अर्कै कुरा गन्छ: विस्तृत अनुसन्धानपछिका अख्तियारका निर्णय, सकिएका अनुसन्धान होइन। अख्तियारले यी दुई छुट्टाछुट्टै प्रकाशित गर्छ, त्यसैले ७५% लाई {investigated} → {filed} बाट निकाल्न मिल्दैन।" },
       src: { en: "CIAA 35th annual report ({fy}), summary", ne: "अख्तियारको ३५औं वार्षिक प्रतिवेदन ({fy}), सारांश" },
       href: "https://research.jawafdehi.org/report#investigation",
     },
@@ -318,6 +318,7 @@
           <h2 class="name"><span class="sr">${esc(tx("stage"))} ${N(s.n)}: </span>${esc(t(s))}</h2>
           <button type="button" class="drip" data-open="${lead.key}">
             <span class="v num${v.length > 6 ? " long" : ""}">${esc(v)}${lead.big.unit.en && !lead.pill ? ` <small>${esc(t(lead.big.unit))}</small>` : ""}</span>
+            ${lead.pill ? "" : `<span class="u">${esc(t(lead.tag))}</span>`}
             <span class="h">${esc(t(lead.headline))}</span>
             <span class="go">${tx("evidence")} →</span>${si === 0 ? handSVG : ""}
           </button>
