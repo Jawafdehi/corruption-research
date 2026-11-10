@@ -59,8 +59,14 @@
     @apply border-border;
   }
 
+  /* The home page's text face, so the report pages read as the same site; the sticky site
+     header (56 px) does not cover a #section the page scrolls to. */
+  html {
+    scroll-padding-top: 64px;
+  }
   body {
     @apply bg-background text-foreground antialiased;
+    font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 

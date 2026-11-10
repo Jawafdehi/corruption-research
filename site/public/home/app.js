@@ -28,14 +28,14 @@
   const T = (o) => fill(t(o));
 
   const C = {
-    q: { en: "In {fy} the CIAA received {n} new complaints. How many end in a conviction that stands?", ne: "आ.व. {fy} मा अख्तियार दुरुपयोग अनुसन्धान आयोगमा {n} नयाँ उजुरी दर्ता भए। तीमध्ये कतिमा अन्तिमसम्म कायम रहने कसुर ठहर हुन्छ?" },
-    sub: {
-      en: "Follow one year of complaints from the CIAA to the Supreme Court, stage by stage. At each stage, red cards show where accountability leaks. Tap any card for the evidence.",
-      ne: "एक वर्षका उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म चरणगत रूपमा पछ्याउनुहोस्। हरेक चरणमा रातो कार्डहरूले जवाफदेहिता कहाँ चुहिन्छ भन्ने देखाउँछन्। प्रमाण हेर्न कुनै पनि कार्डमा थिच्नुहोस्।",
-    },
+    q: { en: "Every year, thousands of corruption complaints are filed with the CIAA. How many end in a conviction that stands?", ne: "हरेक वर्ष अख्तियारमा भ्रष्टाचारका हजारौं उजुरी दर्ता हुन्छन्। तीमध्ये कतिमा अन्तिमसम्म कायम रहने कसुर ठहर हुन्छ?" },
+    sub: { en: "We follow the seven steps of a corruption case and show where the pipeline leaks.", ne: "हामी भ्रष्टाचारको मुद्दाका सात चरण पछ्याउँछौं, र यो प्रक्रिया कहाँ कहाँ चुहिन्छ भन्ने देखाउँछौं।" },
     cue: { en: "Scroll down", ne: "तल स्क्रोल गर्नुहोस्" },
-    // One line in the intro with the two figures that matter (both from the funnel's data).
-    gist: { en: "{fy}: {complaints} complaints to the CIAA → about {supreme} cases with a conviction that stands", ne: "आ.व. {fy}: अख्तियारमा {complaints} उजुरी → कसुर ठहर कायम रहने करिब {supreme} मुद्दा" },
+    // The main message in one sentence, from the funnel's data; then the period of the court data.
+    gist: { en: "Of the {complaints} complaints filed with the CIAA in {fy}, we estimate that only about {supreme} ({endPct}) will end in a conviction that stands after the Supreme Court.",
+      ne: "आ.व. {fy} मा अख्तियारमा दर्ता भएका {complaints} उजुरीमध्ये करिब {supreme} ({endPct}) मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहने हाम्रो अनुमान छ।" },
+    period: { en: "The estimate is based on court records of every CIAA case filed since {courtFrom}, {courtYears} years: the {lrDec} the Special Court has decided, and the {apDec} convictions from cases filed in those years whose Supreme Court appeal has been decided.",
+      ne: "यो अनुमान {courtFrom} देखि दायर भएका अख्तियारका सबै मुद्दाका {courtYears} वर्षका अदालती अभिलेखमा आधारित छ: विशेष अदालतले फैसला गरेका {lrDec} मुद्दा, र ती वर्षमा दायर भएका मुद्दामध्ये सर्वोच्च अदालतमा पुनरावेदनको फैसला भएका {apDec} कसुर ठहर।" },
     skip: { en: "Without animation", ne: "एनिमेसनबिना" },
     skipShort: { en: "Static", ne: "स्थिर" },
     skipLong: { en: "Or read it all on one page, without animation", ne: "वा एनिमेसनबिना सबै एउटै पानामा पढ्नुहोस्" },
@@ -44,23 +44,31 @@
     est: { en: "Our estimate", ne: "हाम्रो अनुमान" },
     figSrc: { en: "How this figure was counted", ne: "यो अंक कसरी निकालियो" },
     leaks: { en: "Where it leaks at this stage", ne: "यस चरणमा कहाँ चुहिन्छ" },
-    hint: { en: "Tap a card to see the evidence", ne: "प्रमाण हेर्न कार्डमा थिच्नुहोस्" },
+    hint: { en: "Tap any card for the evidence", ne: "प्रमाण हेर्न कुनै पनि कार्डमा थिच्नुहोस्।" },
     scale: { en: "Widths are not to scale, so that every stage can be read.", ne: "हरेक चरण पढ्न सकियोस् भनेर पट्टीहरूको चौडाइ अनुपातअनुसार राखिएको छैन।" },
     ciaa: { en: "CIAA", ne: "अख्तियार" },
     courts: { en: "Courts", ne: "अदालत" },
     endEyebrow: { en: "Where it ends", ne: "अन्त्यमा" },
     estLine: { en: "An estimate: each stage's rate applied in turn to one year's complaints, not one group of complaints followed to the end.", ne: "अनुमान: एक वर्षका उजुरीमा हरेक चरणको दर क्रमशः लागू गरेर निकालिएको, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएर होइन।" },
-    squares: { en: "Each square is one complaint: 10,000 in all", ne: "हरेक सानो कोठा एउटा उजुरी हो (जम्मा १०,०००)।" },
+    squares: { en: "Each square is one complaint: 10,000 in all. Tap or point at a square to see where it dropped out.", ne: "हरेक सानो कोठा एउटा उजुरी हो (जम्मा १०,०००)। कुन चरणमा छुट्यो भनेर हेर्न कुनै कोठामा थिच्नुहोस्।" },
     stands: { en: "End in a conviction that stands", ne: "अन्तिमसम्म कसुर ठहर कायम रहने" },
-    leaked: { en: "Lost along the way", ne: "बीच बाटोमै छुटेका" },
+    // Where each of the 10,000 complaints drops out (F.split, from the funnel's chain).
+    split: {
+      never: { en: "Never sent for full investigation", ne: "विस्तृत अनुसन्धानमा नपठाइएका" },
+      noCase: { en: "Sent for full investigation, but no case filed", ne: "विस्तृत अनुसन्धानमा पठाइए, तर मुद्दा दायर भएन" },
+      trial: { en: "Lost at the Special Court trial: every defendant acquitted", ne: "विशेष अदालतमा सबै प्रतिवादीले सफाइ पाएका" },
+      overturned: { en: "Conviction overturned on appeal", ne: "पुनरावेदनमा कसुर ठहर उल्टिएका" },
+      stands: { en: "Conviction that stands", ne: "कायम रहने कसुर ठहर" },
+    },
+    tipOf: { en: "{n} of 10,000", ne: "१०,००० मध्ये {n}" },
+    replay: { en: "Play again", ne: "फेरि हेर्नुहोस्" },
+    estMark: { en: "≈ marks our estimates.", ne: "≈ चिन्हले हाम्रो अनुमान जनाउँछ।" },
     endLine: {
       en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than {perK} in 1,000.",
       ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहन्छ: १,००० मा {perK} भन्दा कम।",
     },
     money: { en: "And the money lost to corruption: how much comes back? No one publishes how much is recovered from corruption judgments.", ne: "भ्रष्टाचारबाट हिनामिना भएको रकम कति फिर्ता भयो? भ्रष्टाचारका फैसलाबाट कति रकम असुली भयो भन्ने कसैले प्रकाशित गर्दैन।" },
     how: { en: "How we counted", ne: "हामीले कसरी गन्यौं" },
-    print: { en: "Print or save as PDF", ne: "प्रिन्ट गर्नुहोस् वा PDF मा सुरक्षित गर्नुहोस्" },
-    printNote: { en: "The whole page, without animation, ready to print.", ne: "पूरा पाना, एनिमेसनबिना, प्रिन्टका लागि तयार।" },
     all: { en: "All {nLeaks} leaks, with evidence", ne: "सबै {nLeaks} चुहावट, प्रमाणसहित" },
     allNote: { en: "The report's {nLeaks} headline findings, in the order of the report's ranking: by how large each leak is and how sure we are. Findings the ranking does not cover come last.",
       ne: "प्रतिवेदनका {nLeaks} मुख्य निष्कर्ष, प्रतिवेदनको क्रमअनुसार: हरेक चुहावट कति ठूलो छ र हामी कत्तिको निश्चित छौं भन्ने आधारमा। क्रममा नपरेका निष्कर्ष अन्त्यमा छन्।" },
@@ -69,10 +77,10 @@
     method: [
       { en: "No public record follows a complaint all the way from the CIAA to the Supreme Court. That is itself one of the gaps. So we take one year's complaints and apply the rate measured at each later stage.",
         ne: "कुनै उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म पछ्याउने सार्वजनिक अभिलेख छैन। यो आफैंमा एउटा कमी हो। त्यसैले हामीले एक वर्षका उजुरी लिएर त्यसपछिका हरेक चरणमा नापिएको दर लागू गरेका छौं।" },
-      { en: "{complaints} new complaints, {investigated} complaints sent on for full investigation and {filed} cases filed in court are the CIAA's own figures for {fy}, from the summary of its 36th annual report. They count different events in the same year; they do not follow one group of complaints.",
-        ne: "{complaints} नयाँ उजुरी, विस्तृत अनुसन्धानका लागि पठाइएका {investigated} उजुरी र अदालतमा दायर {filed} मुद्दा अख्तियारकै ३६औं वार्षिक प्रतिवेदनको सारांशमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
-      { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from many years of court records.",
-        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादीलाई कसुर ठहर भयो। सर्वोच्च अदालत: कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा कसुर ठहर पूरै उल्टिएन। दुवै दर धेरै वर्षका अदालती अभिलेखबाट लिइएका हुन्।" },
+      { en: "{complaints} new complaints, {investigated} complaints sent on for full investigation and {filed} cases filed in court are the figures that the Commission for the Investigation of Abuse of Authority (the CIAA) itself gives for {fy}, in the summary of its 36th annual report. They count different events in the same year; they do not follow one group of complaints.",
+        ne: "{complaints} नयाँ उजुरी, विस्तृत अनुसन्धानका लागि पठाइएका {investigated} उजुरी र अदालतमा दायर {filed} मुद्दा अख्तियार दुरुपयोग अनुसन्धान आयोग (अख्तियार) कै ३६औं वार्षिक प्रतिवेदनको सारांशमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
+      { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from court records of cases filed since {courtFrom} ({courtYears} years); the Supreme Court rate counts only the convictions whose appeal has been decided.",
+        ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादीलाई कसुर ठहर भयो। सर्वोच्च अदालत: कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा कसुर ठहर पूरै उल्टिएन। दुवै दर {courtFrom} देखि दायर भएका मुद्दाका ({courtYears} वर्षका) अदालती अभिलेखबाट लिइएका हुन्; सर्वोच्च अदालतको दरमा पुनरावेदनको फैसला भएका कसुर ठहर मात्र गनिएका छन्।" },
       { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
         ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
     ],
@@ -144,23 +152,14 @@
   const LEADS = new Set(); Object.keys(RANK).sort(byRank).forEach((k) => { if (![...LEADS].some((x) => RANK[x] === RANK[k]) && RANK[k] <= 5) LEADS.add(k); });
   const tierOf = (k) => (LEADS.has(k) ? 1 : RANK[k] ? 2 : 3);
   S.forEach((st) => st.gaps.sort(byRank));
-  // The Supreme Court's eight leaks come in three parts, so each screen has one subject.
-  const PART = { oneWay: 0, whyLost: 0, notAppealed: 0, duration: 1, hearings: 1, neverListed: 1, arson: 2, noLink: 2 };
-  const PARTS = { supreme: [{ en: "The appeal and its outcome", ne: "पुनरावेदन र त्यसको नतिजा" }, { en: "Years of waiting", ne: "वर्षौंको पर्खाइ" }, { en: "Lost files, missing links", ne: "नष्ट मिसिल, नजोडिएका पुनरावेदन" }] };
-
-  // One scroll step per group of gap cards: up to three on wide screens; two on phones, where
-  // every card is full width and leads with its sentence.
+  // One scroll step per stage (damo, 10 November: no paging through screens). Where a stage has
+  // more cards than fit beside the funnel (three on wide screens, two on phones and short
+  // windows), its cards become a horizontal carousel: one card at a time, a peek of the next,
+  // and "1/3" with previous and next buttons.
   const NARROW = matchMedia("(max-width: 599px)");
   const SHORTWIDE = matchMedia("(min-width: 600px) and (max-height: 860px)"); // e.g. 1024×768: two cards fit, three do not
   const PER = NARROW.matches || SHORTWIDE.matches ? 2 : 3;
-  const STEPS = [];
-  S.forEach((st, i) => {
-    const parts = PARTS[st.key] ? PARTS[st.key].map((p, j) => ({ p, gaps: st.gaps.filter((k) => PART[k] === j) })) : [{ p: null, gaps: st.gaps }];
-    parts.forEach(({ p, gaps }) => {
-      const n = Math.ceil(gaps.length / PER) || 1, per = Math.ceil(gaps.length / n);
-      for (let j = 0; j < n; j++) STEPS.push({ s: i, gaps: gaps.slice(j * per, (j + 1) * per), part: p });
-    });
-  });
+  const STEPS = S.map((st, i) => ({ s: i, gaps: st.gaps.slice(), car: st.gaps.length > PER }));
   const NST = STEPS.length, LASTSTEP = NST - 1;
   console.assert(STEPS.flatMap((x) => x.gaps).length === JW.findings.length, "every finding is on one step");
 
@@ -253,7 +252,6 @@
   const perTxt = (st) => (st.per10k == null || st === S[0] ? "" : `${esc(t(C.per))} <b class="num">${approx(st)}${N(st.per10k)}</b>`);
   const skipHref = (on) => { const u = new URL(location.href); u.hash = ""; on ? u.searchParams.set("static", "1") : u.searchParams.delete("static"); u.searchParams.delete("at"); return u.pathname + u.search; };
 
-  const printHref = () => { const u = new URL(skipHref(true), location.href); u.searchParams.set("view", "funnel"); u.searchParams.set("print", "1"); return u.pathname + u.search; };
   // Screens too short for the funnel beside its cards (landscape phones, 320×568, 200% zoom)
   // get the one-page version, which shows the same content.
   const SHORT = matchMedia("(max-height: 680px)");
@@ -261,13 +259,15 @@
   // The Funnel | Pipeline switch opens the middle part; it sticks while the reader is in it.
   const switchHTML = (live) => `<div class="switch" id="switch"><div class="swin"><span class="swl" id="swl">${esc(tx("viewLabel"))}</span><span data-viewtoggle></span>${U.view === "funnel" ? `<a class="skip" id="skip" href="${skipHref(live)}"><span class="lg">${esc(t(live ? C.skip : C.animated))}</span>${live ? `<span class="sh" aria-hidden="true">${esc(t(C.skipShort))}</span>` : ""}</a>` : ""}</div></div>`;
 
+  // Bold the gist's two figures (the cases that stand, and their share of the complaints).
+  const gistHTML = () => { let h = esc(T(C.gist)); [T({ en: "{supreme}", ne: "{supreme}" }), T({ en: "{endPct}", ne: "{endPct}" })].forEach((x) => { h = h.replace(esc(x), `<b>${esc(x)}</b>`); }); return h; };
   function introHTML() {
     return `<section class="intro" id="intro"><div class="in">
-      <p class="byname">${esc(t({ en: "Jawafdehi Initiative · जवाफदेही", ne: "जवाफदेही इनिशिएटिभ" }))}</p>
       <p class="eyebrow">${esc(tx("title"))}</p>
-      <h1>${esc(t(C.q)).replace("{fy}", esc(dev2(V.fy))).replace("{n}", `<span class="num">${cm(N(S[0].count))}</span>`)}</h1>
+      <h1>${esc(t(C.q))}</h1>
       <p class="sub">${esc(t(C.sub))}</p>
-      <p class="gist num">${esc(T(C.gist))}</p>
+      <p class="gist">${gistHTML()}</p>
+      <p class="period">${esc(T(C.period))}</p>
       <p class="cue" aria-hidden="true">${esc(t(C.cue))}<svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 8l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
     </div></section>`;
   }
@@ -277,6 +277,35 @@
     const counted = S.filter((s) => s.count != null).map((s) => s.count), mx = Math.max(...counted), mn = Math.min(...counted);
     const w = (c) => (c == null ? 18 : 18 + 82 * (Math.log(c / mn) / Math.log(mx / mn)));
     return `<nav class="ladder" id="ladder" aria-label="${esc(tx("stage"))}"><ol>${S.map((st, i) => `${i === 3 ? `<li class="lbnd" aria-hidden="true"><span>${esc(t(C.ciaa))} ↑</span><span>${esc(t(C.courts))} ↓</span></li>` : ""}<li data-s="${i}"><button type="button" data-jump="${i}"><span class="ln">${esc(t(STAGE[st.key].name))}</span><span class="lb"><i class="${st.inst}" style="width:${w(st.count).toFixed(0)}%"></i></span><span class="lc num">${countTxt(st)}</span></button></li>`).join("")}</ol></nav>`;
+  }
+
+  const CAR = {
+    prev: { en: "Previous card", ne: "अघिल्लो कार्ड" }, next: { en: "Next card", ne: "अर्को कार्ड" },
+    of: { en: "Card {i} of {n}", ne: "{n} मध्ये {i} औं कार्ड" }, swipe: { en: "Swipe or use the arrows for more", ne: "थप हेर्न सार्नुहोस् वा तीरमा थिच्नुहोस्" },
+  };
+  const carHTML = (x, k) => `<div class="car" data-n="${x.gaps.length}">
+      <div class="cards" tabindex="0" role="group" aria-roledescription="carousel" aria-labelledby="grp-h-${k}">${x.gaps.map((g, j) => `<div class="slide" role="group" aria-label="${esc(t(CAR.of).replace("{i}", N(j + 1)).replace("{n}", N(x.gaps.length)))}">${card(g, false)}</div>`).join("")}</div>
+      <div class="carnav"><button type="button" class="carb" data-car="-1" aria-label="${esc(t(CAR.prev))}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18"><path d="M11 3 5 9l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="carpos num" aria-live="polite"><b>${N(1)}</b>/${N(x.gaps.length)}</span><button type="button" class="carb" data-car="1" aria-label="${esc(t(CAR.next))}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18"><path d="M7 3l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="carhint">${esc(t(CAR.swipe))}</span></div>
+    </div>`;
+  // Touch and trackpads scroll the carousel natively (snap points); a mouse uses the buttons,
+  // Shift + wheel or a horizontal wheel; the keyboard uses ← → Home End once the carousel
+  // has focus, or Tab through its cards. A plain vertical wheel keeps scrolling the page:
+  // the page's own scroll drives the funnel, and it is never taken over.
+  function wireCars(root) {
+    root.querySelectorAll(".car").forEach((car) => {
+      const sc = car.querySelector(".cards"), slides = [...sc.children], pos = car.querySelector(".carpos b"), n = slides.length;
+      const [bp, bn] = car.querySelectorAll(".carb");
+      const at = () => { const w = slides[0].offsetWidth + parseFloat(getComputedStyle(sc).columnGap || 0); return w > 0 ? Math.max(0, Math.min(n - 1, Math.round(sc.scrollLeft / w))) : 0; };
+      const show = () => { const i = at(); pos.textContent = N(i + 1); bp.disabled = i === 0; bn.disabled = i === n - 1; };
+      const go = (i) => { i = Math.max(0, Math.min(n - 1, i)); sc.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: RM.matches ? "auto" : "smooth" }); };
+      let q = 0; sc.addEventListener("scroll", () => { if (!q) q = requestAnimationFrame(() => { q = 0; show(); }); }, { passive: true });
+      bp.addEventListener("click", () => go(at() - 1)); bn.addEventListener("click", () => go(at() + 1));
+      sc.addEventListener("keydown", (e) => {
+        const k = { ArrowLeft: at() - 1, ArrowRight: at() + 1, Home: 0, End: n - 1 }[e.key];
+        if (k == null) return; e.preventDefault(); go(k);
+      });
+      show();
+    });
   }
 
   function stageHTML() {
@@ -294,7 +323,7 @@
       <div class="funcol"><div class="fun" id="fun"></div><p class="scale">${esc(t(C.scale))}</p></div>
       ${ladderHTML()}
       <div class="gaps" id="gaps">
-        ${STEPS.map((x, k) => `<div class="grp" data-k="${k}" inert aria-hidden="true"><h2>${esc(t(C.leaks))}${x.part ? `<span>${esc(t(x.part))}</span>` : ""}</h2><p class="hint">${esc(t(C.hint))}</p><div class="cards">${x.gaps.map((g, j) => card(g, j === 0)).join("")}</div></div>`).join("")}
+        ${STEPS.map((x, k) => `<div class="grp${x.car ? " has-car" : ""}" data-k="${k}" inert aria-hidden="true"><h2 id="grp-h-${k}">${esc(t(C.leaks))}</h2>${k === 0 ? `<p class="hint">${esc(t(C.hint))}</p>` : ""}${x.car ? carHTML(x, k) : `<div class="cards">${x.gaps.map((g, j) => card(g, k === 0 && j === 0)).join("")}</div>`}</div>`).join("")}
       </div>
     </div></section>`;
   }
@@ -317,18 +346,19 @@
   function endHTML() {
     return `<section class="end" id="end"><div class="in">
       <div class="grid2">
-        <div><canvas id="dots" width="560" height="560" role="img" aria-label="${esc(T(C.endLine))}"></canvas>
-          <ul class="legend"><li><i style="background:var(--navy)"></i>${esc(t(C.stands))}: <b class="num">${N(F.end.per10k)}</b></li><li><i style="background:#c9cfd8"></i>${esc(t(C.leaked))}</li><li>${esc(t(C.squares))}</li></ul></div>
+        <div><div class="dotsw"><canvas id="dots" width="560" height="560" role="img" aria-label="${esc(T(C.endLine) + " " + F.split.map((x) => `${t(C.split[x.key])}: ${x.est ? "≈" : ""}${N(x.per10k)}`).join(", "))}"></canvas><div class="dtip" id="dtip" role="status" hidden></div></div>
+          <ol class="legend split" id="split">${F.split.map((x) => `<li data-k="${x.key}"><i style="background:${SPLITC[x.key]}"></i><span>${esc(t(C.split[x.key]))}</span> <b class="num">${x.est ? "≈" : ""}${N(x.per10k)}</b></li>`).join("")}</ol>
+          <p class="dnote">${esc(t(C.squares))} ${esc(t(C.estMark))}</p>
+          <button type="button" class="btn replay" id="replay" hidden>${esc(t(C.replay))}</button></div>
         <div>
           <p class="eyebrow">${esc(t(C.endEyebrow))}</p>
           <p class="bigp num">${cm(t(F.end.pct))}</p>
           <p class="estline">${esc(t(C.estLine))}</p>
           <p class="endline">${esc(T(C.endLine))}</p>
-          <div class="money"><p>${esc(t(C.money))}</p><button type="button" class="btn" data-open="recovery">${esc(tx("evidence"))}</button></div>
+          <div class="money"><p>${esc(t(C.money))}</p><button type="button" class="btn" data-open="recovery">${esc(tx("evidence"))} →</button></div>
         </div>
       </div>
-      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p><p class="src">${esc(T(C.latest))}</p>
-        <p class="printl"><a class="btn" href="${printHref()}">${esc(t(C.print))}</a> <span>${esc(t(C.printNote))}</span></p></div>
+      <div class="method" id="how"><h2>${esc(t(C.how))}</h2>${C.method.map((p) => `<p>${esc(T(p))}</p>`).join("")}<p class="src">${esc(T(C.src))}</p><p class="src">${esc(T(C.latest))}</p></div>
       <div class="allg" id="leaks"><h2>${esc(T(C.all))}</h2><p class="allnote">${esc(T(C.allNote))} ${U.reportLink("https://research.jawafdehi.org/report#ranked-leaks", esc(t(C.ranked))).replace('class="btn"', 'class="tl"')}</p>${[1, 2, 3].map((tr) => { const ks = JW.findings.map((f) => f.key).filter((k) => tierOf(k) === tr).sort(byRank); return ks.length ? `<h3 class="tierh">${esc(t(C.tier[tr - 1]))}</h3><div class="g tier${tr}">${ks.map((k) => (tr === 3 ? row3(k) : card(k, false, tr))).join("")}</div>` : ""; }).join("")}</div>
     </div></section>`;
   }
@@ -351,20 +381,14 @@
     <section class="route" aria-label="${esc(tx("title"))}">
       <div class="inst" aria-hidden="true"><span class="c">${esc(t(P.ic))}</span><span class="s">${esc(t(P.is))}</span><span class="u">${esc(t(P.iu))}</span><span class="n">${esc(t(P.in))}</span></div>
       <ol class="stops">${JW.stages.map((s, si) => {
-        const lead = byKey(LEAD[s.key]);
-        const rest = JW.findings.filter((f) => f.stage === s.key && f.key !== lead.key);
-        const v = lead.pill || t(lead.card || lead.big.value); // recovery shows "?", as on the funnel
+        // The same card as in the funnel for every finding (damo, 10 November: "Years of
+        // waiting" did not match the others): the stage's lead first, then the rest by rank.
+        const ks = [LEAD[s.key], ...JW.findings.filter((f) => f.stage === s.key && f.key !== LEAD[s.key]).map((f) => f.key).sort(byRank)];
         return `<li class="stop" data-inst="${s.inst}">
           <span class="joint" aria-hidden="true">${N(s.n)}</span>
-          <p class="who">${esc(t(JW.institutions[s.inst]))}</p>
-          <h2 class="name"><span class="sr">${esc(tx("stage"))} ${N(s.n)}: </span>${esc(t(s))}</h2>
-          <button type="button" class="drip" data-open="${lead.key}">
-            <span class="v num${v.length > 6 ? " long" : ""}">${esc(v)}${lead.big.unit.en && !lead.pill ? ` <small>${esc(t(lead.big.unit))}</small>` : ""}</span>
-            ${lead.pill ? "" : `<span class="u">${evHTML(lead) || esc(t(lead.tag))}</span>`}
-            <span class="h">${esc(t(lead.headline))}</span>
-            <span class="go">${tx("evidence")} →</span>${si === 0 ? handSVG : ""}
-          </button>
-          ${rest.length ? `<p class="morel">${esc(t(P.more))}</p><ul class="more">${rest.map((f) => `<li><button type="button" data-open="${f.key}"><span class="hl">${esc(t(f.headline))}</span> <span class="ev">${evHTML(f) || `<b class="num">${esc(f.pill || t(f.card || f.big.value))}${f.big.unit.en && !f.pill ? " " + esc(t(f.big.unit)) : ""}</b> ${esc(t(f.tag))}`}</span></button></li>`).join("")}</ul>` : ""}
+          <div class="sh"><p class="who">${esc(t(JW.institutions[s.inst]))}</p>
+          <h2 class="name"><span class="sr">${esc(tx("stage"))} ${N(s.n)}: </span>${esc(t(s))}</h2></div>
+          <div class="pcards">${ks.map((k, j) => card(k, si === 0 && j === 0)).join("")}</div>
         </li>`;
       }).join("")}</ol>
       <div class="pend"><span class="tap" aria-hidden="true">?</span><p>${esc(t(P.end))}</p></div>
@@ -496,37 +520,89 @@
     trackTop = el.track.getBoundingClientRect().top + window.scrollY;
   }
 
-  /* ---------- the 10,000 squares ---------- */
-  let dotsIO;
-  function dots(animate) {
+  /* ---------- the 10,000 squares ----------
+     Filled in reading order by where each complaint drops out: first the ones never sent for
+     full investigation, then each later stage, and last (bottom right) the ones that end in a
+     conviction that stands. The animation drains them stage by stage over about 14 seconds and
+     names each part as its squares settle; with reduced motion, the final state at once. */
+  const SPLITC = { never: "#c9cfd8", noCase: "#e0868b", trial: "#b5242c", overturned: "#6e1218", stands: "#0e1f3b" };
+  const ALLC = "#5d6b82";
+  const SPLIT0 = []; F.split.reduce((a, x) => { SPLIT0.push(a); return a + x.per10k; }, 0);
+  const catAt = (i) => { for (let j = F.split.length - 1; j >= 0; j--) if (i >= SPLIT0[j]) return j; return 0; };
+  const DUR = [5200, 3000, 2200, 2000]; // ms per draining part (never, noCase, trial, overturned): 12.4 s, then the end
+  let dotsIO, dotsRun = 0, dotsW = 0, dotsBusy = false;
+  function dots(animate, onResize) {
     const cv = document.getElementById("dots"); if (!cv) return;
+    if (onResize && (dotsBusy || Math.round(cv.getBoundingClientRect().width) === dotsW)) return;
+    dotsW = Math.round(cv.getBoundingClientRect().width);
+    const run = ++dotsRun; // a newer call (resize, replay, language) stops an older animation
     const css = cv.getBoundingClientRect().width || 560, dpr = Math.min(2, window.devicePixelRatio || 1);
     cv.width = cv.height = Math.round(css * dpr);
     const g = cv.getContext("2d"), c = cv.width / 100, sq = Math.max(1, c * 0.74);
-    const keep = 10000 - F.end.per10k;
-    const NAVY = "#0e1f3b", GONE = "#c9cfd8", ALL = "#5d6b82";
     const cell = (i, col) => { g.fillStyle = col; g.fillRect((i % 100) * c, Math.floor(i / 100) * c, sq, sq); };
-    const final = () => {
-      g.clearRect(0, 0, cv.width, cv.height);
-      for (let i = 0; i < 10000; i++) cell(i, i >= keep ? NAVY : GONE);
-      const x0 = (keep % 100) * c, y0 = Math.floor(keep / 100) * c, pad = 3 * dpr, r = cv.width;
-      g.strokeStyle = NAVY; g.lineWidth = 2 * dpr;
+    const legend = [...document.querySelectorAll("#split li")], rp = document.getElementById("replay");
+    const reveal = (n) => legend.forEach((li, j) => { li.classList.toggle("on", j < n); li.classList.toggle("now", j === n - 1 && n < legend.length); });
+    const box = () => { // a frame round the squares that stand, with their count
+      const keep = SPLIT0[SPLIT0.length - 1], x0 = (keep % 100) * c, y0 = Math.floor(keep / 100) * c, pad = 3 * dpr, r = cv.width;
+      g.strokeStyle = SPLITC.stands; g.lineWidth = 2 * dpr;
       g.strokeRect(x0 - pad, y0 - pad, r - x0 + pad - dpr, r - y0 + pad - dpr);
       const lab = N(F.end.per10k), fs = Math.round(15 * dpr);
       g.font = `700 ${fs}px "IBM Plex Mono", "Noto Sans Devanagari", monospace`;
       const tw = g.measureText(lab).width + 12 * dpr, bx = r - tw - 1, by = y0 - pad - fs - 12 * dpr;
-      g.fillStyle = NAVY; g.fillRect(bx, by, tw, fs + 10 * dpr);
+      g.fillStyle = SPLITC.stands; g.fillRect(bx, by, tw, fs + 10 * dpr);
       g.fillStyle = "#fff"; g.textBaseline = "middle"; g.fillText(lab, bx + 6 * dpr, by + (fs + 10 * dpr) / 2);
     };
-    if (!animate) { final(); return; }
-    for (let i = 0; i < 10000; i++) cell(i, i >= keep ? NAVY : ALL);
-    let done = 0; const t0 = performance.now(), dur = 1600;
+    const final = () => {
+      g.clearRect(0, 0, cv.width, cv.height);
+      for (let i = 0; i < 10000; i++) cell(i, SPLITC[F.split[catAt(i)].key]);
+      box(); reveal(legend.length);
+      if (rp) rp.hidden = RM.matches;
+    };
+    if (!animate) { dotsBusy = false; final(); return; }
+    dotsBusy = true;
+    if (rp) rp.hidden = true;
+    g.clearRect(0, 0, cv.width, cv.height);
+    for (let i = 0; i < 10000; i++) cell(i, ALLC);
+    reveal(0);
+    let part = 0, done = SPLIT0[0], t0 = performance.now();
     (function step(now) {
-      const p = Math.min(1, (now - t0) / dur), upto = Math.floor(keep * (1 - Math.pow(1 - p, 2.2)));
-      for (let i = done; i < upto; i++) cell(i, GONE);
+      if (run !== dotsRun) return;
+      if (part >= DUR.length) { dotsBusy = false; final(); return; }
+      const a = SPLIT0[part], b = a + F.split[part].per10k, p = Math.min(1, (now - t0) / DUR[part]);
+      // the first three quarters of each part drain its squares; the rest holds, with its label shown
+      const upto = a + Math.floor((b - a) * (1 - Math.pow(1 - Math.min(1, p / 0.75), 2)));
+      for (let i = done; i < upto; i++) cell(i, SPLITC[F.split[part].key]);
       done = upto;
-      if (p < 1) requestAnimationFrame(step); else final();
+      if (p >= 0.75) reveal(part + 1);
+      if (p >= 1) { part++; done = SPLIT0[part] ?? 10000; t0 = now; }
+      requestAnimationFrame(step);
     })(t0);
+  }
+  // One tooltip at a time, inside the screen; it closes on a tap elsewhere, on Esc, or when
+  // the pointer leaves the grid.
+  function wireTip() {
+    const cv = document.getElementById("dots"), tip = document.getElementById("dtip"), wrap = cv && cv.parentElement;
+    if (!cv || !tip) return;
+    const hide = () => { tip.hidden = true; };
+    const showAt = (ev) => {
+      const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
+      if (x < 0 || y < 0 || x >= r.width || y >= r.height) return hide();
+      const i = Math.floor(y / (r.height / 100)) * 100 + Math.floor(x / (r.width / 100)), x2 = F.split[catAt(i)];
+      tip.innerHTML = `<i style="background:${SPLITC[x2.key]}"></i><span><b>${esc(t(C.split[x2.key]))}</b>: ${esc(t(C.tipOf).replace("{n}", (x2.est ? "≈" : "") + N(x2.per10k)))}</span>`;
+      tip.hidden = false;
+      const wr = wrap.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, vw = document.documentElement.clientWidth;
+      let left = x - tw / 2, top = y - th - 12;
+      left = Math.max(-wr.left + 8, Math.min(left, vw - wr.left - tw - 8));
+      if (top + wr.top < 64) top = y + 16;
+      tip.style.left = `${left}px`; tip.style.top = `${top}px`;
+    };
+    cv.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse") showAt(e); });
+    cv.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") hide(); });
+    cv.addEventListener("click", (e) => { e.stopPropagation(); showAt(e); });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".dotsw")) hide(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+    window.addEventListener("scroll", hide, { passive: true });
+    document.getElementById("replay")?.addEventListener("click", () => dots(true));
   }
 
   /* ---------- render ---------- */
@@ -540,6 +616,7 @@
     document.body.classList.toggle("static", mode === "static");
     const middle = mode === "pipe" ? pipeHTML() : mode === "static" ? staticHTML() : stageHTML();
     main.innerHTML = introHTML() + `<div class="mid" id="mid" role="region" aria-labelledby="swl">${switchHTML(mode === "live")}${middle}</div>` + endHTML();
+    wireTip(); wireCars(main);
     if (mode === "pipe") {
       document.getElementById("bar").style.transform = "scaleX(0)";
       dots(false);
@@ -569,7 +646,7 @@
   function endDots() {
     if (RM.matches || mode === "static") return;
     let done = false;
-    dotsIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !done) { done = true; dots(true); dotsIO.disconnect(); } }), { threshold: 0.35 });
+    dotsIO = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !done) { done = true; dots(true); dotsIO.disconnect(); } }), { threshold: 0.6 });
     dotsIO.observe(document.getElementById("dots"));
   }
 
@@ -587,13 +664,13 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   let rz, lastBox = "";
   function relayout() {
-    if (mode === "pipe") { dots(false); return; }
+    if (mode === "pipe") { dots(false, true); return; }
     if (mode !== "live" && mode !== "static") return;
     const b = el.fun.getBoundingClientRect(), key = `${Math.round(b.width)}x${Math.round(b.height)}x${window.innerHeight}`;
     if (key === lastBox) return; lastBox = key;
     if (mode === "live") { measure(); layoutSvg(); draw(posFromScroll()); }
     else { layoutSvg(); el.rect.setAttribute("height", H); el.lvls.forEach((n) => n.classList.add("on")); el.drops.forEach((n) => n.classList.add("on")); el.q.classList.add("on"); el.lead.remove(); }
-    dots(false);
+    dots(false, true);
   }
   window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(relayout, 120); });
   RM.addEventListener?.("change", () => { if (U.view === "funnel") { render(); } });
@@ -618,7 +695,5 @@
   // Fonts change the column sizes: lay out again once they are in, then honour ?at=.
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
     lastBox = ""; relayout(); goAt();
-    // ?print=1 (from "Print or save as PDF"): the one-page version, straight to the print dialog.
-    if (qs.has("print") && mode === "static") setTimeout(() => window.print(), 300);
   });
 })();

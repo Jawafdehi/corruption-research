@@ -1,12 +1,15 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { Suspense, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SECTIONS } from "@/sections";
-import { LanguageToggle } from "@/components/layout/LanguageToggle";
+import { UnreviewedBadge } from "@/components/layout/LanguageToggle";
 import { Skeleton } from "@/components/ui/skeleton";
+// The site header and footer: the same component as on the home page (copied in from the
+// design mockup by scripts/sync-home.sh). It sets window.JWHeader.
+import "@/home/site-header.js";
+import "@/home/site-header.css";
 import { CITATIONS, REPORT } from "@/data/research-corruption";
-import { cn } from "@/lib/utils";
 
 /** Holds space while a lazily-loaded section arrives, so the page does not jump. */
 const SectionFallback = () => {
@@ -97,36 +100,33 @@ function DocumentTitle() {
   return null;
 }
 
-function SectionNav() {
-  const { t } = useTranslation();
+type HeaderApi = {
+  mount: (el: HTMLElement, o: { lang: string; path: string; base: string; inSite: boolean; onLang: (l: string) => void }) => void;
+  TAGLINE: string;
+};
+const headerApi = () => (window as unknown as { JWHeader: HeaderApi }).JWHeader;
 
-  return (
-    <nav
-      aria-label={t("research.corruption.nav.aria", "Report sections")}
-      className="overflow-x-auto border-b border-border bg-card/60"
-    >
-      <div className="container flex gap-1 px-4 md:px-6">
-        {SECTIONS.map((s) => (
-          <NavLink
-            key={s.path}
-            to={s.path}
-            end={s.path === "/"}
-            title={t(`research.corruption.nav.${s.key}Blurb`, s.blurb)}
-            className={({ isActive }) =>
-              cn(
-                "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors",
-                isActive
-                  ? "border-accent text-accent"
-                  : "border-transparent text-muted-foreground hover:text-foreground",
-              )
-            }
-          >
-            {t(`research.corruption.nav.${s.key}`, s.label)}
-          </NavLink>
-        ))}
-      </div>
-    </nav>
-  );
+/**
+ * The site header: logo and name, the report sections, English | नेपाली. On phones the
+ * sections sit behind a ☰ button (a full-screen sheet); the language toggle stays visible.
+ * It is the home page's own header component (home/site-header.js), mounted here, so every
+ * page of the site has the same header.
+ */
+function SiteHeader() {
+  const ref = useRef<HTMLElement>(null);
+  const { i18n, language } = useTranslation();
+  const { pathname } = useLocation();
+  useEffect(() => {
+    if (!ref.current) return;
+    headerApi().mount(ref.current, {
+      lang: language,
+      path: pathname,
+      base: import.meta.env.BASE_URL,
+      inSite: true,
+      onLang: (l) => void i18n.changeLanguage(l as "en" | "ne"),
+    });
+  }, [i18n, language, pathname]);
+  return <header ref={ref} className="jw-hd" />;
 }
 
 export function Layout() {
@@ -138,27 +138,8 @@ export function Layout() {
     <div className="flex min-h-screen flex-col">
       <ScrollToTarget />
       <DocumentTitle />
-      {/* The wordmark gets its own band. Sharing a line with the title made the
-          logo read as part of the headline rather than as whose publication this is. */}
-      <div className="border-b border-border bg-[hsl(var(--surface))]">
-        <div className="container flex items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <a
-            href="https://jawafdehi.org"
-            className="inline-flex items-center gap-3 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 focus-visible:ring-offset-background"
-          >
-            <img
-              src="/assets/logo.svg"
-              alt={t("research.corruption.site.logoAlt", "Jawafdehi")}
-              className="h-7 w-auto md:h-8"
-            />
-            {/* Hidden on phones, where the logo and the language buttons need the row. */}
-            <span className="hidden border-l border-border pl-3 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:inline">
-              {t("research.corruption.site.eyebrow2", "Research")}
-            </span>
-          </a>
-          <LanguageToggle />
-        </div>
-      </div>
+      <SiteHeader />
+      <UnreviewedBadge />
 
       <header className="border-b border-border">
         <div className="container px-4 py-7 md:px-6 md:py-9">
@@ -171,62 +152,71 @@ export function Layout() {
         </div>
       </header>
 
-      <SectionNav />
-
       <main className="container flex-1 px-4 py-8 md:px-6 md:py-12">
         <Suspense fallback={<SectionFallback />}>
           <Outlet />
         </Suspense>
       </main>
 
-      <footer className="border-t border-border bg-card/60">
-        <div className="container space-y-2 px-4 py-8 text-xs leading-5 text-muted-foreground md:px-6">
-          <p>
-            {t(
-              "research.corruption.footer.snapshot",
-              "Court register snapshot {{snapshot}} · page generated {{generated}}. Every number on this site is derived from the published dataset rather than entered by hand.",
-              {
-                snapshot: snapshot ?? "—",
-                generated: generatedAt.slice(0, 10),
-              },
-            )}
-          </p>
-          <p>
-            {t(
-              "research.corruption.footer.pack",
-              "Reproducible data pack and notebook:",
-            )}{" "}
-            <a
-              className="underline hover:text-foreground"
-              href={CITATIONS.researchPack}
-            >
-              github.com/Jawafdehi/corruption-research
-            </a>{" "}
-            · {t("research.corruption.footer.records", "Source records:")}{" "}
-            <a
-              className="underline hover:text-foreground"
-              href={CITATIONS.courtRecords}
-            >
-              jawafdehi.org
-            </a>
-          </p>
-          {/* Split around the <strong> so the emphasis survives translation. */}
-          <p>
-            {t(
-              "research.corruption.footer.licence",
-              "© Jawafdehi Initiative. Data and text licensed CC BY-NC 4.0. Counts are of",
-            )}{" "}
-            <strong className="font-semibold text-foreground">
+      <footer className="jw-foot">
+        <div className="in">
+          <img
+            src={`${import.meta.env.BASE_URL}home/brand/jawafdehi-logo-white-for-dark-bg.svg`}
+            alt={t("research.corruption.doc.site", "Jawafdehi Initiative")}
+            width={75}
+            height={34}
+          />
+          <div>
+            <p className="tag" lang="ne">
+              {headerApi().TAGLINE}
+            </p>
+            <small>
               {t(
-                "research.corruption.footer.casesNotPeople",
-                "cases, never of people",
+                "research.corruption.footer.byline",
+                "A research report by Jawafdehi Initiative · jawafdehi.org",
               )}
-            </strong>{" "}
-            {t(
-              "research.corruption.footer.licenceEnd",
-              "— the court records one verdict per case.",
-            )}
-          </p>
+            </small>
+            <small>
+              {t(
+                "research.corruption.footer.snapshot",
+                "Court register snapshot {{snapshot}} · page generated {{generated}}. Every number on this site is derived from the published dataset rather than entered by hand.",
+                {
+                  snapshot: snapshot ?? "—",
+                  generated: generatedAt.slice(0, 10),
+                },
+              )}
+            </small>
+            <small>
+              {t(
+                "research.corruption.footer.pack",
+                "Reproducible data pack and notebook:",
+              )}{" "}
+              <a className="underline" href={CITATIONS.researchPack}>
+                github.com/Jawafdehi/corruption-research
+              </a>{" "}
+              · {t("research.corruption.footer.records", "Source records:")}{" "}
+              <a className="underline" href={CITATIONS.courtRecords}>
+                jawafdehi.org
+              </a>
+            </small>
+            {/* Split around the <strong> so the emphasis survives translation. */}
+            <small>
+              {t(
+                "research.corruption.footer.licence",
+                "© Jawafdehi Initiative. Data and text licensed CC BY-NC 4.0. Counts are of",
+              )}{" "}
+              <strong className="font-semibold text-white">
+                {t(
+                  "research.corruption.footer.casesNotPeople",
+                  "cases, never of people",
+                )}
+              </strong>{" "}
+              {t(
+                "research.corruption.footer.licenceEnd",
+                "— the court records one verdict per case.",
+              )}
+            </small>
+          </div>
         </div>
       </footer>
     </div>

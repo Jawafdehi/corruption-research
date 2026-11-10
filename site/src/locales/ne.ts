@@ -103,6 +103,7 @@ export const ne: Record<string, string> = {
 
   "research.corruption.footer.snapshot":
     "अदालत दर्ता किताबको स्न्यापसट {{snapshot}} · पृष्ठ तयार भएको {{generated}}। यस साइटको हरेक अंक हातले नभरी प्रकाशित डेटासेटबाट निकालिएको हो।",
+  "research.corruption.footer.byline": "जवाफदेही इनिशिएटिभको अनुसन्धान प्रतिवेदन · jawafdehi.org",
   "research.corruption.footer.pack": "पुनरुत्पादनयोग्य डेटा प्याक र नोटबुक:",
   "research.corruption.footer.records": "स्रोत अभिलेख:",
   "research.corruption.footer.licence":

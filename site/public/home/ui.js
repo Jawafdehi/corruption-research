@@ -24,8 +24,9 @@
     research: { en: "Research", ne: "अनुसन्धान" },
     byline: { en: "A research report by Jawafdehi Initiative · jawafdehi.org", ne: "जवाफदेही इनिशिएटिभको अनुसन्धान प्रतिवेदन · jawafdehi.org" },
     draft: { en: "Draft for review, not yet published.", ne: "समीक्षाका लागि मस्यौदा, अहिलेसम्म प्रकाशित गरिएको छैन।" },
-    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, and the CIAA's 36th annual report summary (2082/83) and 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: २०८३ असोज २२ देखि कार्तिक १७ सम्म सङ्कलित अदालतका अभिलेख, र अख्तियारको ३६औं वार्षिक प्रतिवेदनको सारांश (२०८२/८३) र ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
-    evidence: { en: "Show evidence", ne: "प्रमाण हेर्नुहोस्" },
+    checked: { en: "Figures recalculated from the source data on {d}. Sources: court records collected 8 October to 3 November 2026, compiled from cases filed since FY {from}; the CIAA's 36th annual report summary (2082/83) and 35th annual report (2081/82).", ne: "अंक {d} मा स्रोत तथ्यांकबाट पुनः गणना गरी जाँचिएका। स्रोत: २०८३ असोज २२ देखि कार्तिक १७ सम्म सङ्कलित अदालतका अभिलेख, आ.व. {from} देखि दायर भएका मुद्दाबाट तयार गरिएको; अख्तियारको ३६औं वार्षिक प्रतिवेदनको सारांश (२०८२/८३) र ३५औं वार्षिक प्रतिवेदन (२०८१/८२)।" },
+    evidence: { en: "Learn more", ne: "थप जान्नुहोस्" },
+    evSources: { en: "Evidence and sources", ne: "प्रमाण र स्रोत" },
     close: { en: "Close", ne: "बन्द गर्नुहोस्" },
     whatWeFound: { en: "What we found", ne: "हामीले के भेट्यौं" },
     howSure: { en: "How sure we are", ne: "हामी कत्तिको निश्चित छौं" },
@@ -151,7 +152,6 @@
   const TAGLINE = "जवाफदेहिताको कहिल्यै म्याद सकिँदैन।";
   const brand = () => `<a class="jw-brand" href="https://jawafdehi.org" aria-label="${esc(tx("site"))} · jawafdehi.org"><img src="${LOGO.light}" alt="" width="66" height="30"><span aria-hidden="true"><b>${esc(tx("site"))}</b>${esc(tx("research"))}</span></a>`;
   const CHECKED = { en: "7–10 November 2026", ne: "२०८३ कार्तिक २१–२४" }; // dates of the recomputations (FIGURES.md, Q9)
-  const brandFoot = () => `<div class="in"><img src="${LOGO.dark}" alt="${esc(tx("site"))}" width="75" height="34"><div><p class="tag" lang="ne">${TAGLINE}</p><small>${esc(tx("byline"))}</small><small>${esc(tx("checked").replace("{d}", t(CHECKED)))}</small>${LAUNCH ? "" : `<small class="draftfoot">${esc(tx("draft"))}</small>`}</div></div>`;
 
   /* ---------- header controls ---------- */
   const seg = (name, cur, opts, label) =>
@@ -191,7 +191,7 @@
     const st = stageOf(f.stage), inst = JW.institutions[f.inst];
     return {
       // Where the leak is: the stage, and who holds the case unless the stage already says it.
-      eyebrow: esc(t(st).includes(t(inst)) || f.inst === "none" ? t(st) : `${t(st)} · ${t(inst)}`),
+      eyebrow: `<b>${esc(tx("evSources"))}</b> · ${esc(t(st).includes(t(inst)) || f.inst === "none" ? t(st) : `${t(st)} · ${t(inst)}`)}`,
       html: `
         ${chip(f.gap)}
         <h2 id="jw-d-h">${esc(t(f.headline))}</h2>
@@ -212,7 +212,6 @@
             <button type="button" class="btn solid" data-a="link">${tx("copyLink")}</button>
             <button type="button" class="btn" data-a="cite">${tx("copyCite")}</button>
             ${navigator.share ? `<button type="button" class="btn" data-a="share">${tx("share")}</button>` : ""}
-            <button type="button" class="btn" data-a="print">${tx("print")}</button>
             ${reportLink(f.href, tx("readMore"))}
           </div>
         </section>`,
@@ -333,13 +332,13 @@
   });
 
   function fillChrome() {
-    document.querySelectorAll("[data-brand]").forEach((el) => (el.innerHTML = brand()));
-    document.querySelectorAll("[data-brandfoot]").forEach((el) => { el.classList.add("jw-foot"); el.innerHTML = brandFoot(); });
-    document.querySelectorAll("[data-langtoggle]").forEach((el) => (el.innerHTML = langToggle()));
+    // The site header (header.js): the same component as on the report pages.
+    document.querySelectorAll("[data-sitehead]").forEach((el) => window.JWHeader.mount(el, { lang, path: "/", base: window.JW_BASE || "/" }));
+    // The site footer (header.js): the same component as on the report pages.
+    document.querySelectorAll("[data-brandfoot]").forEach((el) => window.JWHeader.footer(el, { lang, base: window.JW_BASE || "/", lines: [{ text: tx("checked").replace("{d}", t(CHECKED)).replace("{from}", dev2(JW.funnel.values.courtFrom)) }, ...(LAUNCH ? [] : [{ text: tx("draft"), cls: "draftfoot" }])] }));
     document.querySelectorAll("[data-viewtoggle]").forEach((el) => (el.innerHTML = viewToggle()));
     document.title = `${tx("title")} · ${tx("site")}`;
     document.querySelectorAll(".skiplink").forEach((el) => (el.textContent = tx("skipTo")));
-    document.querySelectorAll("nav.ctl").forEach((el) => el.setAttribute("aria-label", tx("settings")));
   }
   function rerender(keepFocus) {
     const open = drawer && location.hash.startsWith("#f=") ? location.hash.slice(3) : null;

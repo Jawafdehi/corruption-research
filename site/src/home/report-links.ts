@@ -4,9 +4,9 @@ import "./report-links.css";
 /**
  * "Read the full report": links from the launch home page into the report pages.
  *
- * The home page (public/home/, synced from the design mockup) has its own header and
- * footer and none of the site's nav, so this block is the way into the rest of the
- * site. It sits just before the page's footer inside #app and follows the page's language
+ * The home page (public/home/, synced from the design mockup) shares the site header
+ * (home/site-header.js) with the report pages; this block, at the end of the page, is the
+ * second way into the rest of the site, with a line on what each section holds. It sits just before the page's footer inside #app and follows the page's language
  * through <html lang>, which the page's own toggle sets.
  *
  * Plain <a href>s, deliberately: each report page is a full page load into the React

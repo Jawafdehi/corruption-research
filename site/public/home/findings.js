@@ -1071,7 +1071,9 @@ window.JW = {
    "endPct": "0.19%",
    "endHi": "24",
    "endHiPct": "0.24%",
-   "appealedShare": "6 in 10"
+   "appealedShare": "6 in 10",
+   "courtFrom": "2069/70",
+   "courtYears": "14"
   },
   "stages": [
    {
@@ -1225,6 +1227,33 @@ window.JW = {
     "ne": "०.१९%"
    }
   },
+  "split": [
+   {
+    "key": "never",
+    "per10k": 9785,
+    "est": false
+   },
+   {
+    "key": "noCase",
+    "per10k": 163,
+    "est": false
+   },
+   {
+    "key": "trial",
+    "per10k": 20,
+    "est": true
+   },
+   {
+    "key": "overturned",
+    "per10k": 13,
+    "est": true
+   },
+   {
+    "key": "stands",
+    "per10k": 19,
+    "est": true
+   }
+  ],
   "copy": {
    "endLine": {
     "en": "About 19 in every 10,000 complaints end in a conviction that still stands after the Supreme Court. That is fewer than 2 in 1,000.",

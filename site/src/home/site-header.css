@@ -1,0 +1,76 @@
+/* The site header (header.js), shared by the home page and the report pages. Self-contained:
+   its own colours and fonts, so it renders the same inside the React report pages. */
+/* The sheet lives on <body>, outside .jw-hd, so it gets the same tokens. */
+.jw-hd, .jw-hd-sheet { --hd-navy: #0e1f3b; --hd-ink: #1f2a37; --hd-ink2: #4b5563; --hd-line: #dde1e7; --hd-paper: #fafaf7; --hd-red: #b5242c; --hd-h: 56px; }
+.jw-hd {
+  position: sticky; top: 0; z-index: 30; height: var(--hd-h); background: rgba(250, 250, 247, .97); border-bottom: 1px solid var(--hd-line);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: var(--hd-ink);
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; font-size: 15px; line-height: 1.3; }
+.jw-hd * { box-sizing: border-box; }
+.jw-hd-in { height: 100%; max-width: 1380px; margin: 0 auto; padding: 0 18px; display: flex; align-items: center; gap: 14px; }
+.jw-hd .jw-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--hd-navy); flex: none; min-height: 44px; border-radius: 4px; }
+.jw-hd .jw-brand img { display: block; height: 30px; width: auto; }
+.jw-hd .jw-brand > span { display: flex; flex-direction: column; border-left: 1px solid var(--hd-line); padding-left: 10px; font-size: 12px; line-height: 1.2; color: var(--hd-ink2); }
+.jw-hd .jw-brand b { font: 700 14px/1.2 "Vesper Libre", Georgia, "Noto Sans Devanagari", serif; color: var(--hd-navy); white-space: nowrap; }
+.jw-hd .jw-brand .rs { white-space: nowrap; }
+.jw-hd-nav { flex: 1 1 auto; min-width: 0; display: none; }
+.jw-hd-nav ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: flex-end; gap: 2px; }
+.jw-hd-a { display: flex; align-items: center; min-height: 44px; padding: 0 10px; border-radius: 6px; color: var(--hd-ink2); text-decoration: none; font-size: 14.5px; font-weight: 600; white-space: nowrap; }
+.jw-hd-a:hover { color: var(--hd-navy); background: #eef1f5; }
+.jw-hd-a[aria-current="page"] { color: var(--hd-navy); box-shadow: inset 0 -3px 0 var(--hd-red); border-radius: 6px 6px 0 0; }
+.jw-hd-lang { flex: none; margin-left: auto; }
+.jw-hd-nav + .jw-hd-lang { margin-left: 0; }
+.jw-hd .seg { display: inline-flex; border: 1px solid var(--hd-navy); border-radius: 8px; overflow: hidden; }
+.jw-hd .seg button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; min-width: 44px; padding: 0 12px; border: 0; background: #fff; color: var(--hd-navy); font: 600 14px/1 system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; cursor: pointer; }
+.jw-hd .seg button[lang="ne"] { font-size: 15px; }
+.jw-hd .seg button + button { border-left: 1px solid var(--hd-navy); }
+.jw-hd .seg button[aria-pressed="true"] { background: var(--hd-navy); color: #fff; }
+.jw-hd-menu { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; min-width: 44px; padding: 0 10px; border: 1px solid var(--hd-line); border-radius: 8px; background: #fff; color: var(--hd-navy); font: 600 14px/1 system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; cursor: pointer; }
+.jw-hd :focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+.jw-hd .seg button:focus-visible { outline-offset: -4px; outline-color: #fff; box-shadow: inset 0 0 0 2px #2563eb; }
+html[lang="ne"] .jw-hd-a, html[lang="ne"] .jw-hd-menu { font-size: 15.5px; }
+/* Wide screens: the sections in the bar, no menu button. */
+@media (min-width: 1200px) {
+  .jw-hd-nav { display: block; }
+  .jw-hd-menu { display: none; }
+}
+@media (min-width: 1200px) and (max-width: 1360px) { .jw-hd .jw-brand > span .rs { display: none; } .jw-hd-a { padding: 0 8px; font-size: 14px; } html[lang="ne"] .jw-hd-a { font-size: 15px; } }
+/* Phones: the mark, the name once, the language toggle and the menu button. */
+@media (max-width: 599px) {
+  .jw-hd-in { padding: 0 10px; gap: 8px; }
+  .jw-hd .jw-brand { gap: 7px; }
+  .jw-hd .jw-brand img { width: 24px; height: 28px; object-fit: cover; object-position: left center; }
+  .jw-hd .jw-brand > span { border: 0; padding: 0; }
+  .jw-hd .jw-brand b { font-size: 13px; }
+  .jw-hd .jw-brand .rs { display: none; }
+  .jw-hd .seg button { padding: 0 9px; min-height: 40px; }
+  .jw-hd-menu span { display: none; }
+}
+@media (max-width: 374px) { .jw-hd .jw-brand > span { display: none; } }
+/* The sheet: full screen, one section per row. */
+.jw-hd-sheet { position: fixed; inset: 0; z-index: 60; background: var(--hd-paper); color: var(--hd-ink); font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; line-height: 1.3; overflow-y: auto; overscroll-behavior: contain; padding: 0 0 24px; }
+.jw-hd-sheet[hidden] { display: none; }
+.jw-hd-sheet-top { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; height: var(--hd-h); padding: 0 10px 0 18px; background: var(--hd-paper); border-bottom: 1px solid var(--hd-line); font-weight: 700; color: var(--hd-navy); }
+.jw-hd-x { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--hd-line); border-radius: 8px; background: #fff; color: var(--hd-ink); cursor: pointer; }
+.jw-hd-sheet *, .jw-hd-sheet { box-sizing: border-box; }
+.jw-hd-sheet :focus-visible { outline: 3px solid #2563eb; outline-offset: -3px; }
+.jw-hd-sheet ul { list-style: none; margin: 0; padding: 8px 0; }
+.jw-hd-row { display: flex; align-items: center; min-height: 52px; padding: 0 18px; border-bottom: 1px solid var(--hd-line); color: var(--hd-ink); text-decoration: none; font-size: 18px; font-weight: 600; }
+html[lang="ne"] .jw-hd-row { font-size: 19px; }
+.jw-hd-row[aria-current="page"] { color: var(--hd-navy); box-shadow: inset 4px 0 0 var(--hd-red); }
+html.jw-hd-locked { overflow: hidden; }
+@media print { .jw-hd { display: none !important; } }
+
+/* The site footer (JWHeader.footer), shared by every page. */
+.jw-foot { background: #0e1f3b; color: #fffdfa; padding: 26px 20px 30px; font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans Devanagari", sans-serif; }
+.jw-foot .in { max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; justify-content: space-between; }
+.jw-foot img { height: 34px; width: auto; display: block; }
+.jw-foot .tag { margin: 0; font-family: "Noto Sans Devanagari", system-ui, sans-serif; font-size: 18px; font-weight: 600; color: #fffdfa; }
+.jw-foot .tag::before { content: ""; display: inline-block; width: 22px; height: 3px; background: #e76a70; vertical-align: middle; margin-right: 10px; }
+.jw-foot small { display: block; color: #c8cfdb; font-size: 13px; line-height: 1.5; margin-top: 4px; max-width: 80ch; }
+html[lang="ne"] .jw-foot small { font-size: 14px; }
+.jw-foot a { color: #fffdfa; }
+.jw-foot .draftfoot { color: #f0d9a8; margin-top: 6px; }
+@media print { .jw-foot { background: none; color: #1f2a37; border-top: 1px solid #dde1e7; } .jw-foot .tag, .jw-foot a { color: #1f2a37; } .jw-foot small { color: #6b7280; } }
+/* In Nepali the logo's wordmark (जवाफदेही) would repeat the name beside it: the mark alone. */
+html[lang="ne"] .jw-hd .jw-brand img { width: 26px; height: 30px; object-fit: cover; object-position: left center; }

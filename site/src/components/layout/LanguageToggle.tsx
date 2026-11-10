@@ -63,3 +63,27 @@ export function LanguageToggle() {
     </div>
   );
 }
+
+/**
+ * The "unreviewed translation" note, on its own line under the site header in Nepali mode
+ * (the header itself is shared with the home page and carries no page-specific badges).
+ */
+export function UnreviewedBadge() {
+  const { t, language } = useTranslation();
+  if (language !== "ne") return null;
+  return (
+    <div className="border-b border-border bg-[hsl(var(--surface))]">
+      <div className="container px-4 py-1.5 md:px-6">
+        <span
+          title={t(
+            "research.corruption.lang.unreviewedTitle",
+            "This Nepali translation is an unreviewed machine-authored first pass. The figures are counted from the court record and do not change with the language.",
+          )}
+          className="rounded border border-border px-1.5 py-0.5 text-xs font-medium text-muted-foreground"
+        >
+          {t("research.corruption.lang.unreviewed", "unreviewed translation")}
+        </span>
+      </div>
+    </div>
+  );
+}

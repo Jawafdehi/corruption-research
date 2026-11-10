@@ -368,6 +368,15 @@ def _hf_fig(key, name):
     return int(f["figures"][name].replace(",", ""))
 
 
+def _split(parts, per, stands):
+    raw = [per(v) for _, v, _ in parts]
+    fl = [int(x) for x in raw]
+    for i in sorted(range(len(raw)), key=lambda i: raw[i] - fl[i], reverse=True)[: 10000 - sum(fl)]:
+        fl[i] += 1
+    assert sum(fl) == 10000 and fl[-1] == stands, (fl, stands)
+    return [{"key": k, "per10k": n, "est": est} for (k, _, est), n in zip(parts, fl)]
+
+
 def build_funnel():
     cv = ap["convictedVsConviction"]
     lr_dec, lr_acq = _hf_fig("lossRate", "decided"), _hf_fig("lossRate", "acq")
@@ -381,6 +390,8 @@ def build_funnel():
     c3 = c2 * conv_rate
     c4 = c3 * stand_rate
     c4_hi = c3 * (1 - appealed_share * (1 - stand_rate))  # if unappealed convictions all stand
+    fys = RG["corpus"]["fiscalYears"]
+    assert fys == list(range(min(fys), max(fys) + 1)), "the court data's filing years are one unbroken run"
     per = lambda c: c / c0 * 10000
     pct = lambda c: f"{c / c0 * 100:.2f}%"
     v = {
@@ -391,6 +402,8 @@ def build_funnel():
         "special": n(round(c3)), "supreme": n(round(c4)),
         "end": n(round(per(c4))), "endPct": pct(c4), "endHi": n(round(per(c4_hi))), "endHiPct": pct(c4_hi),
         "appealedShare": f"{round(appealed_share * 10)} in 10",
+        # The period of the court data behind both court rates: the fiscal years of filing.
+        "courtFrom": f"{min(fys)}/{(min(fys) + 1) % 100:02d}", "courtYears": str(len(fys)),
     }
     S = [
         ("complaints", "ciaa", c0, False, ["tracking"],
@@ -434,6 +447,9 @@ def build_funnel():
         "values": v,
         "stages": stages,
         "end": {"per10k": round(per(c4)), "per10kHi": round(per(c4_hi)), "pct": {"en": v["endPct"], "ne": ne_val(v["endPct"])}},
+        # The end grid's 10,000 squares, split by where each complaint drops out (largest
+        # remainder, so the parts add up to exactly 10,000 and "stands" matches the end figure).
+        "split": _split([("never", c0 - c1, False), ("noCase", c1 - c2, False), ("trial", c2 - c3, True), ("overturned", c3 - c4, True), ("stands", c4, True)], per, round(per(c4))),
         "copy": {
             "endLine": T("About {{end}} in every 10,000 complaints end in a conviction that still stands after the Supreme Court. That is fewer than 2 in 1,000.",
                          "हरेक १०,००० उजुरीमध्ये करिब {{end}} मात्र सर्वोच्च अदालतपछि पनि कायम रहने ठहरमा पुग्छन्। अर्थात् १,००० मा २ भन्दा कम।"),
