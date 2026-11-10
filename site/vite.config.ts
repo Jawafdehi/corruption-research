@@ -28,6 +28,8 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    sourcemap: true,
+    // Source maps only in the review build: the launch build (VITE_JW_LAUNCH=1, which is
+    // also what CI deploys) ships none.
+    sourcemap: process.env.VITE_JW_LAUNCH !== "1",
   },
 });

@@ -759,7 +759,7 @@ window.JW = {
    },
    "explain": "Counting the appeals still waiting, half of those registered 2008–2018 took more than 4.1 years to decide; 28.3% of the decided ones took over six. A convicted person's appeal waits longer, about 4.7 years.",
    "caveat": "",
-   "source": "stages/8.2-DURATION.md (origin universe, NGM 2026-11-02)",
+   "source": "stages/8.2-DURATION.md (origin universe, Supreme Court records collected 2 November 2026)",
    "href": "https://research.jawafdehi.org/appeals#appeal-duration",
    "tag": {
     "en": "Years of waiting",

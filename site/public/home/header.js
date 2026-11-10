@@ -112,17 +112,77 @@
     // filter) would be placed against the header, not the screen.
     document.body.append(el.querySelector(".jw-hd-sheet"));
     wire(el, o);
+    printParts(o);
   }
+
+  /* Print (damo, 10 November, 15:10): browser print / save as PDF gets a first-page header
+     (the navy logo, the name in both languages, the page title, its public address and the
+     date) and a running footer (research.jawafdehi.org and the page number). The page number
+     comes from @page margin boxes (header.css) where the browser has them; elsewhere a fixed
+     footer repeats the address on every page, without a number. */
+  const PUBLIC = "https://research.jawafdehi.org";
+  const PT = { printed: { en: "Printed", ne: "छापिएको मिति" } };
+  // Bikram Sambat month starts (AD), 2083–2084, from nepali-datetime; they match the CIAA's own
+  // dates (२०८३ असोज १ = 17 September 2026). Outside that range the date is given in AD.
+  const BS = { 2083: ["2026-04-14", "2026-05-15", "2026-06-15", "2026-07-17", "2026-08-17", "2026-09-17", "2026-10-18", "2026-11-17", "2026-12-16", "2027-01-15", "2027-02-13", "2027-03-15", "2027-04-14"],
+    2084: ["2027-04-14", "2027-05-15", "2027-06-15", "2027-07-17", "2027-08-17", "2027-09-17", "2027-10-17", "2027-11-16", "2027-12-16", "2028-01-14", "2028-02-13", "2028-03-14", "2028-04-13"] };
+  const BSM = ["वैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कात्तिक", "मंसिर", "पुस", "माघ", "फागुन", "चैत"];
+  const NED = (x) => String(x).replace(/[0-9]/g, (d) => "०१२३४५६७८९"[d]);
+  const ENM = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function dateTxt(lang, d) {
+    const day = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    if (lang !== "ne") return `${d.getDate()} ${ENM[d.getMonth()]} ${d.getFullYear()}`;
+    for (const y of Object.keys(BS)) for (let m = 0; m < 12; m++) {
+      const a = Date.parse(BS[y][m] + "T00:00:00Z"), b = Date.parse(BS[y][m + 1] + "T00:00:00Z");
+      if (day >= a && day < b) return NED(`${y} ${BSM[m]} ${(day - a) / 864e5 + 1}`);
+    }
+    return NED(`सन् ${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+  }
+  // The page's own title, without the trailing " · Jawafdehi Initiative" (the header names it).
+  const pageTitle = () => document.title.split(" · ").filter((x) => !/^(Jawafdehi Initiative|जवाफदेही इनिशिएटिभ)$/.test(x.trim())).join(" · ") || document.title;
+  const publicUrl = (o) => `${PUBLIC.replace(/^https:\/\//, "")}${o.path === "/" ? "/" : o.path}${o.lang === "ne" ? "?lang=ne" : ""}`;
+  let printO = null;
+  function fillPrint() {
+    const o = printO, ph = document.getElementById("jw-print-hd"); if (!o || !ph) return;
+    ph.querySelector(".pt").textContent = pageTitle();
+    ph.querySelector(".pu").textContent = publicUrl(o);
+    ph.querySelector(".pd").textContent = `${PT.printed[o.lang] || PT.printed.en}: ${dateTxt(o.lang, new Date())}`;
+  }
+  function printParts(o) {
+    printO = o;
+    const logo = (o.inSite ? `${o.base}home/brand/` : "/home/brand/") + "jawafdehi-logo-navy-for-light-bg.svg";
+    document.getElementById("jw-print-hd")?.remove(); document.getElementById("jw-print-ft")?.remove();
+    const ph = document.createElement("div");
+    ph.id = "jw-print-hd"; ph.className = "jw-print-hd"; ph.setAttribute("aria-hidden", "true");
+    ph.innerHTML = `<img src="${esc(logo)}" alt="" width="110" height="50"><div><p class="pn"><span lang="en">${esc(T.site.en)}</span> / <span lang="ne">${esc(T.site.ne)}</span></p><p class="pt"></p><p class="pm"><span class="pu"></span> · <span class="pd"></span></p></div>`;
+    document.body.prepend(ph);
+    const pf = document.createElement("div");
+    pf.id = "jw-print-ft"; pf.className = "jw-print-ft"; pf.setAttribute("aria-hidden", "true"); pf.textContent = "research.jawafdehi.org";
+    document.body.append(pf);
+    // Browsers with @page margin boxes print the address and page number there instead.
+    document.documentElement.classList.toggle("jw-pmb", "CSSMarginRule" in window);
+    fillPrint();
+  }
+  window.addEventListener("beforeprint", fillPrint);
+  // The report pages set their title after the header mounts: follow it.
+  const ttl = document.querySelector("head > title");
+  if (ttl) new MutationObserver(fillPrint).observe(ttl, { childList: true, characterData: true, subtree: true });
+  matchMedia("print").addEventListener?.("change", (e) => { if (e.matches) fillPrint(); });
 
   // The site footer, also one component for every page: the white logo, the tagline, the
   // byline, then each page's own lines (plain text or trusted markup from the page itself).
   const TAGLINE = "जवाफदेहिताको कहिल्यै म्याद सकिँदैन।";
   const BYLINE = { en: "A research report by Jawafdehi Initiative · jawafdehi.org", ne: "जवाफदेही इनिशिएटिभको अनुसन्धान प्रतिवेदन · jawafdehi.org" };
+  // The privacy note is this site's own page (/privacy, both languages); the terms are the
+  // organisation's, on jawafdehi.org.
+  const LEGAL = { privacy: { en: "Privacy", ne: "गोपनीयता" }, terms: { en: "Terms of use", ne: "प्रयोगका सर्त" } };
   function footer(el, opts) {
     const o = Object.assign({ lang: "en", base: "/", inSite: !!window.JW_IN_SITE, lines: [] }, opts);
     const src = (o.inSite ? `${o.base}home/brand/` : "/home/brand/") + "jawafdehi-logo-white-for-dark-bg.svg";
+    const t = (x) => x[o.lang] || x.en;
+    const legal = `<small class="legal"><a href="${esc(href(o, "/privacy"))}">${esc(t(LEGAL.privacy))}</a> · <a href="https://jawafdehi.org/terms">${esc(t(LEGAL.terms))}</a></small>`;
     el.classList.add("jw-foot");
-    el.innerHTML = `<div class="in"><img src="${esc(src)}" alt="${esc(T.site[o.lang] || T.site.en)}" width="75" height="34"><div><p class="tag" lang="ne">${TAGLINE}</p><small>${esc(BYLINE[o.lang] || BYLINE.en)}</small>${o.lines.map((l) => `<small${l.cls ? ` class="${esc(l.cls)}"` : ""}>${l.html != null ? l.html : esc(l.text)}</small>`).join("")}</div></div>`;
+    el.innerHTML = `<div class="in"><img src="${esc(src)}" alt="${esc(T.site[o.lang] || T.site.en)}" width="75" height="34"><div><p class="tag" lang="ne">${TAGLINE}</p><small>${esc(BYLINE[o.lang] || BYLINE.en)}</small>${o.lines.map((l) => `<small${l.cls ? ` class="${esc(l.cls)}"` : ""}>${l.html != null ? l.html : esc(l.text)}</small>`).join("")}${legal}</div></div>`;
   }
 
   window.JWHeader = { mount, footer, SECTIONS, TAGLINE };

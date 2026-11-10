@@ -18,6 +18,7 @@ const Prosecution = lazy(() => import("@/pages/Prosecution"));
 const CourtOutcomes = lazy(() => import("@/pages/CourtOutcomes"));
 const Appeals = lazy(() => import("@/pages/Appeals"));
 const Method = lazy(() => import("@/pages/Method"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
 
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="court-outcomes" element={<CourtOutcomes />} />
         <Route path="appeals" element={<Appeals />} />
         <Route path="method" element={<Method />} />
+        <Route path="privacy" element={<Privacy />} />
         {/* The pre-redesign paths, kept so existing links and bookmarks still land.
             /gaps is among them now: its six findings moved into the stage each one
             belongs to, so the nearest thing to the old page is the stage list itself. */}

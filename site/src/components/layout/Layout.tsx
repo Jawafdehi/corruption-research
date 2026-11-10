@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { Suspense, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -94,8 +94,9 @@ function DocumentTitle() {
       t("research.corruption.doc.site", "Jawafdehi Initiative"),
     ];
     if (section) parts.unshift(t(`research.corruption.nav.${section.key}`, section.label));
+    else if (pathname.startsWith("/privacy")) parts.unshift(t("research.corruption.privacy.eyebrow", "Privacy"));
     document.title = parts.join(" · ");
-  }, [t, section]);
+  }, [t, section, pathname]);
 
   return null;
 }
@@ -130,7 +131,7 @@ function SiteHeader() {
 }
 
 export function Layout() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const { dataset, generatedAt } = REPORT.provenance;
   const snapshot = dataset.cases?.modified;
 
@@ -215,6 +216,14 @@ export function Layout() {
                 "research.corruption.footer.licenceEnd",
                 "— the court records one verdict per case.",
               )}
+            </small>
+            {/* As in the home page's footer (site-header.js): this site's privacy note, the
+                organisation's terms. */}
+            <small className="legal">
+              <Link to={language === "ne" ? "/privacy?lang=ne" : "/privacy"}>
+                {t("research.corruption.privacy.eyebrow", "Privacy")}
+              </Link>{" "}
+              · <a href="https://jawafdehi.org/terms">{t("research.corruption.footer.terms", "Terms of use")}</a>
             </small>
           </div>
         </div>

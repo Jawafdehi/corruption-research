@@ -71,6 +71,30 @@ html.jw-hd-locked { overflow: hidden; }
 html[lang="ne"] .jw-foot small { font-size: 14px; }
 .jw-foot a { color: #fffdfa; }
 .jw-foot .draftfoot { color: #f0d9a8; margin-top: 6px; }
+/* Privacy · Terms of use: phone-sized tap targets without spacing the line out visually. */
+.jw-foot .legal { margin-top: 0; }
+.jw-foot .legal a { display: inline-block; padding: 12px 2px; text-decoration: underline; text-underline-offset: 2px; }
 @media print { .jw-foot { background: none; color: #1f2a37; border-top: 1px solid #dde1e7; } .jw-foot .tag, .jw-foot a { color: #1f2a37; } .jw-foot small { color: #6b7280; } }
 /* In Nepali the logo's wordmark (जवाफदेही) would repeat the name beside it: the mark alone. */
 html[lang="ne"] .jw-hd .jw-brand img { width: 26px; height: 30px; object-fit: cover; object-position: left center; }
+
+/* Print (damo, 10 November, 15:10): a first-page header with the logo, and a running footer.
+   The address and page number go in the page's bottom margin where the browser supports @page
+   margin boxes (html.jw-pmb); elsewhere a fixed footer repeats the address on every page. */
+.jw-print-hd, .jw-print-ft { display: none; }
+@page {
+  margin: 14mm 12mm 16mm;
+  @bottom-left { content: "research.jawafdehi.org"; font: 9pt system-ui, "Noto Sans Devanagari", sans-serif; color: #4b5563; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 9pt "IBM Plex Mono", monospace; color: #4b5563; }
+}
+@media print {
+  .jw-print-hd { display: flex !important; align-items: center; gap: 14px; margin: 0 0 6mm; padding: 0 0 4mm; border-bottom: 2px solid #0e1f3b; color: #0e1f3b; break-after: avoid; font-family: system-ui, "Noto Sans Devanagari", sans-serif; }
+  .jw-print-hd img { width: 30mm; height: auto; flex: none; }
+  .jw-print-hd p { margin: 0; }
+  .jw-print-hd .pn { font-size: 11pt; font-weight: 700; }
+  .jw-print-hd .pn [lang="ne"] { font-family: "Noto Sans Devanagari", sans-serif; }
+  .jw-print-hd .pt { font-size: 15pt; font-weight: 700; line-height: 1.25; margin-top: 1mm; }
+  .jw-print-hd .pm { font-size: 9pt; color: #4b5563; margin-top: 1mm; }
+  html:lang(ne) .jw-print-hd .pt { font-size: 16pt; line-height: 1.4; }
+  html:not(.jw-pmb) .jw-print-ft { display: block !important; position: fixed; left: 0; right: 0; bottom: 0; font: 8.5pt system-ui, sans-serif; color: #4b5563; text-align: left; }
+}

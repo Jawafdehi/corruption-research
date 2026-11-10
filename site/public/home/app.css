@@ -339,7 +339,7 @@ html[lang="ne"] .stop .who { text-transform: none; letter-spacing: 0; font-size:
 
 /* ---------- print: the one-page version, on A4 ---------- */
 @media print {
-  @page { size: A4; margin: 14mm 12mm; }
+  @page { size: A4; }
   html, body { background: #fff !important; }
   .top, .switch, .skiplink, .cue, .skip2, .printl, .hand, .srcbtn, .jw-drawer, .jw-scrim, .jw-toast { display: none !important; }
   .intro { min-height: 0; padding: 0 0 8mm; background: #fff; color: var(--ink); }
@@ -532,24 +532,19 @@ html[lang="ne"] .intro .period { font-size: 16px; line-height: 1.65; }
 .grp .hint { display: block !important; font-size: 14px; color: var(--ink-2); margin: 0 0 8px; }
 html[lang="ne"] .grp .hint { font-size: 15px; }
 
-/* "Where it leaks at this stage", when a stage has more cards than fit: a horizontal snap
-   carousel, one card at a time with a peek of the next, and "1/3" between previous / next. */
-.car { position: relative; min-width: 0; }
-.car .cards { display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
-  scroll-padding: 0 2px; padding: 2px 2px 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.car .cards::-webkit-scrollbar { display: none; }
-.car .cards:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-.car .cards { align-items: start; }
-.car .slide { scroll-snap-align: start; min-width: 0; }
-.carnav { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-.carb { display: grid; place-items: center; width: 44px; height: 40px; border: 1px solid var(--navy); border-radius: 8px; background: #fff; color: var(--navy); }
-.carb:disabled { opacity: .35; cursor: default; }
-.carpos { min-width: 3.4em; text-align: center; font-size: 15px; color: var(--ink-2); }
-.carpos b { color: var(--ink); }
-.carhint { font-size: 13.5px; color: var(--ink-2); margin-left: 4px; }
-html[lang="ne"] .carhint { font-size: 14.5px; }
-@media (max-width: 599px) { .car .cards { grid-auto-columns: 88%; } .carhint { display: none; } .carb { height: 36px; } }
-@media (max-width: 599px) and (max-height: 780px) { .carnav { margin-top: 2px; } .carb { height: 32px; } }
+/* "Where it leaks at this stage", when a stage has more cards than fit (damo, 15:10): the cards
+   stay stacked top to bottom in a fixed window, and the stage takes more scroll length, so
+   scrolling down moves them up through it. The window itself never scrolls. */
+.vwin { position: relative; }
+.grp.ovf .vwin { overflow: hidden; overflow: clip; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); }
+.grp.ovf.atend .vwin { -webkit-mask-image: none; mask-image: none; }
+.grp.ovf.moved .vwin { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to bottom, transparent, #000 22px, #000 calc(100% - 36px), transparent); }
+.grp.ovf.moved.atend .vwin { -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22px); mask-image: linear-gradient(to bottom, transparent, #000 22px); }
+.grp.ovf .cards { will-change: transform; padding-bottom: 2px; }
+.grp .more { display: none; margin: 6px 0 0; font-size: 14px; color: var(--ink-2); }
+html[lang="ne"] .grp .more { font-size: 15px; }
+.grp.ovf .more { display: block; }
+.grp.ovf.atend .more { visibility: hidden; }
 
 /* The 10,000 squares: one colour per stage where a complaint drops out, a legend line each,
    a tooltip on the square under the pointer or finger. */
@@ -596,3 +591,15 @@ body.tapped .card .hand { display: none !important; }
   .stop:last-child .joint { border-style: solid; border-color: var(--ink); }
 }
 @media (min-width: 900px) { .pcards .hand { left: -30px; top: 14px; } }
+
+/* Print from the browser menu (round 14): the live page prints the one-page list in place of
+   its scroll track, and the navy intro's light text turns dark on white. */
+.printonly { display: none; }
+@media print {
+  .track:not(.static-list), .ladder { display: none !important; }
+  .printonly { display: block !important; }
+  .printonly .swrap { display: block; }
+  .intro .gist b, .intro .gist { color: var(--ink) !important; }
+  .intro .period { color: var(--ink-2) !important; }
+  .end .replay { display: none !important; }
+}

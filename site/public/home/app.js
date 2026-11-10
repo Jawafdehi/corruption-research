@@ -153,13 +153,11 @@
   const tierOf = (k) => (LEADS.has(k) ? 1 : RANK[k] ? 2 : 3);
   S.forEach((st) => st.gaps.sort(byRank));
   // One scroll step per stage (damo, 10 November: no paging through screens). Where a stage has
-  // more cards than fit beside the funnel (three on wide screens, two on phones and short
-  // windows), its cards become a horizontal carousel: one card at a time, a peek of the next,
-  // and "1/3" with previous and next buttons.
+  // more cards than fit on screen, they stay stacked top to bottom and the stage takes more
+  // scroll length: scrolling down moves the reader through its cards (damo, 15:10: vertical,
+  // not a carousel). Measured, not counted, so it follows the screen and the language.
   const NARROW = matchMedia("(max-width: 599px)");
-  const SHORTWIDE = matchMedia("(min-width: 600px) and (max-height: 860px)"); // e.g. 1024×768: two cards fit, three do not
-  const PER = NARROW.matches || SHORTWIDE.matches ? 2 : 3;
-  const STEPS = S.map((st, i) => ({ s: i, gaps: st.gaps.slice(), car: st.gaps.length > PER }));
+  const STEPS = S.map((st, i) => ({ s: i, gaps: st.gaps.slice() }));
   const NST = STEPS.length, LASTSTEP = NST - 1;
   console.assert(STEPS.flatMap((x) => x.gaps).length === JW.findings.length, "every finding is on one step");
 
@@ -279,34 +277,7 @@
     return `<nav class="ladder" id="ladder" aria-label="${esc(tx("stage"))}"><ol>${S.map((st, i) => `${i === 3 ? `<li class="lbnd" aria-hidden="true"><span>${esc(t(C.ciaa))} ↑</span><span>${esc(t(C.courts))} ↓</span></li>` : ""}<li data-s="${i}"><button type="button" data-jump="${i}"><span class="ln">${esc(t(STAGE[st.key].name))}</span><span class="lb"><i class="${st.inst}" style="width:${w(st.count).toFixed(0)}%"></i></span><span class="lc num">${countTxt(st)}</span></button></li>`).join("")}</ol></nav>`;
   }
 
-  const CAR = {
-    prev: { en: "Previous card", ne: "अघिल्लो कार्ड" }, next: { en: "Next card", ne: "अर्को कार्ड" },
-    of: { en: "Card {i} of {n}", ne: "{n} मध्ये {i} औं कार्ड" }, swipe: { en: "Swipe or use the arrows for more", ne: "थप हेर्न स्वाइप गर्नुहोस् वा तीरमा थिच्नुहोस्" },
-  };
-  const carHTML = (x, k) => `<div class="car" data-n="${x.gaps.length}">
-      <div class="cards" tabindex="0" role="group" aria-roledescription="carousel" aria-labelledby="grp-h-${k}">${x.gaps.map((g, j) => `<div class="slide" role="group" aria-label="${esc(t(CAR.of).replace("{i}", N(j + 1)).replace("{n}", N(x.gaps.length)))}">${card(g, false)}</div>`).join("")}</div>
-      <div class="carnav"><button type="button" class="carb" data-car="-1" aria-label="${esc(t(CAR.prev))}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18"><path d="M11 3 5 9l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="carpos num" aria-live="polite"><b>${N(1)}</b>/${N(x.gaps.length)}</span><button type="button" class="carb" data-car="1" aria-label="${esc(t(CAR.next))}"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18"><path d="M7 3l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="carhint">${esc(t(CAR.swipe))}</span></div>
-    </div>`;
-  // Touch and trackpads scroll the carousel natively (snap points); a mouse uses the buttons,
-  // Shift + wheel or a horizontal wheel; the keyboard uses ← → Home End once the carousel
-  // has focus, or Tab through its cards. A plain vertical wheel keeps scrolling the page:
-  // the page's own scroll drives the funnel, and it is never taken over.
-  function wireCars(root) {
-    root.querySelectorAll(".car").forEach((car) => {
-      const sc = car.querySelector(".cards"), slides = [...sc.children], pos = car.querySelector(".carpos b"), n = slides.length;
-      const [bp, bn] = car.querySelectorAll(".carb");
-      const at = () => { const w = slides[0].offsetWidth + parseFloat(getComputedStyle(sc).columnGap || 0); return w > 0 ? Math.max(0, Math.min(n - 1, Math.round(sc.scrollLeft / w))) : 0; };
-      const show = () => { const i = at(); pos.textContent = N(i + 1); bp.disabled = i === 0; bn.disabled = i === n - 1; };
-      const go = (i) => { i = Math.max(0, Math.min(n - 1, i)); sc.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: RM.matches ? "auto" : "smooth" }); };
-      let q = 0; sc.addEventListener("scroll", () => { if (!q) q = requestAnimationFrame(() => { q = 0; show(); }); }, { passive: true });
-      bp.addEventListener("click", () => go(at() - 1)); bn.addEventListener("click", () => go(at() + 1));
-      sc.addEventListener("keydown", (e) => {
-        const k = { ArrowLeft: at() - 1, ArrowRight: at() + 1, Home: 0, End: n - 1 }[e.key];
-        if (k == null) return; e.preventDefault(); go(k);
-      });
-      show();
-    });
-  }
+  const MORE = { en: "Scroll down for more", ne: "थप हेर्न तल स्क्रोल गर्नुहोस्" };
 
   function stageHTML() {
     return `<section class="track" id="track" aria-label="${esc(tx("title"))}"><div class="stage" id="stage">
@@ -323,13 +294,15 @@
       <div class="funcol"><div class="fun" id="fun"></div><p class="scale">${esc(t(C.scale))}</p></div>
       ${ladderHTML()}
       <div class="gaps" id="gaps">
-        ${STEPS.map((x, k) => `<div class="grp${x.car ? " has-car" : ""}" data-k="${k}" inert aria-hidden="true"><h2 id="grp-h-${k}">${esc(t(C.leaks))}</h2>${k === 0 ? `<p class="hint">${esc(t(C.hint))}</p>` : ""}${x.car ? carHTML(x, k) : `<div class="cards">${x.gaps.map((g, j) => card(g, k === 0 && j === 0)).join("")}</div>`}</div>`).join("")}
+        ${STEPS.map((x, k) => `<div class="grp" data-k="${k}" inert aria-hidden="true"><h2 id="grp-h-${k}">${esc(t(C.leaks))}</h2>${k === 0 ? `<p class="hint">${esc(t(C.hint))}</p>` : ""}<div class="vwin"><div class="cards">${x.gaps.map((g, j) => card(g, k === 0 && j === 0)).join("")}</div></div><p class="more" aria-hidden="true">${esc(t(MORE))} <span>↓</span></p></div>`).join("")}
       </div>
     </div></section>`;
   }
 
-  function staticHTML() {
-    return `<section class="track static-list"><div class="swrap"><div class="funcol"><div class="fun" id="fun"></div><p class="scale">${esc(t(C.scale))}</p></div><ol class="slist">${S.map((st, i) => {
+  // forPrint: the same list, without the live funnel graphic, printed in place of the scroll
+  // track when the live page is printed from the browser menu.
+  function staticHTML(forPrint) {
+    return `<section class="${forPrint ? "printonly" : "track"} static-list"><div class="swrap">${forPrint ? "" : `<div class="funcol"><div class="fun" id="fun"></div><p class="scale">${esc(t(C.scale))}</p></div>`}<ol class="slist">${S.map((st, i) => {
       const sc = STAGE[st.key];
       return `<li><div>
         <p class="eyebrow">${instDot(st)}${esc(eyebrowTxt(st))}</p>
@@ -417,6 +390,8 @@
 
   /* ---------- live funnel ---------- */
   let el = {}, trackTop = 0, stepPx = 1, active = -1, raf = 0, mode = "";
+  // Where each step starts on the page, and how much extra scroll it takes for its cards.
+  let starts = STEPS.map(() => 0), extra = STEPS.map(() => 0);
 
   function layoutSvg() {
     const box = el.fun.getBoundingClientRect();
@@ -431,8 +406,17 @@
     active = -1;
   }
 
-  // P: 0 … NST-1, how far down the steps the reader is. A pure function of scrollY.
-  const posFromScroll = () => Math.max(0, Math.min(LASTSTEP, (window.scrollY - trackTop) / stepPx));
+  // P: 0 … NST-1, how far down the steps the reader is. A pure function of scrollY. A step
+  // with more cards than fit first scrolls through them (P holds), then flows on.
+  function posFromScroll() {
+    const y = window.scrollY;
+    let k = 0; while (k < LASTSTEP && y >= starts[k + 1]) k++;
+    const d = y - starts[k];
+    if (d <= extra[k] || k === LASTSTEP) return k;
+    return Math.min(LASTSTEP, k + (d - extra[k]) / stepPx);
+  }
+  // How far the shown group's cards have moved up: also a pure function of scrollY.
+  const innerAt = (k) => Math.max(0, Math.min(extra[k], window.scrollY - starts[k]));
   // Each step holds still for its first 40%, then the funnel flows to the next step's level.
   function levelAt(Pp) {
     const i = Math.min(LASTSTEP, Math.floor(Pp)), f = Pp - i;
@@ -454,9 +438,23 @@
     el.surf.setAttribute("ry", Math.max(1.5, Math.min(10, rx * 0.1)).toFixed(1));
     el.surf.setAttribute("class", fy < BND ? "ciaa" : "court");
     setStep(stepAt(Pp));
+    if (mode === "live") moveCards();
     if (el.bar) el.bar.style.transform = `scaleX(${(Pp / LASTSTEP).toFixed(4)})`;
   }
 
+  // The reading block: the stage's name, count and lines.
+  function fillRead(st) {
+    const sc = STAGE[st.key];
+    el.eb.innerHTML = `${instDot(st)}${esc(eyebrowTxt(st))}`;
+    el.sname.textContent = t(sc.name);
+    el.cnt.innerHTML = cm(countTxt(st));
+    el.cnt.classList.toggle("unknown", st.count == null);
+    el.lab.textContent = T(sc.label);
+    el.per.innerHTML = perTxt(st);
+    el.fnote.textContent = T(sc.note);
+    el.srcbtn.hidden = st.count == null;
+    el.srcbtn.dataset.open = st.count == null ? "" : "stage-" + st.key;
+  }
   function setStep(k) {
     if (k === active) return;
     active = k;
@@ -468,15 +466,7 @@
     el.lead.setAttribute("x1", x0); el.lead.setAttribute("x2", W + 40);
     el.lead.setAttribute("y1", Y[x.s]); el.lead.setAttribute("y2", Y[x.s]);
     if (mode !== "live") return;
-    el.eb.innerHTML = `${instDot(st)}${esc(eyebrowTxt(st))}`;
-    el.sname.textContent = t(sc.name);
-    el.cnt.innerHTML = cm(countTxt(st));
-    el.cnt.classList.toggle("unknown", st.count == null);
-    el.lab.textContent = T(sc.label);
-    el.per.innerHTML = perTxt(st);
-    el.fnote.textContent = T(sc.note);
-    el.srcbtn.hidden = st.count == null;
-    el.srcbtn.dataset.open = st.count == null ? "" : "stage-" + st.key;
+    fillRead(st);
     [...el.steps, ...el.ladder].forEach((li) => { const s = +li.dataset.s; li.classList.toggle("on", s === x.s); li.classList.toggle("done", s < x.s); });
     // Only the current group of cards can be seen, focused or tapped; the rest are inert.
     el.grps.forEach((g, i) => {
@@ -503,10 +493,37 @@
     const s = Math.min(fb.width / W, fb.height / H), oy = fb.height - H * s;
     const levelPx = fb.top - sb.top + oy + Y[STEPS[active].s] * s;
     const g = el.grps[active], gh = g.offsetHeight, home = gb.top - sb.top - (parseFloat(el.gaps.dataset.y) || 0);
-    const c0 = g.querySelector(".card"), aim = c0 ? c0.offsetTop + c0.offsetHeight / 2 : 46;
+    const c0 = g.querySelector(".card"), aim = c0 ? c0.getBoundingClientRect().top - g.getBoundingClientRect().top + c0.offsetHeight / 2 : 46;
     const y = Math.max(0, Math.min(levelPx - aim - home, sb.height - gh - home - 16));
     el.gaps.dataset.y = y.toFixed(0);
     el.gaps.style.transform = `translateY(${y.toFixed(0)}px)`;
+  }
+
+  function moveCards() {
+    const g = el.grps[active]; if (!g || !g._c) return;
+    const d = innerAt(active), more = d < extra[active] - 2;
+    g._c.style.transform = d ? `translateY(${-d.toFixed(0)}px)` : "";
+    g.classList.toggle("atend", !more);
+    g.classList.toggle("moved", d > 2);
+  }
+  // Group sizes: a group whose cards do not fit gets a fixed window, and its step the extra
+  // scroll length to move through them.
+  function measureGroups() {
+    if (!el.grps) return;
+    el.gaps.style.transform = ""; el.gaps.dataset.y = "0";
+    const sb = el.stage.getBoundingClientRect(), pb = parseFloat(getComputedStyle(el.stage).paddingBottom) || 0;
+    el.grps.forEach((g, k) => {
+      const w = g.querySelector(".vwin"), c = w.firstElementChild, m = g.querySelector(".more");
+      g._c = c; g.classList.remove("ovf"); w.style.height = ""; c.style.transform = "";
+      el.grps.forEach((o) => { o.style.display = o === g ? "block" : "none"; });
+      fillRead(S[STEPS[k].s]); // on phones the reading block sits above the cards
+      const ch = c.offsetHeight, wt = w.getBoundingClientRect().top;
+      g.classList.add("ovf"); const mh = m.offsetHeight + 6; g.classList.remove("ovf");
+      const avail = Math.floor(sb.top + Math.min(sb.height - pb, window.innerHeight) - 10 - wt - mh);
+      extra[k] = ch > avail + 1 && avail > 120 ? ch - avail : 0;
+      if (extra[k]) { g.classList.add("ovf"); w.style.height = `${avail}px`; }
+    });
+    el.grps.forEach((o) => { o.style.display = ""; });
   }
 
   function frame() { raf = 0; if (mode === "live" && el.rect) draw(posFromScroll()); }
@@ -516,9 +533,14 @@
   const lvh = () => { const m = document.createElement("div"); m.style.cssText = "position:absolute;visibility:hidden;height:100lvh;width:0"; document.body.append(m); const h = m.offsetHeight || window.innerHeight; m.remove(); return Math.max(h, window.innerHeight); };
   function measure() {
     stepPx = Math.max(420, lvh() * 0.8);
-    el.track.style.height = `${Math.round(stepPx * (LASTSTEP + 0.5) + lvh())}px`;
+    measureGroups();
     trackTop = el.track.getBoundingClientRect().top + window.scrollY;
+    starts = STEPS.map((x, k) => trackTop + k * stepPx + extra.slice(0, k).reduce((a, b) => a + b, 0));
+    el.track.style.height = `${Math.round(starts[LASTSTEP] - trackTop + extra[LASTSTEP] + stepPx * 0.5 + lvh())}px`;
+    active = -1;
   }
+  // For the checks: step positions, and a way to draw now (background tabs throttle frames).
+  window.JW7 = { stepTop: (k) => starts[k], extra: (k) => extra[k], get stepPx() { return stepPx; }, sync: () => frame() };
 
   /* ---------- the 10,000 squares ----------
      Filled in reading order by where each complaint drops out: first the ones never sent for
@@ -614,9 +636,9 @@
     // Same top and bottom for both views; only the middle part changes.
     mode = U.view === "pipe" ? "pipe" : isStatic() ? "static" : "live";
     document.body.classList.toggle("static", mode === "static");
-    const middle = mode === "pipe" ? pipeHTML() : mode === "static" ? staticHTML() : stageHTML();
+    const middle = mode === "pipe" ? pipeHTML() : mode === "static" ? staticHTML() : stageHTML() + staticHTML(true);
     main.innerHTML = introHTML() + `<div class="mid" id="mid" role="region" aria-labelledby="swl">${switchHTML(mode === "live")}${middle}</div>` + endHTML();
-    wireTip(); wireCars(main);
+    wireTip();
     if (mode === "pipe") {
       document.getElementById("bar").style.transform = "scaleX(0)";
       dots(false);
@@ -658,7 +680,7 @@
     const to = (id) => { const n = document.getElementById(id); if (n) window.scrollTo(0, n.getBoundingClientRect().top + window.scrollY - (id === "mid" ? head : head + 8)); };
     if (AT === "switch") return to("mid");
     if (["end", "method", "leaks"].includes(AT)) return to(AT === "method" ? "how" : AT);
-    if (mode === "live") window.scrollTo(0, trackTop + Math.max(0, Math.min(LASTSTEP, parseFloat(AT) || 0)) * stepPx);
+    if (mode === "live") { const p = Math.max(0, Math.min(LASTSTEP, parseFloat(AT) || 0)), k = Math.floor(p); window.scrollTo(0, starts[k] + (p > k ? extra[k] + (p - k) * stepPx : 0)); }
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -674,8 +696,7 @@
   }
   window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(relayout, 120); });
   RM.addEventListener?.("change", () => { if (U.view === "funnel") { render(); } });
-  NARROW.addEventListener?.("change", () => location.reload()); // the steps differ (two cards a screen on phones)
-  SHORTWIDE.addEventListener?.("change", () => location.reload());
+  NARROW.addEventListener?.("change", () => location.reload()); // the phone layout differs (the ladder)
   SHORT.addEventListener?.("change", () => { if (U.view === "funnel" && !qs.has("static") && !RM.matches) { lastBox = ""; render(); } });
 
   // The tap hint shows until the reader opens any evidence, then never again.
@@ -687,8 +708,17 @@
     const j = e.target.closest("[data-jump]");
     if (j) {
       const k = STEPS.findIndex((x) => x.s === +j.dataset.jump);
-      window.scrollTo({ top: trackTop + k * stepPx, behavior: RM.matches ? "auto" : "smooth" });
+      window.scrollTo({ top: starts[k], behavior: RM.matches ? "auto" : "smooth" });
     }
+  });
+  // Keyboard: Tab through a long stage's cards; the page scrolls so the focused card is in
+  // its window (the window itself never scrolls).
+  document.addEventListener("focusin", (e) => {
+    const c = e.target.closest?.(".grp.on.ovf .card"); if (!c || mode !== "live") return;
+    const g = c.closest(".grp"), w = g.querySelector(".vwin"), k = +g.dataset.k; w.scrollTop = 0;
+    const d = innerAt(k), top = c.offsetTop, bot = top + c.offsetHeight, h = w.clientHeight;
+    const to = top < d ? top : bot > d + h ? Math.min(extra[k], bot - h) : d;
+    if (to !== d) window.scrollTo(0, starts[k] + to);
   });
 
   U.onRender(() => { lastBox = ""; render(); });
