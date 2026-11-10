@@ -494,3 +494,6 @@ html[lang="ne"] .top .jw-brand img { width: 26px; height: 30px; object-fit: cove
   .card .ev { font-size: 13.5px; } html[lang="ne"] .card .ev { font-size: 14px; }
   .card .ft { display: none; }
 }
+/* pipe view: seven columns are narrow between 1000 and 1250 px, so long words wrap inside the card */
+.drip, .stop { min-width: 0; overflow-wrap: anywhere; }
+@media (min-width: 1000px) and (max-width: 1250px) { .drip .h { font-size: 15px; } html[lang="ne"] .drip .h { font-size: 16px; } .drip .v { font-size: 22px; } .drip { padding: 10px 11px; } }
