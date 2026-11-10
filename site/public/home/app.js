@@ -50,14 +50,14 @@
     courts: { en: "Courts", ne: "अदालत" },
     endEyebrow: { en: "Where it ends", ne: "अन्त्यमा" },
     estLine: { en: "An estimate: each stage's rate applied in turn to one year's complaints, not one group of complaints followed to the end.", ne: "अनुमान: एक वर्षका उजुरीमा हरेक चरणको दर क्रमशः लागू गरेर निकालिएको, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएर होइन।" },
-    squares: { en: "Each square is one complaint: 10,000 in all", ne: "हरेक वर्ग एउटा उजुरी हो (जम्मा १०,०००)।" },
+    squares: { en: "Each square is one complaint: 10,000 in all", ne: "हरेक सानो कोठा एउटा उजुरी हो (जम्मा १०,०००)।" },
     stands: { en: "End in a conviction that stands", ne: "अन्तिमसम्म कसुर ठहर कायम रहने" },
     leaked: { en: "Lost along the way", ne: "बीच बाटोमै छुटेका" },
     endLine: {
       en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than {perK} in 1,000.",
       ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहन्छ: १,००० मा {perK} भन्दा कम।",
     },
-    money: { en: "And the money? No one publishes how much is recovered from corruption judgments.", ne: "अनि रकम? भ्रष्टाचारका फैसलाबाट कति रकम असुल भयो भन्ने कसैले प्रकाशित गर्दैन।" },
+    money: { en: "And the money lost to corruption: how much comes back? No one publishes how much is recovered from corruption judgments.", ne: "भ्रष्टाचारबाट हिनामिना भएको रकम कति फिर्ता भयो? भ्रष्टाचारका फैसलाबाट कति रकम असुली भयो भन्ने कसैले प्रकाशित गर्दैन।" },
     how: { en: "How we counted", ne: "हामीले कसरी गन्यौं" },
     print: { en: "Print or save as PDF", ne: "प्रिन्ट गर्नुहोस् वा PDF मा सुरक्षित गर्नुहोस्" },
     printNote: { en: "The whole page, without animation, ready to print.", ne: "पूरा पाना, एनिमेसनबिना, प्रिन्टका लागि तयार।" },
@@ -65,7 +65,7 @@
     allNote: { en: "The report's {nLeaks} headline findings, in the order of the report's ranking: by how large each leak is and how sure we are. Findings the ranking does not cover come last.",
       ne: "प्रतिवेदनका {nLeaks} मुख्य निष्कर्ष, प्रतिवेदनको क्रमअनुसार: हरेक चुहावट कति ठूलो छ र हामी कत्तिको निश्चित छौं भन्ने आधारमा। क्रममा नपरेका निष्कर्ष अन्त्यमा छन्।" },
     ranked: { en: "The ranked list", ne: "क्रमबद्ध सूची" },
-    tier: [{ en: "The biggest leaks, best evidenced", ne: "सबैभन्दा ठूला, सबैभन्दा बलियो प्रमाण भएका चुहावट" }, { en: "Also ranked in the report", ne: "प्रतिवेदनको क्रममा परेका अन्य चुहावट" }, { en: "Not in the report's ranking", ne: "प्रतिवेदनको क्रममा नपरेका" }],
+    tier: [{ en: "The biggest leaks, best evidenced", ne: "सबैभन्दा ठूला र सबैभन्दा बलियो प्रमाण भएका चुहावट" }, { en: "Also ranked in the report", ne: "प्रतिवेदनको क्रममा परेका अन्य चुहावट" }, { en: "Not in the report's ranking", ne: "प्रतिवेदनको क्रममा नपरेका" }],
     method: [
       { en: "No public record follows a complaint all the way from the CIAA to the Supreme Court. That is itself one of the gaps. So we take one year's complaints and apply the rate measured at each later stage.",
         ne: "कुनै उजुरीलाई अख्तियारदेखि सर्वोच्च अदालतसम्म पछ्याउने सार्वजनिक अभिलेख छैन। यो आफैंमा एउटा कमी हो। त्यसैले हामीले एक वर्षका उजुरी लिएर त्यसपछिका हरेक चरणमा नापिएको दर लागू गरेका छौं।" },
@@ -93,7 +93,7 @@
       href: "https://research.jawafdehi.org/report#complaints",
     },
     investigated: {
-      name: { en: "Full investigation", ne: "विस्तृत अनुसन्धान" },
+      name: { en: "Sent for full investigation", ne: "विस्तृत अनुसन्धानमा पठाइएका" },
       label: { en: "complaints the CIAA sent on for full investigation that year", ne: "सो वर्ष अख्तियारले विस्तृत अनुसन्धानका लागि पठाएका उजुरी" },
       note: { en: "Most complaints are closed at screening or sent elsewhere.", ne: "धेरैजसो उजुरी स्क्रिनिङ र प्रारम्भिक छानबिनमै तामेलीमा राखिन्छन् वा अन्यत्र पठाइन्छन्।" },
       how: { en: "Complaints the CIAA sent on for a full investigation during {fy}, from the screening table in the summary of its 36th annual report. The summary does not give the number of full investigations completed that year, so this stage counts the complaints sent on: the same year and the same report as the other two CIAA figures.",
@@ -130,7 +130,7 @@
     },
     recovery: {
       name: { en: "Money recovered", ne: "रकम असुली" },
-      label: { en: "No one publishes how much money is recovered from corruption judgments.", ne: "भ्रष्टाचारका फैसलाबाट कति रकम असुल भयो भन्ने कसैले प्रकाशित गर्दैन।" },
+      label: { en: "No one publishes how much money is recovered from corruption judgments.", ne: "भ्रष्टाचारका फैसलाबाट कति रकम असुली भयो भन्ने कसैले प्रकाशित गर्दैन।" },
       note: { en: "", ne: "" },
     },
   };
@@ -340,7 +340,7 @@
     sub: { en: "A corruption case in Nepal passes through seven stages, from the complaint to getting the money back. At each one, accountability leaks. Here is where, with the evidence.",
       ne: "नेपालमा भ्रष्टाचारको मुद्दा उजुरीदेखि रकम असुलीसम्म सात चरण पार गर्छ। हरेक चरणमा जवाफदेहिता चुहिन्छ। कहाँ चुहिन्छ, प्रमाणसहित यहाँ छ।" },
     hint: { en: "Each red card is a leak. Tap one to see the evidence.", ne: "हरेक रातो कार्ड एउटा चुहावट हो। प्रमाण हेर्न कुनै एकमा थिच्नुहोस्।" },
-    end: { en: "The pipe ends open: no one publishes how much money is recovered.", ne: "पाइपको अन्त्य खुला छ: कति रकम असुल भयो भन्ने कसैले प्रकाशित गर्दैन।" },
+    end: { en: "The pipe ends open: no one publishes how much money is recovered.", ne: "पाइपको अन्त्य खुला छ: कति रकम असुली भयो भन्ने कसैले प्रकाशित गर्दैन।" },
     ic: { en: "CIAA", ne: "अख्तियार" }, is: { en: "Special Court", ne: "विशेष अदालत" }, iu: { en: "Supreme Court", ne: "सर्वोच्च अदालत" }, in: { en: "Not published", ne: "प्रकाशित छैन" },
     keyLeak: { en: "A leak, measured from the record", ne: "अभिलेखबाट मापन गरिएको चुहावट" },
     keyTitle: { en: "What the labels mean", ne: "लेबलको अर्थ" },

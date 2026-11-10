@@ -41,9 +41,9 @@
  },
  "whyAcquitted": {
   "en": "In 13 of 31 judgments with acquittals that we read (from a random sample of 42), the Special Court said the evidence did not prove the charge.",
-  "ne": "नमुनाका रूपमा पढिएका (४२ को नमुनाबाट) सफाइसहितका फैसलामा, ३१ मा १३ पटक विशेष अदालतले प्रमाणले अभियोग पुष्टि नगरेको भन्यो।",
+  "ne": "नमुनाका रूपमा छानिएका ४२ फैसलामध्ये कारण खुलेका ३१ मा, १३ वटामा विशेष अदालतले प्रमाणले अभियोग पुष्टि नगरेको भन्यो।",
   "fig_en": "13 of 31",
-  "fig_ne": "३१ मा १३"
+  "fig_ne": "१३ वटामा"
  },
  "oneWay": {
   "en": "When a convicted person appeals, the Supreme Court fully overturns the conviction in 41% of trials; when the government appeals an acquittal, the acquittal is overturned in only 1%.",
@@ -53,9 +53,9 @@
  },
  "whyLost": {
   "en": "In 7 of 16 overturned convictions that we read (a sample), the Supreme Court pointed to flaws in the CIAA's investigation.",
-  "ne": "नमुनाका रूपमा पढिएका उल्टिएका कसुर ठहरमा, १६ मा ७ पटक सर्वोच्च अदालतले अनुसन्धानको कमजोरी औंल्यायो।",
+  "ne": "नमुनाका रूपमा पढिएका १६ उल्टिएका कसुर ठहरमध्ये ७ वटामा सर्वोच्च अदालतले अनुसन्धानको कमजोरी औंल्यायो।",
   "fig_en": "7 of 16",
-  "fig_ne": "१६ मा ७"
+  "fig_ne": "७ वटामा"
  },
  "notAppealed": {
   "en": "Of the 1,010 acquittals old enough for an appeal to have been filed, 21.7% (219) have no government appeal on record, and no reason is published.",
@@ -64,10 +64,10 @@
   "fig_ne": "२१.७%"
  },
  "duration": {
-  "en": "For corruption appeals registered 2064–2075 BS (2008–2018), the median time for the Supreme Court to decide was 4.1 years, counting those still pending: half took longer.",
-  "ne": "२०६४–२०७५ (सन् २००८–२०१८) मा दर्ता भएका भ्रष्टाचार पुनरावेदनको फैसला हुन सर्वोच्च अदालतमा लागेको मध्यिका समय ४.१ वर्ष हो; विचाराधीनसमेत गन्दा आधामा योभन्दा लामो समय लाग्यो।",
-  "fig_en": "4.1 years",
-  "fig_ne": "४.१ वर्ष"
+  "en": "Of corruption appeals registered 2064–2075 BS (2008–2018), counting those still pending, half have taken more than 4.1 years to be decided.",
+  "ne": "२०६४–२०७५ (सन् २००८–२०१८) मा दर्ता भएका भ्रष्टाचार पुनरावेदनमध्ये, विचाराधीनसमेत गन्दा, आधाको फैसला हुन ४.१ वर्षभन्दा बढी लागेको छ।",
+  "fig_en": "more than 4.1 years",
+  "fig_ne": "४.१ वर्षभन्दा बढी"
  },
  "hearings": {
   "en": "Of the 27,855 times so far that a corruption appeal was put on the Supreme Court's hearing list, 77% ended without the bench taking it up.",
@@ -94,10 +94,10 @@
   "fig_ne": "७२६"
  },
  "recovery": {
-  "en": "No institution publishes how much money is recovered from corruption judgments.",
-  "ne": "भ्रष्टाचारका फैसलाबाट कति रकम असुली भयो भन्ने कुनै पनि निकायले प्रकाशित गर्दैन।",
-  "fig_en": "",
-  "fig_ne": ""
+  "en": "In 2080/81 and 2081/82, outside one or two courts, about 1 in 9 rupees of the courts' fine ledger (all kinds of case) was disposed of in a year; for corruption alone, no figure exists.",
+  "ne": "२०८०/८१ र २०८१/८२ मा, एक-दुई अदालत बाहेक, अदालतको दण्ड-जरिवाना लगतको (सबै प्रकारका मुद्दा) करिब ९ मा १ रुपैयाँ वर्षमा फर्छ्यौट भयो; भ्रष्टाचारको असुलीको छुट्टै तथ्यांक नै छैन।",
+  "fig_en": "1 in 9",
+  "fig_ne": "९ मा १"
  }
 };
   window.JW.findings.forEach((f) => { if (E[f.key]) f.ev = E[f.key]; else (window.JW_COPY_ERRORS = window.JW_COPY_ERRORS || []).push(f.key + ": no evidence sentence"); });

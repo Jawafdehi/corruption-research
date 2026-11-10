@@ -292,6 +292,11 @@
   const walk3 = (o, isNe) => { if (!o || typeof o !== "object") return; for (const k of Object.keys(o)) { const v = o[k], ne = isNe || k === "ne" || /_ne$/.test(k);
     if (typeof v === "string" && ne) o[k] = NE_FIXES3.reduce((x, [a, b]) => x.split(a).join(b), v); else if (typeof v === "object") walk3(v, ne && k !== "en"); } };
   JW.findings.forEach((f) => walk3(f, false)); JW.stages.forEach((st) => walk3(st, false));
+  // Julius, 13:20 PT: one word for recovery (असुली), and the officials' register (सर्वसाधारण).
+  const NE_FIXES4 = [["असुल भयो", "असुली भयो"], ["जनताले", "सर्वसाधारणले"]];
+  const walk4 = (o, isNe) => { if (!o || typeof o !== "object") return; for (const k of Object.keys(o)) { const v = o[k], ne = isNe || k === "ne" || /_ne$/.test(k);
+    if (typeof v === "string" && ne) o[k] = NE_FIXES4.reduce((x, [a, b]) => x.split(a).join(b), v); else if (typeof v === "object") walk4(v, ne && k !== "en"); } };
+  JW.findings.forEach((f) => walk4(f, false));
   // Every Nepali headline is a sentence and ends in । (the recovery one could not be reached by a pair).
   JW.findings.forEach((f) => { if (!/[।?]$/.test(f.headline.ne)) f.headline.ne += "।"; });
   JW.stages.forEach((st) => walkNe(st, false));
