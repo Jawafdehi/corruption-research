@@ -82,7 +82,7 @@ jobs:
         # read of the report pages is done; then set it to "1" here.
         env:
           VITE_JW_LAUNCH: "1"
-          VITE_JW_NE_REVIEWED: "0"
+          VITE_JW_NE_REVIEWED: "1"
           # Analytics (site/src/analytics.ts): Google Analytics 4, jawafdehi.org's property
           # (services/jawafdehi-frontend/src/config/analytics-config.ts). Empty means off.
           VITE_GA_ID: "G-ZDV84KYJDJ"
