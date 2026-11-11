@@ -117,7 +117,7 @@
             "selective": "12"
           },
           "gap": "A→B",
-          "caveat": "Read with AI software, not yet reviewed by a lawyer; 31 judgments is a sample.",
+          "caveat": "These readings of court judgments were made with AI software and have not yet been checked by a lawyer. They may contain errors; the judgment itself is the authority. 31 judgments is a sample.",
           "source": "acquittal-reasons/FINDING.md (card 6.4; READING.csv)",
           "href": "/report#trial"
         }
@@ -153,7 +153,7 @@
             "stingPct": "84%"
           },
           "gap": "A",
-          "caveat": "Read with AI software, not yet reviewed by a lawyer; 16 judgments is a sample.",
+          "caveat": "These readings of court judgments were made with AI software and have not yet been checked by a lawyer. They may contain errors; the judgment itself is the authority. 16 judgments is a sample.",
           "source": "legal-check/AGENT_READING.csv; stages/8.5-REVERSAL-REASONS.md (83.7%)",
           "href": "/report#appeal-decided"
         },

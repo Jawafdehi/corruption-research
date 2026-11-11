@@ -50,9 +50,9 @@ The Special Court's case page gives one outcome for the whole case: guilty, part
 **Gap type: A→B.** (A) The court's public case page gives one outcome for a whole case and none for each defendant. Checked on the court's own pages on 2026-11-07, 19:53–20:05 UTC, for five partly-upheld cases. (B) As a result, this research cannot give a conviction rate for each person.
 
 **What a member of the public sees** (checked 2026-11-07):
-- **The case page** (Special Court → "CASE PROCESS STATUS"). Opened for five partly-upheld cases: 070-CR-0016, 070-CR-0158, 074-CR-0025, 076-CR-0270 and 078-CR-0085. Every page shows a single status, "फैसला / आंशिक ठहर". None shows an outcome for any defendant, and none links to the judgment. 070-CR-0158, for example, lists about 30 defendants and one outcome.
+- **The case page** (Special Court → "CASE PROCESS STATUS"). Opened for five partly-upheld cases, filed between 2070/71 and 2078/79. Every page shows a single status, "फैसला / आंशिक ठहर". None shows an outcome for any defendant, and none links to the judgment. One of them, a forest-felling case, lists about 30 defendants and one outcome.
 - **The full judgment** ("फैसला / आदेश को पुर्ण पाठ"). The reader chooses the court, types the case number and solves a CAPTCHA. Four of the five judgments are there, and each names who was convicted and who was cleared, inside a text of up to about 180,000 characters.
-- **The missing judgment.** For 076-CR-0270, decided on 2080/11/03, the page still showed "फैसला अपलोड हुन बाँकी" (judgment not yet uploaded), more than two and a half years later.
+- **The missing judgment.** For one of the five, a case about government land registered in a private name, decided on 2080/11/03, the page still showed "फैसला अपलोड हुन बाँकी" (judgment not yet uploaded), more than two and a half years later.
 - **The "DECIDED CASES" page.** It says judgments can be viewed and downloaded there. It returned no rows for any query tried.
 
 **Key figures** (unit: decided cases and defendant entries, not identified people; source: the court record as published, held in this project's copy of 2026-11-02; each defendant entry joined to its case's single published verdict, institutions removed):
@@ -70,8 +70,8 @@ The Special Court's case page gives one outcome for the whole case: guilty, part
 - A conviction rate for each person. Read the table only as cases and defendant entries.
 - That a defendant entry is a distinct person. Only about 5% of entries carry an identity code, so someone charged twice counts twice.
 - A rate of missing judgments. Five cases were checked by hand; they show what the pages look like. Whether other official sources (for example the law reports, नेपाल कानून पत्रिका) give outcomes for each defendant was not checked.
-- An exact share. The defendant lists themselves are incomplete for some cases (next finding). For three of the five cases checked, the court page and this project's copy give different defendant counts (074-CR-0025: 41 against 29; 076-CR-0270: 37 against 25; 078-CR-0085: 52 against 34), so the 34.3% is if anything an undercount.
-- One decided case names no defendant (070-CR-0038) and is left out: 2,754 cases here against 2,755 elsewhere.
+- An exact share. The defendant lists themselves are incomplete for some cases (next finding). For three of the five cases checked, the court page and this project's copy give different defendant counts (41 against 29, 37 against 25, and 52 against 34), so the 34.3% is if anything an undercount.
+- One decided case names no defendant and is left out: 2,754 cases here against 2,755 elsewhere.
 
 ## The court record's defendant lists are incomplete for early trials, not in general
 
@@ -87,7 +87,7 @@ For cases registered at the Special Court in 2069–2072, the court record often
 | Registered 2069–2072: 174 | 24 (13.8%) |
 | Registered 2073 onward: 841 | 1 (0.1%) |
 
-- The 25 omissions add up to at least 148 defendants. Examples: 071-CR-0028, 33 in the judgment and 1 on the record; 071-CR-0062, 15 and 1.
+- The 25 omissions add up to at least 148 defendants. Examples: one case with 33 defendants in the judgment and 1 on the record; another with 15 and 1.
 - In 21 of the 25 the record lists only the first-named defendant.
 - Where the record lists two or more defendants it is almost always complete.
 - 21 of 483 counted trials that the record lists with one defendant (4.3%) really have more.
@@ -95,7 +95,7 @@ For cases registered at the Special Court in 2069–2072, the court record often
 
 **What this cannot establish.**
 - The 1,549 trials whose judgment has no countable opening list of defendants. They contain more trials listed with one defendant (55.4% against 47.6%), so the rate there could differ.
-- Trials without a judgment text, including the largest example: one forest-felling trial (069-CR-0025) with 31 defendants on the record and 87 appeals at the Supreme Court.
+- Trials without a judgment text, including the largest example: one forest-felling trial registered in 2069/70, with 31 defendants on the record and 87 appeals at the Supreme Court.
 - For trials outside the source check, whether a gap arises on the court website or in this project's copy of it. Where it was checked, it is mostly the court page.
 
 ## When the court acquits, it usually says the charge was not proved, or was not a crime. Sometimes it says the CIAA charged selectively

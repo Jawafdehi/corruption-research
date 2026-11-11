@@ -797,7 +797,7 @@ def supreme_appeal_duration_origin():
         "fromYear": lo, "toYear": hi, "censorDate": APPEAL_CENSOR_AD,
         **block(win),
         "bands": bands,
-        "withoutMassTrial": {"trial": APPEAL_MASS_TRIAL, "dockets": int(mass.sum()), **block(win[~mass])},
+        "withoutMassTrial": {"dockets": int(mass.sum()), **block(win[~mass])},
         "keywordOnly": block(win[win.keyword_universe == "True"]),
         "bySide": {s: block(win[win.appellant_side == s]) for s in ("person", "government")},
         "earlier": window(last - 11, last - 7),

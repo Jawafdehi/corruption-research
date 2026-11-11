@@ -451,11 +451,10 @@ export default function Appeals() {
         <Caveat>
           {t(
             "research.corruption.delay.caveat2",
-            "The decided-only median is a floor: an appeal still open is by definition a slow one. The Kaplan-Meier median of {{km}} years counts the open appeals too, assuming they behave like decided ones of the same age. Registration years after {{to}} are excluded because too few of their appeals have been decided. Counts are of appeal dockets, and co-defendants file separately: one trial ({{mass}}) filed {{dockets}} dockets decided on a single day; without it the median is {{without}} years.",
+            "The decided-only median is a floor: an appeal still open is by definition a slow one. The Kaplan-Meier median of {{km}} years counts the open appeals too, assuming they behave like decided ones of the same age. Registration years after {{to}} are excluded because too few of their appeals have been decided. Counts are of appeal dockets, and co-defendants file separately: one forest-felling trial registered in 2069/70 filed {{dockets}} dockets decided on a single day; without it the median is {{without}} years.",
             {
               km: (supremeDelay.kmMedianYears ?? supremeDelay.medianYears).toFixed(1),
               to: supremeDelay.toYear,
-              mass: supremeDelay.withoutMassTrial.trial,
               dockets: n(supremeDelay.withoutMassTrial.dockets),
               without: supremeDelay.withoutMassTrial.medianYears.toFixed(1),
             },

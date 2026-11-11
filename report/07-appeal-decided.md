@@ -18,8 +18,8 @@ When people convicted by the Special Court appealed, the Supreme Court fully cle
 
 - **Where it concentrates** (convicted people's appeals): bribery 66% (192 of 289 trials); fake credential 3% (4 of 156); embezzlement 22% (8 of 37). Amount claimed under Rs 10 lakh: 64% (175 of 274). Verdicts of FY2071/72–2072/73: 20–27%; FY2074/75–2076/77: 52–60%.
 - **Robustness:** 38.6–40.9% against 0.5–1.1% across link grades, outcome sources and with mass trials removed.
-- **Checked against the judgments:** in 183 of 185 "reversed" trials whose closing order could be read automatically, at least one appellant is acquitted. Of 277 readable judgments on government appeals against acquittals, 276 uphold the acquittal and one partly reverses it (076-CR-1505).
-- **Per person rather than per trial:** 418 of 925 appellants (45.2%). Mass trials dominate this figure; in one forest-felling trial (069-CR-0025) 86 appellants were all cleared.
+- **Checked against the judgments:** in 183 of 185 "reversed" trials whose closing order could be read automatically, at least one appellant is acquitted. Of 277 readable judgments on government appeals against acquittals, 276 uphold the acquittal and one partly reverses it.
+- **Per person rather than per trial:** 418 of 925 appellants (45.2%). Mass trials dominate this figure; in one forest-felling trial registered in 2069/70, 86 appellants were all cleared.
 
 **What the 2021 ruling has to do with it** (unit: trials with at least one Supreme Court judgment text, 404 of the 567; the counts are a text search for the ruling, 074-WC-0020 of 2078/01/08, and for rule 30 of the CIAA Rules):
 
@@ -32,7 +32,7 @@ When people convicted by the Special Court appealed, the Supreme Court fully cle
 - Convictions after the ruling were rarely overturned: 5 of 39 trials with a text (13%), against 187 of 365 (51%) before it.
 - Per appeal rather than per trial: 186 of 360 reversing judgments (51.7%) cite the ruling, against 40 of 310 (12.9%) other final judgments.
 
-**Why convictions were overturned** (*read with AI software, not yet reviewed by a lawyer*). The ruling's holding, as read: it struck down rule 30 of the CIAA Rules 2059 and held that money the CIAA hands a complainant to pass on as a bribe cannot be used as evidence. 16 sampled full reversals were read with AI software. Main ground: evidence insufficient 8, procedure 7 (6 of them the 2021 ruling), no loss shown 1. In none did the Supreme Court say it had simply weighed the same evidence differently. It placed the failure in the investigation (7), the change in the law (6) or the charge sheet (3). For the 2021 ruling, the Special Court's "error" exists only in light of the later law. A blind second reading of 10 sampled judgments agreed on outcome, stage and trial-court error in 10 of 10, and on main ground in 9 of 10.
+**Why convictions were overturned.** *These readings of court judgments were made with AI software and have not yet been checked by a lawyer. They may contain errors; the judgment itself is the authority.* The ruling's holding, as read: it struck down rule 30 of the CIAA Rules 2059 and held that money the CIAA hands a complainant to pass on as a bribe cannot be used as evidence. 16 sampled full reversals were read with AI software. Main ground: evidence insufficient 8, procedure 7 (6 of them the 2021 ruling), no loss shown 1. In none did the Supreme Court say it had simply weighed the same evidence differently. It placed the failure in the investigation (7), the change in the law (6) or the charge sheet (3). For the 2021 ruling, the Special Court's "error" exists only in light of the later law. A blind second reading of 10 sampled judgments agreed on outcome, stage and trial-court error in 10 of 10, and on main ground in 9 of 10.
 
 **What this cannot establish.**
 - That anyone was innocent. A reversal can rest on evidence, procedure or the change in the law.
@@ -55,7 +55,7 @@ For appeals registered at the Supreme Court in 2008–2018, half of those decide
 - By year of decision: appeals decided 2015–2019 had waited a median of 2.08 years (676 appeals); those decided 2023–2026, 5.33 years (1,031). This measures how old the appeals being cleared were, not how long an appeal filed today will take.
 - 2,128 of the 4,430 appeals had no decision date.
 
-**A selection by case type gives a longer wait.** Counting only appeals whose case type contains the word भ्रष्टाचार (corruption), as the site did before, gives 4.57 years for 2008–2018 (1,064 decided) and 34.5% over six years. That selection leaves out 1,253 appeals filed under fake certificate, bribery and other types, which are decided faster. One judgment moves it: 87 appeals from one forest-felling trial (069-CR-0025), all registered in 2017, were all decided on 2023-06-05.
+**A selection by case type gives a longer wait.** Counting only appeals whose case type contains the word भ्रष्टाचार (corruption), as the site did before, gives 4.57 years for 2008–2018 (1,064 decided) and 34.5% over six years. That selection leaves out 1,253 appeals filed under fake certificate, bribery and other types, which are decided faster. One judgment moves it: 87 appeals from one forest-felling trial registered in 2069/70, all registered in 2017, were all decided on 2023-06-05.
 
 **What this cannot establish.**
 - How long undecided appeals will take. The estimate that counts them assumes they behave like decided appeals of the same age. If the files destroyed in the fire of 9 September 2025 slow them further, it understates.
