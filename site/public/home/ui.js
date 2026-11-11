@@ -241,7 +241,7 @@
     if (drawer) closeNow(opts.silent);
     const body = f ? findingBody(f) : x(k);
     // A language switch closes and reopens the same drawer: not a new open.
-    if (!opts.silent) { openAt = performance.now(); if (f) track("select_content", { content_type: "finding", item_id: k, finding: k, stage: f.stage, tier: window.JW7 && window.JW7.tierOf ? window.JW7.tierOf(k) : null, view, via: opts.fromLoad ? "link" : "tap" }); }
+    if (!opts.silent) { openAt = performance.now(); if (f) track("select_content", { content_type: "finding", item_id: k, finding: k, stage: f.stage, tier: window.JW7 && window.JW7.tierOf ? window.JW7.tierOf(k) : null, view: view === "pipe" ? "pipeline" : view, via: opts.fromLoad ? "link" : "tap" }); }
     openKey = f ? k : null;
     lastFocus = opts.focusBack || document.activeElement;
     scrim = document.createElement("div"); scrim.className = "jw-scrim";
