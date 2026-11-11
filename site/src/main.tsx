@@ -6,12 +6,15 @@
 // Tailwind stylesheet, so neither can restyle it.
 //
 // Every other path is the report: the React app in spa.tsx, unchanged.
-// Both use the self-hosted fonts in fonts.ts.
+// Both use the self-hosted fonts in fonts.ts, and the analytics wrapper in analytics.ts
+// (the home page's scripts reach it through window.jwTrack).
 import "./fonts";
+import { initAnalytics } from "./analytics";
 
 const base = import.meta.env.BASE_URL;
 const path = window.location.pathname;
 const isHome = path === base || path === base.replace(/\/$/, "") || path === `${base}index.html`;
+initAnalytics(isHome);
 
 if (isHome) {
   void import("./home/mount").then((m) => m.mountHome());

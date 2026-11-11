@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { Block, Body, Eyebrow, Lede, SectionHeading } from "@/components/layout/Prose";
 
 /**
- * The site's own privacy note (damo, 10 November): no tracking, what the browser keeps,
+ * The site's own privacy note (damo, 10 November; Google Analytics from 11 November): what is
+ * collected, what the browser keeps,
  * and a contact. Every sentence here is a claim about the build and its hosting, checked in
  * work/2026-11-08-research-site-design/PRIVACY.md; change the two together.
  */
@@ -15,11 +16,11 @@ export default function Privacy() {
     <>
       <Block>
         <Eyebrow>{t("research.corruption.privacy.eyebrow", "Privacy")}</Eyebrow>
-        <SectionHeading>{t("research.corruption.privacy.title", "This site does not track you")}</SectionHeading>
+        <SectionHeading>{t("research.corruption.privacy.title", "What this site collects")}</SectionHeading>
         <Lede>
           {t(
             "research.corruption.privacy.lede",
-            "It sets no cookies. It has no analytics, no advertising, no sign-in and no forms. Every file it loads, the fonts included, comes from research.jawafdehi.org itself, so reading it connects your browser to no other company.",
+            "It has no advertising, no sign-in and no forms. We use Google Analytics to count page views and clicks, so Google receives your IP address and browser details. We don't sell or share anything else. The site's own files, the fonts included, come from Jawafdehi's own servers.",
           )}
         </Lede>
       </Block>
@@ -29,7 +30,7 @@ export default function Privacy() {
         <Body>
           {t(
             "research.corruption.privacy.stored",
-            "Three small settings, in your browser's own storage, never sent to us: your language (English or Nepali), the view you chose on the home page (funnel or pipeline), and whether you have already tapped a card, so that the hint is not shown again. Clearing your browser's data for this site removes them.",
+            "Three small settings, in your browser's own storage, never sent to us: your language (English or Nepali), the view you chose on the home page (funnel or pipeline), and whether you have already tapped a card, so that the hint is not shown again. Google Analytics also sets its own cookies (_ga) to tell repeat visits apart. Clearing your browser's data for this site removes them.",
           )}
         </Body>
       </Block>
@@ -39,7 +40,7 @@ export default function Privacy() {
         <Body>
           {t(
             "research.corruption.privacy.host",
-            "The site is served by Cloudflare. Like any web host, Cloudflare uses your IP address and browser details to deliver the pages and to protect the site from attacks. If a page fails to load, your browser may send Cloudflare a short error report. No code of ours runs on the server, and we add no logging of our own.",
+            "The site is served by Cloudflare. Like any web host, Cloudflare uses your IP address and browser details to deliver the pages and to protect the site from attacks. If a page fails to load, your browser may send Cloudflare a short error report. No code of ours runs on the server, and apart from Google Analytics we add no logging of our own.",
           )}
         </Body>
       </Block>

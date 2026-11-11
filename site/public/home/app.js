@@ -26,6 +26,17 @@
     return dev2(v);
   });
   const T = (o) => fill(t(o));
+  // Analytics: how far readers get. Each event once per page view (a language switch redraws
+  // the page but is not a new view).
+  const once = new Set();
+  const track1 = (id, name, props) => { if (once.has(id)) return; once.add(id); U.track(name, props); };
+  // Reaching step i counts every step up to it (a fast scroll can pass a step between two
+  // frames), so "how far readers get" never has a gap. keyOf(j) names step j's stage.
+  const stepSeen = (view, i, n, keyOf) => {
+    const v = view === "pipe" ? "pipeline" : "funnel";
+    for (let j = 0; j <= i; j++) track1(`step:${view}:${j}`, "funnel_step", { step: j + 1, stage: keyOf(j), view: v, lang: U.lang });
+    if (i === n - 1) track1(`done:${view}`, "funnel_complete", { view: v, lang: U.lang });
+  };
 
   const C = {
     q: { en: "Every year, thousands of corruption complaints are filed with the CIAA. How many end in a conviction that stands?", ne: "हरेक वर्ष अख्तियारमा भ्रष्टाचारका हजारौं उजुरी दर्ता हुन्छन्। तीमध्ये कतिमा अन्तिमसम्म कायम रहने कसुर ठहर हुन्छ?" },
@@ -529,7 +540,12 @@
     el.grps.forEach((o) => { o.style.display = ""; });
   }
 
-  function frame() { raf = 0; if (mode === "live" && el.rect) draw(posFromScroll()); }
+  function frame() {
+    raf = 0; if (mode !== "live" || !el.rect) return;
+    draw(posFromScroll());
+    // A step counts once the stage is on screen (not while the reader is still in the intro).
+    if (window.scrollY + window.innerHeight * 0.5 >= starts[0]) stepSeen("funnel", active, NST, (j) => S[STEPS[j].s].key);
+  }
   function onScroll() { if (!raf) raf = requestAnimationFrame(frame); }
   // The large viewport (100lvh) does not change when a phone's address bar shows or hides,
   // so neither does the size of a step.
@@ -543,7 +559,7 @@
     active = -1;
   }
   // For the checks: step positions, and a way to draw now (background tabs throttle frames).
-  window.JW7 = { stepTop: (k) => starts[k], extra: (k) => extra[k], get stepPx() { return stepPx; }, sync: () => frame() };
+  window.JW7 = { tierOf: (k) => tierOf(k), stepTop: (k) => starts[k], extra: (k) => extra[k], get stepPx() { return stepPx; }, sync: () => frame() };
 
   /* ---------- the 10,000 squares ----------
      Filled in reading order by where each complaint drops out: first the ones never sent for
@@ -592,7 +608,7 @@
     let part = 0, done = SPLIT0[0], t0 = performance.now();
     (function step(now) {
       if (run !== dotsRun) return;
-      if (part >= DUR.length) { dotsBusy = false; final(); return; }
+      if (part >= DUR.length) { dotsBusy = false; final(); track1("grid", "grid_seen", { animated: true, lang: U.lang }); return; }
       const a = SPLIT0[part], b = a + F.split[part].per10k, p = Math.min(1, (now - t0) / DUR[part]);
       // the first three quarters of each part drain its squares; the rest holds, with its label shown
       const upto = a + Math.floor((b - a) * (1 - Math.pow(1 - Math.min(1, p / 0.75), 2)));
@@ -615,6 +631,7 @@
       const i = Math.floor(y / (r.height / 100)) * 100 + Math.floor(x / (r.width / 100)), x2 = F.split[catAt(i)];
       tip.innerHTML = `<i style="background:${SPLITC[x2.key]}"></i><span><b>${esc(t(C.split[x2.key]))}</b>: ${esc(fill(t(C.tipOf).replace("{n}", partTxt(x2, true))))}</span>`;
       tip.hidden = false;
+      track1("tip:" + x2.key, "tooltip", { part: x2.key, lang: U.lang });
       const wr = wrap.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, vw = document.documentElement.clientWidth;
       let left = x - tw / 2, top = y - th - 12;
       left = Math.max(-wr.left + 8, Math.min(left, vw - wr.left - tw - 8));
@@ -642,6 +659,7 @@
     const middle = mode === "pipe" ? pipeHTML() : mode === "static" ? staticHTML() : stageHTML() + staticHTML(true);
     main.innerHTML = introHTML() + `<div class="mid" id="mid" role="region" aria-labelledby="swl">${switchHTML(mode === "live")}${middle}</div>` + endHTML();
     wireTip();
+    watch();
     if (mode === "pipe") {
       document.getElementById("bar").style.transform = "scaleX(0)";
       dots(false);
@@ -666,6 +684,20 @@
     draw(posFromScroll());
     dots(false);
     endDots();
+  }
+  // Analytics watchers for the parts of the page that do not move with the funnel: the pipe's
+  // and the one-page version's stages, the end, the grid (when it does not drain) and the leaks.
+  let watchIO = [];
+  function watch() {
+    watchIO.forEach((o) => o.disconnect()); watchIO = [];
+    track1("view0", "view_initial", { view: U.view === "pipe" ? "pipeline" : "funnel", mode, lang: U.lang });
+    const io = (nodes, fn, opt) => { const o = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { o.unobserve(e.target); fn(e.target); } }), opt); nodes.forEach((n) => n && o.observe(n)); watchIO.push(o); };
+    const half = { rootMargin: "0px 0px -50% 0px" };
+    if (mode === "pipe") { const li = [...document.querySelectorAll(".route .stop")]; io(li, (n) => { const i = li.indexOf(n); stepSeen("pipe", i, li.length, (j) => JW.stages[j].key); }, half); }
+    if (mode === "static") { const li = [...document.querySelectorAll(".track .slist > li")]; io(li, (n) => { const i = li.indexOf(n); stepSeen("funnel", i, li.length, (j) => S[j].key); }, half); }
+    io([document.getElementById("end")], () => track1("end", "funnel_beyond", { view: U.view === "pipe" ? "pipeline" : "funnel", lang: U.lang }), { rootMargin: "0px 0px -25% 0px" });
+    io([document.getElementById("leaks")], () => track1("leaks", "leaks_seen", { lang: U.lang }), half);
+    if (RM.matches || mode === "static") io([document.getElementById("dots")], () => track1("grid", "grid_seen", { animated: false, lang: U.lang }), { threshold: 0.6 });
   }
   // The 10,000 squares drain once when they come into view (never with reduced motion).
   function endDots() {

@@ -83,6 +83,9 @@ jobs:
         env:
           VITE_JW_LAUNCH: "1"
           VITE_JW_NE_REVIEWED: "0"
+          # Analytics (site/src/analytics.ts): Google Analytics 4, jawafdehi.org's property
+          # (services/jawafdehi-frontend/src/config/analytics-config.ts). Empty means off.
+          VITE_GA_ID: "G-ZDV84KYJDJ"
         run: npm run build
 
       - name: Deploy to Cloudflare

@@ -185,6 +185,9 @@
       : `Jawafdehi Initiative, "Where accountability leaks" (${LAUNCH ? "" : "draft, "}November 2026). Finding: ${f.headline.en}. ${f.href}. Source: ${f.src.en}.`;
 
   let drawer, scrim, lastFocus, pushed = false, lockY = 0;
+  // Analytics (the site's analytics.ts, through window.jwTrack): nothing here when it is absent.
+  const track = (n, p) => { try { window.jwTrack && window.jwTrack(n, p); } catch (e) {} };
+  let openKey = null, openAt = 0; // the finding whose drawer is open, and since when
   const extra = {}; // other drawers (e.g. a funnel stage's own figure), by key
 
   function findingBody(f) {
@@ -235,8 +238,11 @@
   function openFinding(k, opts = {}) {
     const f = byKey(k), x = extra[k];
     if (!f && !x) return false;
-    if (drawer) closeNow();
+    if (drawer) closeNow(opts.silent);
     const body = f ? findingBody(f) : x(k);
+    // A language switch closes and reopens the same drawer: not a new open.
+    if (!opts.silent) { openAt = performance.now(); if (f) track("select_content", { content_type: "finding", item_id: k, finding: k, stage: f.stage, tier: window.JW7 && window.JW7.tierOf ? window.JW7.tierOf(k) : null, view, via: opts.fromLoad ? "link" : "tap" }); }
+    openKey = f ? k : null;
     lastFocus = opts.focusBack || document.activeElement;
     scrim = document.createElement("div"); scrim.className = "jw-scrim";
     drawer = document.createElement("div");
@@ -259,8 +265,10 @@
     else { history.pushState({ jwDrawer: k }, "", location.pathname + location.search + "#f=" + k); pushed = true; }
     return true;
   }
-  function closeNow() {
+  function closeNow(silent) {
     if (!drawer) return;
+    if (!silent && openKey) track("drawer_close", { finding: openKey, seconds_open: Math.round((performance.now() - openAt) / 1000) });
+    openKey = null;
     const d = drawer, s = scrim; drawer = scrim = null;
     d.remove(); s.remove();
     document.getElementById("app")?.removeAttribute("aria-hidden");
@@ -342,12 +350,12 @@
   }
   function rerender(keepFocus) {
     const open = drawer && location.hash.startsWith("#f=") ? location.hash.slice(3) : null;
-    if (open) closeNow();
+    if (open) closeNow(true);
     document.documentElement.lang = lang;
     renderers.forEach((r) => r());
     fillChrome();
     if (keepFocus) document.querySelector(`button[data-${keepFocus[0]}="${keepFocus[1]}"]`)?.focus({ preventScroll: true });
-    if (open) { pushed = false; openFinding(open, { fromLoad: true }); }
+    if (open) { pushed = false; openFinding(open, { fromLoad: true, silent: true }); }
   }
   function setLang(l) {
     if (l === lang) return;
@@ -374,6 +382,6 @@
     if (m) openFinding(m[1], { fromLoad: true });
   }
 
-  window.JWUI = { reportLink, LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
+  window.JWUI = { track, reportLink, LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
     get lang() { return lang; }, get view() { return view; } };
 })();
