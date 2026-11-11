@@ -118,7 +118,7 @@ export default function Prosecution() {
 
   return (
     <>
-      <Block>
+      <Block id="prosecution">
         <Eyebrow>
           {t(
             "research.corruption.prosecution.eyebrow",
@@ -280,7 +280,7 @@ export default function Prosecution() {
         </DataNote>
       </Block>
 
-      <Block>
+      <Block id="case-size">
         <Eyebrow>
           {t("research.corruption.size.eyebrow", "How cases differ")}
         </Eyebrow>

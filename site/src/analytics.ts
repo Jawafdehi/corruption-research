@@ -187,11 +187,22 @@ function scrollDepth() {
 }
 
 /* ---------- report pages: each <h2> section that comes into view, once per page view ---------- */
+// A stable id for a heading, the same in English and Nepali: its own anchor id, else the
+// nearest enclosing anchor id, numbered when that block holds more than one <h2> (the
+// report's markdown parts). Never the heading's text, which changes with the language.
+function sectionId(h: Element): string {
+  if (h.id) return h.id;
+  const box = h.parentElement?.closest("main [id]");
+  if (!box) return `h2-${Array.from(document.querySelectorAll<Element>("main h2")).indexOf(h) + 1}`;
+  const n = Array.from(box.querySelectorAll<Element>("h2")).indexOf(h);
+  return n > 0 ? `${box.id}-${n + 1}` : box.id;
+}
+
 function sectionViews() {
   let path = "", seen = new Set<string>(), watched = new WeakSet<Element>();
   const see = (h: Element) => {
     io.unobserve(h);
-    const id = h.id || h.closest("section[id]")?.id || clip(h.textContent || "", 60);
+    const id = sectionId(h);
     if (!id || seen.has(id)) return;
     seen.add(id);
     track("section_view", { section: id, lang: lang() });

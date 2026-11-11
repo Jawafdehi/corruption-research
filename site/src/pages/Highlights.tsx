@@ -882,7 +882,7 @@ export default function Highlights() {
       </Reveal>
 
       <Reveal>
-        <header className="mx-auto mt-10 max-w-3xl text-center md:mt-14">
+        <header id="case-route" className="mx-auto mt-10 max-w-3xl text-center md:mt-14">
           <h2 className="font-display text-[1.9rem] font-bold leading-[1.1] tracking-tight md:text-[2.75rem]">
             {t(
               "research.corruption.hl.title2",

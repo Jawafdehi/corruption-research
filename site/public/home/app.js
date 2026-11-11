@@ -31,10 +31,15 @@
   const once = new Set();
   const track1 = (id, name, props) => { if (once.has(id)) return; once.add(id); U.track(name, props); };
   // Reaching step i counts every step up to it (a fast scroll can pass a step between two
-  // frames), so "how far readers get" never has a gap. keyOf(j) names step j's stage.
+  // frames), so "how far readers get" never has a gap. keyOf(j) names step j's stage, as a
+  // funnel stage key or a pipe stop key; either way the event carries the funnel's stage key
+  // and step 1-6 (U.aStage), so the two views report the same steps.
   const stepSeen = (view, i, n, keyOf) => {
     const v = view === "pipe" ? "pipeline" : "funnel";
-    for (let j = 0; j <= i; j++) track1(`step:${view}:${j}`, "funnel_step", { step: j + 1, stage: keyOf(j), view: v, lang: U.lang });
+    for (let j = 0; j <= i; j++) {
+      const s = U.aStage(keyOf(j));
+      track1(`step:${view}:${s}`, "funnel_step", { step: s + 1, stage: S[s].key, view: v, lang: U.lang });
+    }
     if (i === n - 1) track1(`done:${view}`, "funnel_complete", { view: v, lang: U.lang });
   };
 

@@ -14,7 +14,7 @@ export default function Privacy() {
 
   return (
     <>
-      <Block>
+      <Block id="collects">
         <Eyebrow>{t("research.corruption.privacy.eyebrow", "Privacy")}</Eyebrow>
         <SectionHeading>{t("research.corruption.privacy.title", "What this site collects")}</SectionHeading>
         <Lede>
@@ -25,7 +25,7 @@ export default function Privacy() {
         </Lede>
       </Block>
 
-      <Block>
+      <Block id="stored">
         <SectionHeading>{t("research.corruption.privacy.storedTitle", "What your browser keeps")}</SectionHeading>
         <Body>
           {t(
@@ -35,7 +35,7 @@ export default function Privacy() {
         </Body>
       </Block>
 
-      <Block>
+      <Block id="hosting">
         <SectionHeading>{t("research.corruption.privacy.hostTitle", "Hosting")}</SectionHeading>
         <Body>
           {t(
@@ -45,7 +45,7 @@ export default function Privacy() {
         </Body>
       </Block>
 
-      <Block>
+      <Block id="people">
         <SectionHeading>{t("research.corruption.privacy.peopleTitle", "The people in the records")}</SectionHeading>
         <Body>
           {t(
@@ -61,7 +61,7 @@ export default function Privacy() {
         </Body>
       </Block>
 
-      <Block>
+      <Block id="contact">
         <SectionHeading>{t("research.corruption.privacy.contactTitle", "Full policy and contact")}</SectionHeading>
         <Body>
           {t(

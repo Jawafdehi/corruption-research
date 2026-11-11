@@ -124,7 +124,7 @@ export default function Appeals() {
 
   return (
     <>
-      <Block>
+      <Block id="appeals">
         <Eyebrow>
           {t(
             "research.corruption.appeals.eyebrow",
@@ -462,7 +462,7 @@ export default function Appeals() {
         </Caveat>
       </Block>
 
-      <Block>
+      <Block id="appeal-decisions">
         <Eyebrow>
           {t(
             "research.corruption.appealDecisions.eyebrow",

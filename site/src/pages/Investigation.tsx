@@ -69,7 +69,7 @@ export default function Investigation() {
 
   return (
     <>
-      <Block>
+      <Block id="investigation">
         <Eyebrow>
           {t(
             "research.corruption.investigation.eyebrow",
@@ -353,7 +353,7 @@ export default function Investigation() {
         </div>
       </Block>
 
-      <Block>
+      <Block id="tameli">
         <Eyebrow>
           {t(
             "research.corruption.investigation.tameliEyebrow",

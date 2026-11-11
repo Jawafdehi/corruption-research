@@ -27,7 +27,7 @@ export default function Method() {
 
   return (
     <>
-      <Block>
+      <Block id="overview">
         <Eyebrow>{t("research.corruption.method.eyebrow", "Sources, limits and provenance")}</Eyebrow>
         <SectionHeading>{t("research.corruption.method.title", "How these numbers were produced")}</SectionHeading>
         <Lede>
@@ -38,7 +38,7 @@ export default function Method() {
         </Lede>
       </Block>
 
-      <Block>
+      <Block id="corpus">
         <SectionHeading>{t("research.corruption.method.corpusTitle", "What counts as a case here")}</SectionHeading>
         <Body>
           {t(
@@ -73,7 +73,7 @@ export default function Method() {
         </Body>
       </Block>
 
-      <Block>
+      <Block id="cross-check">
         <SectionHeading>{t("research.corruption.method.crossTitle", "Checking the two records against each other")}</SectionHeading>
         <Body>
           {t(
@@ -123,7 +123,7 @@ export default function Method() {
         </Figure>
       </Block>
 
-      <Block>
+      <Block id="assumptions">
         <SectionHeading>{t("research.corruption.method.assumptionsTitle", "Figures taken from the Commission's reports")}</SectionHeading>
         <Body>
           {t(
@@ -179,7 +179,7 @@ export default function Method() {
         </Figure>
       </Block>
 
-      <Block>
+      <Block id="limits">
         <SectionHeading>{t("research.corruption.method.limitsTitle", "What this cannot tell you")}</SectionHeading>
         <Caveat>
           {t(
@@ -211,7 +211,7 @@ export default function Method() {
         </Body>
       </Block>
 
-      <Block>
+      <Block id="closure-series">
         <SectionHeading>
           {t("research.corruption.method.disposalsTitle", "The post-investigation closure series")}
         </SectionHeading>
@@ -273,7 +273,7 @@ export default function Method() {
         </div>
       </Block>
 
-      <Block>
+      <Block id="provenance">
         <SectionHeading>{t("research.corruption.method.provenanceTitle", "Provenance")}</SectionHeading>
         <Body>
           {t(

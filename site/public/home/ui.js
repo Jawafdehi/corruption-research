@@ -62,6 +62,17 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const stageOf = (key) => JW.stages.find((s) => s.key === key);
   const byKey = (k) => JW.findings.find((f) => f.key === k);
+  // Analytics names stages the funnel's way in both views: 6 stages, step 1-6, with the
+  // pipe's two Supreme Court stops as one. Each pipe stop maps to the funnel stage that holds
+  // its findings, so a GA funnel compares the two views step for step.
+  const toFunnel = {};
+  JW.funnel.stages.forEach((s, i) => s.gaps.forEach((g) => {
+    const p = byKey(g).stage;
+    if (p in toFunnel && toFunnel[p] !== i) console.error(`pipe stop ${p} spans two funnel stages`);
+    toFunnel[p] = i;
+  }));
+  // Index (0-5) of the funnel stage for a funnel stage key or a pipe stop key.
+  const aStage = (k) => { const i = JW.funnel.stages.findIndex((s) => s.key === k); return i >= 0 ? i : toFunnel[k]; };
   const gapCode = (g) => (g === "leak+A" ? "A" : g);
   // "230 of 567" / "५६७ मध्ये २३०": Nepali puts the whole first.
   const ofTxt = (part, whole) => (lang === "ne" ? `${N(whole)} मध्ये ${N(part)}` : `${N(part)} of ${N(whole)}`);
@@ -241,7 +252,7 @@
     if (drawer) closeNow(opts.silent);
     const body = f ? findingBody(f) : x(k);
     // A language switch closes and reopens the same drawer: not a new open.
-    if (!opts.silent) { openAt = performance.now(); if (f) track("select_content", { content_type: "finding", item_id: k, finding: k, stage: f.stage, tier: window.JW7 && window.JW7.tierOf ? window.JW7.tierOf(k) : null, view: view === "pipe" ? "pipeline" : view, via: opts.fromLoad ? "link" : "tap" }); }
+    if (!opts.silent) { openAt = performance.now(); if (f) track("select_content", { content_type: "finding", item_id: k, finding: k, stage: JW.funnel.stages[aStage(f.stage)].key, step: aStage(f.stage) + 1, tier: window.JW7 && window.JW7.tierOf ? window.JW7.tierOf(k) : null, view: view === "pipe" ? "pipeline" : view, via: opts.fromLoad ? "link" : "tap" }); }
     openKey = f ? k : null;
     lastFocus = opts.focusBack || document.activeElement;
     scrim = document.createElement("div"); scrim.className = "jw-scrim";
@@ -382,6 +393,6 @@
     if (m) openFinding(m[1], { fromLoad: true });
   }
 
-  window.JWUI = { track, reportLink, LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
+  window.JWUI = { track, aStage,reportLink, LAUNCH, ofTxt, LOGO, TAGLINE, JW, t, tx, N, dev, dev2, esc, viz, chip, gapCode, bigHTML, stageOf, byKey, openFinding, closeFinding, extra, onRender, UI, TONE,
     get lang() { return lang; }, get view() { return view; } };
 })();

@@ -19,7 +19,7 @@ export function AboutResearch({
   facts: readonly { key: string; value: string; label: string }[];
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-border bg-[hsl(var(--surface))]">
+    <section id="about-research" className="overflow-hidden rounded-xl border border-border bg-[hsl(var(--surface))]">
       <div className="border-b border-border px-5 py-5 md:px-8 md:py-6">
         {/* The label IS the heading. A kicker over a headline that says the same
             thing twice earns neither of them their line. */}

@@ -46,7 +46,7 @@ export default function Report() {
 
   return (
     <>
-      <Block>
+      <Block id="overview">
         <Eyebrow>{t("research.corruption.report.eyebrow", "The report")}</Eyebrow>
         <SectionHeading>{t("research.corruption.report.title", "Where accountability leaks")}</SectionHeading>
         <Lede>
