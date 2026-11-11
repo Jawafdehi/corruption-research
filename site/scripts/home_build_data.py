@@ -371,13 +371,16 @@ def _hf_fig(key, name):
     return int(f["figures"][name].replace(",", ""))
 
 
-def _split(parts, per, stands):
+def _split(parts, per, stands, counts):
     raw = [per(v) for _, v, _ in parts]
     fl = [int(x) for x in raw]
     for i in sorted(range(len(raw)), key=lambda i: raw[i] - fl[i], reverse=True)[: 10000 - sum(fl)]:
         fl[i] += 1
     assert sum(fl) == 10000 and fl[-1] == stands, (fl, stands)
-    return [{"key": k, "per10k": n, "est": est} for (k, _, est), n in zip(parts, fl)]
+    assert counts[-1] == round(parts[-1][1]) and sum(counts) == round(sum(v for _, v, _ in parts)), counts  # real counts add up to the year's complaints
+    # per10k only builds the grid (10,000 squares in proportion); the text shows `count`,
+    # the real number of the year's complaints in each part.
+    return [{"key": k, "per10k": n, "count": c, "est": est} for (k, _, est), n, c in zip(parts, fl, counts)]
 
 
 def build_funnel():
@@ -397,6 +400,8 @@ def build_funnel():
     assert fys == list(range(min(fys), max(fys) + 1)), "the court data's filing years are one unbroken run"
     per = lambda c: c / c0 * 10000
     pct = lambda c: f"{c / c0 * 100:.2f}%"
+    # A stage's share of the year's complaints, for the stage line: two significant figures.
+    share = lambda c: f"{c / c0 * 100:.1f}%" if c / c0 >= 0.01 else f"{c / c0 * 100:.2f}%"
     v = {
         "fy": cd["fy"], "fyOld": CD_OLD["fy"], "sent": "1" if NEW else "", "complaints": n(c0), "onBooks": n(cd["total_complaints"]),
         "investigated": n(c1), "filed": n(c2),
@@ -439,6 +444,7 @@ def build_funnel():
         stages.append({
             "key": key, "inst": inst, "count": None if count is None else round(count), "est": est, "gaps": gaps,
             "per10k": None if count is None else round(per(count)),
+            "share": None if count is None else share(count),
             "name": {"en": name_en, "ne": name_ne},
             "label": {"en": fill(lab_en, v, key), "ne": fill(lab_ne, v, key, ne=True)},
             "note": {"en": fill(note_en, v, key), "ne": fill(note_ne, v, key, ne=True)},
@@ -452,10 +458,13 @@ def build_funnel():
         "end": {"per10k": round(per(c4)), "per10kHi": round(per(c4_hi)), "pct": {"en": v["endPct"], "ne": ne_val(v["endPct"])}},
         # The end grid's 10,000 squares, split by where each complaint drops out (largest
         # remainder, so the parts add up to exactly 10,000 and "stands" matches the end figure).
-        "split": _split([("never", c0 - c1, False), ("noCase", c1 - c2, False), ("trial", c2 - c3, True), ("overturned", c3 - c4, True), ("stands", c4, True)], per, round(per(c4))),
+        # Each part's real count is the difference of the stages' rounded counts, so the five
+        # add up to the year's complaints and match the funnel's labels.
+        "split": _split([("never", c0 - c1, False), ("noCase", c1 - c2, False), ("trial", c2 - c3, True), ("overturned", c3 - c4, True), ("stands", c4, True)], per, round(per(c4)),
+                        [c0 - c1, c1 - c2, c2 - round(c3), round(c3) - round(c4), round(c4)]),
         "copy": {
-            "endLine": T("About {{end}} in every 10,000 complaints end in a conviction that still stands after the Supreme Court. That is fewer than 2 in 1,000.",
-                         "हरेक १०,००० उजुरीमध्ये करिब {{end}} मात्र सर्वोच्च अदालतपछि पनि कायम रहने ठहरमा पुग्छन्। अर्थात् १,००० मा २ भन्दा कम।"),
+            "endLine": T("About {{endPct}} of complaints, fewer than 2 in 1,000, end in a conviction that still stands after the Supreme Court.",
+                         "करिब {{endPct}} उजुरी, अर्थात् १,००० मा २ भन्दा कम, मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहन्छ।"),
             "method": [
                 T("No public record lets anyone follow one complaint all the way to the Supreme Court. That is one of the gaps. So we take one year's complaints and apply each stage's measured rate.",
                   "कुनै एक उजुरीलाई सर्वोच्च अदालतसम्म पछ्याउन मिल्ने सार्वजनिक अभिलेख छैन। यो आफैंमा एउटा कमी हो। त्यसैले हामीले एक वर्षका उजुरी लिएर हरेक चरणको नापिएको दर लागू गरेका छौं।"),
@@ -463,8 +472,8 @@ def build_funnel():
                   "{{complaints}} नयाँ उजुरी, {{investigated}} सकिएका विस्तृत अनुसन्धान र अदालत लगिएका {{filed}} मुद्दा अख्तियारकै {{fy}} का तथ्यांक हुन् (३५औं वार्षिक प्रतिवेदन)।"),
                 T("Special Court: {{lrConv}} of {{lrDec}} decided CIAA cases ({{convRate}}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction stood in {{apStand}} of {{apDec}} decided appeals ({{standRate}}). Both come from the court record over many years.",
                   "विशेष अदालत: फैसला भएका अख्तियारका {{lrDec}} मुद्दामध्ये {{lrConv}} ({{convRate}}) मा कम्तीमा एक जना दोषी ठहरिए। सर्वोच्च अदालत: दोषीले पुनरावेदन गर्दा फैसला भएका {{apDec}} मध्ये {{apStand}} ({{standRate}}) मा ठहर कायम रह्यो। दुवै धेरै वर्षको अदालती अभिलेखबाट।"),
-                T("So this shows the system's odds, not one group of complaints followed through: complaints and finished investigations in a year are different events, and the court rates come from earlier cases. Court stages count cases, not people. If every conviction that nobody appealed also stands (about {{appealedShare}} convictions have an appeal on record), the end figure is about {{endHi}} in 10,000 ({{endHiPct}}).",
-                  "त्यसैले यसले प्रणालीको सम्भावना देखाउँछ, उजुरीको एउटै समूह अन्त्यसम्म पछ्याएको होइन: एक वर्षका उजुरी र सकिएका अनुसन्धान फरक घटना हुन्, र अदालतका दर पहिलेका मुद्दाबाट लिइएका हुन्। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब {{appealedShare}} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक १०,००० मा करिब {{endHi}} ({{endHiPct}}) हुन्छ।"),
+                T("So this shows the system's odds, not one group of complaints followed through: complaints and finished investigations in a year are different events, and the court rates come from earlier cases. Court stages count cases, not people. If every conviction that nobody appealed also stands (about {{appealedShare}} convictions have an appeal on record), the end figure is about {{endHiPct}}.",
+                  "त्यसैले यसले प्रणालीको सम्भावना देखाउँछ, उजुरीको एउटै समूह अन्त्यसम्म पछ्याएको होइन: एक वर्षका उजुरी र सकिएका अनुसन्धान फरक घटना हुन्, र अदालतका दर पहिलेका मुद्दाबाट लिइएका हुन्। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै ठहर पनि कायम रहन्छन् भने (करिब {{appealedShare}} ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक करिब {{endHiPct}} हुन्छ।"),
             ],
         },
     }

@@ -40,7 +40,7 @@
     skipShort: { en: "Static", ne: "स्थिर" },
     skipLong: { en: "Or read it all on one page, without animation", ne: "वा एनिमेसनबिना सबै एउटै पानामा पढ्नुहोस्" },
     animated: { en: "With animation", ne: "एनिमेसनसहित" },
-    per: { en: "For every 10,000 complaints:", ne: "प्रति १०,००० उजुरी:" },
+    share: { en: "{n} of the year's complaints", ne: "सो वर्षका उजुरीको {n}" },
     est: { en: "Our estimate", ne: "हाम्रो अनुमान" },
     figSrc: { en: "How this figure was counted", ne: "यो अंक कसरी निकालियो" },
     leaks: { en: "Where it leaks at this stage", ne: "यस चरणमा कहाँ चुहिन्छ" },
@@ -50,9 +50,9 @@
     courts: { en: "Courts", ne: "अदालत" },
     endEyebrow: { en: "Where it ends", ne: "अन्त्यमा" },
     estLine: { en: "An estimate: each stage's rate applied in turn to one year's complaints, not one group of complaints followed to the end.", ne: "अनुमान: एक वर्षका उजुरीमा हरेक चरणको दर क्रमशः लागू गरेर निकालिएको, उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएर होइन।" },
-    squares: { en: "Each square is one complaint: 10,000 in all. Tap or point at a square to see where it dropped out.", ne: "हरेक सानो कोठा एउटा उजुरी हो (जम्मा १०,०००)। कुन चरणमा छुट्यो भनेर हेर्न कुनै कोठामा थिच्नुहोस्।" },
+    squares: { en: "The squares show the {complaints} complaints of {fy} in proportion. Tap or point at a square to see where it dropped out.", ne: "वर्गहरूले {fy} का {complaints} उजुरीलाई अनुपातमा देखाउँछन्। कुन चरणमा छुट्यो भनेर हेर्न कुनै वर्गमा थिच्नुहोस्।" },
     stands: { en: "End in a conviction that stands", ne: "अन्तिमसम्म कसुर ठहर कायम रहने" },
-    // Where each of the 10,000 complaints drops out (F.split, from the funnel's chain).
+    // Where the year's complaints drop out (F.split, from the funnel's chain): real counts.
     split: {
       never: { en: "Never sent for full investigation", ne: "विस्तृत अनुसन्धानमा नपठाइएका" },
       noCase: { en: "Sent for full investigation, but no case filed", ne: "विस्तृत अनुसन्धानमा पठाइए, तर मुद्दा दायर भएन" },
@@ -60,12 +60,12 @@
       overturned: { en: "Conviction overturned on appeal", ne: "पुनरावेदनमा कसुर ठहर उल्टिएका" },
       stands: { en: "Conviction that stands", ne: "कायम रहने कसुर ठहर" },
     },
-    tipOf: { en: "{n} of 10,000", ne: "१०,००० मध्ये {n}" },
+    tipOf: { en: "{n} of {complaints} complaints", ne: "{complaints} उजुरीमध्ये {n}" },
     replay: { en: "Play again", ne: "फेरि हेर्नुहोस्" },
     estMark: { en: "≈ marks our estimates.", ne: "≈ चिन्हले हाम्रो अनुमान जनाउँछ।" },
     endLine: {
-      en: "About {end} in every 10,000 complaints end in a conviction that still stands after the Supreme Court: fewer than {perK} in 1,000.",
-      ne: "हरेक १०,००० उजुरीमध्ये करिब {end} मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहन्छ: १,००० मा {perK} भन्दा कम।",
+      en: "About {endPct} of complaints, fewer than {perK} in 1,000, end in a conviction that still stands after the Supreme Court.",
+      ne: "करिब {endPct} उजुरी, अर्थात् १,००० मा {perK} भन्दा कम, मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहन्छ।",
     },
     money: { en: "And the money lost to corruption: how much comes back? No one publishes how much is recovered from corruption judgments.", ne: "भ्रष्टाचारबाट हिनामिना भएको रकम कति फिर्ता भयो? भ्रष्टाचारका फैसलाबाट कति रकम असुली भयो भन्ने कसैले प्रकाशित गर्दैन।" },
     how: { en: "How we counted", ne: "हामीले कसरी गन्यौं" },
@@ -81,8 +81,8 @@
         ne: "{complaints} नयाँ उजुरी, विस्तृत अनुसन्धानका लागि पठाइएका {investigated} उजुरी र अदालतमा दायर {filed} मुद्दा अख्तियार दुरुपयोग अनुसन्धान आयोग (अख्तियार) कै ३६औं वार्षिक प्रतिवेदनको सारांशमा दिइएका {fy} का तथ्यांक हुन्। यिनले एउटै वर्षका फरक घटना गन्छन्; उजुरीको एउटै समूहलाई पछ्याउँदैनन्।" },
       { en: "Special Court: {lrConv} of {lrDec} decided CIAA cases ({convRate}) ended with at least one person convicted. Supreme Court: when a convicted person appealed, the conviction was not fully overturned in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}). Both rates come from court records of cases filed since {courtFrom} ({courtYears} years); the Supreme Court rate counts only the convictions whose appeal has been decided.",
         ne: "विशेष अदालत: फैसला भएका अख्तियारका {lrDec} मुद्दामध्ये {lrConv} ({convRate}) मा कम्तीमा एक प्रतिवादीलाई कसुर ठहर भयो। सर्वोच्च अदालत: कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा कसुर ठहर पूरै उल्टिएन। दुवै दर {courtFrom} देखि दायर भएका मुद्दाका ({courtYears} वर्षका) अदालती अभिलेखबाट लिइएका हुन्; सर्वोच्च अदालतको दरमा पुनरावेदनको फैसला भएका कसुर ठहर मात्र गनिएका छन्।" },
-      { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHi} in 10,000 ({endHiPct}) instead of {end}.",
-        ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {end} को सट्टा १०,००० मा करिब {endHi} ({endHiPct}) हुन्छ।" },
+      { en: "So the funnel shows the odds the system gives a complaint, not one group of complaints followed to the end. The court stages count cases, not people. If every conviction that nobody appealed also stands (about {appealedShare} convictions have an appeal on record), the end figure is about {endHiPct} instead of {endPct}.",
+        ne: "त्यसैले फनेलले प्रणालीमा आएको एउटा उजुरी हरेक चरण पार गर्ने सम्भावना देखाउँछ; उजुरीको एउटै समूहलाई अन्त्यसम्म पछ्याएको होइन। अदालतका चरणले मुद्दा गन्छन्, व्यक्ति होइन। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने (करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ), अन्तिम अंक {endPct} को सट्टा करिब {endHiPct} हुन्छ।" },
     ],
     latest: { en: "CIAA figures are for {fy}, from the summary of its 36th annual report (published 14 Kartik 2083). The full report is not yet online. Where the summary does not give a figure, the card uses {fyOld} (35th report) and says so.",
       ne: "अख्तियारका तथ्यांक {fy} का हुन्, ३६औं वार्षिक प्रतिवेदनको सारांशबाट (२०८३ कार्तिक १४ मा सार्वजनिक)। पूरा प्रतिवेदन अझै अनलाइन छैन। सारांशमा नभएका अंकका लागि कार्डमा {fyOld} (३५औं प्रतिवेदन) प्रयोग गरिएको छ र सोही कुरा उल्लेख छ।" },
@@ -131,8 +131,8 @@
       name: { en: "Supreme Court", ne: "सर्वोच्च अदालत" },
       label: { en: "of the ≈{special} cases with a conviction are estimated to keep it after a Supreme Court appeal", ne: "कसुर ठहर भएका ≈{special} मुद्दामध्ये सर्वोच्च अदालतमा पुनरावेदनपछि पनि कसुर ठहर कायम रहने अनुमानित मुद्दा" },
       note: { en: "When a convicted person appeals, the conviction is not fully overturned in {standRate} of cases whose appeal has been decided ({apStand} of {apDec}).", ne: "कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका मुद्दामध्ये {standRate} ({apDec} मध्ये {apStand}) मा कसुर ठहर पूरै उल्टिँदैन।" },
-      how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}); in {apPartial} of these it overturned part of it. Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHi} in 10,000 complaints instead of {end}.",
-        ne: "हाम्रो अनुमान। कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले कसुर ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा कसुर ठहरको केही अंश उल्टियो। अनुमानित करिब {special} कसुर ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै कसुर ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने अन्तिम अंक {end} को सट्टा १०,००० उजुरीमा करिब {endHi} हुन्छ।" },
+      how: { en: "Our estimate. When a convicted person appealed, the Supreme Court did not fully overturn the conviction in {apStand} of the {apDec} cases whose appeal has been decided ({standRate}); in {apPartial} of these it overturned part of it. Applied to the estimated ≈{special} convictions, that gives about {supreme}. This treats every conviction as appealed; about {appealedShare} convictions have an appeal on record. If every conviction that nobody appealed also stands, the end figure is about {endHiPct} of complaints instead of {endPct}.",
+        ne: "हाम्रो अनुमान। कसुरदार ठहरिएका प्रतिवादीले पुनरावेदन गर्दा पुनरावेदनको फैसला भएका {apDec} मुद्दामध्ये {apStand} ({standRate}) मा सर्वोच्च अदालतले कसुर ठहर पूरै उल्टाएन; तीमध्ये {apPartial} मा कसुर ठहरको केही अंश उल्टियो। अनुमानित करिब {special} कसुर ठहरमा यो दर लागू गर्दा करिब {supreme} हुन्छ। यसमा सबै कसुर ठहरमा पुनरावेदन भएको मानिएको छ; करिब {appealedShare} कसुर ठहरमा पुनरावेदन अभिलेखमा छ। पुनरावेदन नभएका सबै कसुर ठहर कायम रहन्छन् भनी मान्ने हो भने अन्तिम अंक उजुरीको {endPct} को सट्टा करिब {endHiPct} हुन्छ।" },
       src: { en: "Supreme Court case records, each appeal linked to its trial (as of 3 November 2026)", ne: "सर्वोच्च अदालतका मुद्दाका अभिलेख, हरेक पुनरावेदन सम्बन्धित मुद्दासँग जोडिएको (२०८३ कार्तिक १७ सम्म)" },
       href: "https://research.jawafdehi.org/appeals#appeal-asymmetry",
     },
@@ -247,7 +247,10 @@
   // The eyebrow names who holds the case, so it never repeats the stage name below it.
   const WHO = { ciaa: { en: "CIAA", ne: "अख्तियार" }, special: { en: "Courts", ne: "अदालत" }, supreme: { en: "Courts", ne: "अदालत" }, none: { en: "After the verdict", ne: "फैसलापछि" } };
   const eyebrowTxt = (st) => t(WHO[st.inst]);
-  const perTxt = (st) => (st.per10k == null || st === S[0] ? "" : `${esc(t(C.per))} <b class="num">${approx(st)}${N(st.per10k)}</b>`);
+  // A stage's share of the year's complaints ("2.2% of the year's complaints"); none on the first stage.
+  const perTxt = (st) => (st.share == null || st === S[0] ? "" : esc(t(C.share)).replace("{n}", `<b class="num">${approx(st)}${dev2(st.share)}</b>`));
+  // A grid part's real count; the part that stands also gives its share ("≈63 (0.19%)").
+  const partTxt = (x, bare) => (x.est ? "≈" : "") + N(x.count) + (x.key === "stands" && !bare ? ` (${t(F.end.pct)})` : "");
   const skipHref = (on) => { const u = new URL(location.href); u.hash = ""; on ? u.searchParams.set("static", "1") : u.searchParams.delete("static"); u.searchParams.delete("at"); return u.pathname + u.search; };
 
   // Screens too short for the funnel beside its cards (landscape phones, 320×568, 200% zoom)
@@ -319,9 +322,9 @@
   function endHTML() {
     return `<section class="end" id="end"><div class="in">
       <div class="grid2">
-        <div><div class="dotsw"><canvas id="dots" width="560" height="560" role="img" aria-label="${esc(T(C.endLine) + " " + F.split.map((x) => `${t(C.split[x.key])}: ${x.est ? "≈" : ""}${N(x.per10k)}`).join(", "))}"></canvas><div class="dtip" id="dtip" role="status" hidden></div></div>
-          <ol class="legend split" id="split">${F.split.map((x) => `<li data-k="${x.key}"><i style="background:${SPLITC[x.key]}"></i><span>${esc(t(C.split[x.key]))}</span> <b class="num">${x.est ? "≈" : ""}${N(x.per10k)}</b></li>`).join("")}</ol>
-          <p class="dnote">${esc(t(C.squares))} ${esc(t(C.estMark))}</p>
+        <div><div class="dotsw"><canvas id="dots" width="560" height="560" role="img" aria-label="${esc(T(C.endLine) + " " + F.split.map((x) => `${t(C.split[x.key])}: ${partTxt(x)}`).join(", "))}"></canvas><div class="dtip" id="dtip" role="status" hidden></div></div>
+          <ol class="legend split" id="split">${F.split.map((x) => `<li data-k="${x.key}"><i style="background:${SPLITC[x.key]}"></i><span>${esc(t(C.split[x.key]))}</span> <b class="num">${partTxt(x)}</b></li>`).join("")}</ol>
+          <p class="dnote">${esc(T(C.squares))} ${esc(t(C.estMark))}</p>
           <button type="button" class="btn replay" id="replay" hidden>${esc(t(C.replay))}</button></div>
         <div>
           <p class="eyebrow">${esc(t(C.endEyebrow))}</p>
@@ -568,7 +571,7 @@
       const keep = SPLIT0[SPLIT0.length - 1], x0 = (keep % 100) * c, y0 = Math.floor(keep / 100) * c, pad = 3 * dpr, r = cv.width;
       g.strokeStyle = SPLITC.stands; g.lineWidth = 2 * dpr;
       g.strokeRect(x0 - pad, y0 - pad, r - x0 + pad - dpr, r - y0 + pad - dpr);
-      const lab = N(F.end.per10k), fs = Math.round(15 * dpr);
+      const lab = "≈" + N(F.split[F.split.length - 1].count), fs = Math.round(15 * dpr);
       g.font = `700 ${fs}px "IBM Plex Mono", "Noto Sans Devanagari", monospace`;
       const tw = g.measureText(lab).width + 12 * dpr, bx = r - tw - 1, by = y0 - pad - fs - 12 * dpr;
       g.fillStyle = SPLITC.stands; g.fillRect(bx, by, tw, fs + 10 * dpr);
@@ -610,7 +613,7 @@
       const r = cv.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
       if (x < 0 || y < 0 || x >= r.width || y >= r.height) return hide();
       const i = Math.floor(y / (r.height / 100)) * 100 + Math.floor(x / (r.width / 100)), x2 = F.split[catAt(i)];
-      tip.innerHTML = `<i style="background:${SPLITC[x2.key]}"></i><span><b>${esc(t(C.split[x2.key]))}</b>: ${esc(t(C.tipOf).replace("{n}", (x2.est ? "≈" : "") + N(x2.per10k)))}</span>`;
+      tip.innerHTML = `<i style="background:${SPLITC[x2.key]}"></i><span><b>${esc(t(C.split[x2.key]))}</b>: ${esc(fill(t(C.tipOf).replace("{n}", partTxt(x2, true))))}</span>`;
       tip.hidden = false;
       const wr = wrap.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight, vw = document.documentElement.clientWidth;
       let left = x - tw / 2, top = y - th - 12;
