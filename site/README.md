@@ -75,8 +75,20 @@ npm run build       # reruns home:data (findings.js from src/data/*.json) first
 `public/home/findings.js` holds every figure on the home page. `scripts/home_build_data.py`
 builds it from this checkout's `src/data/headline-findings.json` and
 `report.generated.json`, and asserts that the chart counts match those figures, so
-`npm run build` fails if the two drift apart. `public/og-image.png` comes from
-`scripts/make-og-image.py`.
+`npm run build` fails if the two drift apart.
+
+### Share cards and icons
+
+`public/og/*.png` are the link-preview cards (1200 × 630): one for the home page, a
+Nepali home card (`home-ne.png`, for posts in Nepali) and one per report page. Each
+is a page written by `og/cards.mjs` from the home page's data and copy layers, then
+rendered in BrowserOS neo by `og/render_neo.py`, which checks that the fonts loaded,
+that no text is under 24 px or overflows, and that each PNG is under 300 KB. Run
+`npm run og:render` after any change to the figures (it needs neo). The build runs
+`og/heads.mjs`, which writes each route's share tags into its own static HTML
+(`dist/appeals.html`, …) so crawlers that don't run JavaScript see them; it stops if
+a card PNG is older than its page. `og/icons.py` makes the favicon set from the
+official mark.
 
 ## Hosting
 

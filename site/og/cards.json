@@ -1,0 +1,83 @@
+[
+ {
+  "file": "home.png",
+  "path": "/",
+  "title": "Where accountability leaks · Jawafdehi Initiative",
+  "description": "Of the 33,519 complaints filed with the CIAA in 2082/83, we estimate that only about 63 (0.19%) will end in a conviction that stands after the Supreme Court.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”: a funnel from 33,519 complaints to the CIAA in 2082/83 down to about 63 convictions that stand, 0.19%.",
+  "html": "cafa29224a8b"
+ },
+ {
+  "file": "home-ne.png",
+  "path": null,
+  "lang": "ne",
+  "title": "जवाफदेहिता कहाँ चुहिन्छ · जवाफदेही इनिशिएटिभ",
+  "description": "आ.व. २०८२/८३ मा अख्तियारमा दर्ता भएका ३३,५१९ उजुरीमध्ये करिब ६३ (०.१९%) मा मात्र सर्वोच्च अदालतपछि पनि कसुर ठहर कायम रहने हाम्रो अनुमान छ।",
+  "alt": "जवाफदेही इनिशिएटिभ, “जवाफदेहिता कहाँ चुहिन्छ”: २०८२/८३ मा अख्तियारमा परेका ३३,५१९ उजुरीदेखि करिब ६३ कायम रहने कसुर ठहरसम्मको फनेल, ०.१९%।",
+  "html": "17750ff91c3f"
+ },
+ {
+  "file": "highlights.png",
+  "path": "/highlights",
+  "title": "Highlights · Where accountability leaks · Jawafdehi Initiative",
+  "description": "16 gaps in accountability, from the first complaint to the money recovered, each with its evidence.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Highlights: What the research found. 16 gaps in accountability, from the first complaint to the money recovered, each with its evidence.",
+  "html": "c2a868e2d402"
+ },
+ {
+  "file": "report.png",
+  "path": "/report",
+  "title": "Full report · Where accountability leaks · Jawafdehi Initiative",
+  "description": "Of the 33,519 complaints filed with the CIAA in 2082/83, we estimate that only about 63 (0.19%) will end in a conviction that stands after the Supreme Court.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Full report: The full report, stage by stage. Of the 33,519 complaints filed with the CIAA in 2082/83, we estimate that only about 63 (0.19%) will end in a conviction that stands after the Supreme Court.",
+  "html": "6a514bd419d8"
+ },
+ {
+  "file": "investigation.png",
+  "path": "/investigation",
+  "title": "Investigation · Where accountability leaks · Jawafdehi Initiative",
+  "description": "In 2082/83, 6 in 10 of the complaints the CIAA decided were closed without a full investigation, and no reason was given.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Investigation: Most complaints are closed before a full investigation, and no reason is given. In 2082/83, 6 in 10 of the complaints the CIAA decided were closed without a full investigation, and no reason was given.",
+  "html": "61791c8e5bc2"
+ },
+ {
+  "file": "prosecution.png",
+  "path": "/prosecution",
+  "title": "Prosecution · Where accountability leaks · Jawafdehi Initiative",
+  "description": "In 2081/82, 75% of the CIAA's decisions after a full investigation closed the case.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Prosecution: After a full investigation, the CIAA now shelves most cases instead of charging them. In 2081/82, 75% of the CIAA's decisions after a full investigation closed the case.",
+  "html": "d7e288782fc7"
+ },
+ {
+  "file": "court-outcomes.png",
+  "path": "/court-outcomes",
+  "title": "Court outcomes · Where accountability leaks · Jawafdehi Initiative",
+  "description": "Of the 2,649 CIAA cases the Special Court has decided so far, 39% ended with every defendant acquitted.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Court outcomes: In about 4 in 10 cases the CIAA files in the Special Court after a full investigation, every defendant is acquitted. Of the 2,649 CIAA cases the Special Court has decided so far, 39% ended with every defendant acquitted.",
+  "html": "6f40c660e0db"
+ },
+ {
+  "file": "appeals.png",
+  "path": "/appeals",
+  "title": "Appeals · Where accountability leaks · Jawafdehi Initiative",
+  "description": "When a convicted person appeals, the Supreme Court fully overturns the conviction in 41% of trials; when the government appeals an acquittal, the acquittal is overturned in only 1%.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Appeals: Appeals go one way: convictions are often overturned, acquittals almost never. When a convicted person appeals, the Supreme Court fully overturns the conviction in 41% of trials; when the government appeals an acquittal, the acquittal is overturned in only 1%.",
+  "html": "c88cd1c770d3"
+ },
+ {
+  "file": "method.png",
+  "path": "/method",
+  "title": "Method · Where accountability leaks · Jawafdehi Initiative",
+  "description": "The estimate is based on court records of every CIAA case filed since 2069/70, 14 years: the 2,649 the Special Court has decided, and the 567 convictions from cases filed in those years whose Supreme Court appeal has been decided.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Method: Sources, limits and how we counted. The estimate is based on court records of every CIAA case filed since 2069/70, 14 years: the 2,649 the Special Court has decided, and the 567 convictions from cases filed in those years whose Supreme Court appeal has been decided.",
+  "html": "9a4a3d4db147"
+ },
+ {
+  "file": "privacy.png",
+  "path": "/privacy",
+  "title": "Privacy · Where accountability leaks · Jawafdehi Initiative",
+  "description": "This site counts cases, not people. It does not name any defendant, complainant, witness or judge.",
+  "alt": "Jawafdehi Initiative, “Where accountability leaks”, Privacy: Privacy.",
+  "html": "ce5bc37d4726"
+ }
+]

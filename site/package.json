@@ -9,8 +9,9 @@
     "tunnel": "cloudflared tunnel --url http://localhost:5173",
     "home:sync": "bash scripts/sync-home.sh",
     "home:data": "python3 scripts/home_build_data.py && node scripts/home_findings_for_highlights.mjs",
-    "build": "npm run home:data && tsc --noEmit && vite build",
-    "build:launch": "npm run home:data && tsc --noEmit && VITE_JW_LAUNCH=1 vite build --outDir dist-launch",
+    "build": "npm run home:data && node og/cards.mjs && tsc --noEmit && vite build && node og/heads.mjs dist",
+    "build:launch": "npm run home:data && node og/cards.mjs && tsc --noEmit && VITE_JW_LAUNCH=1 vite build --outDir dist-launch && node og/heads.mjs dist-launch",
+    "og:render": "node og/cards.mjs && python3 og/render_neo.py && node og/heads.mjs --source",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "deploy": "wrangler deploy"
